@@ -71,4 +71,36 @@ class ExtensionServiceProvider extends ServiceProvider {
 			return new ProviderRepository($app);
 		});
 	}
+
+	/**
+	 * Bootstrap the application events.
+	 *
+	 * @return void
+	 */
+	public function boot()
+	{
+		$this->package('orchestra/extension', 'orchestra/extension');
+
+		$this->registerExtensionEvents();
+	}
+
+	/**
+	 * Register on boot extension events.
+	 *
+	 * @return void
+	 */
+	protected function registerExtensionEvents()
+	{
+		$app = $this->app;
+
+		$app->before(function() use ($app)
+		{
+			$app['orchestra.extension']->load();
+		});
+
+		$app->after(function() use ($app)
+		{
+			$app['orchestra.extension']->shutdown();
+		});
+	}
 }

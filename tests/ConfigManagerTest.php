@@ -18,7 +18,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase {
 	public function testMapMethod()
 	{
 		$app = array(
-			'orchestra.memory' => ($memory = \Mockery::mock('\Orchestra\Memory\MemoryManager')),
+			'orchestra.memory' => ($memory = \Mockery::mock('Memory')),
 			'config' => ($config = \Mockery::mock('Config')),
 		);
 

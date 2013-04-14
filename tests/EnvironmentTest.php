@@ -31,6 +31,57 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Test Orchestra\Extension\Environment::active() method.
+	 *
+	 * @test
+	 */
+	public function testActiveMethod()
+	{
+		$app = array(
+			'orchestra.memory' => ($memory = \Mockery::mock('Memory')),
+		);
+
+		$memory->shouldReceive('make')
+				->once()->andReturn($memory)
+			->shouldReceive('get')
+				->once()->with('extensions.available', array())
+				->andReturn(array('laravel/framework' => array()))
+			->shouldReceive('get')
+				->once()->with('extensions.active', array())
+				->andReturn(array())
+			->shouldReceive('put')
+				->once()->with('extensions.active', array('laravel/framework' => array()))
+				->andReturn(true);
+
+		$stub = new \Orchestra\Extension\Environment($app);
+		$stub->activate('laravel/framework');
+	}
+
+	/**
+	 * Test Orchestra\Extension\Environment::deactive() method.
+	 *
+	 * @test
+	 */
+	public function testDeactiveMethod()
+	{
+		$app = array(
+			'orchestra.memory' => ($memory = \Mockery::mock('Memory')),
+		);
+
+		$memory->shouldReceive('make')
+				->once()->andReturn($memory)
+			->shouldReceive('get')
+				->once()->with('extensions.active', array())
+				->andReturn(array('laravel/framework' => array(), 'daylerees/doc-reader' => array()))
+			->shouldReceive('put')
+				->once()->with('extensions.active', array('daylerees/doc-reader' => array()))
+				->andReturn(true);
+
+		$stub = new \Orchestra\Extension\Environment($app);
+		$stub->deactivate('laravel/framework');
+	}
+
+	/**
 	 * Test Orchestra\Extension\Environment::isActive() method.
 	 *
 	 * @test

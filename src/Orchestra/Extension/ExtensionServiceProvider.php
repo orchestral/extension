@@ -13,6 +13,7 @@ class ExtensionServiceProvider extends ServiceProvider {
 	{
 		$this->registerIlluminateServiceProvider();
 		$this->registerExtension();
+		$this->registerExtensionConfigManager();
 		$this->registerExtensionFinder();
 		$this->registerExtensionProvider();
 	}
@@ -43,6 +44,19 @@ class ExtensionServiceProvider extends ServiceProvider {
 		$this->app['orchestra.extension'] = $this->app->share(function ($app)
 		{
 			return new Environment($app);
+		});
+	}
+
+	/**
+	 * Register the service provider for Extension Config Manager.
+	 *
+	 * @return void
+	 */
+	protected function registerExtensionConfigManager()
+	{
+		$this->app['orchestra.extension.config'] = $this->app->share(function ($app)
+		{
+			return new ConfigManager($app);
 		});
 	}
 

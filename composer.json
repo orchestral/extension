@@ -10,7 +10,8 @@
 	],
 	"require": {
 		"php": ">=5.3.3",
-		"illuminate/foundation": "4.0.*@dev"
+		"illuminate/foundation": "4.0.*@dev",
+		"orchestra/memory": "dev-master"
 	},
 	"require-dev": {
 		"mockery/mockery": "0.8.0"

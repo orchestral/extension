@@ -42,7 +42,7 @@ class ExtensionServiceProvider extends ServiceProvider {
 	{
 		$this->app['orchestra.extension'] = $this->app->share(function ($app)
 		{
-			return new Extension($app);
+			return new Environment($app);
 		});
 	}
 

@@ -1,0 +1,24 @@
+{
+	"name": "orchestra/extension",
+	"description": "Orchestra Platform Extension Component",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Mior Muhammad Zaki",
+			"email": "crynobone@gmail.com"
+		}
+	],
+	"require": {
+		"php": ">=5.3.3",
+		"illuminate/foundation": "4.0.*@dev"
+	},
+	"require-dev": {
+		"mockery/mockery": "0.8.0"
+	},
+	"autoload": {
+		"psr-0": { 
+			"Orchestra\\Extension" : "src/"
+		}
+	},
+	"minimum-stability": "dev"
+}

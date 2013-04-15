@@ -145,9 +145,9 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 			->shouldReceive('get')
 				->once()->with('extensions.available', array())
 				->andReturn(array('laravel/framework' => array(
-					'path'     => '/foo/path/laravel/framework/',
-					'config'   => array('foo' => 'bar'),
-					'services' => array('Laravel\FrameworkServiceProvider'),
+					'path'    => '/foo/path/laravel/framework/',
+					'config'  => array('foo' => 'bar'),
+					'service' => array('Laravel\FrameworkServiceProvider'),
 				)))
 			->shouldReceive('get')
 				->once()->with('extensions.active', array())

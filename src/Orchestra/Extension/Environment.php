@@ -47,7 +47,7 @@ class Environment {
 	{
 		if ( ! is_string($name)) return ;
 
-		$this->services = array_merge($this->services, $config['services']);
+		$this->services = array_merge($this->services, $config['service']);
 
 		// by now, extension should already exist as an extension. We should
 		// be able start orchestra.php start file on each package.

@@ -93,7 +93,7 @@ class Finder {
 			'version'     => (isset($jsonable->version) ? $jsonable->version : '>0'),
 			'config'      => (isset($jsonable->config) ? $jsonable->config : array()),
 			'require'     => (isset($jsonable->require) ? $jsonable->require : array()),
-			'services'    => (isset($jsonable->services) ? $jsonable->services : array()),
+			'service'     => (isset($jsonable->service) ? $jsonable->service : array()),
 		);
 	}
 

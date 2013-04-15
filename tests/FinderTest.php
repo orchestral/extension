@@ -64,7 +64,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 			'version'     => '>0',
 			'config'      => array(),
 			'require'     => array(),
-			'services'    => array(),
+			'service'     => array(),
 		);
 
 		$this->assertEquals(array('laravel/framework' => $manifest), $stub->detect());

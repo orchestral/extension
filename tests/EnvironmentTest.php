@@ -11,6 +11,26 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Test construct Orchestra\Extension\Environment with no database 
+	 * connection
+	 *
+	 * @test
+	 */
+	public function testConstructWithNoDatabaseConnection()
+	{
+		$app = array(
+			'orchestra.memory' => ($memory = \Mockery::mock('Memory')),
+		);
+
+		$memory->shouldReceive('make')->once()->andThrow('\PDOException')
+			->shouldReceive('driver')
+				->once()->with('runtime.orchestra')
+				->andReturn(null);
+
+		$stub = new \Orchestra\Extension\Environment($app);
+	}
+
+	/**
 	 * Test Orchestra\Extension\Environment::isActive() method.
 	 *
 	 * @test

@@ -42,7 +42,7 @@ class Environment {
 	public function __construct($app)
 	{
 		$this->app = $app;
-		$provider  = $this->app->make('orchestra.memory');
+		$provider  = $this->app['orchestra.memory'];
 
 		try 
 		{

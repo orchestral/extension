@@ -1,5 +1,7 @@
 <?php namespace Orchestra\Extension;
 
+use PDOException;
+
 class Environment {
 
 	/**
@@ -8,6 +10,13 @@ class Environment {
 	 * @var Illuminate\Foundation\Application
 	 */
 	protected $app = null;
+
+	/**
+	 * Memory instance.
+	 *
+	 * @var Orchestra\Memory\Drivers\Driver
+	 */
+	protected $memory = null;
 
 	/**
 	 * List of extensions.
@@ -33,6 +42,16 @@ class Environment {
 	public function __construct($app)
 	{
 		$this->app = $app;
+		$provider  = $this->app->make('orchestra.memory');
+
+		try 
+		{
+			$this->memory = $provider->make();
+		} 
+		catch (PDOException $e) 
+		{
+			$this->memory = $provider->driver('runtime.orchestra');
+		}
 	}
 
 	/**
@@ -70,7 +89,7 @@ class Environment {
 	 */
 	public function activate($name)
 	{
-		$memory     = $this->app['orchestra.memory']->make();
+		$memory     = $this->memory;
 		$availables = $memory->get('extensions.available', array());
 		$actives    = $memory->get('extensions.active', array());
 
@@ -91,7 +110,7 @@ class Environment {
 	 */
 	public function deactivate($name)
 	{
-		$memory  = $this->app['orchestra.memory']->make();
+		$memory  = $this->memory;
 		$current = $memory->get('extensions.active', array());
 		$actives = array();
 
@@ -161,7 +180,7 @@ class Environment {
 	 */
 	public function isAvailable($name)
 	{	
-		$memory = $this->app['orchestra.memory']->make();
+		$memory = $this->memory;
 		return (is_array($memory->get("extensions.available.{$name}")));
 	}
 
@@ -174,7 +193,7 @@ class Environment {
 	 */
 	public function isActive($name)
 	{
-		$memory = $this->app['orchestra.memory']->make();
+		$memory = $this->memory;
 		return (is_array($memory->get("extensions.active.{$name}")));
 	}
 
@@ -187,8 +206,7 @@ class Environment {
 	public function detect()
 	{
 		$extensions = $this->app['orchestra.extension.finder']->detect();
-
-		$this->app['orchestra.memory']->make()->put('extensions.available', $extensions);
+		$this->memory->put('extensions.available', $extensions);
 
 		return $extensions;
 	}
@@ -201,7 +219,7 @@ class Environment {
 	 */
 	public function load()
 	{
-		$memory     = $this->app['orchestra.memory']->make();
+		$memory     = $this->memory;
 		$availables = $memory->get('extensions.available', array());
 		$actives    = $memory->get('extensions.active', array());
 

@@ -18,14 +18,9 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testServicesMethod()
 	{
-		$provider = \Mockery::mock('\Illuminate\Foundation\ProviderRepository');
-
-		$app = array(
-			'orchestra.service.provider' => $provider
-		);
-		
-		$provider->shouldReceive('load')
-			->once()->with($app, array('Orchestra\Foo\FooServiceProvider'))
+		$app = \Mockery::mock('Application');
+		$app->shouldReceive('register')
+				->once()->with('Orchestra\Foo\FooServiceProvider')
 				->andReturn(null);
 
 		$stub = new \Orchestra\Extension\ProviderRepository($app);

@@ -30,7 +30,10 @@ class ProviderRepository {
 	 */
 	public function services($providers)
 	{
-		$this->app['orchestra.service.provider']->load($this->app, $providers);
+		foreach ($providers as $provider)
+		{
+			$this->app->register($provider);
+		}
 	}
 
 }

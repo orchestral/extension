@@ -11,29 +11,12 @@ class ExtensionServiceProvider extends ServiceProvider {
 	 */
 	public function register() 
 	{
-		$this->registerIlluminateServiceProvider();
 		$this->registerExtension();
 		$this->registerExtensionConfigManager();
 		$this->registerExtensionFinder();
 		$this->registerExtensionProvider();
 
 		$this->package('orchestra/extension', 'orchestra/extension');
-	}
-
-	/**
-	 * Register the service provider for `orchestra.service.provider`.
-	 *
-	 * @return void
-	 */
-	public function registerIlluminateServiceProvider()
-	{
-		$this->app['orchestra.service.provider'] = $this->app->share(function ($app)
-		{
-			return new \Illuminate\Foundation\ProviderRepository(
-				$app['files'],
-				$app['config']->get('orchestra/extension::manifest')
-			);
-		});
 	}
 
 	/**

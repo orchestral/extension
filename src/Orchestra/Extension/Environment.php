@@ -1,6 +1,6 @@
 <?php namespace Orchestra\Extension;
 
-use PDOException;
+use Exception;
 
 class Environment {
 
@@ -48,7 +48,7 @@ class Environment {
 		{
 			$this->memory = $provider->make();
 		} 
-		catch (PDOException $e) 
+		catch (Exception $e) 
 		{
 			$this->memory = $provider->driver('runtime.orchestra');
 		}

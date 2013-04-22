@@ -26,13 +26,13 @@ class Finder {
 	public function __construct($app)
 	{
 		$this->app = $app;
-		$appPath   = rtrim($app['path.app'], '/');
-		$basePath  = rtrim($app['path.base'], '/');
+		$appPath   = rtrim($app['path.app'], '/').'/';
+		$basePath  = rtrim($app['path.base'], '/').'/';
 
 		$this->paths = array(
-			"{$appPath}/",
-			"{$basePath}/vendor/*/*/",
-			"{$basePath}/workbench/*/*/"
+			"{$appPath}",
+			"{$basePath}vendor/*/*/",
+			"{$basePath}workbench/*/*/"
 		);
 	}
 
@@ -64,7 +64,13 @@ class Finder {
 			{
 				list($vendor, $package) = $this->getPackageSegmentsFromManifest($manifest);
 
-				if ( ! is_null($vendor) and ! is_null($package))
+				// Each package should have vendor/package name pattern, 
+				// except when we deal with app. 
+				if (rtrim($this->app['path.app'], '/') === rtrim($path, '/'))
+				{
+					$extensions['app'] = $this->getManifestContents($manifest);
+				}
+				elseif ( ! is_null($vendor) and ! is_null($package))
 				{
 					$extensions["{$vendor}/{$package}"] = $this->getManifestContents($manifest);
 				}

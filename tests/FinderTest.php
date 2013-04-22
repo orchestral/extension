@@ -45,40 +45,55 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	public function testDetectMethod()
 	{
 		$app = array(
-			'path.app'  => '/foo/app',
-			'path.base' => '/foo/path',
+			'path.app'  => '/foo/app/',
+			'path.base' => '/foo/path/',
 			'files'     => $fileMock = \Mockery::mock('\Illuminate\Filesystem\Filesystem'),
 		);
 
 		$fileMock->shouldReceive('glob')
 				->with('/foo/app/orchestra.json')
 				->once()
-				->andReturn(array())
+				->andReturn(array('/foo/app/orchestra.json'))
+			->shouldReceive('get')
+				->with('/foo/app/orchestra.json')
+				->once()
+				->andReturn('{"name":"Application"}')
 			->shouldReceive('glob')
 				->with('/foo/path/vendor/*/*/orchestra.json')
 				->once()
 				->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json'))
-			->shouldReceive('glob')
-				->with('/foo/path/workbench/*/*/orchestra.json')
-				->once()
-				->andReturn(array())
 			->shouldReceive('get')
 				->with('/foo/path/vendor/laravel/framework/orchestra.json')
 				->once()
-				->andReturn('{"name":"Laravel Framework"}');
+				->andReturn('{"name":"Laravel Framework"}')
+			->shouldReceive('glob')
+				->with('/foo/path/workbench/*/*/orchestra.json')
+				->once()
+				->andReturn(array());
 
 		$stub = new \Orchestra\Extension\Finder($app);
-		$manifest = array(
-			'path'        => '/foo/path/vendor/laravel/framework/',
-			'name'        => 'Laravel Framework',
-			'description' => null,
-			'version'     => '>0',
-			'config'      => array(),
-			'require'     => array(),
-			'service'     => array(),
+		$expected = array(
+			'laravel/framework' => array(
+				'path'        => '/foo/path/vendor/laravel/framework/',
+				'name'        => 'Laravel Framework',
+				'description' => null,
+				'version'     => '>0',
+				'config'      => array(),
+				'require'     => array(),
+				'service'     => array(),
+			),
+			'app' => array(
+				'path'        => '/foo/app/',
+				'name'        => 'Application',
+				'description' => null,
+				'version'     => '>0',
+				'config'      => array(),
+				'require'     => array(),
+				'service'     => array(),
+			),
 		);
 
-		$this->assertEquals(array('laravel/framework' => $manifest), $stub->detect());
+		$this->assertEquals($expected, $stub->detect());
 	}
 
 	/**

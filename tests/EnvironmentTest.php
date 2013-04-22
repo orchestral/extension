@@ -164,20 +164,33 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 				->once()->andReturn($memory)
 			->shouldReceive('get')
 				->once()->with('extensions.available', array())
-				->andReturn(array('laravel/framework' => array(
-					'path'    => '/foo/path/laravel/framework/',
-					'config'  => array('foo' => 'bar'),
-					'service' => array('Laravel\FrameworkServiceProvider'),
-				)))
+				->andReturn(array(
+					'laravel/framework' => array(
+						'path'    => '/foo/path/laravel/framework/',
+						'config'  => array('foo' => 'bar'),
+						'service' => array('Laravel\FrameworkServiceProvider'),
+					),
+					'app' => array(
+						'path'    => '/foo/app/',
+						'config'  => array('foo' => 'bar'),
+						'service' => array(),
+					),
+				))
 			->shouldReceive('get')
 				->once()->with('extensions.active', array())
-				->andReturn(array('laravel/framework' => array()));
+				->andReturn(array('laravel/framework' => array(), 'app' => array()));
 
 		$events->shouldReceive('fire')
 				->once()->with('extension.started: laravel/framework')
 				->andReturn(null)
 			->shouldReceive('fire')
 				->once()->with('extension.done: laravel/framework', \Mockery::any())
+				->andReturn(null)
+			->shouldReceive('fire')
+				->once()->with('extension.started: app')
+				->andReturn(null)
+			->shouldReceive('fire')
+				->once()->with('extension.done: app', \Mockery::any())
 				->andReturn(null);
 
 		$files->shouldReceive('isFile')
@@ -185,6 +198,15 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 				->andReturn(true)
 			->shouldReceive('getRequire')
 				->once()->with('/foo/path/laravel/framework/src/orchestra.php')
+				->andReturn(true)
+			->shouldReceive('isFile')
+				->once()->with('/foo/app/src/orchestra.php')
+				->andReturn(false)
+			->shouldReceive('isFile')
+				->once()->with('/foo/app/orchestra.php')
+				->andReturn(true)
+			->shouldReceive('getRequire')
+				->once()->with('/foo/app/orchestra.php')
 				->andReturn(true);
 
 		$provider->shouldReceive('services')

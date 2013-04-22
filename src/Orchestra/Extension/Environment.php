@@ -74,6 +74,10 @@ class Environment {
 		{
 			$this->app['files']->getRequire($file);
 		}
+		elseif ($this->app['files']->isFile($file = rtrim($config['path'], '/').'/orchestra.php'))
+		{
+			$this->app['files']->getRequire($file);
+		}
 
 		$this->extensions[$name] = $config;
 

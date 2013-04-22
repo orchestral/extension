@@ -18,13 +18,11 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testServicesMethod()
 	{
-		$request = \Mockery::mock('\Illuminate\Http\Request');
-		$request->shouldReceive('ajax')->andReturn(null);
-
 		$provider = \Mockery::mock('\Illuminate\Foundation\ProviderRepository');
 
-		$app = new \Illuminate\Foundation\Application($request);
-		$app['orchestra.service.provider'] = $provider;
+		$app = array(
+			'orchestra.service.provider' => $provider
+		);
 		
 		$provider->shouldReceive('load')
 			->once()->with($app, array('Orchestra\Foo\FooServiceProvider'))

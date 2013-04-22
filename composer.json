@@ -16,7 +16,6 @@
 	},
 	"require": {
 		"php": ">=5.3.3",
-		"illuminate/foundation": "4.0.*@dev",
 		"orchestra/memory": "2.0.*",
 		"orchestra/support": "2.0.*"
 	},

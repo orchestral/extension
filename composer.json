@@ -1,6 +1,7 @@
 {
 	"name": "orchestra/extension",
 	"description": "Orchestra Platform Extension Component",
+	"keywords": ["orchestra-platform", "laravel", "extension"],
 	"license": "MIT",
 	"authors": [
 		{
@@ -8,18 +9,27 @@
 			"email": "crynobone@gmail.com"
 		}
 	],
+	"autoload": {
+		"psr-0": { 
+			"Orchestra\\Extension" : "src/"
+		}
+	},
 	"require": {
 		"php": ">=5.3.3",
 		"illuminate/foundation": "4.0.*@dev",
-		"orchestra/memory": "dev-master",
-		"orchestra/support": "dev-master"
+		"orchestra/memory": "2.0.*",
+		"orchestra/support": "2.0.*"
 	},
 	"require-dev": {
 		"mockery/mockery": "0.8.0"
 	},
-	"autoload": {
-		"psr-0": { 
-			"Orchestra\\Extension" : "src/"
+	"suggest": {
+		"laravel/framework": "Allow using orchestra/extension component outside of Orchestra Platform",
+		"orchestra/foundation": "Allow using orchestra/extension with Orchestra Platform"
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "2.0.x-dev"
 		}
 	},
 	"minimum-stability": "dev"

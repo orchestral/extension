@@ -18,6 +18,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	public function testConstructMethod()
 	{
 		$app = array(
+			'path.app'  => '/foo/app',
 			'path.base' => '/foo/path'
 		);
 
@@ -27,7 +28,12 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 		$paths = $refl->getProperty('paths');
 		$paths->setAccessible(true);
 
-		$this->assertEquals(array('/foo/path/vendor/', '/foo/path/workbench/'), 
+		$this->assertEquals(array('/foo/app/', '/foo/path/vendor/*/*/', '/foo/path/workbench/*/*/'), 
+			$paths->getValue($stub)); 
+
+		$stub->addPath('/foo/public');
+
+		$this->assertEquals(array('/foo/app/', '/foo/path/vendor/*/*/', '/foo/path/workbench/*/*/', '/foo/public'), 
 			$paths->getValue($stub)); 
 	}
 
@@ -39,11 +45,16 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	public function testDetectMethod()
 	{
 		$app = array(
-			'path.base' => '/foo/path/',
+			'path.app'  => '/foo/app',
+			'path.base' => '/foo/path',
 			'files'     => $fileMock = \Mockery::mock('\Illuminate\Filesystem\Filesystem'),
 		);
 
 		$fileMock->shouldReceive('glob')
+				->with('/foo/app/orchestra.json')
+				->once()
+				->andReturn(array())
+			->shouldReceive('glob')
 				->with('/foo/path/vendor/*/*/orchestra.json')
 				->once()
 				->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json'))
@@ -79,11 +90,16 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	public function testDetectMethodThrowsException()
 	{
 		$app = array(
-			'path.base' => '/foo/path/',
+			'path.app'  => '/foo/app',
+			'path.base' => '/foo/path',
 			'files'     => $fileMock = \Mockery::mock('\Illuminate\Filesystem\Filesystem'),
 		);
 
 		$fileMock->shouldReceive('glob')
+				->with('/foo/app/orchestra.json')
+				->once()
+				->andReturn(array())
+			->shouldReceive('glob')
 				->with('/foo/path/vendor/*/*/orchestra.json')
 				->once()
 				->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json'))

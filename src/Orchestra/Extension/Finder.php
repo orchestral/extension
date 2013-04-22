@@ -26,10 +26,14 @@ class Finder {
 	public function __construct($app)
 	{
 		$this->app = $app;
+		$appPath   = rtrim($app['path.app'], '/');
 		$basePath  = rtrim($app['path.base'], '/');
 
-		$this->addPath("{$basePath}/vendor/");
-		$this->addPath("{$basePath}/workbench/");
+		$this->paths = array(
+			"{$appPath}/",
+			"{$basePath}/vendor/*/*/",
+			"{$basePath}/workbench/*/*/"
+		);
 	}
 
 	/**
@@ -56,7 +60,7 @@ class Finder {
 
 		foreach ($this->paths as $path)
 		{
-			foreach ($this->app['files']->glob("{$path}*/*/orchestra.json") as $manifest)
+			foreach ($this->app['files']->glob("{$path}orchestra.json") as $manifest)
 			{
 				list($vendor, $package) = $this->getPackageSegmentsFromManifest($manifest);
 

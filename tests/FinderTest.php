@@ -18,7 +18,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	public function testConstructMethod()
 	{
 		$app = array(
-			'path.app'  => '/foo/app',
+			'path'      => '/foo/app',
 			'path.base' => '/foo/path'
 		);
 
@@ -45,7 +45,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	public function testDetectMethod()
 	{
 		$app = array(
-			'path.app'  => '/foo/app/',
+			'path'      => '/foo/app/',
 			'path.base' => '/foo/path/',
 			'files'     => $fileMock = \Mockery::mock('\Illuminate\Filesystem\Filesystem'),
 		);
@@ -105,7 +105,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	public function testDetectMethodThrowsException()
 	{
 		$app = array(
-			'path.app'  => '/foo/app',
+			'path'      => '/foo/app',
 			'path.base' => '/foo/path',
 			'files'     => $fileMock = \Mockery::mock('\Illuminate\Filesystem\Filesystem'),
 		);

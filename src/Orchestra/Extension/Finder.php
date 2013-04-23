@@ -26,7 +26,7 @@ class Finder {
 	public function __construct($app)
 	{
 		$this->app = $app;
-		$appPath   = rtrim($app['path.app'], '/').'/';
+		$appPath   = rtrim($app['path'], '/').'/';
 		$basePath  = rtrim($app['path.base'], '/').'/';
 
 		// In most cases we would only need to concern with the following 
@@ -71,7 +71,7 @@ class Finder {
 
 				// Each package should have vendor/package name pattern, 
 				// except when we deal with app. 
-				if (rtrim($this->app['path.app'], '/') === rtrim($path, '/'))
+				if (rtrim($this->app['path'], '/') === rtrim($path, '/'))
 				{
 					$extensions['app'] = $this->getManifestContents($manifest);
 				}

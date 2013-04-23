@@ -29,6 +29,8 @@ class Finder {
 		$appPath   = rtrim($app['path.app'], '/').'/';
 		$basePath  = rtrim($app['path.base'], '/').'/';
 
+		// In most cases we would only need to concern with the following 
+		// path; application folder, vendor folders and workbench folders.
 		$this->paths = array(
 			"{$appPath}",
 			"{$basePath}vendor/*/*/",
@@ -58,6 +60,9 @@ class Finder {
 	{
 		$extensions = array();
 
+		// Loop each path to check if there orchestra.json available within
+		// the paths. We would only treat packages that include orchestra.json
+		// as an Orchestra Platform extension.
 		foreach ($this->paths as $path)
 		{
 			foreach ($this->app['files']->glob("{$path}orchestra.json") as $manifest)
@@ -91,11 +96,18 @@ class Finder {
 	{
 		$jsonable = json_decode($this->app['files']->get($manifest));
 
+		// If json_decode fail, due to invalid json format. We going to 
+		// throw an exception so this error can be fixed by the developer 
+		// instead of allowing the application to run with a buggy config.
 		if (is_null($jsonable))
 		{
 			throw new ManifestRuntimeException("Cannot decode file [{$manifest}]");
 		}
 
+		// Generate a proper manifest configuration for the extension. This 
+		// would allow other part of the application to use this configuration
+		// to migrate, load service provider as well as preload some 
+		// configuration.
 		return array(
 			'path'        => str_replace('orchestra.json', '', $manifest),
 			'name'        => (isset($jsonable->name) ? $jsonable->name : null),
@@ -103,7 +115,7 @@ class Finder {
 			'version'     => (isset($jsonable->version) ? $jsonable->version : '>0'),
 			'config'      => (isset($jsonable->config) ? $jsonable->config : array()),
 			'require'     => (isset($jsonable->require) ? $jsonable->require : array()),
-			'service'     => (isset($jsonable->service) ? $jsonable->service : array()),
+			'provide'     => (isset($jsonable->provide) ? $jsonable->provide : array()),
 		);
 	}
 
@@ -120,7 +132,8 @@ class Finder {
 		$package  = null; 
 		$fragment = explode('/', $manifest);
 
-		// Remove orchestra.json from fragment.
+		// Remove orchestra.json from fragment as we are only interested with
+		// the two segment before it.
 		array_pop($fragment);
 
 		if (count($fragment) > 2)

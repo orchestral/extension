@@ -80,7 +80,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 				'version'     => '>0',
 				'config'      => array(),
 				'require'     => array(),
-				'service'     => array(),
+				'provide'     => array(),
 			),
 			'app' => array(
 				'path'        => '/foo/app/',
@@ -89,7 +89,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 				'version'     => '>0',
 				'config'      => array(),
 				'require'     => array(),
-				'service'     => array(),
+				'provide'     => array(),
 			),
 		);
 

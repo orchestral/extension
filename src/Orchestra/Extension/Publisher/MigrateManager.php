@@ -25,10 +25,8 @@ class MigrateManager {
 	 */
 	public function __construct($app)
 	{
-		$this->app = $app;
-
-		// Boot migration dependency
-		$this->migrator = $this->app->make('migrator');
+		$this->app      = $app;
+		$this->migrator = $this->app['migrator'];
 	}
 
 	/**
@@ -67,9 +65,13 @@ class MigrateManager {
 	 */
 	public function extension($name)
 	{
-		$path = $this->app['orchestra.extension']->option($name, 'path');
-		
-		 ! is_null($path) and $this->migrator->run($path);
+		$basePath = rtrim($this->app['orchestra.extension']->option($name, 'path'), '/');
+		$paths    = array("{$basePath}/migrations/", "{$basePath}/src/migrations/");
+
+		foreach ($paths as $path)
+		{
+			if ($this->app['files']->isDirectory($path)) $this->run($path);
+		}
 	}
 
 	/**

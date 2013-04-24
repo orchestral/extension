@@ -92,12 +92,12 @@ class ExtensionServiceProvider extends ServiceProvider {
 
 		$app->before(function() use ($app)
 		{
-			$app->make('orchestra.extension')->load();
+			$app['orchestra.extension']->load();
 		});
 
 		$app->after(function() use ($app)
 		{
-			$app->make('orchestra.extension')->shutdown();
+			$app['orchestra.extension']->shutdown();
 		});
 	}
 }

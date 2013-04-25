@@ -26,11 +26,11 @@ class Environment {
 	protected $extensions = array();
 
 	/**
-	 * List of services.
+	 * List of provided services.
 	 *
 	 * @var array
 	 */
-	protected $services = array();
+	protected $provides = array();
 
 	/**
 	 * Construct a new Application instance.
@@ -66,7 +66,7 @@ class Environment {
 	{
 		if ( ! is_string($name)) return ;
 
-		$this->services = array_merge($this->services, $config['service']);
+		$this->provides = array_merge($this->provides, $config['provide']);
 
 		// by now, extension should already exist as an extension. We should
 		// be able start orchestra.php start file on each package.
@@ -232,14 +232,14 @@ class Environment {
 			if (isset($availables[$name]))
 			{
 				$availables[$name]['config'] = array_merge(
-					$availables[$name]['config'], 
-					$config
+					(array) $availables[$name]['config'], 
+					(array) $config
 				);
 
 				$this->start($name, $availables[$name]);
 			}
 		}
 
-		$this->app['orchestra.extension.provider']->services($this->services);
+		$this->app['orchestra.extension.provider']->services($this->provides);
 	}
 }

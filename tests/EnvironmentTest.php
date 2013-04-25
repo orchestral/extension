@@ -168,12 +168,12 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 					'laravel/framework' => array(
 						'path'    => '/foo/path/laravel/framework/',
 						'config'  => array('foo' => 'bar'),
-						'service' => array('Laravel\FrameworkServiceProvider'),
+						'provide' => array('Laravel\FrameworkServiceProvider'),
 					),
 					'app' => array(
 						'path'    => '/foo/app/',
 						'config'  => array('foo' => 'bar'),
-						'service' => array(),
+						'provide' => array(),
 					),
 				))
 			->shouldReceive('get')

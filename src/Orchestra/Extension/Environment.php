@@ -1,6 +1,7 @@
 <?php namespace Orchestra\Extension;
 
-use Exception;
+use Exception,
+	Orchestra\Memory\Drivers\Driver as MemoryDriver;
 
 class Environment {
 
@@ -42,6 +43,19 @@ class Environment {
 	public function __construct($app)
 	{
 		$this->app = $app;
+	}
+
+	/**
+	 * Set memory provider.
+	 *
+	 * @access public
+	 * @return self
+	 */
+	public function attach(MemoryDriver $memory)
+	{
+		$this->memory = $memory;
+
+		return $this;
 	}
 
 	/**
@@ -211,11 +225,11 @@ class Environment {
 	 * @access public
 	 * @return void
 	 */
-	public function load($memory)
+	public function load()
 	{
-		$this->memory = $memory;
-		$availables   = $memory->get('extensions.available', array());
-		$actives      = $memory->get('extensions.active', array());
+		$memory     = $this->memory;
+		$availables = $memory->get('extensions.available', array());
+		$actives    = $memory->get('extensions.active', array());
 
 		foreach ($actives as $name => $options)
 		{
@@ -237,5 +251,7 @@ class Environment {
 		}
 
 		$this->app['orchestra.extension.provider']->services($this->provides);
+
+		return $this;
 	}
 }

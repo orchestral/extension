@@ -113,6 +113,7 @@ class Finder {
 			'name'        => (isset($jsonable->name) ? $jsonable->name : null),
 			'description' => (isset($jsonable->description) ? $jsonable->description : null),
 			'author'      => (isset($jsonable->author) ? $jsonable->author : null),
+			'url'         => (isset($jsonable->url) ? $jsonable->url : null),
 			'version'     => (isset($jsonable->version) ? $jsonable->version : '>0'),
 			'config'      => (isset($jsonable->config) ? $jsonable->config : array()),
 			'provide'     => (isset($jsonable->provide) ? $jsonable->provide : array()),

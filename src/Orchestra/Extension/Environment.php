@@ -99,7 +99,7 @@ class Environment {
 
 		if (isset($availables[$name]))
 		{
-			$actives[$name] = $availables[$name];
+			$this->extensions[$name] = $actives[$name] = $availables[$name];
 		}
 
 		$memory->put('extensions.active', $actives);

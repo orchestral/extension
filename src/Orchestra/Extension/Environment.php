@@ -42,16 +42,6 @@ class Environment {
 	public function __construct($app)
 	{
 		$this->app = $app;
-		$provider  = $this->app['orchestra.memory'];
-
-		try 
-		{
-			$this->memory = $provider->make();
-		} 
-		catch (Exception $e) 
-		{
-			$this->memory = $provider->driver('runtime.orchestra');
-		}
 	}
 
 	/**
@@ -221,11 +211,11 @@ class Environment {
 	 * @access public
 	 * @return void
 	 */
-	public function load()
+	public function load($memory)
 	{
-		$memory     = $this->memory;
-		$availables = $memory->get('extensions.available', array());
-		$actives    = $memory->get('extensions.active', array());
+		$this->memory = $memory;
+		$availables   = $memory->get('extensions.available', array());
+		$actives      = $memory->get('extensions.active', array());
 
 		foreach ($actives as $name => $options)
 		{

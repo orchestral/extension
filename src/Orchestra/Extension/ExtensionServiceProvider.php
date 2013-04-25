@@ -1,6 +1,7 @@
 <?php namespace Orchestra\Extension;
 
-use Illuminate\Support\ServiceProvider;
+use Exception,
+	Illuminate\Support\ServiceProvider;
 
 class ExtensionServiceProvider extends ServiceProvider {
 
@@ -89,7 +90,21 @@ class ExtensionServiceProvider extends ServiceProvider {
 	{
 		$app = $this->app;
 
-		$app['orchestra.extension']->load();
+		$app->booting(function($app)
+		{
+			$memoryProvider = $app['orchestra.memory'];
+
+			try 
+			{
+				$memory = $memoryProvider->make();
+			} 
+			catch (Exception $e) 
+			{
+				$memory = $memoryProvider->driver('runtime.orchestra');
+			}
+
+			$app['orchestra.extension']->load($memory);
+		});
 
 		$app->after(function() use ($app)
 		{

@@ -112,9 +112,9 @@ class Finder {
 			'path'        => str_replace('orchestra.json', '', $manifest),
 			'name'        => (isset($jsonable->name) ? $jsonable->name : null),
 			'description' => (isset($jsonable->description) ? $jsonable->description : null),
+			'author'      => (isset($jsonable->author) ? $jsonable->author : null),
 			'version'     => (isset($jsonable->version) ? $jsonable->version : '>0'),
 			'config'      => (isset($jsonable->config) ? $jsonable->config : array()),
-			'require'     => (isset($jsonable->require) ? $jsonable->require : array()),
 			'provide'     => (isset($jsonable->provide) ? $jsonable->provide : array()),
 		);
 	}

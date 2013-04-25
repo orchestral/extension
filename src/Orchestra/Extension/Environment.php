@@ -227,15 +227,18 @@ class Environment {
 		$availables = $memory->get('extensions.available', array());
 		$actives    = $memory->get('extensions.active', array());
 
-		foreach ($actives as $name => $config)
+		foreach ($actives as $name => $options)
 		{
 			if (isset($availables[$name]))
 			{
-				$availables[$name]['config'] = array_merge(
-					(array) $availables[$name]['config'], 
-					(array) $config
-				);
+				$config = array_merge((array) $availables[$name]['config'], (array) $options['config']);
+				
+				if (isset($config['handles']))
+				{
+					$this->app['config']->set("orchestra/extension::handles.{$name}", $config['handles']);
+				}
 
+				$availables[$name]['config'] = $config;
 				$this->start($name, $availables[$name]);
 			}
 		}

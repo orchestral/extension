@@ -151,6 +151,22 @@ class Environment {
 	}
 
 	/**
+	 * Publish an extension.
+	 *
+	 * @access public
+	 * @param  string
+	 * @return void
+	 */
+	public function publish($name)
+	{
+		$this->app['orchestra.publisher.migrate']->extension($name);
+		$this->app['orchestra.publisher.asset']->extension($name);
+
+		$this->app['events']->fire("orchestra.publishing", array($name));
+		$this->app['events']->fire("orchestra.publishing: {$name}");	
+	}
+
+	/**
 	 * Check if extension is started
 	 *
 	 * @access public

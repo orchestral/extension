@@ -1,6 +1,7 @@
 <?php namespace Orchestra\Extension;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\AssetPublisher,
+	Illuminate\Support\ServiceProvider;
 
 class PublisherServiceProvider extends ServiceProvider {
 
@@ -28,12 +29,11 @@ class PublisherServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	protected function registerMigration()
-	{
-		$this->app->make('migration.repository');
-		
+	{	
 		$this->app['orchestra.publisher.migrate'] = $this->app->share(function ($app)
 		{
-			return new Publisher\MigrateManager($app);
+			$app['migration.repository'];
+			return new Publisher\MigrateManager($app, $app['migrator']);
 		});
 	}
 
@@ -46,7 +46,8 @@ class PublisherServiceProvider extends ServiceProvider {
 	{
 		$this->app['orchestra.publisher.asset'] = $this->app->share(function ($app)
 		{
-			return new Publisher\AssetManager($app);
+			$publisher = new AssetPublisher($app['files'], $app['path.public']);
+			return new Publisher\AssetManager($app, $publisher);
 		});
 	}
 

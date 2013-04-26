@@ -11,41 +11,19 @@ class MigrateManagerTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Test construct Orchestra\Extension\Publisher\MigrateManager.
-	 *
-	 * @test
-	 */
-	public function testConstructMethod()
-	{
-		$app = array(
-			'migrator' => 'foo',
-		);
-
-		$stub = new \Orchestra\Extension\Publisher\MigrateManager($app);
-		$refl = new \ReflectionObject($stub);
-		$migrator = $refl->getProperty('migrator');
-		$migrator->setAccessible(true);
-
-		$this->assertEquals('foo', $migrator->getValue($stub));
-	}
-
-	/**
 	 * Test Orchestra\Extension\Publisher\MigrateManager::run() method.
 	 *
 	 * @test
 	 */
 	public function testRunMethod()
 	{
-		$app = array(
-			'migrator' => $migrator = \Mockery::mock('migrator'),
-		);
-
+		$migrator = \Mockery::mock('\Illuminate\Database\Migrations\Migrator');
 		$migrator->shouldReceive('getRepository')->once()->andReturn($repository = \Mockery::mock('Repository'))
 			->shouldReceive('run')->once()->with('/foo/path/migrations')->andReturn(null);
 		$repository->shouldReceive('repositoryExists')->once()->andReturn(false)
 			->shouldReceive('createRepository')->once()->andReturn(null);
 
-		$stub = new \Orchestra\Extension\Publisher\MigrateManager($app);
+		$stub = new \Orchestra\Extension\Publisher\MigrateManager(array(), $migrator);
 		$stub->run('/foo/path/migrations');
 	}
 
@@ -57,7 +35,7 @@ class MigrateManagerTest extends \PHPUnit_Framework_TestCase {
 	public function testExtensionMethod()
 	{
 		$app = array(
-			'migrator' => $migrator = \Mockery::mock('Migrator'),
+			'migrator' => $migrator = \Mockery::mock('\Illuminate\Database\Migrations\Migrator'),
 			'files' => $files = \Mockery::mock('Filesystem'),
 			'orchestra.extension' => $extension = \Mockery::mock('Extension'),
 		);
@@ -71,7 +49,7 @@ class MigrateManagerTest extends \PHPUnit_Framework_TestCase {
 		$repository->shouldReceive('repositoryExists')->once()->andReturn(true)
 			->shouldReceive('createRepository')->never()->andReturn(null);
 
-		$stub = new \Orchestra\Extension\Publisher\MigrateManager($app);
+		$stub = new \Orchestra\Extension\Publisher\MigrateManager($app, $migrator);
 		$stub->extension('foo/bar');
 	}
 
@@ -83,7 +61,7 @@ class MigrateManagerTest extends \PHPUnit_Framework_TestCase {
 	public function testFoundationMethod()
 	{
 		$app = array(
-			'migrator'  => $migrator = \Mockery::mock('Migrator'),
+			'migrator'  => $migrator = \Mockery::mock('\Illuminate\Database\Migrations\Migrator'),
 			'path.base' => '/foo/path/',
 		);
 
@@ -93,7 +71,7 @@ class MigrateManagerTest extends \PHPUnit_Framework_TestCase {
 		$repository->shouldReceive('repositoryExists')->twice()->andReturn(true)
 			->shouldReceive('createRepository')->never()->andReturn(null);
 
-		$stub = new \Orchestra\Extension\Publisher\MigrateManager($app);
+		$stub = new \Orchestra\Extension\Publisher\MigrateManager($app, $migrator);
 		$stub->foundation();
 	}
 }

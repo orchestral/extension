@@ -22,13 +22,13 @@ class ProviderRepository {
 	}
 
 	/**
-	 * Load available services.
+	 * Load available service providers.
 	 *
 	 * @access public
 	 * @param  array    $providers
 	 * @return void
 	 */
-	public function services($providers)
+	public function provides($providers)
 	{
 		foreach ($providers as $provider)
 		{

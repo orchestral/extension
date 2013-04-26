@@ -10,15 +10,24 @@ class Dispatcher {
 	protected $app = null;
 
 	/**
+	 * Provider instance.
+	 *
+	 * @var Orchestra\Extension\ProviderRepository
+	 */
+	protected $provider = null;
+
+	/**
 	 * Construct a new Application instance.
 	 *
 	 * @access public
-	 * @param  Illuminate\Foundation\Application    $app
+	 * @param  Illuminate\Foundation\Application        $app
+	 * @param  Orchestra\Extension\ProviderRepository   $provider
 	 * @return void
 	 */
-	public function __construct($app)
+	public function __construct($app, ProviderRepository $provider)
 	{
-		$this->app = $app;
+		$this->app      = $app;
+		$this->provider = $provider;
 	}
 
 	/**
@@ -53,7 +62,7 @@ class Dispatcher {
 			$this->app['files']->getRequire($file);
 		}
 
-		! empty($provides) and $this->app['orchestra.extension.provider']->services($provides);
+		! empty($provides) and $this->provider->services($provides);
 		
 		$this->fireEvent($name, $options, 'started');
 	}

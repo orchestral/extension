@@ -3,6 +3,21 @@
 class DispatcherTest extends \PHPUnit_Framework_TestCase {
 
 	/**
+	 * Provider instance.
+	 *
+	 * @var Orchestra\Extension\ProviderRepository
+	 */
+	private $provider = null;
+
+	/**
+	 * Setup the test environment.
+	 */
+	public function setUp()
+	{
+		$this->provider = \Mockery::mock('\Orchestra\Extension\ProviderRepository');
+	}
+
+	/**
 	 * Teardown the test environment.
 	 */
 	public function tearDown()
@@ -21,7 +36,6 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase {
 			'config' => ($config = \Mockery::mock('Config')),
 			'events' => ($events = \Mockery::mock('Event')),
 			'files'  => ($files  = \Mockery::mock('Filesystem')),
-			'orchestra.extension.provider' => ($provider = \Mockery::mock('ProviderRepository')),
 		);
 
 		$options1 = array(
@@ -58,10 +72,11 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase {
 			->shouldReceive('getRequire')
 				->once()->with('/foo/app/orchestra.php')->andReturn(true);
 
+		$provider = $this->provider;
 		$provider->shouldReceive('services')
 				->once()->with(array('Laravel\FrameworkServiceProvider'))->andReturn(true);
 
-		$stub = new \Orchestra\Extension\Dispatcher($app);
+		$stub = new \Orchestra\Extension\Dispatcher($app, $provider);
 
 		$stub->start('laravel/framework', $options1);
 		$stub->start('app', $options2);
@@ -83,7 +98,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase {
 			->shouldReceive('fire')
 				->once()->with('extension.done', array('laravel/framework', 'foo'))->andReturn(null);
 
-		$stub = new \Orchestra\Extension\Dispatcher($app);
+		$stub = new \Orchestra\Extension\Dispatcher($app, $this->provider);
 		$stub->finish('laravel/framework', 'foo');
 	}
 }

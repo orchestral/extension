@@ -24,6 +24,6 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase {
 				->andReturn(null);
 
 		$stub = new \Orchestra\Extension\ProviderRepository($app);
-		$stub->services(array('Orchestra\Foo\FooServiceProvider'));
+		$stub->provides(array('Orchestra\Foo\FooServiceProvider'));
 	}
 }

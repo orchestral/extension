@@ -92,16 +92,20 @@ class ExtensionServiceProvider extends ServiceProvider {
 
 		$app->booting(function($app)
 		{
+			$provider = $app['orchestra.memory'];
+			$env      = $app['orchestra.extension'];
+
 			try 
 			{
-				$memory = $app['orchestra.memory']->make();
+				$memory = $provider->make();
 			} 
 			catch (Exception $e) 
 			{
-				$memory = $app['orchestra.memory']->driver('runtime.orchestra');
+				$memory = $provider->driver('runtime.orchestra');
 			}
 
-			$app['orchestra.extension']->attach($memory)->load($memory);
+			$env->attach($memory);
+			$env->boot($memory);
 		});
 
 		$app->after(function() use ($app)

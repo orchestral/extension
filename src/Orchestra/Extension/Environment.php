@@ -57,6 +57,42 @@ class Environment {
 
 		return $this;
 	}
+	
+	/**
+	 * Boot active extensions.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function boot()
+	{
+		$memory     = $this->memory;
+		$availables = $memory->get('extensions.available', array());
+		$actives    = $memory->get('extensions.active', array());
+
+		foreach ($actives as $name => $options)
+		{
+			if (isset($availables[$name]))
+			{
+				$config = array_merge(
+					(array) array_get($availables, "{$name}.config"), 
+					(array) array_get($options, "config")
+				);
+				
+				if (isset($config['handles']))
+				{
+					$this->app['config']->set("orchestra/extension::handles.{$name}", $config['handles']);
+				}
+
+				$availables[$name]['config'] = $config;
+				$this->start($name, $availables[$name]);
+			}
+		}
+
+		$this->app['orchestra.extension.provider']->services($this->provides);
+
+		return $this;
+	}
 
 	/**
 	 * Start the extension.
@@ -217,41 +253,5 @@ class Environment {
 		$this->memory->put('extensions.available', $extensions);
 
 		return $extensions;
-	}
-	
-	/**
-	 * Load active extension on boot.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function load()
-	{
-		$memory     = $this->memory;
-		$availables = $memory->get('extensions.available', array());
-		$actives    = $memory->get('extensions.active', array());
-
-		foreach ($actives as $name => $options)
-		{
-			if (isset($availables[$name]))
-			{
-				$config = array_merge(
-					(array) array_get($availables, "{$name}.config"), 
-					(array) array_get($options, "config")
-				);
-				
-				if (isset($config['handles']))
-				{
-					$this->app['config']->set("orchestra/extension::handles.{$name}", $config['handles']);
-				}
-
-				$availables[$name]['config'] = $config;
-				$this->start($name, $availables[$name]);
-			}
-		}
-
-		$this->app['orchestra.extension.provider']->services($this->provides);
-
-		return $this;
 	}
 }

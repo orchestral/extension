@@ -11,6 +11,82 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Test Orchestra\Extension\Environment::boot() method.
+	 *
+	 * @test
+	 */
+	public function testBootMethod()
+	{
+		$app  = array(
+			'orchestra.memory' => ($memory = \Mockery::mock('Orchestra\Memory\Drivers\Driver')),
+			'events' => ($events = \Mockery::mock('Event')),
+			'files'  => ($files  = \Mockery::mock('Filesystem')),
+			'orchestra.extension.provider' => ($provider = \Mockery::mock('ProviderRepository')),
+		);
+
+		$memory->shouldReceive('get')->once()->with('extensions.available', array())->andReturn(array(
+				'laravel/framework' => array(
+					'path'    => '/foo/path/laravel/framework/',
+					'config'  => array('foo' => 'bar'),
+					'provide' => array('Laravel\FrameworkServiceProvider'),
+				),
+				'app' => array(
+					'path'    => '/foo/app/',
+					'config'  => array('foo' => 'bar'),
+					'provide' => array(),
+				),
+			))
+			->shouldReceive('get')->once()->with('extensions.active', array())->andReturn(array(
+				'laravel/framework' => array(), 
+				'app' => array(),
+			));
+
+		$events->shouldReceive('fire')
+				->once()->with('extension.started: laravel/framework')
+				->andReturn(null)
+			->shouldReceive('fire')
+				->once()->with('extension.done: laravel/framework', \Mockery::any())
+				->andReturn(null)
+			->shouldReceive('fire')
+				->once()->with('extension.started: app')
+				->andReturn(null)
+			->shouldReceive('fire')
+				->once()->with('extension.done: app', \Mockery::any())
+				->andReturn(null);
+
+		$files->shouldReceive('isFile')
+				->once()->with('/foo/path/laravel/framework/src/orchestra.php')
+				->andReturn(true)
+			->shouldReceive('getRequire')
+				->once()->with('/foo/path/laravel/framework/src/orchestra.php')
+				->andReturn(true)
+			->shouldReceive('isFile')
+				->once()->with('/foo/app/src/orchestra.php')
+				->andReturn(false)
+			->shouldReceive('isFile')
+				->once()->with('/foo/app/orchestra.php')
+				->andReturn(true)
+			->shouldReceive('getRequire')
+				->once()->with('/foo/app/orchestra.php')
+				->andReturn(true);
+
+		$provider->shouldReceive('services')
+				->once()->with(array('Laravel\FrameworkServiceProvider'))
+				->andReturn(true);
+
+		$stub = new \Orchestra\Extension\Environment($app);
+		$stub->attach($memory);
+		$stub->boot();
+
+		$this->assertEquals(array('foo' => 'bar'), $stub->option('laravel/framework', 'config'));
+		$this->assertEquals('bad!', $stub->option('foobar/hello-world', 'config', 'bad!'));
+		$this->assertTrue($stub->started('laravel/framework'));
+		$this->assertFalse($stub->started('foobar/hello-world'));
+
+		$stub->shutdown();
+	}
+
+	/**
 	 * Test Orchestra\Extension\Environment::isActive() method.
 	 *
 	 * @test
@@ -116,81 +192,5 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$stub = new \Orchestra\Extension\Environment($app);
 		$stub->attach($memory);
 		$this->assertEquals('foo', $stub->detect());
-	}
-
-	/**
-	 * Test Orchestra\Extension\Environment::load() method.
-	 *
-	 * @test
-	 */
-	public function testLoadMethod()
-	{
-		$app  = array(
-			'orchestra.memory' => ($memory = \Mockery::mock('Orchestra\Memory\Drivers\Driver')),
-			'events' => ($events = \Mockery::mock('Event')),
-			'files'  => ($files  = \Mockery::mock('Filesystem')),
-			'orchestra.extension.provider' => ($provider = \Mockery::mock('ProviderRepository')),
-		);
-
-		$memory->shouldReceive('get')->once()->with('extensions.available', array())->andReturn(array(
-				'laravel/framework' => array(
-					'path'    => '/foo/path/laravel/framework/',
-					'config'  => array('foo' => 'bar'),
-					'provide' => array('Laravel\FrameworkServiceProvider'),
-				),
-				'app' => array(
-					'path'    => '/foo/app/',
-					'config'  => array('foo' => 'bar'),
-					'provide' => array(),
-				),
-			))
-			->shouldReceive('get')->once()->with('extensions.active', array())->andReturn(array(
-				'laravel/framework' => array(), 
-				'app' => array(),
-			));
-
-		$events->shouldReceive('fire')
-				->once()->with('extension.started: laravel/framework')
-				->andReturn(null)
-			->shouldReceive('fire')
-				->once()->with('extension.done: laravel/framework', \Mockery::any())
-				->andReturn(null)
-			->shouldReceive('fire')
-				->once()->with('extension.started: app')
-				->andReturn(null)
-			->shouldReceive('fire')
-				->once()->with('extension.done: app', \Mockery::any())
-				->andReturn(null);
-
-		$files->shouldReceive('isFile')
-				->once()->with('/foo/path/laravel/framework/src/orchestra.php')
-				->andReturn(true)
-			->shouldReceive('getRequire')
-				->once()->with('/foo/path/laravel/framework/src/orchestra.php')
-				->andReturn(true)
-			->shouldReceive('isFile')
-				->once()->with('/foo/app/src/orchestra.php')
-				->andReturn(false)
-			->shouldReceive('isFile')
-				->once()->with('/foo/app/orchestra.php')
-				->andReturn(true)
-			->shouldReceive('getRequire')
-				->once()->with('/foo/app/orchestra.php')
-				->andReturn(true);
-
-		$provider->shouldReceive('services')
-				->once()->with(array('Laravel\FrameworkServiceProvider'))
-				->andReturn(true);
-
-		$stub = new \Orchestra\Extension\Environment($app);
-		$stub->attach($memory);
-		$stub->load();
-
-		$this->assertEquals(array('foo' => 'bar'), $stub->option('laravel/framework', 'config'));
-		$this->assertEquals('bad!', $stub->option('foobar/hello-world', 'config', 'bad!'));
-		$this->assertTrue($stub->started('laravel/framework'));
-		$this->assertFalse($stub->started('foobar/hello-world'));
-
-		$stub->shutdown();
 	}
 }

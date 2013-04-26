@@ -1,0 +1,87 @@
+<?php namespace Orchestra\Extension;
+
+class Dispatcher {
+	
+	/**
+	 * Application instance.
+	 *
+	 * @var Illuminate\Foundation\Application
+	 */
+	protected $app = null;
+
+	/**
+	 * Construct a new Application instance.
+	 *
+	 * @access public
+	 * @param  Illuminate\Foundation\Application    $app
+	 * @return void
+	 */
+	public function __construct($app)
+	{
+		$this->app = $app;
+	}
+
+	/**
+	 * Start the extension.
+	 *
+	 * @access public	
+	 * @param  string   $name
+	 * @param  array    $options
+	 * @return void
+	 */
+	public function start($name, $options)
+	{
+		if ( ! is_string($name)) return ;
+
+		$config = $options['config'];
+
+		if (isset($config['handles']))
+		{
+			$this->app['config']->set("orchestra/extension::handles.{$name}", $config['handles']);
+		}
+
+		$provides = array_get($options, 'provide', array());
+
+		// by now, extension should already exist as an extension. We should
+		// be able start orchestra.php start file on each package.
+		if ($this->app['files']->isFile($file = rtrim($options['path'], '/').'/src/orchestra.php'))
+		{
+			$this->app['files']->getRequire($file);
+		}
+		elseif ($this->app['files']->isFile($file = rtrim($options['path'], '/').'/orchestra.php'))
+		{
+			$this->app['files']->getRequire($file);
+		}
+
+		! empty($provides) and $this->app['orchestra.extension.provider']->services($provides);
+		
+		$this->fireEvent($name, $options, 'started');
+	}
+
+	/**
+	 * Shutdown an extension.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function finish($name, $options)
+	{
+		$this->fireEvent($name, $options, 'done');
+	}
+
+
+	/**
+	 * Fire events.
+	 *
+	 * @access protected
+	 * @param  string   $name
+	 * @param  array    $options
+	 * @param  string   $type
+	 * @return void
+	 */
+	protected function fireEvent($name, $options, $type = 'started')
+	{
+		$this->app['events']->fire("extension.{$type}", array($name, $options));
+		$this->app['events']->fire("extension.{$type}: {$name}", array($options));
+	}
+}

@@ -110,7 +110,7 @@ class ExtensionServiceProvider extends ServiceProvider {
 
 		$app->after(function() use ($app)
 		{
-			$app['orchestra.extension']->shutdown();
+			$app['orchestra.extension']->finish();
 		});
 	}
 }

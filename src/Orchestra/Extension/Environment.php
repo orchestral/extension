@@ -13,6 +13,13 @@ class Environment {
 	protected $app = null;
 
 	/**
+	 * Dispatcher instance.
+	 *
+	 * @var Orchestra\Extension\Dispatcher
+	 */
+	protected $dispatcher = null;
+
+	/**
 	 * Memory instance.
 	 *
 	 * @var Orchestra\Memory\Drivers\Driver
@@ -27,22 +34,17 @@ class Environment {
 	protected $extensions = array();
 
 	/**
-	 * List of provided services.
-	 *
-	 * @var array
-	 */
-	protected $provides = array();
-
-	/**
 	 * Construct a new Application instance.
 	 *
 	 * @access public
 	 * @param  Illuminate\Foundation\Application    $app
+	 * @param  Orchestra\Extension\Dispatcher       $dispatcher
 	 * @return void
 	 */
-	public function __construct($app)
+	public function __construct($app, Dispatcher $dispatcher)
 	{
-		$this->app = $app;
+		$this->app        = $app;
+		$this->dispatcher = $dispatcher;
 	}
 
 	/**
@@ -78,50 +80,30 @@ class Environment {
 					(array) array_get($availables, "{$name}.config"), 
 					(array) array_get($options, "config")
 				);
-				
-				if (isset($config['handles']))
-				{
-					$this->app['config']->set("orchestra/extension::handles.{$name}", $config['handles']);
-				}
 
-				$availables[$name]['config'] = $config;
-				$this->start($name, $availables[$name]);
+				array_set($options, "config", $config);
+				$this->extensions[$name] = $options;
+				$this->dispatcher->start($name, $options);
 			}
 		}
-
-		$this->app['orchestra.extension.provider']->services($this->provides);
 
 		return $this;
 	}
 
 	/**
-	 * Start the extension.
+	 * Shutdown all Extensions.
 	 *
-	 * @access public	
-	 * @param  string   $name
-	 * @param  array    $config
+	 * @access public
 	 * @return void
 	 */
-	public function start($name, $config)
+	public function finish()
 	{
-		if ( ! is_string($name)) return ;
-
-		$this->provides = array_merge($this->provides, array_get($config, 'provide', array()));
-
-		// by now, extension should already exist as an extension. We should
-		// be able start orchestra.php start file on each package.
-		if ($this->app['files']->isFile($file = rtrim($config['path'], '/').'/src/orchestra.php'))
+		foreach ($this->extensions as $name => $options)
 		{
-			$this->app['files']->getRequire($file);
-		}
-		elseif ($this->app['files']->isFile($file = rtrim($config['path'], '/').'/orchestra.php'))
-		{
-			$this->app['files']->getRequire($file);
+			$this->dispatcher->finish($name, $options);
 		}
 
-		$this->extensions[$name] = $config;
-
-		$this->app['events']->fire("extension.started: {$name}");
+		$this->extensions = array();
 	}
 
 	/**
@@ -166,22 +148,6 @@ class Environment {
 		}
 
 		$memory->put('extensions.active', $actives);
-	}
-
-	/**
-	 * Shutdown all Extensions.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function shutdown()
-	{
-		foreach ($this->extensions as $name => $extension)
-		{
-			$this->app['events']->fire("extension.done: {$name}", array($extension));
-		}
-
-		$this->extensions = array();
 	}
 
 	/**

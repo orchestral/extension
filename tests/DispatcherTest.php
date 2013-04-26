@@ -73,7 +73,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase {
 				->once()->with('/foo/app/orchestra.php')->andReturn(true);
 
 		$provider = $this->provider;
-		$provider->shouldReceive('services')
+		$provider->shouldReceive('provides')
 				->once()->with(array('Laravel\FrameworkServiceProvider'))->andReturn(true);
 
 		$stub = new \Orchestra\Extension\Dispatcher($app, $provider);

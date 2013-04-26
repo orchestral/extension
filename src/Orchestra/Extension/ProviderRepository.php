@@ -25,14 +25,14 @@ class ProviderRepository {
 	 * Load available service providers.
 	 *
 	 * @access public
-	 * @param  array    $providers
+	 * @param  array    $services
 	 * @return void
 	 */
-	public function provides($providers)
+	public function provides($services)
 	{
-		foreach ($providers as $provider)
+		foreach ($services as $service)
 		{
-			$this->app->register($provider);
+			$this->app->register($service);
 		}
 	}
 

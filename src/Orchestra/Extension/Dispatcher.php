@@ -49,7 +49,7 @@ class Dispatcher {
 			$this->app['config']->set("orchestra/extension::handles.{$name}", $config['handles']);
 		}
 
-		$provides = array_get($options, 'provide', array());
+		$services = array_get($options, 'provide', array());
 
 		// by now, extension should already exist as an extension. We should
 		// be able start orchestra.php start file on each package.
@@ -62,7 +62,7 @@ class Dispatcher {
 			$this->app['files']->getRequire($file);
 		}
 
-		! empty($provides) and $this->provider->services($provides);
+		! empty($services) and $this->provider->provides($services);
 		
 		$this->fireEvent($name, $options, 'started');
 	}
@@ -77,7 +77,6 @@ class Dispatcher {
 	{
 		$this->fireEvent($name, $options, 'done');
 	}
-
 
 	/**
 	 * Fire events.

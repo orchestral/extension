@@ -1,5 +1,8 @@
 <?php namespace Orchestra\Extension\Tests;
 
+use Mockery as m;
+use Orchestra\Extension\ConfigManager;
+
 class ConfigManagerTest extends \PHPUnit_Framework_TestCase {
 
 	/**
@@ -7,7 +10,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function tearDown()
 	{
-		\Mockery::close();
+		m::close();
 	}
 
 	/**
@@ -17,32 +20,27 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testMapMethod()
 	{
-		$app = array(
-			'orchestra.memory' => ($memory = \Mockery::mock('Memory')),
-			'config' => ($config = \Mockery::mock('Config')),
+		$memory = m::mock('Memory');
+		$config = m::mock('Config');
+		$app    = array(
+			'orchestra.memory' => $memory,
+			'config' => $config,
 		);
 
 		$memory->shouldReceive('make')
 				->once()->andReturn($memory)
 			->shouldReceive('get')
-				->once()->with('extension_laravel/framework', array())
-				->andReturn(array('foobar' => 'foobar is awesome'))
+				->once()->with('extension_laravel/framework', array())->andReturn(array('foobar' => 'foobar is awesome'))
 			->shouldReceive('put')
-				->once()
-				->with('extension_laravel/framework', array('foobar' => 'foobar is awesome', 'foo' => 'foobar'))
-				->andReturn(true);
-
+				->once()->with('extension_laravel/framework', array('foobar' => 'foobar is awesome', 'foo' => 'foobar'))->andReturn(true);
 		$config->shouldReceive('set')
-				->once()->with('laravel/framework::foobar', 'foobar is awesome')
-				->andReturn(true)
+				->once()->with('laravel/framework::foobar', 'foobar is awesome')->andReturn(true)
 			->shouldReceive('get')
-				->once()->with('laravel/framework::foobar')
-				->andReturn('foobar is awesome')
+				->once()->with('laravel/framework::foobar')->andReturn('foobar is awesome')
 			->shouldReceive('get')
-				->once()->with('laravel/framework::foo')
-				->andReturn('foobar');
+				->once()->with('laravel/framework::foo')->andReturn('foobar');
 
-		$stub = new \Orchestra\Extension\ConfigManager($app);
+		$stub = new ConfigManager($app);
 
 		$stub->map('laravel/framework', array(
 			'foo'    => 'laravel/framework::foo',

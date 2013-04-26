@@ -1,5 +1,8 @@
 <?php namespace Orchestra\Extension\Tests;
 
+use Mockery as m;
+use Orchestra\Extension\Finder;
+
 class FinderTest extends \PHPUnit_Framework_TestCase {
 	
 	/**
@@ -7,7 +10,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function tearDown()
 	{
-		\Mockery::close();
+		m::close();
 	}
 
 	/**
@@ -22,7 +25,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 			'path.base' => '/foo/path'
 		);
 
-		$stub = new \Orchestra\Extension\Finder($app);
+		$stub = new Finder($app);
 
 		$refl  = new \ReflectionObject($stub);
 		$paths = $refl->getProperty('paths');
@@ -44,34 +47,30 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testDetectMethod()
 	{
+		$files = m::mock('\Illuminate\Filesystem\Filesystem');
 		$app = array(
 			'path'      => '/foo/app/',
 			'path.base' => '/foo/path/',
-			'files'     => $fileMock = \Mockery::mock('\Illuminate\Filesystem\Filesystem'),
+			'files'     => $files,
 		);
 
-		$fileMock->shouldReceive('glob')
-				->with('/foo/app/orchestra.json')
-				->once()
+		$files->shouldReceive('glob')
+				->with('/foo/app/orchestra.json')->once()
 				->andReturn(array('/foo/app/orchestra.json'))
 			->shouldReceive('get')
-				->with('/foo/app/orchestra.json')
-				->once()
+				->with('/foo/app/orchestra.json')->once()
 				->andReturn('{"name":"Application"}')
 			->shouldReceive('glob')
-				->with('/foo/path/vendor/*/*/orchestra.json')
-				->once()
+				->with('/foo/path/vendor/*/*/orchestra.json')->once()
 				->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json'))
 			->shouldReceive('get')
-				->with('/foo/path/vendor/laravel/framework/orchestra.json')
-				->once()
+				->with('/foo/path/vendor/laravel/framework/orchestra.json')->once()
 				->andReturn('{"name":"Laravel Framework"}')
 			->shouldReceive('glob')
-				->with('/foo/path/workbench/*/*/orchestra.json')
-				->once()
+				->with('/foo/path/workbench/*/*/orchestra.json')->once()
 				->andReturn(array());
 
-		$stub = new \Orchestra\Extension\Finder($app);
+		$stub     = new Finder($app);
 		$expected = array(
 			'laravel/framework' => array(
 				'path'        => '/foo/path/vendor/laravel/framework/',
@@ -106,28 +105,26 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testDetectMethodThrowsException()
 	{
-		$app = array(
+		$files = m::mock('\Illuminate\Filesystem\Filesystem');
+		$app   = array(
 			'path'      => '/foo/app',
 			'path.base' => '/foo/path',
-			'files'     => $fileMock = \Mockery::mock('\Illuminate\Filesystem\Filesystem'),
+			'files'     => $files,
 		);
 
-		$fileMock->shouldReceive('glob')
-				->with('/foo/app/orchestra.json')
-				->once()
+		$files->shouldReceive('glob')
+				->with('/foo/app/orchestra.json')->once()
 				->andReturn(array())
 			->shouldReceive('glob')
-				->with('/foo/path/vendor/*/*/orchestra.json')
-				->once()
+				->with('/foo/path/vendor/*/*/orchestra.json')->once()
 				->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json'))
 			->shouldReceive('glob')
-				->with('/foo/path/workbench/*/*/orchestra.json')
+				->with('/foo/path/workbench/*/*/orchestra.json')->never()
 				->andReturn(array())
 			->shouldReceive('get')
-				->with('/foo/path/vendor/laravel/framework/orchestra.json')
-				->once()
+				->with('/foo/path/vendor/laravel/framework/orchestra.json')->once()
 				->andReturn('{"name":"Laravel Framework}');
 
-		with(new \Orchestra\Extension\Finder($app))->detect();
+		with(new Finder($app))->detect();
 	}
 }

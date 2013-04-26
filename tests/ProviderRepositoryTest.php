@@ -1,5 +1,8 @@
 <?php namespace Orchestra\Extension\Test;
 
+use Mockery as m;
+use Orchestra\Extension\ProviderRepository;
+
 class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	/**
@@ -7,7 +10,7 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function tearDown()
 	{
-		\Mockery::close();
+		m::close();
 	}
 
 	/**
@@ -18,12 +21,10 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testServicesMethod()
 	{
-		$app = \Mockery::mock('Application');
-		$app->shouldReceive('register')
-				->once()->with('Orchestra\Foo\FooServiceProvider')
-				->andReturn(null);
+		$app = m::mock('Application');
+		$app->shouldReceive('register')->once()->with('Orchestra\Foo\FooServiceProvider')->andReturn(null);
 
-		$stub = new \Orchestra\Extension\ProviderRepository($app);
+		$stub = new ProviderRepository($app);
 		$stub->provides(array('Orchestra\Foo\FooServiceProvider'));
 	}
 }

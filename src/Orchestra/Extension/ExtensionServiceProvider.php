@@ -1,7 +1,7 @@
 <?php namespace Orchestra\Extension;
 
-use Exception,
-	Illuminate\Support\ServiceProvider;
+use Exception;
+use Illuminate\Support\ServiceProvider;
 
 class ExtensionServiceProvider extends ServiceProvider {
 

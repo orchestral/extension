@@ -1,12 +1,15 @@
 <?php namespace Orchestra\Extension\Tests\Publisher;
 
+use Mockery as m;
+use Orchestra\Extension\Publisher\AssetManager;
+
 class AssetManagerTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Teardown the test environment.
 	 */
 	public function tearDown()
 	{
-		\Mockery::close();
+		m::close();
 	}
 
 	/**
@@ -16,10 +19,10 @@ class AssetManagerTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testPublishMethod()
 	{
-		$publisher = \Mockery::mock('\Illuminate\Foundation\AssetPublisher');
+		$publisher = m::mock('\Illuminate\Foundation\AssetPublisher');
 		$publisher->shouldReceive('publish')->once()->with('foo', 'bar')->andReturn(null);
 
-		$stub = new \Orchestra\Extension\Publisher\AssetManager(array(), $publisher);
+		$stub = new AssetManager(array(), $publisher);
 		$stub->publish('foo', 'bar');
 	}
 
@@ -30,18 +33,19 @@ class AssetManagerTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testExtensionMethod()
 	{
-		$app = array(
-			'files' => $files = \Mockery::mock('Filesystem'),
-			'orchestra.extension' => $extension = \Mockery::mock('Extension'),
+		$files     = m::mock('Filesystem');
+		$extension = m::mock('Extension');
+		$publisher = m::mock('\Illuminate\Foundation\AssetPublisher');
+		$app       = array(
+			'files' => $files,
+			'orchestra.extension' => $extension,
 		);
 
 		$files->shouldReceive('isDirectory')->once()->with('bar/public')->andReturn(true);
 		$extension->shouldReceive('option')->once()->with('foo', 'path')->andReturn('bar');
-
-		$publisher = \Mockery::mock('\Illuminate\Foundation\AssetPublisher');
 		$publisher->shouldReceive('publish')->once()->with('foo', 'bar/public')->andReturn(null);
 
-		$stub = new \Orchestra\Extension\Publisher\AssetManager($app, $publisher);
+		$stub = new AssetManager($app, $publisher);
 		$stub->extension('foo');
 	}
 }

@@ -1,4 +1,7 @@
-<?php namespace Orchestra\Extension;
+<?php namespace Orchestra\Extension\Tests;
+
+use Mockery as m;
+use Orchestra\Extension\Environment;
 
 class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 
@@ -14,7 +17,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function setUp()
 	{
-		$this->dispatcher = \Mockery::mock('\Orchestra\Extension\Dispatcher');
+		$this->dispatcher = m::mock('\Orchestra\Extension\Dispatcher');
 	}
 	
 	/**
@@ -23,7 +26,26 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	public function tearDown()
 	{
 		unset($this->dispatcher);
-		\Mockery::close();
+		m::close();
+	}
+
+	/**
+	 * Get data provider.
+	 */
+	protected function dataProvider()
+	{
+		return array(
+			array(
+				'path'    => '/foo/path/laravel/framework/',
+				'config'  => array('foo' => 'bar'),
+				'provide' => array('Laravel\FrameworkServiceProvider'),
+			),
+			array(
+				'path'    => '/foo/app/',
+				'config'  => array('foo' => 'bar'),
+				'provide' => array(),
+			),
+		);
 	}
 
 	/**
@@ -33,35 +55,20 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testBootMethod()
 	{
-		$app  = array(
-			'orchestra.memory' => ($memory = \Mockery::mock('Orchestra\Memory\Drivers\Driver')),
-		);
-
-		$options1 = array(
-			'path'    => '/foo/path/laravel/framework/',
-			'config'  => array('foo' => 'bar'),
-			'provide' => array('Laravel\FrameworkServiceProvider'),
-		);
-
-		$options2 = array(
-			'path'    => '/foo/app/',
-			'config'  => array('foo' => 'bar'),
-			'provide' => array(),
-		);
-
-		$mock = array(
-			'laravel/framework' => $options1,
-			'app' => $options2,
-		);
-
-		$memory->shouldReceive('get')->once()->with('extensions.available', array())->andReturn($mock)
-			->shouldReceive('get')->once()->with('extensions.active', array())->andReturn($mock);
-
 		$dispatcher = $this->dispatcher;
+		$memory     = m::mock('Orchestra\Memory\Drivers\Driver');
+		$app        = array('orchestra.memory' => $memory);
+
+		list($options1, $options2) = $this->dataProvider();
+
+		$extension = array('laravel/framework' => $options1, 'app' => $options2);
+
+		$memory->shouldReceive('get')->once()->with('extensions.available', array())->andReturn($extension)
+			->shouldReceive('get')->once()->with('extensions.active', array())->andReturn($extension);
 		$dispatcher->shouldReceive('start')->with('laravel/framework', $options1)->andReturn(null)
 			->shouldReceive('start')->with('app', $options2)->andReturn(null);
 
-		$stub = new \Orchestra\Extension\Environment($app, $dispatcher);
+		$stub = new Environment($app, $dispatcher);
 		$stub->attach($memory);
 		$stub->boot();
 
@@ -78,24 +85,14 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testFinishMethod()
 	{
-		$options1 = array(
-			'path'    => '/foo/path/laravel/framework/',
-			'config'  => array('foo' => 'bar'),
-			'provide' => array('Laravel\FrameworkServiceProvider'),
-		);
-
-		$options2 = array(
-			'path'    => '/foo/app/',
-			'config'  => array('foo' => 'bar'),
-			'provide' => array(),
-		);
-
 		$dispatcher = $this->dispatcher;
+
+		list($options1, $options2) = $this->dataProvider();
+
 		$dispatcher->shouldReceive('finish')->with('laravel/framework', $options1)->andReturn(null)
 			->shouldReceive('finish')->with('app', $options2)->andReturn(null);
 
-
-		$stub = new \Orchestra\Extension\Environment(array(), $dispatcher);
+		$stub = new Environment(array(), $dispatcher);
 
 		$refl = new \ReflectionObject($stub);
 		$extensions = $refl->getProperty('extensions');
@@ -112,15 +109,13 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testIsAvailableMethod()
 	{
-		$app = array(
-			'orchestra.memory' => ($memory = \Mockery::mock('Orchestra\Memory\Drivers\Driver')),
-		);
+		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
+		$app    = array('orchestra.memory' => $memory);
 
 		$memory->shouldReceive('get')
-				->once()->with('extensions.available.laravel/framework')
-				->andReturn(array());
+				->once()->with('extensions.available.laravel/framework')->andReturn(array());
 
-		$stub = new \Orchestra\Extension\Environment($app, $this->dispatcher);
+		$stub = new Environment($app, $this->dispatcher);
 		$stub->attach($memory);
 		$this->assertTrue($stub->isAvailable('laravel/framework'));
 	}
@@ -132,21 +127,33 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testActiveMethod()
 	{
-		$app = array(
-			'orchestra.memory' => ($memory = \Mockery::mock('Orchestra\Memory\Drivers\Driver')),
+		$memory   = m::mock('\Orchestra\Memory\Drivers\Driver');
+		$migrator = m::mock('Migrator');
+		$asset    = m::mock('Asset');
+		$events   = m::mock('Event');
+		$app      = array(
+			'orchestra.memory' => $memory,
+			'orchestra.publisher.migrate' => $migrator,
+			'orchestra.publisher.asset' => $asset,
+			'events' => $events,
 		);
 
 		$memory->shouldReceive('get')
-				->once()->with('extensions.available', array())
-				->andReturn(array('laravel/framework' => array()))
+				->once()->with('extensions.available', array())->andReturn(array('laravel/framework' => array()))
 			->shouldReceive('get')
-				->once()->with('extensions.active', array())
-				->andReturn(array())
+				->once()->with('extensions.active', array())->andReturn(array())
 			->shouldReceive('put')
-				->once()->with('extensions.active', array('laravel/framework' => array()))
-				->andReturn(true);
+				->once()->with('extensions.active', array('laravel/framework' => array()))->andReturn(true);
+		$migrator->shouldReceive('extension')
+				->once()->with('laravel/framework')->andReturn(true);
+		$asset->shouldReceive('extension')
+				->once()->with('laravel/framework')->andReturn(true);
+		$events->shouldReceive('fire')
+				->once()->with('orchestra.publishing', array('laravel/framework'))->andReturn(true)
+			->shouldReceive('fire')
+				->once()->with('orchestra.publishing: laravel/framework')->andReturn(true);
 
-		$stub = new \Orchestra\Extension\Environment($app, $this->dispatcher);
+		$stub = new Environment($app, $this->dispatcher);
 		$stub->attach($memory);
 		$stub->activate('laravel/framework');
 	}
@@ -158,9 +165,8 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testDeactiveMethod()
 	{
-		$app = array(
-			'orchestra.memory' => ($memory = \Mockery::mock('Orchestra\Memory\Drivers\Driver')),
-		);
+		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
+		$app    = array('orchestra.memory' => $memory);
 
 		$memory->shouldReceive('get')
 				->once()->with('extensions.active', array())
@@ -169,7 +175,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 				->once()->with('extensions.active', array('daylerees/doc-reader' => array()))
 				->andReturn(true);
 
-		$stub = new \Orchestra\Extension\Environment($app, $this->dispatcher);
+		$stub = new Environment($app, $this->dispatcher);
 		$stub->attach($memory);
 		$stub->deactivate('laravel/framework');
 	}
@@ -181,13 +187,12 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testIsActiveMethod()
 	{
-		$app = array(
-			'orchestra.memory' => ($memory = \Mockery::mock('Orchestra\Memory\Drivers\Driver')),
-		);
+		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
+		$app    = array('orchestra.memory' => $memory);
 
 		$memory->shouldReceive('get')->once()->with('extensions.active.laravel/framework')->andReturn(array());
 
-		$stub = new \Orchestra\Extension\Environment($app, $this->dispatcher);
+		$stub = new Environment($app, $this->dispatcher);
 		$stub->attach($memory);
 		$this->assertTrue($stub->isActive('laravel/framework'));
 	}
@@ -199,15 +204,17 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testDetectMethod()
 	{
-		$app  = array(
-			'orchestra.extension.finder' => ($finder = \Mockery::mock('Finder')),
-			'orchestra.memory'           => ($memory = \Mockery::mock('Orchestra\Memory\Drivers\Driver')),
+		$finder = m::mock('Finder');
+		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
+		$app    = array(
+			'orchestra.extension.finder' => $finder,
+			'orchestra.memory' => $memory,
 		);
 
 		$finder->shouldReceive('detect')->once()->andReturn('foo');
 		$memory->shouldReceive('put')->once()->with('extensions.available', 'foo')->andReturn('foobar');
 
-		$stub = new \Orchestra\Extension\Environment($app, $this->dispatcher);
+		$stub = new Environment($app, $this->dispatcher);
 		$stub->attach($memory);
 		$this->assertEquals('foo', $stub->detect());
 	}

@@ -1,7 +1,7 @@
 <?php namespace Orchestra\Extension;
 
-use Exception,
-	Orchestra\Memory\Drivers\Driver as MemoryDriver;
+use Exception;
+use Orchestra\Memory\Drivers\Driver as MemoryDriver;
 
 class Environment {
 

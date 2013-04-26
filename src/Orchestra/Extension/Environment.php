@@ -121,7 +121,11 @@ class Environment {
 
 		if (isset($availables[$name]))
 		{
+			// Append the activated extension to active extensions, and also
+			// publish the extension (migrate the database and publish the
+			// asset).
 			$this->extensions[$name] = $actives[$name] = $availables[$name];
+			$this->publish($name);
 		}
 
 		$memory->put('extensions.active', $actives);

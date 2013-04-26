@@ -10,6 +10,13 @@ class ProviderRepository {
 	protected $app = null;
 
 	/**
+	 * List of services.
+	 *
+	 * @var array
+	 */
+	protected $services = array();
+
+	/**
 	 * Construct a new finder.
 	 *
 	 * @access public
@@ -33,6 +40,7 @@ class ProviderRepository {
 		foreach ($services as $service)
 		{
 			$this->app->register($service);
+			$this->services[] = $service;
 		}
 	}
 

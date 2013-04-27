@@ -1,6 +1,8 @@
 <?php namespace Orchestra\Extension\Publisher;
 
+use Exception;
 use Illuminate\Foundation\AssetPublisher;
+use Orchestra\Extension\FilePermissionException;
 
 class AssetManager {
 
@@ -55,6 +57,17 @@ class AssetManager {
 	{
 		$path = rtrim($this->app['orchestra.extension']->option($name, 'path'), '/').'/public';
 		
-		if ($this->app['files']->isDirectory($path)) $this->publish($name, $path);
+		if ($this->app['files']->isDirectory($path)) 
+		{
+			try 
+			{
+				$this->publish($name, $path);
+				return true;
+			}
+			catch (Exception $e)
+			{
+				throw new FilePermissionException("Unable to publish [{$path}].");
+			}
+		}
 	}
 }

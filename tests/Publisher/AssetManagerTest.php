@@ -48,4 +48,28 @@ class AssetManagerTest extends \PHPUnit_Framework_TestCase {
 		$stub = new AssetManager($app, $publisher);
 		$stub->extension('foo');
 	}
+
+	/**
+	 * Test Orchestra\Extension\Publisher\AssetManager::extension() method 
+	 * throws exception.
+	 *
+	 * @expectedException \Orchestra\Extension\FilePermissionException
+	 */
+	public function testExtensionMethodThrowsException()
+	{
+		$files     = m::mock('Filesystem');
+		$extension = m::mock('Extension');
+		$publisher = m::mock('\Illuminate\Foundation\AssetPublisher');
+		$app       = array(
+			'files' => $files,
+			'orchestra.extension' => $extension,
+		);
+
+		$files->shouldReceive('isDirectory')->once()->with('bar/public')->andReturn(true);
+		$extension->shouldReceive('option')->once()->with('foo', 'path')->andReturn('bar');
+		$publisher->shouldReceive('publish')->once()->with('foo', 'bar/public')->andThrow('\Exception');
+
+		$stub = new AssetManager($app, $publisher);
+		$stub->extension('foo');
+	}
 }

@@ -57,17 +57,18 @@ class AssetManager {
 	{
 		$path = rtrim($this->app['orchestra.extension']->option($name, 'path'), '/').'/public';
 		
-		if ($this->app['files']->isDirectory($path)) 
+		if ( !$this->app['files']->isDirectory($path)) return false;
+
+		try 
 		{
-			try 
-			{
-				$this->publish($name, $path);
-				return true;
-			}
-			catch (Exception $e)
-			{
-				throw new FilePermissionException("Unable to publish [{$path}].");
-			}
+			$this->publish($name, $path);
 		}
+		catch (Exception $e)
+		{
+			throw new FilePermissionException("Unable to publish [{$path}].");
+			return false;
+		}
+
+		return true;
 	}
 }

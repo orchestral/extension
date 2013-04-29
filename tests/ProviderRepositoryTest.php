@@ -1,4 +1,4 @@
-<?php namespace Orchestra\Extension\Test;
+<?php namespace Orchestra\Extension\Tests;
 
 use Mockery as m;
 use Orchestra\Extension\ProviderRepository;
@@ -21,10 +21,23 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testServicesMethod()
 	{
+		$mock = new FooServiceProviderMock;
 		$app = m::mock('Application');
-		$app->shouldReceive('register')->once()->with('Orchestra\Foo\FooServiceProvider')->andReturn(null);
+		$app->shouldReceive('register')->once()->with($mock)->andReturn(null);
 
+		$this->assertFalse($mock->booted);
 		$stub = new ProviderRepository($app);
-		$stub->provides(array('Orchestra\Foo\FooServiceProvider'));
+		$stub->provides(array($mock));
+		$this->assertTrue($mock->booted);
+	}
+}
+
+class FooServiceProviderMock {
+
+	public $booted = false;
+
+	public function boot()
+	{
+		$this->booted = true;
 	}
 }

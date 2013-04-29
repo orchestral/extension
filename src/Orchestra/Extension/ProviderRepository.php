@@ -39,9 +39,16 @@ class ProviderRepository {
 	{
 		foreach ($services as $service)
 		{
-			$this->app->register($service);
+			$provider = (is_string($service) ? new $service($this->app) : $service);
+
+			// During this process, Illuminate\Foundation\Application has 
+			// been booted and it would ignore any of the deferred service 
+			// provider that has a boot method. In this case we should 
+			// manually run the boot method.
+			$this->app->register($provider);
+			$provider->boot();
+
 			$this->services[] = $service;
 		}
 	}
-
 }

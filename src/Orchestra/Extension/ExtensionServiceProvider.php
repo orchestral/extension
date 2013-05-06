@@ -67,7 +67,7 @@ class ExtensionServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('orchestra/extension', 'orchestra/extension');
-		$this->registerExtensionEvents();
+		$this->bootExtensionEvents();
 	}
 
 	/**
@@ -75,7 +75,7 @@ class ExtensionServiceProvider extends ServiceProvider {
 	 *
 	 * @return void
 	 */
-	protected function registerExtensionEvents()
+	protected function bootExtensionEvents()
 	{
 		$app = $this->app;
 

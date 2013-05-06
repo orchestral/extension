@@ -20,10 +20,10 @@ class AssetManagerTest extends \PHPUnit_Framework_TestCase {
 	public function testPublishMethod()
 	{
 		$publisher = m::mock('\Illuminate\Foundation\AssetPublisher');
-		$publisher->shouldReceive('publish')->once()->with('foo', 'bar')->andReturn(null);
+		$publisher->shouldReceive('publish')->once()->with('foo', 'bar')->andReturn(true);
 
 		$stub = new AssetManager(array(), $publisher);
-		$stub->publish('foo', 'bar');
+		$this->assertTrue($stub->publish('foo', 'bar'));
 	}
 
 	/**
@@ -43,10 +43,10 @@ class AssetManagerTest extends \PHPUnit_Framework_TestCase {
 
 		$files->shouldReceive('isDirectory')->once()->with('bar/public')->andReturn(true);
 		$extension->shouldReceive('option')->once()->with('foo', 'path')->andReturn('bar');
-		$publisher->shouldReceive('publish')->once()->with('foo', 'bar/public')->andReturn(null);
+		$publisher->shouldReceive('publish')->once()->with('foo', 'bar/public')->andReturn(true);
 
 		$stub = new AssetManager($app, $publisher);
-		$stub->extension('foo');
+		$this->assertTrue($stub->extension('foo'));
 	}
 
 	/**
@@ -70,6 +70,6 @@ class AssetManagerTest extends \PHPUnit_Framework_TestCase {
 		$publisher->shouldReceive('publish')->once()->with('foo', 'bar/public')->andThrow('\Exception');
 
 		$stub = new AssetManager($app, $publisher);
-		$stub->extension('foo');
+		$this->assertFalse($stub->extension('foo'));
 	}
 }

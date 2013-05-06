@@ -44,7 +44,7 @@ class AssetManager {
 	 */
 	public function publish($name, $destinationPath)
 	{
-		$this->publisher->publish($name, $destinationPath);
+		return $this->publisher->publish($name, $destinationPath);
 	}
 
 	/**
@@ -61,14 +61,12 @@ class AssetManager {
 
 		try 
 		{
-			$this->publish($name, $path);
+			return $this->publish($name, $path);
 		}
 		catch (Exception $e)
 		{
 			throw new FilePermissionException("Unable to publish [{$path}].");
 			return false;
 		}
-
-		return true;
 	}
 }

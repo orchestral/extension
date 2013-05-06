@@ -18,7 +18,7 @@ class ExtensionCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Orchestra\Extension commandline tool';
+	protected $description = 'Orchestra\Extension Command';
 
 	/**
 	 * Create a new command instance.
@@ -134,7 +134,7 @@ class ExtensionCommand extends Command {
 	protected function getArguments()
 	{
 		return array(
-			array('action', InputArgument::REQUIRED, "Type of action. E.g: 'install', 'upgrade', 'detect', 'activate', 'deactivate'."),
+			array('action', InputArgument::REQUIRED, "Type of action, e.g: 'install', 'upgrade', 'detect', 'activate', 'deactivate'."),
 			array('name', InputArgument::OPTIONAL, 'Extension Name.'),
 		);
 	}

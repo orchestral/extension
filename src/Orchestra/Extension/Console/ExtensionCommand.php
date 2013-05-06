@@ -45,7 +45,7 @@ class ExtensionCommand extends Command {
 				$this->info('orchestra/extension has been migrated');
 				break;
 			case 'detect' :
-				$this->fireDetectExtension();
+				$this->fireDetect();
 				break;
 			default :
 				$this->error("Invalid action [{$action}].");
@@ -69,7 +69,7 @@ class ExtensionCommand extends Command {
 	 * @access protected
 	 * @return void
 	 */
-	protected function fireMigration()
+	protected function fireDetect()
 	{
 		$extensions = $this->laravel['orchestra.extension.finder']->detect();
 

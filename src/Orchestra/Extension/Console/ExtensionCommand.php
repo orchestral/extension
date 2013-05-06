@@ -135,7 +135,7 @@ class ExtensionCommand extends Command {
 	{
 		return array(
 			array('action', InputArgument::REQUIRED, "Type of action. E.g: 'install', 'upgrade', 'detect', 'activate', 'deactivate'."),
-			array('name', null, InputArgument::OPTIONAL, 'Extension Name.'),
+			array('name', InputArgument::OPTIONAL, 'Extension Name.'),
 		);
 	}
 

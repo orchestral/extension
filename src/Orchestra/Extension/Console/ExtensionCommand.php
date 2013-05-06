@@ -37,6 +37,8 @@ class ExtensionCommand extends Command {
 	 */
 	public function fire()
 	{
+		$name = $this->argument('name');
+
 		switch ($action = $this->argument('action'))
 		{
 			case 'install' :
@@ -47,9 +49,17 @@ class ExtensionCommand extends Command {
 			case 'detect' :
 				$this->fireDetect();
 				break;
+			case 'activate' :
+				$this->fireActivate($name);
+				break;
+			case 'deactivate' :
+				$this->fireDeactivate($name);
+				break;
 			default :
-				$this->error("Invalid action [{$action}].");
+				return $this->error("Invalid action [{$action}].");
 		}
+
+		$this->laravel['orchestra.memory']->finish();
 	}
 
 	/**
@@ -71,14 +81,48 @@ class ExtensionCommand extends Command {
 	 */
 	protected function fireDetect()
 	{
-		$extensions = $this->laravel['orchestra.extension.finder']->detect();
+		$service    = $this->laravel['orchestra.extension'];
+		$extensions = $service->detect();
 
-		if ( ! empty($extensions)) $this->line("<info>Detected:</info>");
-
-		foreach ($extension as $name => $options)
+		if (empty($extensions))
 		{
-			$this->line("<comment>{$name}</comment>");
+			return $this->line("<comment>No extension detected!</comment>");
 		}
+
+		$this->line("<info>Detected:</info>");
+
+		foreach ($extensions as $name => $options)
+		{
+			$output = ($service->isActive($name) ? "* <info>%s</info>" : "- <comment>%s</comment>");
+			
+			$this->line(sprintf($output, $name));
+		}
+	}
+
+	/**
+	 * Fire extension activation.
+	 *
+	 * @access protected
+	 * @param  string   $name
+	 * @return void
+	 */
+	protected function fireActivate($name)
+	{
+		$this->laravel['orchestra.extension']->activate($name);
+		$this->info("Extension [{$name}] activated.");
+	}
+
+	/**
+	 * Fire extension activation.
+	 *
+	 * @access protected
+	 * @param  string   $name
+	 * @return void
+	 */
+	protected function fireDeactivate($name)
+	{
+		$this->laravel['orchestra.extension']->deactivate($name);
+		$this->info("Extension [{$name}] deactivated.");
 	}
 				
 
@@ -90,7 +134,8 @@ class ExtensionCommand extends Command {
 	protected function getArguments()
 	{
 		return array(
-			array('action', InputArgument::REQUIRED, "Type of action. E.g: 'install', 'upgrade'."),
+			array('action', InputArgument::REQUIRED, "Type of action. E.g: 'install', 'upgrade', 'detect', 'activate', 'deactivate'."),
+			array('name', null, InputArgument::OPTIONAL, 'Extension Name.'),
 		);
 	}
 

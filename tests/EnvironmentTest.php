@@ -70,12 +70,16 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 
 		$stub = new Environment($app, $dispatcher);
 		$stub->attach($memory);
+
+		$this->assertEquals($memory, $stub->getMemoryProvider());
+		
 		$stub->boot();
 
 		$this->assertEquals($options1['config'], $stub->option('laravel/framework', 'config'));
 		$this->assertEquals('bad!', $stub->option('foobar/hello-world', 'config', 'bad!'));
 		$this->assertTrue($stub->started('laravel/framework'));
 		$this->assertFalse($stub->started('foobar/hello-world'));
+
 	}
 
 	/**

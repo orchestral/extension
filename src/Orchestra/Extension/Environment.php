@@ -56,16 +56,38 @@ class Environment {
 	}
 
 	/**
-	 * Set memory provider.
+	 * Attach memory provider.
 	 *
 	 * @access public
 	 * @return self
 	 */
 	public function attach(MemoryDriver $memory)
 	{
-		$this->memory = $memory;
+		$this->setMemoryProvider($memory);
 
 		return $this;
+	}
+
+	/**
+	 * Set memory provider
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function setMemoryProvider(MemoryDriver $memory)
+	{
+		$this->memory = $memory;
+	}
+
+	/**
+	 * Set memory provider
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function getMemoryProvider()
+	{
+		return $this->memory;
 	}
 	
 	/**

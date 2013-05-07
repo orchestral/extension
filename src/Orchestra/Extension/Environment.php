@@ -26,6 +26,14 @@ class Environment {
 	 */
 	protected $memory = null;
 
+
+	/**
+	 * Booted indicator.
+	 *
+	 * @var boolean
+	 */
+	protected $booted = false;
+
 	/**
 	 * List of extensions.
 	 *
@@ -68,9 +76,12 @@ class Environment {
 	 */
 	public function boot()
 	{
-		$memory     = $this->memory;
-		$availables = $memory->get('extensions.available', array());
-		$actives    = $memory->get('extensions.active', array());
+		if ($this->booted) return $this;
+
+		$this->booted = true;
+		$memory       = $this->memory;
+		$availables   = $memory->get('extensions.available', array());
+		$actives      = $memory->get('extensions.active', array());
 
 		foreach ($actives as $name => $options)
 		{
@@ -104,6 +115,26 @@ class Environment {
 		}
 
 		$this->extensions = array();
+	}
+
+	/**
+	 * Get extension handle.
+	 *
+	 * @access public
+	 * @param  string   $name
+	 * @param  string   $default
+	 * @return string
+	 */
+	public function route($name, $default = '/')
+	{
+		// Boot the extension.
+		$this->boot();
+
+		// All route should be manage via `orchestra/extension::handles.{name}` 
+		// config key, except for orchestra/foundation.
+		$key = "orchestra/extension::handles.{$name}";
+
+		return $this->app['config']->get($key, $default);
 	}
 
 	/**

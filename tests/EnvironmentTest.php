@@ -37,7 +37,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		return array(
 			array(
 				'path'    => '/foo/path/laravel/framework/',
-				'config'  => array('foo' => 'bar'),
+				'config'  => array('foo' => 'bar', 'handles' => 'laravel'),
 				'provide' => array('Laravel\FrameworkServiceProvider'),
 			),
 			array(
@@ -72,10 +72,42 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$stub->attach($memory);
 		$stub->boot();
 
-		$this->assertEquals(array('foo' => 'bar'), $stub->option('laravel/framework', 'config'));
+		$this->assertEquals($options1['config'], $stub->option('laravel/framework', 'config'));
 		$this->assertEquals('bad!', $stub->option('foobar/hello-world', 'config', 'bad!'));
 		$this->assertTrue($stub->started('laravel/framework'));
 		$this->assertFalse($stub->started('foobar/hello-world'));
+	}
+
+	/**
+	 * Test Orchestra\Extension\Environment::route() method.
+	 *
+	 * @test
+	 */
+	public function testRouteMethod()
+	{
+		$dispatcher = $this->dispatcher;
+		$memory     = m::mock('Orchestra\Memory\Drivers\Driver');
+		$config     = m::mock('Config');
+		$app        = array(
+			'orchestra.memory' => $memory,
+			'config' => $config,
+		);
+
+		list($options1, $options2) = $this->dataProvider();
+
+		$extension = array('laravel/framework' => $options1, 'app' => $options2);
+
+		$memory->shouldReceive('get')->once()->with('extensions.available', array())->andReturn($extension)
+			->shouldReceive('get')->once()->with('extensions.active', array())->andReturn($extension);
+		$dispatcher->shouldReceive('start')->with('laravel/framework', $options1)->andReturn(null)
+			->shouldReceive('start')->with('app', $options2)->andReturn(null);
+		$config->shouldReceive('get')->with('orchestra/extension::handles.laravel/framework', '/')->andReturn('laravel');
+
+		$stub = new Environment($app, $dispatcher);
+		$stub->attach($memory);
+		$stub->boot();
+
+		$this->assertEquals('laravel', $stub->route('laravel/framework', '/'));
 	}
 
 	/**

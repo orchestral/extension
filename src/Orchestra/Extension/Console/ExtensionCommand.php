@@ -37,7 +37,8 @@ class ExtensionCommand extends Command {
 	 */
 	public function fire()
 	{
-		$name = $this->argument('name');
+		$fired = false;
+		$name  = $this->argument('name');
 
 		switch ($action = $this->argument('action'))
 		{
@@ -45,19 +46,23 @@ class ExtensionCommand extends Command {
 			case 'upgrade' :
 				$this->fireMigration();
 				$this->info('orchestra/extension has been migrated');
+				$fired = true;
 				break;
 			case 'detect' :
 				$this->fireDetect();
+				$fired = true;
 				break;
 			case 'activate' :
 				$this->fireActivate($name);
+				$fired = true;
 				break;
 			case 'deactivate' :
 				$this->fireDeactivate($name);
+				$fired = true;
 				break;
-			default :
-				return $this->error("Invalid action [{$action}].");
 		}
+
+		if ($fired === false) return $this->error("Invalid action [{$action}].");
 
 		$this->laravel['orchestra.memory']->finish();
 	}
@@ -93,7 +98,7 @@ class ExtensionCommand extends Command {
 
 		foreach ($extensions as $name => $options)
 		{
-			$output = ($service->isActive($name) ? "✓ <info>%s</info>" : "- <comment>%s</comment>");
+			$output = ($service->started($name) ? "✓ <info>%s</info>" : "- <comment>%s</comment>");
 			
 			$this->line(sprintf($output, $name));
 		}
@@ -134,7 +139,7 @@ class ExtensionCommand extends Command {
 	protected function getArguments()
 	{
 		return array(
-			array('action', InputArgument::REQUIRED, "Type of action, e.g: 'install', 'upgrade', 'detect', 'activate', 'deactivate'."),
+			array('action', InputArgument::OPTIONAL, "Type of action, e.g: 'install', 'upgrade', 'detect', 'activate', 'deactivate'."),
 			array('name', InputArgument::OPTIONAL, 'Extension Name.'),
 		);
 	}
@@ -146,6 +151,8 @@ class ExtensionCommand extends Command {
 	 */
 	protected function getOptions()
 	{
-		return array();
+		return array(
+			// array('mode', null, InputOption::VALUE_OPTIONAL, 'Extension Mode.', 'normal'),
+		);
 	}
 }

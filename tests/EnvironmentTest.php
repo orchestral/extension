@@ -57,7 +57,13 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	{
 		$dispatcher = $this->dispatcher;
 		$memory     = m::mock('Orchestra\Memory\Drivers\Driver');
-		$app        = array('orchestra.memory' => $memory);
+		$request    = m::mock('Request');
+		$session    = m::mock('Session');
+		$app        = array(
+			'orchestra.memory' => $memory,
+			'request' => $request,
+			'session' => $session,
+		);
 
 		list($options1, $options2) = $this->dataProvider();
 
@@ -67,6 +73,8 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 			->shouldReceive('get')->once()->with('extensions.active', array())->andReturn($extension);
 		$dispatcher->shouldReceive('start')->with('laravel/framework', $options1)->andReturn(null)
 			->shouldReceive('start')->with('app', $options2)->andReturn(null);
+		$request->shouldReceive('input')->once()->with('safe_mode')->andReturn('off');
+		$session->shouldReceive('forget')->once()->with('orchestra-safemode')->andReturn(null);
 
 		$stub = new Environment($app, $dispatcher);
 		$stub->attach($memory);
@@ -92,9 +100,13 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$dispatcher = $this->dispatcher;
 		$memory     = m::mock('Orchestra\Memory\Drivers\Driver');
 		$config     = m::mock('Config');
+		$request    = m::mock('Request');
+		$session    = m::mock('Session');
 		$app        = array(
 			'orchestra.memory' => $memory,
 			'config' => $config,
+			'request' => $request,
+			'session' => $session,
 		);
 
 		list($options1, $options2) = $this->dataProvider();
@@ -106,6 +118,9 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$dispatcher->shouldReceive('start')->with('laravel/framework', $options1)->andReturn(null)
 			->shouldReceive('start')->with('app', $options2)->andReturn(null);
 		$config->shouldReceive('get')->with('orchestra/extension::handles.laravel/framework', '/')->andReturn('laravel');
+		$request->shouldReceive('input')->once()->with('safe_mode')->andReturn(null);
+		$session->shouldReceive('get')->once()->with('orchestra-safemode')->andReturn(null)
+			->shouldReceive('put')->once()->with('orchestra-safemode', 'off')->andReturn(null);
 
 		$stub = new Environment($app, $dispatcher);
 		$stub->attach($memory);

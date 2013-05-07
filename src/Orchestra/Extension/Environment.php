@@ -101,9 +101,12 @@ class Environment {
 		if ($this->booted) return $this;
 
 		$this->booted = true;
-		$memory       = $this->memory;
-		$availables   = $memory->get('extensions.available', array());
-		$actives      = $memory->get('extensions.active', array());
+
+		if ($this->isSafeMode()) return $this;
+
+		$memory     = $this->memory;
+		$availables = $memory->get('extensions.available', array());
+		$actives    = $memory->get('extensions.active', array());
 
 		foreach ($actives as $name => $options)
 		{
@@ -292,5 +295,34 @@ class Environment {
 		$this->memory->put('extensions.available', $extensions);
 
 		return $extensions;
+	}
+
+	/**
+	 * Determine whether current request is in safe mode or not.
+	 *
+	 * @access protected
+	 * @return boolean
+	 */
+	protected function isSafeMode()
+	{
+		$input   = $this->app['request']->input('safe_mode');
+		$session = $this->app['session'];
+
+		if ($input == 'off')
+		{
+			$session->forget('orchestra-safemode');
+			return false;
+		}
+
+		$mode = $session->get('orchestra-safemode');
+
+		if (is_null($mode))
+		{
+			$input !== 'on' and $input = 'off';
+
+			$session->put('orchestra-safemode', $mode = $input);
+		}
+
+		return ($mode === 'on');
 	}
 }

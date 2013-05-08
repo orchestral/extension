@@ -17,6 +17,13 @@ class Dispatcher {
 	protected $provider = null;
 
 	/**
+	 * List of extensions to be boot.
+	 *
+	 * @var array
+	 */
+	protected $extensions = array();
+
+	/**
 	 * Construct a new Application instance.
 	 *
 	 * @access public
@@ -31,27 +38,62 @@ class Dispatcher {
 	}
 
 	/**
-	 * Start the extension.
+	 * Register the extension.
 	 *
 	 * @access public	
 	 * @param  string   $name
 	 * @param  array    $options
 	 * @return void
 	 */
-	public function start($name, $options)
+	public function register($name, $options)
 	{
 		if ( ! is_string($name)) return ;
 
 		$config = $options['config'];
 
+		// Set the handles to orchestra/extension package config (if available).
 		if (isset($config['handles']))
 		{
 			$this->app['config']->set("orchestra/extension::handles.{$name}", $config['handles']);
 		}
 
+		// Get available service providers from orchestra.json and register 
+		// it to Laravel. In this case all service provider would be eager 
+		// loaded since the application would require it from any action.
 		$services = array_get($options, 'provide', array());
+		! empty($services) and $this->provider->provides($services);
 
-		// by now, extension should already exist as an extension. We should
+		// Register the extension so we can boot it later, this action is 
+		// to allow all service providers to be registered first before we 
+		// start the extension. An extension might be using another extension 
+		// to work.
+		$this->extensions[$name] = $options;
+	}
+
+	/**
+	 * Boot all extensions.
+	 *
+	 * @var 
+	 */
+	public function boot()
+	{
+		foreach ($this->extensions as $name => $options)
+		{
+			$this->start($name, $options);
+		}
+	}
+
+	/**
+	 * Start the extension.
+	 *
+	 * @access protected
+	 * @param  string   $name
+	 * @param  array    $options
+	 * @return void
+	 */
+	protected function start($name, $options)
+	{
+		// By now, extension should already exist as an extension. We should
 		// be able start orchestra.php start file on each package.
 		if ($this->app['files']->isFile($file = rtrim($options['path'], '/').'/src/orchestra.php'))
 		{
@@ -62,8 +104,6 @@ class Dispatcher {
 			$this->app['files']->getRequire($file);
 		}
 
-		! empty($services) and $this->provider->provides($services);
-		
 		$this->fireEvent($name, $options, 'started');
 	}
 

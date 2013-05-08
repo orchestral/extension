@@ -71,8 +71,9 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 
 		$memory->shouldReceive('get')->once()->with('extensions.available', array())->andReturn($extension)
 			->shouldReceive('get')->once()->with('extensions.active', array())->andReturn($extension);
-		$dispatcher->shouldReceive('start')->with('laravel/framework', $options1)->andReturn(null)
-			->shouldReceive('start')->with('app', $options2)->andReturn(null);
+		$dispatcher->shouldReceive('register')->once()->with('laravel/framework', $options1)->andReturn(null)
+			->shouldReceive('register')->once()->with('app', $options2)->andReturn(null)
+			->shouldReceive('boot')->once()->andReturn(null);
 		$request->shouldReceive('input')->once()->with('safe_mode')->andReturn('off');
 		$session->shouldReceive('forget')->once()->with('orchestra-safemode')->andReturn(null);
 
@@ -115,8 +116,9 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 
 		$memory->shouldReceive('get')->once()->with('extensions.available', array())->andReturn($extension)
 			->shouldReceive('get')->once()->with('extensions.active', array())->andReturn($extension);
-		$dispatcher->shouldReceive('start')->with('laravel/framework', $options1)->andReturn(null)
-			->shouldReceive('start')->with('app', $options2)->andReturn(null);
+		$dispatcher->shouldReceive('register')->once()->with('laravel/framework', $options1)->andReturn(null)
+			->shouldReceive('register')->once()->with('app', $options2)->andReturn(null)
+			->shouldReceive('boot')->once()->andReturn(null);
 		$config->shouldReceive('get')->with('orchestra/extension::handles.laravel/framework', '/')->andReturn('laravel');
 		$request->shouldReceive('input')->once()->with('safe_mode')->andReturn(null);
 		$session->shouldReceive('get')->once()->with('orchestra-safemode')->andReturn(null)

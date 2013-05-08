@@ -119,9 +119,11 @@ class Environment {
 
 				array_set($options, "config", $config);
 				$this->extensions[$name] = $options;
-				$this->dispatcher->start($name, $options);
+				$this->dispatcher->register($name, $options);
 			}
 		}
+
+		$this->dispatcher->boot();
 
 		return $this;
 	}

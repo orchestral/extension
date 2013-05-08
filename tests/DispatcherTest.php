@@ -82,8 +82,9 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase {
 
 		$stub = new Dispatcher($app, $provider);
 
-		$stub->start('laravel/framework', $options1);
-		$stub->start('app', $options2);
+		$stub->register('laravel/framework', $options1);
+		$stub->register('app', $options2);
+		$stub->boot();
 	}
 
 	/**

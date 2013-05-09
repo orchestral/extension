@@ -69,7 +69,7 @@ class MigrateManager {
 	public function extension($name)
 	{
 		$basePath = rtrim($this->app['orchestra.extension']->option($name, 'path'), '/');
-		$paths    = array("{$basePath}/migrations/", "{$basePath}/src/migrations/");
+		$paths    = array("{$basePath}/database/migrations/", "{$basePath}/src/migrations/");
 
 		foreach ($paths as $path)
 		{

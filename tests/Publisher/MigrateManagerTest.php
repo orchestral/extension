@@ -50,11 +50,10 @@ class MigrateManagerTest extends \PHPUnit_Framework_TestCase {
 		);
 
 		$extension->shouldReceive('option')->once()->with('foo/bar', 'path')->andReturn('/foo/path/foo/bar/');
-		$files->shouldReceive('isDirectory')->once()->with('/foo/path/foo/bar/migrations/')->andReturn(true)
+		$files->shouldReceive('isDirectory')->once()->with('/foo/path/foo/bar/database/migrations/')->andReturn(true)
 			->shouldReceive('isDirectory')->once()->with('/foo/path/foo/bar/src/migrations/')->andReturn(false);
 		$migrator->shouldReceive('getRepository')->once()->andReturn($repository)
-			->shouldReceive('run')->once()->with('/foo/path/foo/bar/migrations/')->andReturn(null)
-			->shouldReceive('run')->never()->with('/foo/path/foo/bar/migrations/')->andReturn(null);
+			->shouldReceive('run')->once()->with('/foo/path/foo/bar/database/migrations/')->andReturn(null);
 		$repository->shouldReceive('repositoryExists')->once()->andReturn(true)
 			->shouldReceive('createRepository')->never()->andReturn(null);
 

@@ -312,17 +312,17 @@ class Environment {
 
 		if ($input == 'off')
 		{
-			$session->forget('orchestra-safemode');
+			$session->forget('orchestra.safemode');
 			return false;
 		}
 
-		$mode = $session->get('orchestra-safemode');
+		$mode = $session->get('orchestra.safemode');
 
 		if (is_null($mode))
 		{
 			$input !== 'on' and $input = 'off';
 
-			$session->put('orchestra-safemode', $mode = $input);
+			$session->put('orchestra.safemode', $mode = $input);
 		}
 
 		return ($mode === 'on');

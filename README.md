@@ -31,18 +31,6 @@ Next add the following service provider in `app/config/app.php`.
 ),
 ```
 
-You might want to add following facades to class aliases in `app/config/app.php`:
-
-```php
-'aliases' => array(
-
-	// ...
-
-	'Orchestra\Extension' => 'Orchestra\Support\Facades\Extension',
-	'Orchestra\Memory'    => 'Orchestra\Support\Facades\Memory',
-),
-```
-
 ## Resources
 
 * [Documentation](http://docs.orchestraplatform.com/pages/components/extension)

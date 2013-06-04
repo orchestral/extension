@@ -72,4 +72,51 @@ class AssetManagerTest extends \PHPUnit_Framework_TestCase {
 		$stub = new AssetManager($app, $publisher);
 		$this->assertFalse($stub->extension('foo'));
 	}
+
+	/**
+	 * Test Orchestra\Extension\Publisher\AssetManager::foundation() method.
+	 *
+	 * @test
+	 */
+	public function testFoundationMethod()
+	{
+		$files     = m::mock('Filesystem');
+		$publisher = m::mock('\Illuminate\Foundation\AssetPublisher');
+		$app       = array(
+			'files' => $files,
+			'path.base' => '/foo/path/',
+		);
+
+		$files->shouldReceive('isDirectory')->once()
+			->with('/foo/path/vendor/orchestra/foundation/src/public')->andReturn(true);
+		$publisher->shouldReceive('publish')->once()
+			->with('orchestra/foundation', '/foo/path/vendor/orchestra/foundation/src/public')->andReturn(true);
+		
+		$stub = new AssetManager($app, $publisher);
+		$this->assertTrue($stub->foundation());
+	}
+
+	/**
+	 * Test Orchestra\Extension\Publisher\AssetManager::foundation() method 
+	 * throws an exception.
+	 *
+	 * @expectedException Orchestra\Extension\FilePermissionException
+	 */
+	public function testFoundationMethodThrowsException()
+	{
+		$files     = m::mock('Filesystem');
+		$publisher = m::mock('\Illuminate\Foundation\AssetPublisher');
+		$app       = array(
+			'files' => $files,
+			'path.base' => '/foo/path/',
+		);
+
+		$files->shouldReceive('isDirectory')->once()
+			->with('/foo/path/vendor/orchestra/foundation/src/public')->andReturn(true);
+		$publisher->shouldReceive('publish')->once()
+			->with('orchestra/foundation', '/foo/path/vendor/orchestra/foundation/src/public')->andThrow('Exception');
+		
+		$stub = new AssetManager($app, $publisher);
+		$stub->foundation();
+	}
 }

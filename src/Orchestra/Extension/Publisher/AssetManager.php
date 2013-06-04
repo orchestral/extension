@@ -48,6 +48,29 @@ class AssetManager {
 	}
 
 	/**
+	 * Migration Orchestra Platform.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function foundation()
+	{
+		$path = rtrim($this->app['path.base'], '/').'/vendor/orchestra/foundation/src/public';
+
+		if ( ! $this->app['files']->isDirectory($path)) return false;
+
+		try 
+		{
+			return $this->publish('orchestra/foundation', $path);
+		}
+		catch (Exception $e)
+		{
+			throw new FilePermissionException("Unable to publish [{$path}].");
+			return false;
+		}
+	}
+
+	/**
 	 * Migration Extension.
 	 *
 	 * @access public
@@ -57,7 +80,7 @@ class AssetManager {
 	{
 		$path = rtrim($this->app['orchestra.extension']->option($name, 'path'), '/').'/public';
 		
-		if ( !$this->app['files']->isDirectory($path)) return false;
+		if ( ! $this->app['files']->isDirectory($path)) return false;
 
 		try 
 		{

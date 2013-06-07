@@ -178,8 +178,10 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 *
 	 * @test
 	 */
-	public function testActiveMethod()
+	public function testActivateMethod()
 	{
+		$dispatcher = $this->dispatcher;
+
 		$memory   = m::mock('\Orchestra\Memory\Drivers\Driver');
 		$migrator = m::mock('Migrator');
 		$asset    = m::mock('Asset');
@@ -191,6 +193,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 			'events' => $events,
 		);
 
+		$dispatcher->shouldReceive('start')->once()->with('laravel/framework', m::any())->andReturn(null);
 		$memory->shouldReceive('get')
 				->once()->with('extensions.available', array())->andReturn(array('laravel/framework' => array()))
 			->shouldReceive('get')
@@ -206,7 +209,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 			->shouldReceive('fire')
 				->once()->with('orchestra.publishing: laravel/framework')->andReturn(true);
 
-		$stub = new Environment($app, $this->dispatcher);
+		$stub = new Environment($app, $dispatcher);
 		$stub->attach($memory);
 		$stub->activate('laravel/framework');
 	}
@@ -216,7 +219,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 *
 	 * @test
 	 */
-	public function testDeactiveMethod()
+	public function testDeactivateMethod()
 	{
 		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
 		$app    = array('orchestra.memory' => $memory);

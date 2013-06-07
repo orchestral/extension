@@ -86,12 +86,12 @@ class Dispatcher {
 	/**
 	 * Start the extension.
 	 *
-	 * @access protected
+	 * @access public
 	 * @param  string   $name
 	 * @param  array    $options
 	 * @return void
 	 */
-	protected function start($name, $options)
+	public function start($name, $options)
 	{
 		// By now, extension should already exist as an extension. We should
 		// be able start orchestra.php start file on each package.

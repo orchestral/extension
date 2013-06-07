@@ -3,7 +3,7 @@ Orchestra Platform Extension Component
 
 Orchestra\Extension allows components or packages to be added dynamically to Orchestra Platform without the hassle of modifying the configuration.
 
-[![Build Status](https://travis-ci.org/orchestral/extension.png?branch=master)](https://travis-ci.org/orchestral/extension)
+[![Build Status](https://travis-ci.org/orchestral/extension.png?branch=2.0)](https://travis-ci.org/orchestral/extension) [![Coverage Status](https://coveralls.io/repos/orchestral/extension/badge.png?branch=2.0)](https://coveralls.io/r/orchestral/extension?branch=2.0)
 
 ## Quick Installation
 

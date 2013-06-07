@@ -183,6 +183,7 @@ class Environment {
 			// publish the extension (migrate the database and publish the
 			// asset).
 			$this->extensions[$name] = $actives[$name] = $availables[$name];
+			$this->dispatcher->start($name, $actives[$name]);
 			$this->publish($name);
 		}
 

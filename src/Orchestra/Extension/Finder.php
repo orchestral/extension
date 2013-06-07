@@ -65,7 +65,13 @@ class Finder {
 		// as an Orchestra Platform extension.
 		foreach ($this->paths as $path)
 		{
-			foreach ($this->app['files']->glob("{$path}orchestra.json") as $manifest)
+			$manifests = $this->app['files']->glob("{$path}orchestra.json");
+
+			// glob() method might return false if there an errors, convert 
+			// the result to an array.
+			is_array($manifests) or $manifests = array();
+
+			foreach ($manifests as $manifest)
 			{
 				list($vendor, $package) = $this->getPackageSegmentsFromManifest($manifest);
 

@@ -1,12 +1,14 @@
 {
 	"name": "orchestra/extension",
 	"description": "Orchestra Platform Extension Component",
-	"keywords": ["orchestra-platform", "laravel", "extension"],
+	"homepage": "http://orchestraplatform.com/docs/2.0/components/extension/",
+	"keywords": ["orchestra-platform", "orchestral", "laravel", "extension"],
 	"license": "MIT",
 	"authors": [
 		{
 			"name": "Mior Muhammad Zaki",
-			"email": "crynobone@gmail.com"
+			"email": "crynobone@gmail.com",
+			"homepage": "https://github.com/crynobone"
 		}
 	],
 	"autoload": {
@@ -16,7 +18,7 @@
 	},
 	"require": {
 		"php": ">=5.3.3",
-		"orchestra/memory": "2.0.*"
+		"orchestra/memory": "self.version"
 	},
 	"require-dev": {
 		"mockery/mockery": "0.8.0",

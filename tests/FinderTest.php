@@ -54,21 +54,18 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 			'files'     => $files,
 		);
 
-		$files->shouldReceive('glob')
-				->with('/foo/app/orchestra.json')->once()
-				->andReturn(array('/foo/app/orchestra.json'))
-			->shouldReceive('get')
-				->with('/foo/app/orchestra.json')->once()
-				->andReturn('{"name":"Application"}')
-			->shouldReceive('glob')
-				->with('/foo/path/vendor/*/*/orchestra.json')->once()
-				->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json'))
-			->shouldReceive('get')
-				->with('/foo/path/vendor/laravel/framework/orchestra.json')->once()
+		$files->shouldReceive('glob')->once()
+				->with('/foo/app/orchestra.json')->andReturn(array('/foo/app/orchestra.json'))
+			->shouldReceive('get')->once()
+				->with('/foo/app/orchestra.json')->andReturn('{"name":"Application"}')
+			->shouldReceive('glob')->once()
+				->with('/foo/path/vendor/*/*/orchestra.json')
+				->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json', '/foo/orchestra.json'))
+			->shouldReceive('get')->once()
+				->with('/foo/path/vendor/laravel/framework/orchestra.json')
 				->andReturn('{"name":"Laravel Framework"}')
-			->shouldReceive('glob')
-				->with('/foo/path/workbench/*/*/orchestra.json')->once()
-				->andReturn(array());
+			->shouldReceive('glob')->once()
+				->with('/foo/path/workbench/*/*/orchestra.json')->andReturn(array());
 
 		$stub     = new Finder($app);
 		$expected = array(
@@ -95,6 +92,33 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 		);
 
 		$this->assertEquals($expected, $stub->detect());
+	}
+
+	/**
+	 * Test Orchestra\Extension\Finder::detect() method giveb reserved name 
+	 * throws exception.
+	 *
+	 * @expectedException \RuntimeException
+	 */
+	public function testDetectMethodGivenReservedNameThrowsException()
+	{
+		$files = m::mock('\Illuminate\Filesystem\Filesystem');
+		$app = array(
+			'path'      => '/foo/app/',
+			'path.base' => '/foo/path/',
+			'files'     => $files,
+		);
+
+		$files->shouldReceive('glob')->once()
+				->with('/foo/app/orchestra.json')->andReturn(array('/foo/app/orchestra.json'))
+			->shouldReceive('get')->once()
+				->with('/foo/app/orchestra.json')->andReturn('{"name":"Application"}')
+			->shouldReceive('glob')->once()
+				->with('/foo/path/vendor/*/*/orchestra.json')
+				->andReturn(array('/foo/path/vendor/orchestra/foundation/orchestra.json'));
+		
+		$stub = new Finder($app);
+		$stub->detect();
 	}
 
 	/**

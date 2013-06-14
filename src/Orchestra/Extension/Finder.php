@@ -1,5 +1,7 @@
 <?php namespace Orchestra\Extension;
 
+use RuntimeException;
+
 class Finder {
 
 	/**
@@ -15,6 +17,29 @@ class Finder {
 	 * @var array
 	 */
 	protected $paths = array();
+
+	/**
+	 * List of reserved name.
+	 *
+	 * @var array
+	 */
+	protected $reserved = array(
+		'orchestra',
+		'resources',
+		'orchestra/asset',
+		'orchestra/auth',
+		'orchestra/extension',
+		'orchestra/facile',
+		'orchestra/foundation',
+		'orchestra/html',
+		'orchestra/memory',
+		'orchestra/platform',
+		'orchestra/resources',
+		'orchestra/support',
+		'orchestra/testbench',
+		'orchestra/view',
+		'orchestra/widget',
+	);
 
 	/**
 	 * Construct a new finder.
@@ -74,17 +99,26 @@ class Finder {
 			foreach ($manifests as $manifest)
 			{
 				list($vendor, $package) = $this->getPackageSegmentsFromManifest($manifest);
+				$name = null;
 
 				// Each package should have vendor/package name pattern, 
 				// except when we deal with app. 
 				if (rtrim($this->app['path'], '/') === rtrim($path, '/'))
 				{
-					$extensions['app'] = $this->getManifestContents($manifest);
+					$name = 'app';
 				}
 				elseif ( ! is_null($vendor) and ! is_null($package))
 				{
-					$extensions["{$vendor}/{$package}"] = $this->getManifestContents($manifest);
+					$name = "{$vendor}/{$package}";
 				}
+				else continue;
+
+				if (in_array($name, $this->reserved))
+				{
+					throw new RuntimeException("Unable to register reserved name [{$name}] as extension.");
+				}
+
+				$extensions[$name] = $this->getManifestContents($manifest);
 			}
 		}
 

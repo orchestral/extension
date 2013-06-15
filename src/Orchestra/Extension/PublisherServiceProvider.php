@@ -33,7 +33,10 @@ class PublisherServiceProvider extends ServiceProvider {
 	{	
 		$this->app['orchestra.publisher.migrate'] = $this->app->share(function ($app)
 		{
+			// In order to use migration, we need to boot 'migration.repository' 
+			// instance.
 			$app['migration.repository'];
+			
 			return new Publisher\MigrateManager($app, $app['migrator']);
 		});
 	}

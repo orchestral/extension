@@ -5,7 +5,7 @@ class ConfigManager {
 	/**
 	 * Application instance.
 	 *
-	 * @var Illuminate\Foundation\Application
+	 * @var \Illuminate\Foundation\Application
 	 */
 	protected $app = null;
 
@@ -13,7 +13,7 @@ class ConfigManager {
 	 * Construct a new Orchestra\Extension\ConfigManager instance.
 	 *
 	 * @access public
-	 * @param  Illuminate\Foundation\Application    $app
+	 * @param  \Illuminate\Foundation\Application   $app
 	 * @return void
 	 */
 	public function __construct($app)
@@ -22,7 +22,7 @@ class ConfigManager {
 	}
 
 	/**
-	 * Map configuration to allow orchestra to store it in database
+	 * Map configuration to allow orchestra to store it in database.
 	 *
 	 * @access public
 	 * @param  string   $name

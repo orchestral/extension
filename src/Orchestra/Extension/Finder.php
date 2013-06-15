@@ -7,7 +7,7 @@ class Finder {
 	/**
 	 * Application instance.
 	 *
-	 * @var Illuminate\Foundation\Application
+	 * @var \Illuminate\Foundation\Application
 	 */
 	protected $app = null;
 	
@@ -45,7 +45,7 @@ class Finder {
 	 * Construct a new finder.
 	 *
 	 * @access public
-	 * @param  Illuminate\Foundation\Application    $app
+	 * @param  \Illuminate\Foundation\Application   $app
 	 * @return void
 	 */
 	public function __construct($app)
@@ -68,18 +68,21 @@ class Finder {
 	 *
 	 * @access public	
 	 * @param  string   $path
-	 * @return void
+	 * @return self
 	 */
 	public function addPath($path)
 	{
 		if ( ! in_array($path, $this->paths)) $this->paths[] = $path;
+
+		return $this;
 	}
 
 	/**
-	 * Detect available extension.
+	 * Detect available extensions.
 	 *
 	 * @access public
 	 * @return array
+	 * @throws \RuntimeException
 	 */
 	public function detect()
 	{
@@ -131,6 +134,7 @@ class Finder {
 	 * @access protected
 	 * @param  string   $manifest
 	 * @return array
+	 * @throws \Orchestra\Extension\ManifestRuntimeException
 	 */
 	protected function getManifestContents($manifest)
 	{

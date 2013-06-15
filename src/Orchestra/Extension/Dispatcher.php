@@ -5,7 +5,7 @@ class Dispatcher {
 	/**
 	 * Application instance.
 	 *
-	 * @var Illuminate\Foundation\Application
+	 * @var \Illuminate\Foundation\Application
 	 */
 	protected $app = null;
 
@@ -27,8 +27,8 @@ class Dispatcher {
 	 * Construct a new Application instance.
 	 *
 	 * @access public
-	 * @param  Illuminate\Foundation\Application        $app
-	 * @param  Orchestra\Extension\ProviderRepository   $provider
+	 * @param  \Illuminate\Foundation\Application       $app
+	 * @param  \Orchestra\Extension\ProviderRepository  $provider
 	 * @return void
 	 */
 	public function __construct($app, ProviderRepository $provider)
@@ -73,7 +73,8 @@ class Dispatcher {
 	/**
 	 * Boot all extensions.
 	 *
-	 * @var 
+	 * @access public
+	 * @return void
 	 */
 	public function boot()
 	{
@@ -111,6 +112,8 @@ class Dispatcher {
 	 * Shutdown an extension.
 	 *
 	 * @access public
+	 * @param  string   $name
+	 * @param  array    $options
 	 * @return void
 	 */
 	public function finish($name, $options)

@@ -9,14 +9,14 @@ class AssetManager {
 	/**
 	 * Application instance.
 	 *
-	 * @var Illuminate\Foundation\Application
+	 * @var \Illuminate\Foundation\Application
 	 */
 	protected $app = null;
 
 	/**
 	 * Migrator instance.
 	 *
-	 * @var Illuminate\Foundation\AssetPublisher
+	 * @var \Illuminate\Foundation\AssetPublisher
 	 */
 	protected $publisher = null;
 
@@ -24,8 +24,8 @@ class AssetManager {
 	 * Construct a new instance.
 	 *
 	 * @access public
-	 * @param  Illuminate\Foundation\Application    $app
-	 * @param  Illuminate\Foundation\AssetPublisher $publisher
+	 * @param  \Illuminate\Foundation\Application       $app
+	 * @param  \Illuminate\Foundation\AssetPublisher    $publisher
 	 * @return void
 	 */
 	public function __construct($app, AssetPublisher $publisher)
@@ -37,10 +37,10 @@ class AssetManager {
 	/**
 	 * Run migration for an extension or application.
 	 *
-	 * @access public	
+	 * @access public
 	 * @param  string   $name
 	 * @param  string   $destinationPath
-	 * @return void
+	 * @return mixed
 	 */
 	public function publish($name, $destinationPath)
 	{
@@ -48,33 +48,12 @@ class AssetManager {
 	}
 
 	/**
-	 * Migration Orchestra Platform.
+	 * Migrate extension.
 	 *
 	 * @access public
-	 * @return void
-	 */
-	public function foundation()
-	{
-		$path = rtrim($this->app['path.base'], '/').'/vendor/orchestra/foundation/src/public';
-
-		if ( ! $this->app['files']->isDirectory($path)) return false;
-
-		try 
-		{
-			return $this->publish('orchestra/foundation', $path);
-		}
-		catch (Exception $e)
-		{
-			throw new FilePermissionException("Unable to publish [{$path}].");
-			return false;
-		}
-	}
-
-	/**
-	 * Migration Extension.
-	 *
-	 * @access public
-	 * @return void
+	 * @param  string   $name
+	 * @return mixed
+	 * @throws \Orchestra\Extension\FilePermissionException
 	 */
 	public function extension($name)
 	{
@@ -85,6 +64,30 @@ class AssetManager {
 		try 
 		{
 			return $this->publish($name, $path);
+		}
+		catch (Exception $e)
+		{
+			throw new FilePermissionException("Unable to publish [{$path}].");
+			return false;
+		}
+	}
+
+	/**
+	 * Migrate Orchestra Platform.
+	 *
+	 * @access public
+	 * @return mixed
+	 * @throws \Orchestra\Extension\FilePermissionException
+	 */
+	public function foundation()
+	{
+		$path = rtrim($this->app['path.base'], '/').'/vendor/orchestra/foundation/src/public';
+
+		if ( ! $this->app['files']->isDirectory($path)) return false;
+
+		try 
+		{
+			return $this->publish('orchestra/foundation', $path);
 		}
 		catch (Exception $e)
 		{

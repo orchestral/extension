@@ -7,14 +7,14 @@ class MigrateManager {
 	/**
 	 * Application instance.
 	 *
-	 * @var Illuminate\Foundation\Application
+	 * @var \Illuminate\Foundation\Application
 	 */
 	protected $app = null;
 
 	/**
 	 * Migrator instance.
 	 *
-	 * @var Illuminate\Database\Migrations\Migrator
+	 * @var \Illuminate\Database\Migrations\Migrator
 	 */
 	protected $migrator = null;
 
@@ -22,8 +22,8 @@ class MigrateManager {
 	 * Construct a new instance.
 	 *
 	 * @access public
-	 * @param  Illuminate\Foundation\Application        $app
-	 * @param  Illuminate\Database\Migrations\Migrator  $migrator
+	 * @param  \Illuminate\Foundation\Application       $app
+	 * @param  \Illuminate\Database\Migrations\Migrator $migrator
 	 * @return void
 	 */
 	public function __construct($app, Migrator $migrator)
@@ -61,9 +61,10 @@ class MigrateManager {
 	}
 
 	/**
-	 * Migration Extension.
+	 * Migrate extension.
 	 *
 	 * @access public
+	 * @param  string   $name
 	 * @return void
 	 */
 	public function extension($name)
@@ -78,7 +79,7 @@ class MigrateManager {
 	}
 
 	/**
-	 * Migration Orchestra Platform.
+	 * Migrate Orchestra Platform.
 	 *
 	 * @access public
 	 * @return void

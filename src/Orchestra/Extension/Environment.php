@@ -8,21 +8,21 @@ class Environment {
 	/**
 	 * Application instance.
 	 *
-	 * @var Illuminate\Foundation\Application
+	 * @var \Illuminate\Foundation\Application
 	 */
 	protected $app = null;
 
 	/**
 	 * Dispatcher instance.
 	 *
-	 * @var Orchestra\Extension\Dispatcher
+	 * @var \Orchestra\Extension\Dispatcher
 	 */
 	protected $dispatcher = null;
 
 	/**
 	 * Memory instance.
 	 *
-	 * @var Orchestra\Memory\Drivers\Driver
+	 * @var \Orchestra\Memory\Drivers\Driver
 	 */
 	protected $memory = null;
 
@@ -45,8 +45,8 @@ class Environment {
 	 * Construct a new Application instance.
 	 *
 	 * @access public
-	 * @param  Illuminate\Foundation\Application    $app
-	 * @param  Orchestra\Extension\Dispatcher       $dispatcher
+	 * @param  \Illuminate\Foundation\Application   $app
+	 * @param  \Orchestra\Extension\Dispatcher      $dispatcher
 	 * @return void
 	 */
 	public function __construct($app, Dispatcher $dispatcher)
@@ -69,21 +69,24 @@ class Environment {
 	}
 
 	/**
-	 * Set memory provider
+	 * Set memory provider.
 	 *
 	 * @access public
-	 * @return void
+	 * @param  \Orchestra\Memory\Drivers\Driver 
+	 * @return self
 	 */
 	public function setMemoryProvider(MemoryDriver $memory)
 	{
 		$this->memory = $memory;
+
+		return $this;
 	}
 
 	/**
-	 * Set memory provider
+	 * Set memory provider.
 	 *
 	 * @access public
-	 * @return void
+	 * @return \Orchestra\Memory\Drivers\Driver 
 	 */
 	public function getMemoryProvider()
 	{
@@ -94,7 +97,7 @@ class Environment {
 	 * Boot active extensions.
 	 *
 	 * @access public
-	 * @return void
+	 * @return self
 	 */
 	public function boot()
 	{
@@ -129,10 +132,10 @@ class Environment {
 	}
 
 	/**
-	 * Shutdown all Extensions.
+	 * Shutdown all extensions.
 	 *
 	 * @access public
-	 * @return void
+	 * @return self
 	 */
 	public function finish()
 	{
@@ -142,10 +145,12 @@ class Environment {
 		}
 
 		$this->extensions = array();
+
+		return $this;
 	}
 
 	/**
-	 * Get extension handle.
+	 * Get extension route handle.
 	 *
 	 * @access public
 	 * @param  string   $name
@@ -191,7 +196,7 @@ class Environment {
 	}
 
 	/**
-	 * Deactivate an extension
+	 * Deactivate an extension.
 	 *
 	 * @access public
 	 * @param  string   $name
@@ -230,11 +235,11 @@ class Environment {
 	}
 
 	/**
-	 * Check if extension is started
+	 * Check if extension is started.
 	 *
 	 * @access public
 	 * @param  string   $name
-	 * @return bool
+	 * @return boolean
 	 */
 	public function started($name)
 	{

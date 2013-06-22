@@ -92,7 +92,6 @@ class AssetManager {
 		catch (Exception $e)
 		{
 			throw new FilePermissionException("Unable to publish [{$path}].");
-			return false;
 		}
 	}
 }

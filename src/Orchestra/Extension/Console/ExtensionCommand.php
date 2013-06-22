@@ -43,6 +43,7 @@ class ExtensionCommand extends Command {
 		switch ($action = $this->argument('action'))
 		{
 			case 'install' :
+				# passthru;
 			case 'upgrade' :
 				$this->fireMigration();
 				$this->info('orchestra/extension has been migrated');
@@ -151,8 +152,6 @@ class ExtensionCommand extends Command {
 	 */
 	protected function getOptions()
 	{
-		return array(
-			// array('mode', null, InputOption::VALUE_OPTIONAL, 'Extension Mode.', 'normal'),
-		);
+		return array();
 	}
 }

@@ -254,6 +254,37 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Test Orchestra\Extension\Environment::isWritableWithAsset() method.
+	 *
+	 * @test
+	 */
+	public function testIsWritableWithAssetMethod()
+	{
+		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
+		$files  = m::mock('Filesystem');
+		$app    = array(
+			'path.public' => '/var/orchestra',
+			'orchestra.memory' => $memory,
+			'files' => $files,
+		);
+
+		$memory->shouldReceive('get')->once()->with('extensions.available.foo.path', 'foo')->andReturn('foo')
+			->shouldReceive('get')->once()->with('extensions.available.bar.path', 'bar')->andReturn('bar')
+			->shouldReceive('get')->once()->with('extensions.available.foobar.path', 'foobar')->andReturn('foobar');
+		$files->shouldReceive('isDirectory')->once()->with('foo/public')->andReturn(false)
+			->shouldReceive('isDirectory')->once()->with('bar/public')->andReturn(true)
+			->shouldReceive('isWritable')->once()->with('/var/orchestra/packages/bar')->andReturn(false)
+			->shouldReceive('isDirectory')->once()->with('foobar/public')->andReturn(true)
+			->shouldReceive('isWritable')->once()->with('/var/orchestra/packages/foobar')->andReturn(true);
+
+		$stub = new Environment($app, $this->dispatcher);
+		$stub->attach($memory);
+		$this->assertFalse($stub->isWritableWithAsset('foo'));
+		$this->assertFalse($stub->isWritableWithAsset('bar'));
+		$this->assertTrue($stub->isWritableWithAsset('foobar'));
+	}
+
+	/**
 	 * Test Orchestra\Extension\Environment::detect() method.
 	 *
 	 * @test

@@ -306,7 +306,12 @@ class Environment {
 
 		$path = rtrim($memory->get("extensions.available.{$name}.path", $name), '/').'/public';
 
-		return ($files->isDirectory($path) and $files->isWritable("{$publicPath}/packages/{$name}"));
+		if ($files->isDirectory($path) and ! $files->isWritable("{$publicPath}/packages/{$name}")) 
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

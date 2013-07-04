@@ -279,7 +279,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 
 		$stub = new Environment($app, $this->dispatcher);
 		$stub->attach($memory);
-		$this->assertFalse($stub->isWritableWithAsset('foo'));
+		$this->assertTrue($stub->isWritableWithAsset('foo'));
 		$this->assertFalse($stub->isWritableWithAsset('bar'));
 		$this->assertTrue($stub->isWritableWithAsset('foobar'));
 	}

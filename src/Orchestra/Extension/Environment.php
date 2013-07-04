@@ -292,6 +292,29 @@ class Environment {
 	}
 
 	/**
+	 * Check whether an extension has a writable public asset.
+	 *
+	 * @access public
+	 * @param  string   $name
+	 * @return boolean
+	 */
+	public function isWritableWithAsset($name)
+	{
+		$files      = $this->app['files'];
+		$memory     = $this->memory;
+		$publicPath = $this->app['path.public'];
+
+		$path = rtrim($memory->get("extensions.available.{$name}.path", $name), '/').'/public';
+
+		if ($files->isDirectory($path) and ! $files->isWritable("{$publicPath}/packages/{$name}")) 
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Detect all extensions.
 	 *
 	 * @access public

@@ -177,8 +177,9 @@ class Finder {
 	protected function getPackageSegmentsFromManifest($manifest)
 	{
 		$vendor   = null;
-		$package  = null; 
-		$fragment = explode('/', $manifest);
+		$package  = null;
+		$manifest = str_replace('\\', DIRECTORY_SEPARATOR, $manifest);
+		$fragment = explode(DIRECTORY_SEPARATOR, $manifest);
 
 		// Remove orchestra.json from fragment as we are only interested with
 		// the two segment before it.

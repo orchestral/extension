@@ -17,6 +17,7 @@ class ExtensionServiceProvider extends ServiceProvider {
 		$this->registerExtensionConfigManager();
 		$this->registerExtensionFinder();
 		$this->registerAliases();
+		$this->registerExtensionEvents();
 	}
 
 	/**
@@ -84,19 +85,18 @@ class ExtensionServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('orchestra/extension', 'orchestra/extension');
-		$this->bootExtensionEvents();
 	}
 
 	/**
-	 * Register on boot extension events.
+	 * Register extension events.
 	 *
 	 * @return void
 	 */
-	protected function bootExtensionEvents()
+	protected function registerExtensionEvents()
 	{
 		$app = $this->app;
 
-		$app->booting(function($app)
+		$app->booted(function($app)
 		{
 			$env = $app['orchestra.extension'];
 

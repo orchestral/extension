@@ -71,7 +71,6 @@ class ExtensionCommand extends Command {
 	/**
 	 * Fire migration process.
 	 *
-	 * @access protected
 	 * @return void
 	 */
 	protected function fireMigration()
@@ -82,7 +81,6 @@ class ExtensionCommand extends Command {
 	/**
 	 * Fire extension detection.
 	 *
-	 * @access protected
 	 * @return void
 	 */
 	protected function fireDetect()
@@ -108,7 +106,6 @@ class ExtensionCommand extends Command {
 	/**
 	 * Fire extension activation.
 	 *
-	 * @access protected
 	 * @param  string   $name
 	 * @return void
 	 */
@@ -121,7 +118,6 @@ class ExtensionCommand extends Command {
 	/**
 	 * Fire extension activation.
 	 *
-	 * @access protected
 	 * @param  string   $name
 	 * @return void
 	 */

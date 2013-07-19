@@ -26,7 +26,6 @@ class Dispatcher {
 	/**
 	 * Construct a new Application instance.
 	 *
-	 * @access public
 	 * @param  \Illuminate\Foundation\Application       $app
 	 * @param  \Orchestra\Extension\ProviderRepository  $provider
 	 * @return void
@@ -40,7 +39,6 @@ class Dispatcher {
 	/**
 	 * Register the extension.
 	 *
-	 * @access public	
 	 * @param  string   $name
 	 * @param  array    $options
 	 * @return void
@@ -73,7 +71,6 @@ class Dispatcher {
 	/**
 	 * Boot all extensions.
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function boot()
@@ -87,7 +84,6 @@ class Dispatcher {
 	/**
 	 * Start the extension.
 	 *
-	 * @access public
 	 * @param  string   $name
 	 * @param  array    $options
 	 * @return void
@@ -111,7 +107,6 @@ class Dispatcher {
 	/**
 	 * Shutdown an extension.
 	 *
-	 * @access public
 	 * @param  string   $name
 	 * @param  array    $options
 	 * @return void
@@ -124,7 +119,6 @@ class Dispatcher {
 	/**
 	 * Fire events.
 	 *
-	 * @access protected
 	 * @param  string   $name
 	 * @param  array    $options
 	 * @param  string   $type

@@ -12,7 +12,6 @@ class ConfigManager {
 	/**
 	 * Construct a new Orchestra\Extension\ConfigManager instance.
 	 *
-	 * @access public
 	 * @param  \Illuminate\Foundation\Application   $app
 	 * @return void
 	 */
@@ -24,7 +23,6 @@ class ConfigManager {
 	/**
 	 * Map configuration to allow orchestra to store it in database.
 	 *
-	 * @access public
 	 * @param  string   $name
 	 * @param  array    $maps
 	 * @return void

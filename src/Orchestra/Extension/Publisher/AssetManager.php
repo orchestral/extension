@@ -23,7 +23,6 @@ class AssetManager {
 	/**
 	 * Construct a new instance.
 	 *
-	 * @access public
 	 * @param  \Illuminate\Foundation\Application       $app
 	 * @param  \Illuminate\Foundation\AssetPublisher    $publisher
 	 * @return void
@@ -37,7 +36,6 @@ class AssetManager {
 	/**
 	 * Run migration for an extension or application.
 	 *
-	 * @access public
 	 * @param  string   $name
 	 * @param  string   $destinationPath
 	 * @return mixed
@@ -50,7 +48,6 @@ class AssetManager {
 	/**
 	 * Migrate extension.
 	 *
-	 * @access public
 	 * @param  string   $name
 	 * @return mixed
 	 * @throws \Orchestra\Extension\FilePermissionException
@@ -75,7 +72,6 @@ class AssetManager {
 	/**
 	 * Migrate Orchestra Platform.
 	 *
-	 * @access public
 	 * @return mixed
 	 * @throws \Orchestra\Extension\FilePermissionException
 	 */

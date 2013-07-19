@@ -47,7 +47,6 @@ class Finder {
 	/**
 	 * Construct a new finder.
 	 *
-	 * @access public
 	 * @param  \Illuminate\Foundation\Application   $app
 	 * @return void
 	 */
@@ -69,7 +68,6 @@ class Finder {
 	/**
 	 * Add a new path to finder.
 	 *
-	 * @access public	
 	 * @param  string   $path
 	 * @return self
 	 */
@@ -83,7 +81,6 @@ class Finder {
 	/**
 	 * Detect available extensions.
 	 *
-	 * @access public
 	 * @return array
 	 * @throws \RuntimeException
 	 */
@@ -134,7 +131,6 @@ class Finder {
 	/**
 	 * Get manifest contents.
 	 *
-	 * @access protected
 	 * @param  string   $manifest
 	 * @return array
 	 * @throws \Orchestra\Extension\ManifestRuntimeException
@@ -170,7 +166,6 @@ class Finder {
 	/**
 	 * Get package name from manifest.
 	 * 
-	 * @access protected
 	 * @param  string   $manifest
 	 * @return array
 	 */

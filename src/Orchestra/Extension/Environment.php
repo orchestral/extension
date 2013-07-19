@@ -44,7 +44,6 @@ class Environment {
 	/**
 	 * Construct a new Application instance.
 	 *
-	 * @access public
 	 * @param  \Illuminate\Foundation\Application   $app
 	 * @param  \Orchestra\Extension\Dispatcher      $dispatcher
 	 * @return void
@@ -58,7 +57,6 @@ class Environment {
 	/**
 	 * Attach memory provider.
 	 *
-	 * @access public
 	 * @return self
 	 */
 	public function attach(MemoryDriver $memory)
@@ -71,7 +69,6 @@ class Environment {
 	/**
 	 * Set memory provider.
 	 *
-	 * @access public
 	 * @param  \Orchestra\Memory\Drivers\Driver 
 	 * @return self
 	 */
@@ -85,7 +82,6 @@ class Environment {
 	/**
 	 * Set memory provider.
 	 *
-	 * @access public
 	 * @return \Orchestra\Memory\Drivers\Driver 
 	 */
 	public function getMemoryProvider()
@@ -96,7 +92,6 @@ class Environment {
 	/**
 	 * Boot active extensions.
 	 *
-	 * @access public
 	 * @return self
 	 */
 	public function boot()
@@ -134,7 +129,6 @@ class Environment {
 	/**
 	 * Shutdown all extensions.
 	 *
-	 * @access public
 	 * @return self
 	 */
 	public function finish()
@@ -152,7 +146,6 @@ class Environment {
 	/**
 	 * Get extension route handle.
 	 *
-	 * @access public
 	 * @param  string   $name
 	 * @param  string   $default
 	 * @return string
@@ -172,7 +165,6 @@ class Environment {
 	/**
 	 * Activate an extension.
 	 *
-	 * @access public
 	 * @param  string   $name
 	 * @return void
 	 */
@@ -198,7 +190,6 @@ class Environment {
 	/**
 	 * Deactivate an extension.
 	 *
-	 * @access public
 	 * @param  string   $name
 	 * @return void
 	 */
@@ -221,7 +212,6 @@ class Environment {
 	/**
 	 * Publish an extension.
 	 *
-	 * @access public
 	 * @param  string
 	 * @return void
 	 */
@@ -237,7 +227,6 @@ class Environment {
 	/**
 	 * Check if extension is started.
 	 *
-	 * @access public
 	 * @param  string   $name
 	 * @return boolean
 	 */
@@ -249,7 +238,6 @@ class Environment {
 	/**
 	 * Get an option for a given extension.
 	 *
-	 * @access public
 	 * @param  string   $name
 	 * @param  string   $option
 	 * @param  mixed    $default
@@ -268,7 +256,6 @@ class Environment {
 	/**
 	 * Check whether an extension is available.
 	 *
-	 * @access public
 	 * @param  string   $name
 	 * @return boolean
 	 */
@@ -281,7 +268,6 @@ class Environment {
 	/**
 	 * Check whether an extension is active.
 	 *
-	 * @access public
 	 * @param  string   $name
 	 * @return boolean
 	 */
@@ -294,7 +280,6 @@ class Environment {
 	/**
 	 * Check whether an extension has a writable public asset.
 	 *
-	 * @access public
 	 * @param  string   $name
 	 * @return boolean
 	 */
@@ -317,7 +302,6 @@ class Environment {
 	/**
 	 * Detect all extensions.
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function detect()
@@ -331,7 +315,6 @@ class Environment {
 	/**
 	 * Determine whether current request is in safe mode or not.
 	 *
-	 * @access protected
 	 * @return boolean
 	 */
 	protected function isSafeMode()

@@ -19,7 +19,6 @@ class ProviderRepository {
 	/**
 	 * Construct a new finder.
 	 *
-	 * @access public
 	 * @param  \Illuminate\Foundation\Application   $app
 	 * @return void
 	 */
@@ -31,7 +30,6 @@ class ProviderRepository {
 	/**
 	 * Load available service providers.
 	 *
-	 * @access public
 	 * @param  array    $services
 	 * @return void
 	 */

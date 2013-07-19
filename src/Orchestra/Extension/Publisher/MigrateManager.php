@@ -21,7 +21,6 @@ class MigrateManager {
 	/**
 	 * Construct a new instance.
 	 *
-	 * @access public
 	 * @param  \Illuminate\Foundation\Application       $app
 	 * @param  \Illuminate\Database\Migrations\Migrator $migrator
 	 * @return void
@@ -35,7 +34,6 @@ class MigrateManager {
 	/**
 	 * Create migration repository if it's not available.
 	 *
-	 * @access protected
 	 * @return void
 	 */
 	protected function createMigrationRepository()
@@ -48,7 +46,6 @@ class MigrateManager {
 	/**
 	 * Run migration for an extension or application.
 	 *
-	 * @access public	
 	 * @param  string   $path
 	 * @return void
 	 */
@@ -63,7 +60,6 @@ class MigrateManager {
 	/**
 	 * Migrate extension.
 	 *
-	 * @access public
 	 * @param  string   $name
 	 * @return void
 	 */
@@ -81,7 +77,6 @@ class MigrateManager {
 	/**
 	 * Migrate Orchestra Platform.
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function foundation()

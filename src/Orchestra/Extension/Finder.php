@@ -137,7 +137,7 @@ class Finder {
 	 */
 	protected function getManifestContents($manifest)
 	{
-		$path     = str_replace('orchestra.json', '', $manifest);
+		$path     = $sourcePath = str_replace('orchestra.json', '', $manifest);
 		$jsonable = json_decode($this->app['files']->get($manifest));
 
 		// If json_decode fail, due to invalid json format. We going to 
@@ -156,6 +156,7 @@ class Finder {
 		// configuration.
 		return array(
 			'path'        => rtrim($path, '/'),
+			'source-path' => rtrim($sourcePath, '/'),
 			'name'        => (isset($jsonable->name) ? $jsonable->name : null),
 			'description' => (isset($jsonable->description) ? $jsonable->description : null),
 			'author'      => (isset($jsonable->author) ? $jsonable->author : null),

@@ -92,12 +92,13 @@ class Dispatcher {
 	{
 		$file     = $this->app['files'];
 		$finder   = $this->app['orchestra.extension.finder'];
-		$basePath = rtrim($options['path'], '/');
+		$base     = rtrim($options['path'], '/');
+		$source   = rtrim(isset($options['source-path']) ? $options['source-path'] : $base, '/');
 		$autoload = isset($options['autoload']) ? $options['autoload'] : array();
 
 		$paths = array_merge(
 			$autoload, 
-			array("{$basePath}/src/orchestra.php", "{$basePath}/orchestra.php")
+			array("{$base}/src/orchestra.php", "{$base}/orchestra.php")
 		); 
 
 		// By now, extension should already exist as an extension. We should
@@ -105,7 +106,8 @@ class Dispatcher {
 		foreach ($paths as $path)
 		{
 			$path = $finder->resolveExtensionPath($path);
-
+			$path = str_replace('source-path::', "{$source}/", $path);
+			
 			if ($file->isFile($path)) $file->getRequire($path);
 		}
 

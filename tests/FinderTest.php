@@ -71,6 +71,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 		$expected = array(
 			'laravel/framework' => array(
 				'path'        => '/foo/path/vendor/laravel/framework',
+				'source-path' => '/foo/path/vendor/laravel/framework',
 				'name'        => 'Laravel Framework',
 				'description' => null,
 				'author'      => null,
@@ -82,6 +83,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 			),
 			'app' => array(
 				'path'        => '/foo/app',
+				'source-path' => '/foo/app',
 				'name'        => 'Application',
 				'description' => null,
 				'author'      => null,

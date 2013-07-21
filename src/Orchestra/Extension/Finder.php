@@ -162,6 +162,7 @@ class Finder {
 			'url'         => (isset($jsonable->url) ? $jsonable->url : null),
 			'version'     => (isset($jsonable->version) ? $jsonable->version : '>0'),
 			'config'      => (isset($jsonable->config) ? $jsonable->config : array()),
+			'autoload'    => (isset($jsonable->autoload) ? $jsonable->autoload : array()),
 			'provide'     => (isset($jsonable->provide) ? $jsonable->provide : array()),
 		);
 	}
@@ -198,7 +199,7 @@ class Finder {
 	 * @param  string   $path
 	 * @return string
 	 */
-	protected function resolveExtensionPath($path)
+	public function resolveExtensionPath($path)
 	{
 		$app  = rtrim($this->app['path'], '/');
 		$base = rtrim($this->app['path.base'], '/');

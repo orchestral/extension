@@ -40,16 +40,19 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase {
 		$config   = m::mock('Config');
 		$events   = m::mock('Event');
 		$files    = m::mock('Filesystem');
+		$finder   = m::mock('Finder');
 		$app      = array(
 			'config' => $config,
 			'events' => $events,
 			'files'  => $files,
+			'orchestra.extension.finder' => $finder,
 		);
 
 		$options1 = array(
-			'config'  => array('handles' => 'laravel'),
-			'path'    => '/foo/path/laravel/framework/',
-			'provide' => array('Laravel\FrameworkServiceProvider'),
+			'config'   => array('handles' => 'laravel'),
+			'path'     => '/foo/path/laravel/framework/',
+			'autoload' => array(),
+			'provide'  => array('Laravel\FrameworkServiceProvider'),
 		);
 
 		$options2 = array(
@@ -57,28 +60,34 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase {
 			'path'   => '/foo/app/',
 		);
 
-		$config->shouldReceive('set')
-				->once()->with('orchestra/extension::handles.laravel/framework', 'laravel')->andReturn(null);
-		$events->shouldReceive('fire')
-				->once()->with('extension.started: laravel/framework', array($options1))->andReturn(null)
-			->shouldReceive('fire')
-				->once()->with('extension.started', array('laravel/framework', $options1))->andReturn(null)
-			->shouldReceive('fire')
-				->once()->with('extension.started: app', array($options2))->andReturn(null)
-			->shouldReceive('fire')
-				->once()->with('extension.started', array('app', $options2))->andReturn(null);
-		$files->shouldReceive('isFile')
-				->once()->with('/foo/path/laravel/framework/src/orchestra.php')->andReturn(true)
-			->shouldReceive('getRequire')
-				->once()->with('/foo/path/laravel/framework/src/orchestra.php')->andReturn(true)
-			->shouldReceive('isFile')
-				->once()->with('/foo/app/src/orchestra.php')->andReturn(false)
-			->shouldReceive('isFile')
-				->once()->with('/foo/app/orchestra.php')->andReturn(true)
-			->shouldReceive('getRequire')
-				->once()->with('/foo/app/orchestra.php')->andReturn(true);
-		$provider->shouldReceive('provides')
-				->once()->with(array('Laravel\FrameworkServiceProvider'))->andReturn(true);
+		$config->shouldReceive('set')->once()
+				->with('orchestra/extension::handles.laravel/framework', 'laravel')->andReturn(null);
+		$events->shouldReceive('fire')->once()
+				->with('extension.started: laravel/framework', array($options1))->andReturn(null)
+			->shouldReceive('fire')->once()
+				->with('extension.started', array('laravel/framework', $options1))->andReturn(null)
+			->shouldReceive('fire')->once()
+				->with('extension.started: app', array($options2))->andReturn(null)
+			->shouldReceive('fire')->once()
+				->with('extension.started', array('app', $options2))->andReturn(null);
+		$files->shouldReceive('isFile')->once()
+				->with('/foo/path/laravel/framework/src/orchestra.php')->andReturn(true)
+			->shouldReceive('isFile')->once()
+				->with('/foo/path/laravel/framework/orchestra.php')->andReturn(false)
+			->shouldReceive('getRequire')->once()
+				->with('/foo/path/laravel/framework/src/orchestra.php')->andReturn(true)
+			->shouldReceive('isFile')->once()
+				->with('/foo/app/src/orchestra.php')->andReturn(false)
+			->shouldReceive('isFile')->once()
+				->with('/foo/app/orchestra.php')->andReturn(true)
+			->shouldReceive('getRequire')->once()
+				->with('/foo/app/orchestra.php')->andReturn(true);
+		$provider->shouldReceive('provides')->once()
+				->with(array('Laravel\FrameworkServiceProvider'))->andReturn(true);
+		$finder->shouldReceive('resolveExtensionPath')->andReturnUsing(function ($p)
+				{
+					return $p;
+				});
 
 		$stub = new Dispatcher($app, $provider);
 

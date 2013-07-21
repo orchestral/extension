@@ -90,15 +90,23 @@ class Dispatcher {
 	 */
 	public function start($name, $options)
 	{
+		$file     = $this->app['files'];
+		$finder   = $this->app['orchestra.extension.finder'];
+		$basePath = rtrim($options['path'], '/');
+		$autoload = isset($options['autoload']) ? $options['autoload'] : array();
+
+		$paths = array_merge(
+			$autoload, 
+			array("{$basePath}/src/orchestra.php", "{$basePath}/orchestra.php")
+		); 
+
 		// By now, extension should already exist as an extension. We should
 		// be able start orchestra.php start file on each package.
-		if ($this->app['files']->isFile($file = rtrim($options['path'], '/').'/src/orchestra.php'))
+		foreach ($paths as $path)
 		{
-			$this->app['files']->getRequire($file);
-		}
-		elseif ($this->app['files']->isFile($file = rtrim($options['path'], '/').'/orchestra.php'))
-		{
-			$this->app['files']->getRequire($file);
+			$path = $finder->resolveExtensionPath($path);
+
+			if ($file->isFile($path)) $file->getRequire($path);
 		}
 
 		$this->fireEvent($name, $options, 'started');

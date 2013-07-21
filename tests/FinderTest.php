@@ -49,8 +49,8 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	{
 		$files = m::mock('\Illuminate\Filesystem\Filesystem');
 		$app = array(
-			'path'      => '/foo/app/',
-			'path.base' => '/foo/path/',
+			'path'      => '/foo/app',
+			'path.base' => '/foo/path',
 			'files'     => $files,
 		);
 
@@ -63,14 +63,14 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 				->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json', '/foo/orchestra.json'))
 			->shouldReceive('get')->once()
 				->with('/foo/path/vendor/laravel/framework/orchestra.json')
-				->andReturn('{"name":"Laravel Framework"}')
+				->andReturn('{"name":"Laravel Framework","path": "vendor::laravel/framework"}')
 			->shouldReceive('glob')->once()
 				->with('/foo/path/workbench/*/*/orchestra.json')->andReturn(array());
 
 		$stub     = new Finder($app);
 		$expected = array(
 			'laravel/framework' => array(
-				'path'        => '/foo/path/vendor/laravel/framework/',
+				'path'        => '/foo/path/vendor/laravel/framework',
 				'name'        => 'Laravel Framework',
 				'description' => null,
 				'author'      => null,
@@ -80,7 +80,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 				'provide'     => array(),
 			),
 			'app' => array(
-				'path'        => '/foo/app/',
+				'path'        => '/foo/app',
 				'name'        => 'Application',
 				'description' => null,
 				'author'      => null,

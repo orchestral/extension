@@ -101,7 +101,7 @@ class Finder {
 
 			foreach ($manifests as $manifest)
 			{
-				list($vendor, $package) = $this->getPackageSegmentsFromManifest($manifest);
+				list($vendor, $package) = $this->resolveExtensionNamespace($manifest);
 				$name = null;
 
 				// Each package should have vendor/package name pattern, 
@@ -137,6 +137,7 @@ class Finder {
 	 */
 	protected function getManifestContents($manifest)
 	{
+		$path     = str_replace('orchestra.json', '', $manifest);
 		$jsonable = json_decode($this->app['files']->get($manifest));
 
 		// If json_decode fail, due to invalid json format. We going to 
@@ -147,12 +148,14 @@ class Finder {
 			throw new ManifestRuntimeException("Cannot decode file [{$manifest}]");
 		}
 
+		if (isset($jsonable->path)) $path = $this->resolveExtensionPath($jsonable->path);
+
 		// Generate a proper manifest configuration for the extension. This 
 		// would allow other part of the application to use this configuration
 		// to migrate, load service provider as well as preload some 
 		// configuration.
 		return array(
-			'path'        => str_replace('orchestra.json', '', $manifest),
+			'path'        => rtrim($path, '/'),
 			'name'        => (isset($jsonable->name) ? $jsonable->name : null),
 			'description' => (isset($jsonable->description) ? $jsonable->description : null),
 			'author'      => (isset($jsonable->author) ? $jsonable->author : null),
@@ -164,12 +167,12 @@ class Finder {
 	}
 
 	/**
-	 * Get package name from manifest.
+	 * Resolve extension namespace name from manifest.
 	 * 
 	 * @param  string   $manifest
 	 * @return array
 	 */
-	protected function getPackageSegmentsFromManifest($manifest)
+	protected function resolveExtensionNamespace($manifest)
 	{
 		$vendor   = null;
 		$package  = null;
@@ -187,5 +190,23 @@ class Finder {
 		}
 
 		return array($vendor, $package);
+	}
+
+	/**
+	 * Resolve extension path.
+	 *
+	 * @param  string   $path
+	 * @return string
+	 */
+	protected function resolveExtensionPath($path)
+	{
+		$app  = rtrim($this->app['path'], '/');
+		$base = rtrim($this->app['path.base'], '/');
+		
+		return str_replace(
+			array('app::', 'vendor::', 'workbench::'),
+			array("{$app}/", "{$base}/vendor/", "{$base}/workbench/"),
+			$path
+		);
 	}
 }

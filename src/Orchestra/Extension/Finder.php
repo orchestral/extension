@@ -36,8 +36,6 @@ class Finder {
 		'orchestra/model',
 		'orchestra/platform',
 		'orchestra/resources',
-		'orchestra/routing',
-		'orchestra/services',
 		'orchestra/support',
 		'orchestra/testbench',
 		'orchestra/view',

@@ -47,12 +47,12 @@ class Dispatcher {
 	{
 		if ( ! is_string($name)) return ;
 
-		$config = $options['config'];
+		$handles = array_get($options, 'config.handles');
 
 		// Set the handles to orchestra/extension package config (if available).
-		if (isset($config['handles']))
+		if ( ! is_null($handles))
 		{
-			$this->app['config']->set("orchestra/extension::handles.{$name}", $config['handles']);
+			$this->app['config']->set("orchestra/extension::handles.{$name}", $handles);
 		}
 
 		// Get available service providers from orchestra.json and register 
@@ -93,8 +93,8 @@ class Dispatcher {
 		$file     = $this->app['files'];
 		$finder   = $this->app['orchestra.extension.finder'];
 		$base     = rtrim($options['path'], '/');
-		$source   = rtrim(isset($options['source-path']) ? $options['source-path'] : $base, '/');
-		$autoload = isset($options['autoload']) ? $options['autoload'] : array();
+		$source   = rtrim(array_get($options, 'source-path', $base), '/');
+		$autoload = array_get($options, 'autoload', array());
 
 		$paths = array_merge(
 			$autoload, 

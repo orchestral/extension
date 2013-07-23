@@ -49,9 +49,16 @@ class MigrateManagerTest extends \PHPUnit_Framework_TestCase {
 			'orchestra.extension' => $extension,
 		);
 
-		$extension->shouldReceive('option')->once()->with('foo/bar', 'path')->andReturn('/foo/path/foo/bar/');
+		$extension->shouldReceive('option')->once()->with('foo/bar', 'path')->andReturn('/foo/path/foo/bar/')
+			->shouldReceive('option')->once()->with('foo/bar', 'source-path')->andReturn('/foo/app/foo/bar/')
+			->shouldReceive('option')->once()->with('laravel/framework', 'path')->andReturn('/foo/path/laravel/framework/')
+			->shouldReceive('option')->once()->with('laravel/framework', 'source-path')->andReturn('/foo/path/laravel/framework/');
 		$files->shouldReceive('isDirectory')->once()->with('/foo/path/foo/bar/database/migrations/')->andReturn(true)
-			->shouldReceive('isDirectory')->once()->with('/foo/path/foo/bar/src/migrations/')->andReturn(false);
+			->shouldReceive('isDirectory')->once()->with('/foo/path/foo/bar/src/migrations/')->andReturn(false)
+			->shouldReceive('isDirectory')->once()->with('/foo/app/foo/bar/database/migrations/')->andReturn(false)
+			->shouldReceive('isDirectory')->once()->with('/foo/app/foo/bar/src/migrations/')->andReturn(false)
+			->shouldReceive('isDirectory')->once()->with('/foo/path/laravel/framework/database/migrations/')->andReturn(false)
+			->shouldReceive('isDirectory')->once()->with('/foo/path/laravel/framework/src/migrations/')->andReturn(false);
 		$migrator->shouldReceive('getRepository')->once()->andReturn($repository)
 			->shouldReceive('run')->once()->with('/foo/path/foo/bar/database/migrations/')->andReturn(null);
 		$repository->shouldReceive('repositoryExists')->once()->andReturn(true)
@@ -59,6 +66,7 @@ class MigrateManagerTest extends \PHPUnit_Framework_TestCase {
 
 		$stub = new MigrateManager($app, $migrator);
 		$stub->extension('foo/bar');
+		$stub->extension('laravel/framework');
 	}
 
 	/**

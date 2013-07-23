@@ -65,8 +65,24 @@ class MigrateManager {
 	 */
 	public function extension($name)
 	{
-		$basePath = rtrim($this->app['orchestra.extension']->option($name, 'path'), '/');
-		$paths    = array("{$basePath}/database/migrations/", "{$basePath}/src/migrations/");
+		$extension  = $this->app['orchestra.extension'];
+		$basePath   = rtrim($extension->option($name, 'path'), '/');
+		$sourcePath = rtrim($extension->option($name, 'source-path'), '/');
+
+		$paths = array(
+			"{$basePath}/database/migrations/", 
+			"{$basePath}/src/migrations/",
+		);
+
+		// We don't execute the same migration twice, this little code 
+		// compare both folder before appending the paths.
+		if ($basePath !== $sourcePath and ! empty($sourcePath))
+		{
+			$paths = array_merge($paths , array(
+				"{$sourcePath}/database/migrations/", 
+				"{$sourcePath}/src/migrations/",
+			));
+		}
 
 		foreach ($paths as $path)
 		{

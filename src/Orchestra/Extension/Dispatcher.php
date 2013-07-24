@@ -66,6 +66,7 @@ class Dispatcher {
 		// start the extension. An extension might be using another extension 
 		// to work.
 		$this->extensions[$name] = $options;
+		$this->start($name, $options);
 	}
 
 	/**
@@ -77,7 +78,7 @@ class Dispatcher {
 	{
 		foreach ($this->extensions as $name => $options)
 		{
-			$this->start($name, $options);
+			$this->fireEvent($name, $options, 'booted');
 		}
 	}
 

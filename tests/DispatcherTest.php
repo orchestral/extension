@@ -69,7 +69,15 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase {
 			->shouldReceive('fire')->once()
 				->with('extension.started: app', array($options2))->andReturn(null)
 			->shouldReceive('fire')->once()
-				->with('extension.started', array('app', $options2))->andReturn(null);
+				->with('extension.started', array('app', $options2))->andReturn(null)
+			->shouldReceive('fire')->once()
+				->with('extension.booted: laravel/framework', array($options1))->andReturn(null)
+			->shouldReceive('fire')->once()
+				->with('extension.booted', array('laravel/framework', $options1))->andReturn(null)
+			->shouldReceive('fire')->once()
+				->with('extension.booted: app', array($options2))->andReturn(null)
+			->shouldReceive('fire')->once()
+				->with('extension.booted', array('app', $options2))->andReturn(null);
 		$files->shouldReceive('isFile')->once()
 				->with('/foo/path/laravel/framework/src/orchestra.php')->andReturn(true)
 			->shouldReceive('isFile')->once()

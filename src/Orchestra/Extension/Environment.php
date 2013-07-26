@@ -271,11 +271,25 @@ class Environment {
 	 * @param  string   $name
 	 * @return boolean
 	 */
-	public function isActive($name)
+	public function activated($name)
 	{
 		$memory = $this->memory;
 		return (is_array($memory->get("extensions.active.{$name}")));
 	}
+
+	/**
+	 * Check whether an extension is active.
+	 *
+	 * @deprecated      To be removed in v2.1
+	 * @param  string   $name
+	 * @return boolean
+	 * @see    self::activated()
+	 */
+	public function isActive($name)
+	{
+		return $this->activated($name);
+	}
+	
 
 	/**
 	 * Check whether an extension has a writable public asset.
@@ -317,7 +331,7 @@ class Environment {
 	 *
 	 * @return boolean
 	 */
-	protected function isSafeMode()
+	public function isSafeMode()
 	{
 		$input   = $this->app['request']->input('safe_mode');
 		$session = $this->app['session'];
@@ -328,12 +342,10 @@ class Environment {
 			return false;
 		}
 
-		$mode = $session->get('orchestra.safemode');
+		$mode = $session->get('orchestra.safemode', 'off');
 
-		if (is_null($mode))
+		if ($input === 'on' and $mode !== $input)
 		{
-			$input !== 'on' and $input = 'off';
-
 			$session->put('orchestra.safemode', $mode = $input);
 		}
 

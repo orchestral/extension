@@ -121,14 +121,37 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 			->shouldReceive('boot')->once()->andReturn(null);
 		$config->shouldReceive('get')->with('orchestra/extension::handles.laravel/framework', '/')->andReturn('laravel');
 		$request->shouldReceive('input')->once()->with('safe_mode')->andReturn(null);
-		$session->shouldReceive('get')->once()->with('orchestra.safemode')->andReturn(null)
-			->shouldReceive('put')->once()->with('orchestra.safemode', 'off')->andReturn(null);
+		$session->shouldReceive('get')->once()->with('orchestra.safemode', 'off')->andReturn('off');
 
 		$stub = new Environment($app, $dispatcher);
 		$stub->attach($memory);
 		$stub->boot();
 
 		$this->assertEquals('laravel', $stub->route('laravel/framework', '/'));
+	}
+
+	/**
+	 * Test Orchestra\Extension\Environment::isSafeMode() method.
+	 *
+	 * @test
+	 */
+	public function testIsSafeModeMethod()
+	{
+		$dispatcher = $this->dispatcher;
+		$request    = m::mock('Request');
+		$session    = m::mock('Session');
+		$app        = array(
+			'request' => $request,
+			'session' => $session,
+		);
+
+		$stub = new Environment($app, $dispatcher);
+
+		$request->shouldReceive('input')->once()->with('safe_mode')->andReturn('on');
+		$session->shouldReceive('get')->once()->with('orchestra.safemode', 'off')->andReturn('off')
+			->shouldReceive('put')->once()->with('orchestra.safemode', 'on')->andReturn(null);
+
+		$this->assertTrue($stub->isSafeMode());
 	}
 
 	/**

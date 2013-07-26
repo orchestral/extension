@@ -179,7 +179,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Test Orchestra\Extension\Environment::isActive() method.
+	 * Test Orchestra\Extension\Environment::isAvailable() method.
 	 *
 	 * @test
 	 */
@@ -260,11 +260,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Test Orchestra\Extension\Environment::isActive() method.
+	 * Test Orchestra\Extension\Environment::activated() method.
 	 *
 	 * @test
 	 */
-	public function testIsActiveMethod()
+	public function testActivatedMethod()
 	{
 		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
 		$app    = array('orchestra.memory' => $memory);
@@ -273,7 +273,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 
 		$stub = new Environment($app, $this->dispatcher);
 		$stub->attach($memory);
-		$this->assertTrue($stub->isActive('laravel/framework'));
+		$this->assertTrue($stub->activated('laravel/framework'));
 	}
 
 	/**

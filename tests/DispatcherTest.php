@@ -51,7 +51,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase {
 		$options1 = array(
 			'config'   => array('handles' => 'laravel'),
 			'path'     => '/foo/path/laravel/framework/',
-			'autoload' => array(),
+			'autoload' => array('hello.php'),
 			'provide'  => array('Laravel\FrameworkServiceProvider'),
 		);
 
@@ -67,31 +67,37 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase {
 			->shouldReceive('fire')->once()
 				->with('extension.started', array('laravel/framework', $options1))->andReturn(null)
 			->shouldReceive('fire')->once()
+				->with('extension.booted: laravel/framework', array($options1))->andReturn(null)
+			->shouldReceive('fire')->once()
+				->with('extension.booted', array('laravel/framework', $options1))->andReturn(null);
+		$files->shouldReceive('isFile')->once()
+				->with('/foo/path/laravel/framework/hello.php')->andReturn(true)
+			->shouldReceive('isFile')->once()
+				->with('/foo/path/laravel/framework/src/orchestra.php')->andReturn(true)
+			->shouldReceive('isFile')->once()
+				->with('/foo/path/laravel/framework/orchestra.php')->andReturn(false)
+			->shouldReceive('getRequire')->once()
+				->with('/foo/path/laravel/framework/hello.php')->andReturn(true)
+			->shouldReceive('getRequire')->once()
+				->with('/foo/path/laravel/framework/src/orchestra.php')->andReturn(true);
+		$provider->shouldReceive('provides')->once()
+				->with(array('Laravel\FrameworkServiceProvider'))->andReturn(true);
+
+		$events->shouldReceive('fire')->once()
 				->with('extension.started: app', array($options2))->andReturn(null)
 			->shouldReceive('fire')->once()
 				->with('extension.started', array('app', $options2))->andReturn(null)
-			->shouldReceive('fire')->once()
-				->with('extension.booted: laravel/framework', array($options1))->andReturn(null)
-			->shouldReceive('fire')->once()
-				->with('extension.booted', array('laravel/framework', $options1))->andReturn(null)
 			->shouldReceive('fire')->once()
 				->with('extension.booted: app', array($options2))->andReturn(null)
 			->shouldReceive('fire')->once()
 				->with('extension.booted', array('app', $options2))->andReturn(null);
 		$files->shouldReceive('isFile')->once()
-				->with('/foo/path/laravel/framework/src/orchestra.php')->andReturn(true)
-			->shouldReceive('isFile')->once()
-				->with('/foo/path/laravel/framework/orchestra.php')->andReturn(false)
-			->shouldReceive('getRequire')->once()
-				->with('/foo/path/laravel/framework/src/orchestra.php')->andReturn(true)
-			->shouldReceive('isFile')->once()
 				->with('/foo/app/src/orchestra.php')->andReturn(false)
 			->shouldReceive('isFile')->once()
 				->with('/foo/app/orchestra.php')->andReturn(true)
 			->shouldReceive('getRequire')->once()
 				->with('/foo/app/orchestra.php')->andReturn(true);
-		$provider->shouldReceive('provides')->once()
-				->with(array('Laravel\FrameworkServiceProvider'))->andReturn(true);
+
 		$finder->shouldReceive('resolveExtensionPath')->andReturnUsing(function ($p)
 				{
 					return $p;

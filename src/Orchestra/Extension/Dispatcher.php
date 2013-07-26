@@ -97,8 +97,16 @@ class Dispatcher {
 		$source   = rtrim(array_get($options, 'source-path', $base), '/');
 		$autoload = array_get($options, 'autoload', array());
 
+		$generatePath = function ($path) use ($base) {
+			if (str_contains($path, '::')) return $path;
+
+			return "source-path::".ltrim($path, '/');
+		};
+
+		$paths = array_map($generatePath, $autoload);
+
 		$paths = array_merge(
-			$autoload, 
+			$paths, 
 			array("{$base}/src/orchestra.php", "{$base}/orchestra.php")
 		); 
 

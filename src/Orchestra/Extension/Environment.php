@@ -344,7 +344,7 @@ class Environment {
 
 		$mode = $session->get('orchestra.safemode', 'off');
 
-		if ($input === 'on')
+		if ($input === 'on' and $mode !== $input)
 		{
 			$session->put('orchestra.safemode', $mode = $input);
 		}

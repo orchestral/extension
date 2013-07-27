@@ -216,8 +216,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 			'events' => $events,
 		);
 
-		$dispatcher->shouldReceive('register')->once()->with('laravel/framework', m::type('Array'))->andReturn(null)
-			->shouldReceive('start')->once()->with('laravel/framework', m::type('Array'))->andReturn(null);
+		$dispatcher->shouldReceive('register')->once()->with('laravel/framework', m::type('Array'))->andReturn(null);
 		$memory->shouldReceive('get')
 				->once()->with('extensions.available', array())->andReturn(array('laravel/framework' => array()))
 			->shouldReceive('get')

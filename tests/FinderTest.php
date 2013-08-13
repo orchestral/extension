@@ -156,8 +156,6 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 		with(new Finder($app))->detect();
 	}
 
-
-
 	/**
 	 * Test Orchestra\Extension\Finder::guessExtensionPath() method.
 	 *

@@ -54,7 +54,9 @@ class AssetManager {
 	 */
 	public function extension($name)
 	{
-		$path = rtrim($this->app['orchestra.extension']->option($name, 'path'), '/').'/public';
+		$finder   = $this->app['orchestra.extension.finder'];
+		$basePath = rtrim($this->app['orchestra.extension']->option($name, 'path'), '/');
+		$path     = $finder->resolveExtensionPath("{$basePath}/public");
 		
 		if ( ! $this->app['files']->isDirectory($path)) return false;
 

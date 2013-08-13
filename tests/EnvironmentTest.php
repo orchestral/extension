@@ -284,16 +284,21 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	public function testIsWritableWithAssetMethod()
 	{
 		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
+		$finder = m::mock('Finder');
 		$files  = m::mock('Filesystem');
 		$app    = array(
 			'path.public' => '/var/orchestra',
 			'orchestra.memory' => $memory,
 			'files' => $files,
+			'orchestra.extension.finder' => $finder,
 		);
 
 		$memory->shouldReceive('get')->once()->with('extensions.available.foo.path', 'foo')->andReturn('foo')
 			->shouldReceive('get')->once()->with('extensions.available.bar.path', 'bar')->andReturn('bar')
 			->shouldReceive('get')->once()->with('extensions.available.foobar.path', 'foobar')->andReturn('foobar');
+		$finder->shouldReceive('resolveExtensionPath')->once()->with('foo/public')->andReturn('foo/public')
+			->shouldReceive('resolveExtensionPath')->once()->with('bar/public')->andReturn('bar/public')
+			->shouldReceive('resolveExtensionPath')->once()->with('foobar/public')->andReturn('foobar/public');
 		$files->shouldReceive('isDirectory')->once()->with('foo/public')->andReturn(false)
 			->shouldReceive('isDirectory')->once()->with('bar/public')->andReturn(true)
 			->shouldReceive('isWritable')->once()->with('/var/orchestra/packages/bar')->andReturn(false)

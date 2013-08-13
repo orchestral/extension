@@ -299,11 +299,13 @@ class Environment {
 	 */
 	public function isWritableWithAsset($name)
 	{
+		$finder     = $this->app['orchestra.extension.finder'];
 		$files      = $this->app['files'];
 		$memory     = $this->memory;
 		$publicPath = $this->app['path.public'];
 
-		$path = rtrim($memory->get("extensions.available.{$name}.path", $name), '/').'/public';
+		$basePath = rtrim($memory->get("extensions.available.{$name}.path", $name), '/');
+		$path     = $finder->resolveExtensionPath("{$basePath}/public");
 
 		if ($files->isDirectory($path) and ! $files->isWritable("{$publicPath}/packages/{$name}")) 
 		{

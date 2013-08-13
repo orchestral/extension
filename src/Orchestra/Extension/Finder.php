@@ -135,7 +135,8 @@ class Finder {
 	 */
 	protected function getManifestContents($manifest)
 	{
-		$path     = $sourcePath = str_replace('orchestra.json', '', $manifest);
+		$base     = rtrim($this->app['path.base'], '/');
+		$path     = $sourcePath = $this->guessExtensionPath($manifest);
 		$jsonable = json_decode($this->app['files']->get($manifest));
 
 		// If json_decode fail, due to invalid json format. We going to 
@@ -146,7 +147,7 @@ class Finder {
 			throw new ManifestRuntimeException("Cannot decode file [{$manifest}]");
 		}
 
-		if (isset($jsonable->path)) $path = $this->resolveExtensionPath($jsonable->path);
+		if (isset($jsonable->path)) $path = $jsonable->path;
 
 		// Generate a proper manifest configuration for the extension. This 
 		// would allow other part of the application to use this configuration
@@ -193,6 +194,25 @@ class Finder {
 	}
 
 	/**
+	 * Guess extension path from manifest file.
+	 *
+	 * @param  string   $path
+	 * @return string
+	 */
+	public function guessExtensionPath($path)
+	{
+		$path = str_replace('orchestra.json', '', $path);
+		$app  = rtrim($this->app['path'], '/');
+		$base = rtrim($this->app['path.base'], '/');
+		
+		return str_replace(
+			array("{$app}/", "{$base}/vendor/", "{$base}/workbench/", "{$base}/"),
+			array('app::', 'vendor::', 'workbench::', 'base::'),
+			$path
+		);
+	}
+
+	/**
 	 * Resolve extension path.
 	 *
 	 * @param  string   $path
@@ -204,8 +224,8 @@ class Finder {
 		$base = rtrim($this->app['path.base'], '/');
 		
 		return str_replace(
-			array('app::', 'vendor::', 'workbench::'),
-			array("{$app}/", "{$base}/vendor/", "{$base}/workbench/"),
+			array('app::', 'vendor::', 'workbench::', 'base::'),
+			array("{$app}/", "{$base}/vendor/", "{$base}/workbench/", "{$base}/"),
 			$path
 		);
 	}

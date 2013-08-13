@@ -70,8 +70,8 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 		$stub     = new Finder($app);
 		$expected = array(
 			'laravel/framework' => array(
-				'path'        => '/foo/path/vendor/laravel/framework',
-				'source-path' => '/foo/path/vendor/laravel/framework',
+				'path'        => 'vendor::laravel/framework',
+				'source-path' => 'vendor::laravel/framework',
 				'name'        => 'Laravel Framework',
 				'description' => null,
 				'author'      => null,
@@ -82,8 +82,8 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 				'provide'     => array(),
 			),
 			'app' => array(
-				'path'        => '/foo/app',
-				'source-path' => '/foo/app',
+				'path'        => 'app::',
+				'source-path' => 'app::',
 				'name'        => 'Application',
 				'description' => null,
 				'author'      => null,
@@ -154,5 +154,53 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 				->andReturn('{"name":"Laravel Framework}');
 
 		with(new Finder($app))->detect();
+	}
+
+	/**
+	 * Test Orchestra\Extension\Finder::guessExtensionPath() method.
+	 *
+	 * @test
+	 * @dataProvider extensionPathProvider
+	 */
+	public function testGuessExtensionPathMethod($output, $expected)
+	{
+		$app = array(
+			'path'      => '/foo/path/app/',
+			'path.base' => '/foo/path/',
+		);
+
+		$stub = new Finder($app);
+		$this->assertEquals($expected, $stub->guessExtensionPath($output));
+	}
+
+	/**
+	 * Test Orchestra\Extension\Finder::resolveExtensionPath() method.
+	 *
+	 * @test
+	 * @dataProvider extensionPathProvider
+	 */
+	public function testResolveExtensionPathMethod($expected, $output)
+	{
+		$app = array(
+			'path'      => '/foo/path/app/',
+			'path.base' => '/foo/path/',
+		);
+
+		$stub = new Finder($app);
+		$this->assertEquals($expected, $stub->resolveExtensionPath($output));
+	}
+
+	/**
+	 * Extension Path provider.
+	 */
+	public function extensionPathProvider()
+	{
+		return array(
+			array("foobar", "foobar"),
+			array("/foo/path/app/foobar", "app::foobar"),
+			array("/foo/path/vendor/foobar", "vendor::foobar"),
+			array("/foo/path/workbench/foobar", "workbench::foobar"),
+			array("/foo/path/foobar", "base::foobar"),
+		);
 	}
 }

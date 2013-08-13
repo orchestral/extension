@@ -43,16 +43,21 @@ class MigrateManagerTest extends \PHPUnit_Framework_TestCase {
 		$files      = m::mock('Filesystem');
 		$extension  = m::mock('Extension');
 		$repository = m::mock('Repository');
+		$finder     = m::mock('Finder');
 		$app        = array(
 			'migrator' => $migrator,
 			'files' => $files,
 			'orchestra.extension' => $extension,
+			'orchestra.extension.finder' => $finder,
 		);
 
 		$extension->shouldReceive('option')->once()->with('foo/bar', 'path')->andReturn('/foo/path/foo/bar/')
 			->shouldReceive('option')->once()->with('foo/bar', 'source-path')->andReturn('/foo/app/foo/bar/')
 			->shouldReceive('option')->once()->with('laravel/framework', 'path')->andReturn('/foo/path/laravel/framework/')
 			->shouldReceive('option')->once()->with('laravel/framework', 'source-path')->andReturn('/foo/path/laravel/framework/');
+		$finder->shouldReceive('resolveExtensionPath')->once()->with('/foo/path/foo/bar')->andReturn('/foo/path/foo/bar')
+			->shouldReceive('resolveExtensionPath')->once()->with('/foo/app/foo/bar')->andReturn('/foo/app/foo/bar')
+			->shouldReceive('resolveExtensionPath')->twice()->with('/foo/path/laravel/framework')->andReturn('/foo/path/laravel/framework');
 		$files->shouldReceive('isDirectory')->once()->with('/foo/path/foo/bar/database/migrations/')->andReturn(true)
 			->shouldReceive('isDirectory')->once()->with('/foo/path/foo/bar/src/migrations/')->andReturn(false)
 			->shouldReceive('isDirectory')->once()->with('/foo/app/foo/bar/database/migrations/')->andReturn(false)

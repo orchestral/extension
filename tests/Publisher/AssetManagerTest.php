@@ -36,13 +36,16 @@ class AssetManagerTest extends \PHPUnit_Framework_TestCase {
 		$files     = m::mock('Filesystem');
 		$extension = m::mock('Extension');
 		$publisher = m::mock('\Illuminate\Foundation\AssetPublisher');
+		$finder    = m::mock('FInder');
 		$app       = array(
 			'files' => $files,
 			'orchestra.extension' => $extension,
+			'orchestra.extension.finder' => $finder, 
 		);
 
 		$files->shouldReceive('isDirectory')->once()->with('bar/public')->andReturn(true);
 		$extension->shouldReceive('option')->once()->with('foo', 'path')->andReturn('bar');
+		$finder->shouldReceive('resolveExtensionPath')->once()->with('bar/public')->andReturn('bar/public');
 		$publisher->shouldReceive('publish')->once()->with('foo', 'bar/public')->andReturn(true);
 
 		$stub = new AssetManager($app, $publisher);
@@ -60,13 +63,16 @@ class AssetManagerTest extends \PHPUnit_Framework_TestCase {
 		$files     = m::mock('Filesystem');
 		$extension = m::mock('Extension');
 		$publisher = m::mock('\Illuminate\Foundation\AssetPublisher');
+		$finder    = m::mock('FInder');
 		$app       = array(
 			'files' => $files,
 			'orchestra.extension' => $extension,
+			'orchestra.extension.finder' => $finder, 
 		);
 
 		$files->shouldReceive('isDirectory')->once()->with('bar/public')->andReturn(true);
 		$extension->shouldReceive('option')->once()->with('foo', 'path')->andReturn('bar');
+		$finder->shouldReceive('resolveExtensionPath')->once()->with('bar/public')->andReturn('bar/public');
 		$publisher->shouldReceive('publish')->once()->with('foo', 'bar/public')->andThrow('\Exception');
 
 		$stub = new AssetManager($app, $publisher);

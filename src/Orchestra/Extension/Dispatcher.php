@@ -104,18 +104,22 @@ class Dispatcher {
 		};
 
 		$paths = array_map($generatePath, $autoload);
-
 		$paths = array_merge(
 			$paths, 
-			array("{$base}/src/orchestra.php", "{$base}/orchestra.php")
-		); 
+			array("source-path::src/orchestra.php", "source-path::orchestra.php")
+		);
 
 		// By now, extension should already exist as an extension. We should
 		// be able start orchestra.php start file on each package.
 		foreach ($paths as $path)
 		{
+			$path = str_replace(
+				array('source-path::', 'app::/'), 
+				array("{$source}/", 'app::'), 
+				$path
+			);
+
 			$path = $finder->resolveExtensionPath($path);
-			$path = str_replace('source-path::', "{$source}/", $path);
 			
 			if ($file->isFile($path)) $file->getRequire($path);
 		}

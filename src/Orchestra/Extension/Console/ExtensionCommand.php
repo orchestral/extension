@@ -97,7 +97,7 @@ class ExtensionCommand extends Command {
 
 		foreach ($extensions as $name => $options)
 		{
-			$output = ($service->started($name) ? "✓ <info>%s %s</info>" : "- <comment>%s</comment>");
+			$output = ($service->started($name) ? "✓ <info>%s [%s]</info>" : "- <comment>%s [%s]</comment>");
 			
 			$this->line(sprintf($output, $name, $options['version']));
 		}

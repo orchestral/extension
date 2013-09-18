@@ -62,7 +62,7 @@ class PublisherServiceProvider extends ServiceProvider {
 	 */
 	protected function registerExtensionCommand()
 	{
-		$this->app['orchestra.commands.extension'] = $this->app->share(function($app)
+		$this->app['orchestra.commands.extension'] = $this->app->share(function()
 		{
 			return new Console\ExtensionCommand;
 		});

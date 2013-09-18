@@ -135,7 +135,6 @@ class Finder {
 	 */
 	protected function getManifestContents($manifest)
 	{
-		$base     = rtrim($this->app['path.base'], '/');
 		$path     = $sourcePath = $this->guessExtensionPath($manifest);
 		$jsonable = json_decode($this->app['files']->get($manifest));
 
@@ -149,13 +148,30 @@ class Finder {
 
 		if (isset($jsonable->path)) $path = $jsonable->path;
 
+		$paths = array(
+			'path'        => rtrim($path, '/'),
+			'source-path' => rtrim($sourcePath, '/'),
+		);
+
 		// Generate a proper manifest configuration for the extension. This 
 		// would allow other part of the application to use this configuration
 		// to migrate, load service provider as well as preload some 
 		// configuration.
+		return array_merge($paths, $this->generateManifestConfig($jsonable));
+	}
+
+	/**
+	 * Generate a proper manifest configuration for the extension. This 
+	 * would allow other part of the application to use this configuration
+	 * to migrate, load service provider as well as preload some 
+	 * configuration.
+	 * 
+	 * @param  object   $jsonable
+	 * @return array
+	 */
+	protected function generateManifestConfig($jsonable)
+	{
 		return array(
-			'path'        => rtrim($path, '/'),
-			'source-path' => rtrim($sourcePath, '/'),
 			'name'        => (isset($jsonable->name) ? $jsonable->name : null),
 			'description' => (isset($jsonable->description) ? $jsonable->description : null),
 			'author'      => (isset($jsonable->author) ? $jsonable->author : null),

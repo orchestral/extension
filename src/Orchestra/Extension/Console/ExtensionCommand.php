@@ -37,7 +37,7 @@ class ExtensionCommand extends Command {
 	 */
 	public function fire()
 	{
-		$fired = false;
+		$fired = true;
 		$name  = $this->argument('name');
 
 		switch ($action = $this->argument('action'))
@@ -47,19 +47,21 @@ class ExtensionCommand extends Command {
 			case 'upgrade' :
 				$this->fireMigration();
 				$this->info('orchestra/extension has been migrated');
-				$fired = true;
+				break;
+			case 'update' :
+				$this->firePublisher($name);
 				break;
 			case 'detect' :
 				$this->fireDetect();
-				$fired = true;
 				break;
 			case 'activate' :
 				$this->fireActivate($name);
-				$fired = true;
 				break;
 			case 'deactivate' :
 				$this->fireDeactivate($name);
-				$fired = true;
+				break;
+			default :
+				$fired = false;
 				break;
 		}
 
@@ -97,9 +99,9 @@ class ExtensionCommand extends Command {
 
 		foreach ($extensions as $name => $options)
 		{
-			$output = ($service->started($name) ? "✓ <info>%s</info>" : "- <comment>%s</comment>");
+			$output = ($service->started($name) ? "✓ <info>%s [%s]</info>" : "- <comment>%s [%s]</comment>");
 			
-			$this->line(sprintf($output, $name));
+			$this->line(sprintf($output, $name, $options['version']));
 		}
 	}
 
@@ -113,6 +115,18 @@ class ExtensionCommand extends Command {
 	{
 		$this->laravel['orchestra.extension']->activate($name);
 		$this->info("Extension [{$name}] activated.");
+	}
+
+	/**
+	 * Update an extension.
+	 *
+	 * @param  string   $name
+	 * @return void
+	 */
+	protected function firePublisher($name)
+	{
+		$this->laravel['orchestra.extension']->publish($name);
+		$this->info("Extension [{$name}] updated.");
 	}
 
 	/**

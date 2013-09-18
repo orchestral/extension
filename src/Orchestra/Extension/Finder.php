@@ -135,7 +135,6 @@ class Finder {
 	 */
 	protected function getManifestContents($manifest)
 	{
-		$base     = rtrim($this->app['path.base'], '/');
 		$path     = $sourcePath = $this->guessExtensionPath($manifest);
 		$jsonable = json_decode($this->app['files']->get($manifest));
 

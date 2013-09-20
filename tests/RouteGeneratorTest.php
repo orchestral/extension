@@ -1,17 +1,17 @@
 <?php namespace Orchestra\Extension\TestCase;
 
-use Orchestra\Extension\RouteResolver;
+use Orchestra\Extension\RouteGenerator;
 
-class RouteResolverTest extends \PHPUnit_Framework_TestCase {
+class RouteGeneratorTest extends \PHPUnit_Framework_TestCase {
 
 	/**
-	 * Test Orchestra\Extension\RouteResolver construct proper route.
+	 * Test Orchestra\Extension\RouteGenerator construct proper route.
 	 *
 	 * @test
 	 */
 	public function testConstructProperRoute()
 	{
-		$stub   = new RouteResolver("foo", "http://localhost");
+		$stub   = new RouteGenerator("foo", "http://localhost");
 		$refl   = new \ReflectionObject($stub);
 		$domain = $refl->getProperty('domain');
 		$prefix = $refl->getProperty('prefix');
@@ -32,15 +32,15 @@ class RouteResolverTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Test Orchestra\Extension\RouteResolver with domain route.
+	 * Test Orchestra\Extension\RouteGenerator with domain route.
 	 *
 	 * @test
 	 */
 	public function testRouteWithDomain()
 	{
-		$stub1 = new RouteResolver("//blog.orchestraplatform.com");
-		$stub2 = new RouteResolver("//blog.orchestraplatform.com/hello");
-		$stub3 = new RouteResolver("//blog.orchestraplatform.com/hello/world");
+		$stub1 = new RouteGenerator("//blog.orchestraplatform.com");
+		$stub2 = new RouteGenerator("//blog.orchestraplatform.com/hello");
+		$stub3 = new RouteGenerator("//blog.orchestraplatform.com/hello/world");
 
 		$this->assertEquals("blog.orchestraplatform.com", $stub1->domain());
 		$this->assertEquals("/", $stub1->prefix());

@@ -134,7 +134,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 
 		$output = $stub->route('laravel/framework', '/');
 
-		$this->assertInstanceOf('\Orchestra\Extension\RouteResolver', $output);
+		$this->assertInstanceOf('\Orchestra\Extension\RouteGenerator', $output);
 		$this->assertEquals('laravel', $output);
 		$this->assertEquals('laravel', $output->prefix());
 		$this->assertEquals('localhost', $output->domain());

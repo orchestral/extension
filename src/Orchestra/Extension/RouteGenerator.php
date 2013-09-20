@@ -1,6 +1,6 @@
 <?php namespace Orchestra\Extension;
 
-class RouteResolver {
+class RouteGenerator {
 
 	/**
 	 * Domain name.

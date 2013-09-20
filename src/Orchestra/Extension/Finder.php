@@ -19,6 +19,22 @@ class Finder {
 	protected $paths = array();
 
 	/**
+	 * Default manifest options.
+	 *
+	 * @var array
+	 */
+	protected $manifestOptions =  array(
+		'name'        => null,
+		'description' => null,
+		'author'      => null,
+		'url'         => null,
+		'version'     => '>0',
+		'config'      => array(),
+		'autoload'    => array(),
+		'provide'     => array(),
+	);
+
+	/**
 	 * List of reserved name.
 	 *
 	 * @var array
@@ -99,27 +115,12 @@ class Finder {
 
 			foreach ($manifests as $manifest)
 			{
-				list($vendor, $package) = $this->resolveExtensionNamespace($manifest);
-				$name = null;
+				$name = $this->guessExtensionNameFromManifest($manifest, $path);
 
-				// Each package should have vendor/package name pattern, 
-				// except when we deal with app. 
-				if (rtrim($this->app['path'], '/') === rtrim($path, '/'))
+				if ( ! is_null($name))
 				{
-					$name = 'app';
+					$extensions[$name] = $this->getManifestContents($manifest);
 				}
-				elseif ( ! is_null($vendor) and ! is_null($package))
-				{
-					$name = "{$vendor}/{$package}";
-				}
-				else continue;
-
-				if (in_array($name, $this->reserved))
-				{
-					throw new RuntimeException("Unable to register reserved name [{$name}] as extension.");
-				}
-
-				$extensions[$name] = $this->getManifestContents($manifest);
 			}
 		}
 
@@ -171,15 +172,68 @@ class Finder {
 	 */
 	protected function generateManifestConfig($jsonable)
 	{
-		return array(
-			'name'        => (isset($jsonable->name) ? $jsonable->name : null),
-			'description' => (isset($jsonable->description) ? $jsonable->description : null),
-			'author'      => (isset($jsonable->author) ? $jsonable->author : null),
-			'url'         => (isset($jsonable->url) ? $jsonable->url : null),
-			'version'     => (isset($jsonable->version) ? $jsonable->version : '>0'),
-			'config'      => (isset($jsonable->config) ? $jsonable->config : array()),
-			'autoload'    => (isset($jsonable->autoload) ? $jsonable->autoload : array()),
-			'provide'     => (isset($jsonable->provide) ? $jsonable->provide : array()),
+		$manifest = array();
+
+		// Assign extension manifest option or provide the default value.
+		foreach ($this->manifestOptions as $key => $default)
+		{
+			$manifest["{$key}"] = (isset($jsonable->{$key}) ? $jsonable->{$key} : $default);
+		}
+
+		return $manifest;
+	}
+
+	/**
+	 * Guess extension name from manifest.
+	 *
+	 * @param  string   $manifest
+	 * @param  string   $path
+	 * @return string
+	 */
+	public function guessExtensionNameFromManifest($manifest, $path)
+	{
+		list($vendor, $package) = $this->resolveExtensionNamespace($manifest);
+		$name = null;
+
+		// Each package should have vendor/package name pattern, 
+		// except when we deal with app. 
+		if (rtrim($this->app['path'], '/') === rtrim($path, '/'))
+		{
+			$name = 'app';
+		}
+		elseif ( ! is_null($vendor) and ! is_null($package))
+		{
+			$name = "{$vendor}/{$package}";
+		}
+		else 
+		{
+			return null;
+		}
+
+		if (in_array($name, $this->reserved))
+		{
+			throw new RuntimeException("Unable to register reserved name [{$name}] as extension.");
+		}
+
+		return $name;
+	}
+
+	/**
+	 * Guess extension path from manifest file.
+	 *
+	 * @param  string   $path
+	 * @return string
+	 */
+	public function guessExtensionPath($path)
+	{
+		$path = str_replace('orchestra.json', '', $path);
+		$app  = rtrim($this->app['path'], '/');
+		$base = rtrim($this->app['path.base'], '/');
+		
+		return str_replace(
+			array("{$app}/", "{$base}/vendor/", "{$base}/workbench/", "{$base}/"),
+			array('app::', 'vendor::', 'workbench::', 'base::'),
+			$path
 		);
 	}
 
@@ -207,25 +261,6 @@ class Finder {
 		}
 
 		return array($vendor, $package);
-	}
-
-	/**
-	 * Guess extension path from manifest file.
-	 *
-	 * @param  string   $path
-	 * @return string
-	 */
-	public function guessExtensionPath($path)
-	{
-		$path = str_replace('orchestra.json', '', $path);
-		$app  = rtrim($this->app['path'], '/');
-		$base = rtrim($this->app['path.base'], '/');
-		
-		return str_replace(
-			array("{$app}/", "{$base}/vendor/", "{$base}/workbench/", "{$base}/"),
-			array('app::', 'vendor::', 'workbench::', 'base::'),
-			$path
-		);
 	}
 
 	/**

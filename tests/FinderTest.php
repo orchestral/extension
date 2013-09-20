@@ -1,4 +1,4 @@
-<?php namespace Orchestra\Extension\Tests;
+<?php namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
 use Orchestra\Extension\Finder;

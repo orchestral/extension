@@ -1,4 +1,4 @@
-<?php namespace Orchestra\Extension\Tests\Publisher;
+<?php namespace Orchestra\Extension\Publisher\TestCase;
 
 use Mockery as m;
 use Orchestra\Extension\Publisher\MigrateManager;

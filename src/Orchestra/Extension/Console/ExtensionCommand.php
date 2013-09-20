@@ -42,21 +42,29 @@ class ExtensionCommand extends Command {
 
 		switch ($action = $this->argument('action'))
 		{
+			// Both "install" and "upgrade" should run migration up for 
+			// the orchestra/extension.
 			case 'install' :
 				# passthru;
 			case 'upgrade' :
 				$this->fireMigration();
 				$this->info('orchestra/extension has been migrated');
 				break;
+			// Running "update" would trigger publishing asset and migration 
+			// for the extension.
 			case 'update' :
 				$this->firePublisher($name);
 				break;
+			// Running "detect" would trigger detecting changes to extensions.
 			case 'detect' :
 				$this->fireDetect();
 				break;
+			// Running "activate" would trigger activation of an extension.
 			case 'activate' :
 				$this->fireActivate($name);
 				break;
+
+			// Running "deactivate" would trigger deactivation of an extension.
 			case 'deactivate' :
 				$this->fireDeactivate($name);
 				break;
@@ -65,8 +73,11 @@ class ExtensionCommand extends Command {
 				break;
 		}
 
+		// If none of the action is triggered, we should notify the error 
+		// to user.
 		if ($fired === false) return $this->error("Invalid action [{$action}].");
 
+		// Save any changes to orchestra/memory
 		$this->laravel['orchestra.memory']->finish();
 	}
 

@@ -48,39 +48,36 @@ class ExtensionCommand extends Command {
 	 */
 	protected function execute()
 	{
-		$name  = $this->argument('name');
+		$action = $this->argument('action');
+		$method = null;
 
-		switch ($action = $this->argument('action'))
+		switch ($action)
 		{
 			case 'install' :
 				# passthru;
 			case 'upgrade' :
-				// Both "install" and "upgrade" should run migration up for 
-				// the orchestra/extension.
-				return $this->fireMigration();
+				$method = 'Migration';
+				break;
 
 			case 'update' :
-				// Running "update" would trigger publishing asset and migration 
-				// for the extension.
-				return $this->firePublisher($name);
+				$method = 'Publisher';
+				break;
 
 			case 'detect' :
-				// Running "detect" would trigger detecting changes to extensions.
-				return $this->fireDetect();
-
+				# passtru;
 			case 'activate' :
-				// Running "activate" would trigger activation of an extension.
-				return $this->fireActivate($name);
-
+				# passtru;
 			case 'deactivate' :
-				// Running "deactivate" would trigger deactivation of an extension.
-				return $this->fireDeactivate($name);
+				$method = Str::title($action);
+				break;
 
 			default :
-				// If none of the action is triggered, we should notify the error 
-				// to user.
+				// If none of the action is triggered, we should notify the 
+				// error to user.
 				return $this->error("Invalid action [{$action}].");
 		}
+
+		return call_user_func(array($this, "fire{$method}"));
 	}
 
 	/**
@@ -131,25 +128,13 @@ class ExtensionCommand extends Command {
 	}
 
 	/**
-	 * Fire extension activation.
-	 *
-	 * @param  string   $name
-	 * @return void
-	 */
-	protected function fireActivate($name)
-	{
-		$this->laravel['orchestra.extension']->activate($name);
-		$this->info("Extension [{$name}] activated.");
-	}
-
-	/**
 	 * Update an extension.
 	 *
-	 * @param  string   $name
 	 * @return void
 	 */
-	protected function firePublisher($name)
+	protected function firePublisher()
 	{
+		$name = $this->argument('name');
 		$this->laravel['orchestra.extension']->publish($name);
 		$this->info("Extension [{$name}] updated.");
 	}
@@ -157,11 +142,23 @@ class ExtensionCommand extends Command {
 	/**
 	 * Fire extension activation.
 	 *
-	 * @param  string   $name
 	 * @return void
 	 */
-	protected function fireDeactivate($name)
+	protected function fireActivate()
 	{
+		$name = $this->argument('name');
+		$this->laravel['orchestra.extension']->activate($name);
+		$this->info("Extension [{$name}] activated.");
+	}
+
+	/**
+	 * Fire extension activation.
+	 *
+	 * @return void
+	 */
+	protected function fireDeactivate()
+	{
+		$name = $this->argument('name');
 		$this->laravel['orchestra.extension']->deactivate($name);
 		$this->info("Extension [{$name}] deactivated.");
 	}

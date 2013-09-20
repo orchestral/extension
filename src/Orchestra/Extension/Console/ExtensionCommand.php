@@ -35,48 +35,61 @@ class ExtensionCommand extends Command {
 	 *
 	 * @return void
 	 */
-	public function fire()
+	public function run()
 	{
-		$fired = true;
+		$this->execute();
+		$this->finish();
+	}
+
+	/**
+	 * Execute the console command.
+	 * 
+	 * @return mixed
+	 */
+	protected function execute()
+	{
 		$name  = $this->argument('name');
 
 		switch ($action = $this->argument('action'))
 		{
-			// Both "install" and "upgrade" should run migration up for 
-			// the orchestra/extension.
 			case 'install' :
 				# passthru;
 			case 'upgrade' :
-				$this->fireMigration();
-				$this->info('orchestra/extension has been migrated');
-				break;
-			// Running "update" would trigger publishing asset and migration 
-			// for the extension.
+				// Both "install" and "upgrade" should run migration up for 
+				// the orchestra/extension.
+				return $this->fireMigration();
+
 			case 'update' :
-				$this->firePublisher($name);
-				break;
-			// Running "detect" would trigger detecting changes to extensions.
+				// Running "update" would trigger publishing asset and migration 
+				// for the extension.
+				return $this->firePublisher($name);
+
 			case 'detect' :
-				$this->fireDetect();
-				break;
-			// Running "activate" would trigger activation of an extension.
+				// Running "detect" would trigger detecting changes to extensions.
+				return $this->fireDetect();
+
 			case 'activate' :
-				$this->fireActivate($name);
-				break;
+				// Running "activate" would trigger activation of an extension.
+				return $this->fireActivate($name);
 
-			// Running "deactivate" would trigger deactivation of an extension.
 			case 'deactivate' :
-				$this->fireDeactivate($name);
-				break;
+				// Running "deactivate" would trigger deactivation of an extension.
+				return $this->fireDeactivate($name);
+
 			default :
-				$fired = false;
-				break;
+				// If none of the action is triggered, we should notify the error 
+				// to user.
+				return $this->error("Invalid action [{$action}].");
 		}
+	}
 
-		// If none of the action is triggered, we should notify the error 
-		// to user.
-		if ($fired === false) return $this->error("Invalid action [{$action}].");
-
+	/**
+	 * Finish the console command.
+	 * 
+	 * @return void
+	 */
+	protected function finish()
+	{
 		// Save any changes to orchestra/memory
 		$this->laravel['orchestra.memory']->finish();
 	}
@@ -89,6 +102,7 @@ class ExtensionCommand extends Command {
 	protected function fireMigration()
 	{
 		$this->call('migrate', array('--package' => 'orchestra/memory'));
+		$this->info('orchestra/extension has been migrated');
 	}
 
 	/**

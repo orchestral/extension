@@ -13,11 +13,19 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	private $dispatcher = null;
 
 	/**
+	 * Debugger (safe mode) instance.
+	 *
+	 * @var \Orchestra\Extension\Debugger
+	 */
+	private $debugger = null;
+
+	/**
 	 * Setup the test environment.
 	 */
 	public function setUp()
 	{
 		$this->dispatcher = m::mock('\Orchestra\Extension\Dispatcher');
+		$this->debugger   = m::mock('\Orchestra\Extension\Debugger');
 	}
 	
 	/**
@@ -26,6 +34,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	public function tearDown()
 	{
 		unset($this->dispatcher);
+		unset($this->debugger);
 		m::close();
 	}
 
@@ -56,13 +65,10 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	public function testBootMethod()
 	{
 		$dispatcher = $this->dispatcher;
+		$debugger   = $this->debugger;
 		$memory     = m::mock('Orchestra\Memory\Drivers\Driver');
-		$request    = m::mock('Request');
-		$session    = m::mock('Session');
 		$app        = array(
 			'orchestra.memory' => $memory,
-			'request' => $request,
-			'session' => $session,
 		);
 
 		list($options1, $options2) = $this->dataProvider();
@@ -74,10 +80,9 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$dispatcher->shouldReceive('register')->once()->with('laravel/framework', $options1)->andReturn(null)
 			->shouldReceive('register')->once()->with('app', $options2)->andReturn(null)
 			->shouldReceive('boot')->once()->andReturn(null);
-		$request->shouldReceive('input')->once()->with('safe_mode')->andReturn('off');
-		$session->shouldReceive('forget')->once()->with('orchestra.safemode')->andReturn(null);
+		$debugger->shouldReceive('check')->once()->andReturn(false);
 
-		$stub = new Environment($app, $dispatcher);
+		$stub = new Environment($app, $dispatcher, $debugger);
 		$stub->attach($memory);
 
 		$this->assertEquals($memory, $stub->getMemoryProvider());
@@ -88,7 +93,6 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('bad!', $stub->option('foobar/hello-world', 'config', 'bad!'));
 		$this->assertTrue($stub->started('laravel/framework'));
 		$this->assertFalse($stub->started('foobar/hello-world'));
-
 	}
 
 	/**
@@ -99,15 +103,12 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	public function testRouteMethod()
 	{
 		$dispatcher = $this->dispatcher;
+		$debugger   = $this->debugger;
 		$memory     = m::mock('Orchestra\Memory\Drivers\Driver');
 		$config     = m::mock('Config');
-		$request    = m::mock('Request');
-		$session    = m::mock('Session');
 		$app        = array(
 			'orchestra.memory' => $memory,
 			'config' => $config,
-			'request' => $request,
-			'session' => $session,
 		);
 
 		list($options1, $options2) = $this->dataProvider();
@@ -119,39 +120,14 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$dispatcher->shouldReceive('register')->once()->with('laravel/framework', $options1)->andReturn(null)
 			->shouldReceive('register')->once()->with('app', $options2)->andReturn(null)
 			->shouldReceive('boot')->once()->andReturn(null);
+		$debugger->shouldReceive('check')->once()->andReturn(false);
 		$config->shouldReceive('get')->with('orchestra/extension::handles.laravel/framework', '/')->andReturn('laravel');
-		$request->shouldReceive('input')->once()->with('safe_mode')->andReturn(null);
-		$session->shouldReceive('get')->once()->with('orchestra.safemode', 'off')->andReturn('off');
 
-		$stub = new Environment($app, $dispatcher);
+		$stub = new Environment($app, $dispatcher, $debugger);
 		$stub->attach($memory);
 		$stub->boot();
 
 		$this->assertEquals('laravel', $stub->route('laravel/framework', '/'));
-	}
-
-	/**
-	 * Test Orchestra\Extension\Environment::isSafeMode() method.
-	 *
-	 * @test
-	 */
-	public function testIsSafeModeMethod()
-	{
-		$dispatcher = $this->dispatcher;
-		$request    = m::mock('Request');
-		$session    = m::mock('Session');
-		$app        = array(
-			'request' => $request,
-			'session' => $session,
-		);
-
-		$stub = new Environment($app, $dispatcher);
-
-		$request->shouldReceive('input')->once()->with('safe_mode')->andReturn('on');
-		$session->shouldReceive('get')->once()->with('orchestra.safemode', 'off')->andReturn('off')
-			->shouldReceive('put')->once()->with('orchestra.safemode', 'on')->andReturn(null);
-
-		$this->assertTrue($stub->isSafeMode());
 	}
 
 	/**
@@ -168,7 +144,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$dispatcher->shouldReceive('finish')->with('laravel/framework', $options1)->andReturn(null)
 			->shouldReceive('finish')->with('app', $options2)->andReturn(null);
 
-		$stub = new Environment(array(), $dispatcher);
+		$stub = new Environment(array(), $dispatcher, $this->debugger);
 
 		$refl = new \ReflectionObject($stub);
 		$extensions = $refl->getProperty('extensions');
@@ -191,7 +167,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$memory->shouldReceive('get')
 				->once()->with('extensions.available.laravel/framework')->andReturn(array());
 
-		$stub = new Environment($app, $this->dispatcher);
+		$stub = new Environment($app, $this->dispatcher, $this->debugger);
 		$stub->attach($memory);
 		$this->assertTrue($stub->isAvailable('laravel/framework'));
 	}
@@ -216,23 +192,24 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 			'events' => $events,
 		);
 
-		$dispatcher->shouldReceive('register')->once()->with('laravel/framework', m::type('Array'))->andReturn(null);
-		$memory->shouldReceive('get')
-				->once()->with('extensions.available', array())->andReturn(array('laravel/framework' => array()))
-			->shouldReceive('get')
-				->once()->with('extensions.active', array())->andReturn(array())
-			->shouldReceive('put')
-				->once()->with('extensions.active', array('laravel/framework' => array()))->andReturn(true);
-		$migrator->shouldReceive('extension')
-				->once()->with('laravel/framework')->andReturn(true);
-		$asset->shouldReceive('extension')
-				->once()->with('laravel/framework')->andReturn(true);
-		$events->shouldReceive('fire')
-				->once()->with('orchestra.publishing', array('laravel/framework'))->andReturn(true)
-			->shouldReceive('fire')
-				->once()->with('orchestra.publishing: laravel/framework')->andReturn(true);
+		$dispatcher->shouldReceive('register')->once()
+				->with('laravel/framework', m::type('Array'))->andReturn(null);
+		$memory->shouldReceive('get')->once()
+				->with('extensions.available', array())->andReturn(array('laravel/framework' => array()))
+			->shouldReceive('get')->once()
+				->with('extensions.active', array())->andReturn(array())
+			->shouldReceive('put')->once()
+				->with('extensions.active', array('laravel/framework' => array()))->andReturn(true);
+		$migrator->shouldReceive('extension')->once()
+				->with('laravel/framework')->andReturn(true);
+		$asset->shouldReceive('extension')->once()
+				->with('laravel/framework')->andReturn(true);
+		$events->shouldReceive('fire')->once()
+				->with('orchestra.publishing', array('laravel/framework'))->andReturn(true)
+			->shouldReceive('fire')->once()
+				->with('orchestra.publishing: laravel/framework')->andReturn(true);
 
-		$stub = new Environment($app, $dispatcher);
+		$stub = new Environment($app, $dispatcher, $this->debugger);
 		$stub->attach($memory);
 		$stub->activate('laravel/framework');
 	}
@@ -254,7 +231,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 				->once()->with('extensions.active', array('daylerees/doc-reader' => array()))
 				->andReturn(true);
 
-		$stub = new Environment($app, $this->dispatcher);
+		$stub = new Environment($app, $this->dispatcher, $this->debugger);
 		$stub->attach($memory);
 		$stub->deactivate('laravel/framework');
 	}
@@ -271,7 +248,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 
 		$memory->shouldReceive('get')->once()->with('extensions.active.laravel/framework')->andReturn(array());
 
-		$stub = new Environment($app, $this->dispatcher);
+		$stub = new Environment($app, $this->dispatcher, $this->debugger);
 		$stub->attach($memory);
 		$this->assertTrue($stub->activated('laravel/framework'));
 	}
@@ -305,7 +282,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 			->shouldReceive('isDirectory')->once()->with('foobar/public')->andReturn(true)
 			->shouldReceive('isWritable')->once()->with('/var/orchestra/packages/foobar')->andReturn(true);
 
-		$stub = new Environment($app, $this->dispatcher);
+		$stub = new Environment($app, $this->dispatcher, $this->debugger);
 		$stub->attach($memory);
 		$this->assertTrue($stub->isWritableWithAsset('foo'));
 		$this->assertFalse($stub->isWritableWithAsset('bar'));
@@ -329,7 +306,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$finder->shouldReceive('detect')->once()->andReturn('foo');
 		$memory->shouldReceive('put')->once()->with('extensions.available', 'foo')->andReturn('foobar');
 
-		$stub = new Environment($app, $this->dispatcher);
+		$stub = new Environment($app, $this->dispatcher, $this->debugger);
 		$stub->attach($memory);
 		$this->assertEquals('foo', $stub->detect());
 	}

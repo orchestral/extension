@@ -2,6 +2,8 @@
 
 use Exception;
 use Orchestra\Memory\Drivers\Driver as MemoryDriver;
+use Orchestra\Extension\Contracts\DebuggerInterface;
+use Orchestra\Extension\Contracts\DispatcherInterface;
 
 class Environment {
 
@@ -20,12 +22,18 @@ class Environment {
 	protected $dispatcher = null;
 
 	/**
+	 * Debugger (safe mode) instance.
+	 *
+	 * @var \Orchestra\Extension\Debugger
+	 */
+	protected $debugger = null;
+
+	/**
 	 * Memory instance.
 	 *
 	 * @var \Orchestra\Memory\Drivers\Driver
 	 */
 	protected $memory = null;
-
 
 	/**
 	 * Booted indicator.
@@ -46,12 +54,14 @@ class Environment {
 	 *
 	 * @param  \Illuminate\Foundation\Application   $app
 	 * @param  \Orchestra\Extension\Dispatcher      $dispatcher
+	 * @param  \Orchestra\Extension\Debugger        $debugger
 	 * @return void
 	 */
-	public function __construct($app, Dispatcher $dispatcher)
+	public function __construct($app, DispatcherInterface $dispatcher, DebuggerInterface $debugger)
 	{
 		$this->app        = $app;
 		$this->dispatcher = $dispatcher;
+		$this->debugger   = $debugger;
 	}
 
 	/**
@@ -100,7 +110,7 @@ class Environment {
 
 		$this->booted = true;
 
-		if ($this->isSafeMode()) return $this;
+		if ($this->debugger->check()) return $this;
 
 		$memory     = $this->memory;
 		$availables = $memory->get('extensions.available', array());
@@ -259,10 +269,23 @@ class Environment {
 	 * @param  string   $name
 	 * @return boolean
 	 */
-	public function isAvailable($name)
-	{	
+	public function available($name)
+	{
 		$memory = $this->memory;
 		return (is_array($memory->get("extensions.available.{$name}")));
+	}
+
+	/**
+	 * Check whether an extension is available.
+	 *
+	 * @deprecated      To be removed in v2.2
+	 * @param  string   $name
+	 * @return boolean
+	 * @see    self::available()
+	 */
+	public function isAvailable($name)
+	{	
+		return $this->available($name);
 	}
 
 	/**
@@ -278,12 +301,25 @@ class Environment {
 	}
 
 	/**
-	 * Check whether an extension has a writable public asset.
+	 * Check whether an extension is active.
 	 *
+	 * @deprecated      To be removed in v2.2
+	 * @param  string   $name
+	 * @return boolean
+	 * @see    self::activated()
+	 */
+	public function isActive($name)
+	{
+		return $this->activated($name);
+	}
+
+	/**
+	 * Check whether an extension has a writable public asset.
+	 * 
 	 * @param  string   $name
 	 * @return boolean
 	 */
-	public function isWritableWithAsset($name)
+	public function permission($name)
 	{
 		$finder     = $this->app['orchestra.extension.finder'];
 		$files      = $this->app['files'];
@@ -300,6 +336,19 @@ class Environment {
 
 		return true;
 	}
+	
+	/**
+	 * Check whether an extension has a writable public asset.
+	 * 
+	 * @deprecated      To be removed in v2.2
+	 * @param  string   $name
+	 * @return boolean
+	 * @see    self::permission()
+	 */
+	public function isWritableWithAsset($name)
+	{
+		return $this->permission($name);
+	}
 
 	/**
 	 * Detect all extensions.
@@ -312,31 +361,5 @@ class Environment {
 		$this->memory->put('extensions.available', $extensions);
 
 		return $extensions;
-	}
-
-	/**
-	 * Determine whether current request is in safe mode or not.
-	 *
-	 * @return boolean
-	 */
-	public function isSafeMode()
-	{
-		$input   = $this->app['request']->input('safe_mode');
-		$session = $this->app['session'];
-
-		if ($input == 'off')
-		{
-			$session->forget('orchestra.safemode');
-			return false;
-		}
-
-		$mode = $session->get('orchestra.safemode', 'off');
-
-		if ($input === 'on' and $mode !== $input)
-		{
-			$session->put('orchestra.safemode', $mode = $input);
-		}
-
-		return ($mode === 'on');
 	}
 }

@@ -20,6 +20,13 @@ class Environment {
 	protected $dispatcher = null;
 
 	/**
+	 * Debugger (safe mode) instance.
+	 *
+	 * @var \Orchestra\Extension\Debugger
+	 */
+	protected $debugger = null;
+
+	/**
 	 * Memory instance.
 	 *
 	 * @var \Orchestra\Memory\Drivers\Driver
@@ -45,12 +52,14 @@ class Environment {
 	 *
 	 * @param  \Illuminate\Foundation\Application   $app
 	 * @param  \Orchestra\Extension\Dispatcher      $dispatcher
+	 * @param  \Orchestra\Extension\Debugger        $debugger
 	 * @return void
 	 */
-	public function __construct($app, Dispatcher $dispatcher)
+	public function __construct($app, Dispatcher $dispatcher, Debugger $debugger)
 	{
 		$this->app        = $app;
 		$this->dispatcher = $dispatcher;
+		$this->debugger   = $debugger;
 	}
 
 	/**
@@ -99,7 +108,7 @@ class Environment {
 
 		$this->booted = true;
 
-		if ($this->isSafeMode()) return $this;
+		if ($this->debugger->check()) return $this;
 
 		$memory     = $this->memory;
 		$availables = $memory->get('extensions.available', array());
@@ -350,31 +359,5 @@ class Environment {
 		$this->memory->put('extensions.available', $extensions);
 
 		return $extensions;
-	}
-
-	/**
-	 * Determine whether current request is in safe mode or not.
-	 *
-	 * @return boolean
-	 */
-	public function isSafeMode()
-	{
-		$input   = $this->app['request']->input('safe_mode');
-		$session = $this->app['session'];
-
-		if ($input == 'off')
-		{
-			$session->forget('orchestra.safemode');
-			return false;
-		}
-
-		$mode = $session->get('orchestra.safemode', 'off');
-
-		if ($input === 'on' and $mode !== $input)
-		{
-			$session->put('orchestra.safemode', $mode = $input);
-		}
-
-		return ($mode === 'on');
 	}
 }

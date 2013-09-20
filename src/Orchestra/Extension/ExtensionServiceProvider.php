@@ -31,8 +31,9 @@ class ExtensionServiceProvider extends ServiceProvider {
 		{
 			$provider   = new ProviderRepository($app);
 			$dispatcher = new Dispatcher($app, $provider);
+			$debugger   = new Debugger($app);
 
-			return new Environment($app, $dispatcher);
+			return new Environment($app, $dispatcher, $debugger);
 		});
 	}
 

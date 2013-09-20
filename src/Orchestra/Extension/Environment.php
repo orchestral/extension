@@ -2,6 +2,8 @@
 
 use Exception;
 use Orchestra\Memory\Drivers\Driver as MemoryDriver;
+use Orchestra\Extension\Contracts\DebuggerInterface;
+use Orchestra\Extension\Contracts\DispatcherInterface;
 
 class Environment {
 
@@ -55,7 +57,7 @@ class Environment {
 	 * @param  \Orchestra\Extension\Debugger        $debugger
 	 * @return void
 	 */
-	public function __construct($app, Dispatcher $dispatcher, Debugger $debugger)
+	public function __construct($app, DispatcherInterface $dispatcher, DebuggerInterface $debugger)
 	{
 		$this->app        = $app;
 		$this->dispatcher = $dispatcher;

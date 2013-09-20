@@ -1,6 +1,6 @@
 <?php namespace Orchestra\Extension;
 
-class Dispatcher {
+class Dispatcher implements Contracts\DispatcherInterface {
 	
 	/**
 	 * Application instance.

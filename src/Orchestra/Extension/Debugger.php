@@ -1,6 +1,6 @@
 <?php namespace Orchestra\Extension;
 
-class Debugger {
+class Debugger implements Contracts\DebuggerInterface {
 
 	/**
 	 * Application instance.

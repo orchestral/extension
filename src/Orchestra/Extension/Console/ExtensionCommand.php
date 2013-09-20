@@ -35,9 +35,9 @@ class ExtensionCommand extends Command {
 	 *
 	 * @return void
 	 */
-	public function run()
+	public function fire()
 	{
-		$this->execute();
+		$this->routeToCommand();
 		$this->finish();
 	}
 
@@ -46,7 +46,7 @@ class ExtensionCommand extends Command {
 	 * 
 	 * @return mixed
 	 */
-	protected function execute()
+	protected function routeToCommand()
 	{
 		$action = $this->argument('action');
 		$method = null;
@@ -154,7 +154,6 @@ class ExtensionCommand extends Command {
 		$this->laravel['orchestra.extension']->deactivate($name);
 		$this->info("Extension [{$name}] deactivated.");
 	}
-				
 
 	/**
 	 * Get the console command arguments.

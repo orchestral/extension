@@ -19,6 +19,22 @@ class Finder {
 	protected $paths = array();
 
 	/**
+	 * Default manifest options.
+	 *
+	 * @var array
+	 */
+	protected $manifestOptions =  array(
+		'name'        => null,
+		'description' => null,
+		'author'      => null,
+		'url'         => null,
+		'version'     => '>0',
+		'config'      => array(),
+		'autoload'    => array(),
+		'provide'     => array(),
+	);
+
+	/**
 	 * List of reserved name.
 	 *
 	 * @var array
@@ -171,16 +187,15 @@ class Finder {
 	 */
 	protected function generateManifestConfig($jsonable)
 	{
-		return array(
-			'name'        => (isset($jsonable->name) ? $jsonable->name : null),
-			'description' => (isset($jsonable->description) ? $jsonable->description : null),
-			'author'      => (isset($jsonable->author) ? $jsonable->author : null),
-			'url'         => (isset($jsonable->url) ? $jsonable->url : null),
-			'version'     => (isset($jsonable->version) ? $jsonable->version : '>0'),
-			'config'      => (isset($jsonable->config) ? $jsonable->config : array()),
-			'autoload'    => (isset($jsonable->autoload) ? $jsonable->autoload : array()),
-			'provide'     => (isset($jsonable->provide) ? $jsonable->provide : array()),
-		);
+		$manifest = array();
+
+		// Assign extension manifest option or provide the default value.
+		foreach ($this->manifestOptions as $key => $default)
+		{
+			$manifest["{$key}"] = (isset($jsonable->{$key}) ? $jsonable->{$key} : $default);
+		}
+
+		return $manifest;
 	}
 
 	/**

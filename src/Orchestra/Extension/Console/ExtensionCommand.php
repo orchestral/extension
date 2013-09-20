@@ -51,30 +51,22 @@ class ExtensionCommand extends Command {
 		$action = $this->argument('action');
 		$method = null;
 
-		switch ($action)
+		$migrate = array('install', 'upgrade');
+		$case    = array('detect', 'activate', 'deactivate');
+		
+		if (in_array($action, $migrate))
 		{
-			case 'install' :
-				# passthru;
-			case 'upgrade' :
-				$method = 'Migration';
-				break;
-
-			case 'update' :
-				$method = 'Publisher';
-				break;
-
-			case 'detect' :
-				# passtru;
-			case 'activate' :
-				# passtru;
-			case 'deactivate' :
-				$method = Str::title($action);
-				break;
-
-			default :
-				// If none of the action is triggered, we should notify the 
-				// error to user.
-				return $this->error("Invalid action [{$action}].");
+			$method = 'Migration';
+		}
+		elseif (in_array($action, $case))
+		{
+			$method = Str::title($action);
+		}
+		else
+		{
+			// If none of the action is triggered, we should notify the 
+			// error to user.
+			return $this->error("Invalid action [{$action}].");
 		}
 
 		return call_user_func(array($this, "fire{$method}"));

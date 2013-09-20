@@ -148,7 +148,11 @@ class Environment extends AbstractableContainer {
 		// config key, except for orchestra/foundation.
 		$key = "orchestra/extension::handles.{$name}";
 
-		return $this->app['config']->get($key, $default);
+		return new RouteResolver(
+			$this->app['config']->get($key, $default), 
+			$this->app['request']->root(),
+			$this->app['request']->secure()
+		);
 	}
 
 	/**

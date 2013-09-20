@@ -106,9 +106,12 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$debugger   = $this->debugger;
 		$memory     = m::mock('Orchestra\Memory\Drivers\Driver');
 		$config     = m::mock('Config');
-		$app        = array(
+		$request    = m::mock('Request');
+
+		$app = array(
 			'orchestra.memory' => $memory,
 			'config' => $config,
+			'request' => $request,
 		);
 
 		list($options1, $options2) = $this->dataProvider();
@@ -122,12 +125,21 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 			->shouldReceive('boot')->once()->andReturn(null);
 		$debugger->shouldReceive('check')->once()->andReturn(false);
 		$config->shouldReceive('get')->with('orchestra/extension::handles.laravel/framework', '/')->andReturn('laravel');
+		$request->shouldReceive('root')->once()->andReturn('http://localhost')
+				->shouldReceive('secure')->once()->andReturn(false);
 
 		$stub = new Environment($app, $dispatcher, $debugger);
 		$stub->attach($memory);
 		$stub->boot();
 
-		$this->assertEquals('laravel', $stub->route('laravel/framework', '/'));
+		$output = $stub->route('laravel/framework', '/');
+
+		$this->assertInstanceOf('\Orchestra\Extension\RouteResolver', $output);
+		$this->assertEquals('laravel', $output);
+		$this->assertEquals('laravel', $output->prefix());
+		$this->assertEquals('localhost', $output->domain());
+		$this->assertEquals('http://localhost/laravel', $output->root());
+		$this->assertEquals('http://localhost/laravel/hello', $output->to('hello'));
 	}
 
 	/**

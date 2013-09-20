@@ -26,7 +26,6 @@ class Environment {
 	 */
 	protected $memory = null;
 
-
 	/**
 	 * Booted indicator.
 	 *
@@ -259,10 +258,23 @@ class Environment {
 	 * @param  string   $name
 	 * @return boolean
 	 */
-	public function isAvailable($name)
-	{	
+	public function available($name)
+	{
 		$memory = $this->memory;
 		return (is_array($memory->get("extensions.available.{$name}")));
+	}
+
+	/**
+	 * Check whether an extension is available.
+	 *
+	 * @deprecated      To be removed in v2.2
+	 * @param  string   $name
+	 * @return boolean
+	 * @see    self::available()
+	 */
+	public function isAvailable($name)
+	{	
+		return $this->available($name);
 	}
 
 	/**
@@ -280,7 +292,7 @@ class Environment {
 	/**
 	 * Check whether an extension is active.
 	 *
-	 * @deprecated      To be removed in v2.1
+	 * @deprecated      To be removed in v2.2
 	 * @param  string   $name
 	 * @return boolean
 	 * @see    self::activated()
@@ -289,15 +301,14 @@ class Environment {
 	{
 		return $this->activated($name);
 	}
-	
 
 	/**
 	 * Check whether an extension has a writable public asset.
-	 *
+	 * 
 	 * @param  string   $name
 	 * @return boolean
 	 */
-	public function isWritableWithAsset($name)
+	public function permission($name)
 	{
 		$finder     = $this->app['orchestra.extension.finder'];
 		$files      = $this->app['files'];
@@ -313,6 +324,19 @@ class Environment {
 		}
 
 		return true;
+	}
+	
+	/**
+	 * Check whether an extension has a writable public asset.
+	 * 
+	 * @deprecated      To be removed in v2.2
+	 * @param  string   $name
+	 * @return boolean
+	 * @see    self::permission()
+	 */
+	public function isWritableWithAsset($name)
+	{
+		return $this->permission($name);
 	}
 
 	/**

@@ -43,7 +43,7 @@ class RouteResolver {
 		// If the handles doesn't start as "//some.domain.com/foo" we should 
 		// assume that it doesn't belong to any subdomain, otherwise we 
 		// need to split the value to "some.domain.com" and "foo".
-		if ( ! starts_with($handles, '//')) 
+		if (is_null($handles) or ! starts_with($handles, '//')) 
 		{
 			$this->prefix = $handles;
 		}

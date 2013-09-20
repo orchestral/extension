@@ -65,16 +65,23 @@ class Environment extends AbstractableContainer {
 	 */
 	public function boot()
 	{
+		// Avoid extension booting being called more than once.
 		if ($this->booted) return $this;
 
 		$this->booted = true;
 
+		// Extension should be activated only if we're not running under 
+		// safe mode (or debug mode). This is to ensure that developer have 
+		// a way to disable broken extension without tempering the database.
 		if ($this->debugger->check()) return $this;
 
 		$memory     = $this->memory;
 		$availables = $memory->get('extensions.available', array());
 		$actives    = $memory->get('extensions.active', array());
 
+		// Loop all active extension and merge the configuration with 
+		// available config. Extension registration is handled by dispatcher 
+		// process due to complexity of extension boot process.
 		foreach ($actives as $name => $options)
 		{
 			if (isset($availables[$name]))
@@ -90,6 +97,9 @@ class Environment extends AbstractableContainer {
 			}
 		}
 
+		// Boot are executed once all extension has been registered. This 
+		// would allow extension to communicate with other extension 
+		// without having to known the registration dependencies.
 		$this->dispatcher->boot();
 
 		return $this;

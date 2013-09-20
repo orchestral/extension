@@ -75,27 +75,7 @@ class Environment extends AbstractableContainer {
 		// a way to disable broken extension without tempering the database.
 		if ($this->debugger->check()) return $this;
 
-		$memory     = $this->memory;
-		$availables = $memory->get('extensions.available', array());
-		$actives    = $memory->get('extensions.active', array());
-
-		// Loop all active extension and merge the configuration with 
-		// available config. Extension registration is handled by dispatcher 
-		// process due to complexity of extension boot process.
-		foreach ($actives as $name => $options)
-		{
-			if (isset($availables[$name]))
-			{
-				$config = array_merge(
-					(array) array_get($availables, "{$name}.config"), 
-					(array) array_get($options, "config")
-				);
-
-				array_set($options, "config", $config);
-				$this->extensions[$name] = $options;
-				$this->dispatcher->register($name, $options);
-			}
-		}
+		$this->registerActiveExtensions();
 
 		// Boot are executed once all extension has been registered. This 
 		// would allow extension to communicate with other extension 
@@ -120,6 +100,36 @@ class Environment extends AbstractableContainer {
 		$this->extensions = array();
 
 		return $this;
+	}
+
+	/**
+	 * Register all active extension to dispatcher.
+	 *
+	 * @return void
+	 */
+	protected function registerActiveExtensions()
+	{
+		$memory     = $this->memory;
+		$availables = $memory->get('extensions.available', array());
+		$actives    = $memory->get('extensions.active', array());
+
+		// Loop all active extension and merge the configuration with 
+		// available config. Extension registration is handled by dispatcher 
+		// process due to complexity of extension boot process.
+		foreach ($actives as $name => $options)
+		{
+			if (isset($availables[$name]))
+			{
+				$config = array_merge(
+					(array) array_get($availables, "{$name}.config"), 
+					(array) array_get($options, "config")
+				);
+
+				array_set($options, "config", $config);
+				$this->extensions[$name] = $options;
+				$this->dispatcher->register($name, $options);
+			}
+		}
 	}
 
 	/**

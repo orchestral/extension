@@ -1,11 +1,12 @@
 <?php namespace Orchestra\Extension;
 
 use Exception;
+use Orchestra\Memory\Abstractable\Container as AbstractableContainer;
 use Orchestra\Memory\Drivers\Driver as MemoryDriver;
 use Orchestra\Extension\Contracts\DebuggerInterface;
 use Orchestra\Extension\Contracts\DispatcherInterface;
 
-class Environment {
+class Environment extends AbstractableContainer {
 
 	/**
 	 * Application instance.
@@ -27,13 +28,6 @@ class Environment {
 	 * @var \Orchestra\Extension\Debugger
 	 */
 	protected $debugger = null;
-
-	/**
-	 * Memory instance.
-	 *
-	 * @var \Orchestra\Memory\Drivers\Driver
-	 */
-	protected $memory = null;
 
 	/**
 	 * Booted indicator.
@@ -62,41 +56,6 @@ class Environment {
 		$this->app        = $app;
 		$this->dispatcher = $dispatcher;
 		$this->debugger   = $debugger;
-	}
-
-	/**
-	 * Attach memory provider.
-	 *
-	 * @return self
-	 */
-	public function attach(MemoryDriver $memory)
-	{
-		$this->setMemoryProvider($memory);
-
-		return $this;
-	}
-
-	/**
-	 * Set memory provider.
-	 *
-	 * @param  \Orchestra\Memory\Drivers\Driver 
-	 * @return self
-	 */
-	public function setMemoryProvider(MemoryDriver $memory)
-	{
-		$this->memory = $memory;
-
-		return $this;
-	}
-
-	/**
-	 * Set memory provider.
-	 *
-	 * @return \Orchestra\Memory\Drivers\Driver 
-	 */
-	public function getMemoryProvider()
-	{
-		return $this->memory;
 	}
 	
 	/**

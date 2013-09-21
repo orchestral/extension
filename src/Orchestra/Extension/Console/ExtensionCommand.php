@@ -1,6 +1,7 @@
 <?php namespace Orchestra\Extension\Console;
 
 use Illuminate\Console\Command;
+use Orchestra\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 

@@ -11,7 +11,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testConstructProperRoute()
 	{
-		$stub   = new RouteGenerator("foo", "http://localhost");
+		$stub   = new RouteGenerator("foo", "http://localhost/laravel");
 		$refl   = new \ReflectionObject($stub);
 		$domain = $refl->getProperty('domain');
 		$prefix = $refl->getProperty('prefix');
@@ -25,10 +25,12 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase {
 		$this->assertNull($domain->getValue($stub));
 		$this->assertEquals('foo', $prefix->getValue($stub));
 
-		$this->assertEquals('localhost', $stub->domain());
+		$this->assertEquals(null, $stub->domain());
+		$this->assertEquals('localhost', $stub->domain(true));
 		$this->assertEquals('foo', $stub->prefix());
+		$this->assertEquals('laravel/foo', $stub->prefix(true));
 		$this->assertEquals('foo', (string) $stub);
-		$this->assertEquals('http://localhost/foo', $stub->root());
+		$this->assertEquals('http://localhost/laravel/foo', $stub->root());
 	}
 
 	/**

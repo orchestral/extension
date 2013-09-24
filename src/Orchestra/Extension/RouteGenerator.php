@@ -31,14 +31,26 @@ class RouteGenerator {
 	protected $baseUrl = null;
 
 	/**
+	 * Base URL prefix.
+	 *
+	 * @var string
+	 */
+	protected $basePrefix = null;
+
+	/**
 	 * Construct a new instance.
 	 *
 	 * @param  string   $handles
 	 */
 	public function __construct($handles, $baseUrl = null, $secure = false)
 	{
-		$this->secure  = $secure;
-		$this->baseUrl = str_replace(array('https://', 'http://'), '', $baseUrl);
+		$baseUrl      = str_replace(array('https://', 'http://'), '', $baseUrl);
+		$this->secure = $secure;
+
+		// Build base URL and prefix from Request::root();
+		$base = explode('/', $baseUrl, 2);
+		if (count($base) > 1) $this->basePrefix = array_pop($base);
+		$this->baseUrl = array_shift($base);
 
 		// If the handles doesn't start as "//some.domain.com/foo" we should 
 		// assume that it doesn't belong to any subdomain, otherwise we 
@@ -68,8 +80,8 @@ class RouteGenerator {
 	public function root()
 	{
 		$http   = ($this->secure ? "https" : "http");
-		$domain = "{$http}://".trim($this->domain(), '/');
-		$prefix = trim($this->prefix, '/');
+		$domain = "{$http}://".trim($this->domain(true), '/');
+		$prefix = $this->prefix(true);
 
 		return trim("{$domain}/{$prefix}", '/');
 	}
@@ -91,11 +103,17 @@ class RouteGenerator {
 	 *
 	 * @return string
 	 */
-	public function domain()
+	public function domain($forceBase = false)
 	{
 		$domain = $this->domain;
 		
-		is_null($domain) and $domain = $this->baseUrl;
+		if (is_null($domain)) 
+		{
+			if ($forceBase === true)
+			{
+				$domain = $this->baseUrl;
+			}
+		}
 
 		return $domain;
 	}
@@ -105,9 +123,22 @@ class RouteGenerator {
 	 *
 	 * @return string
 	 */
-	public function prefix()
+	public function prefix($forceBase = false)
 	{
-		return $this->prefix;
+		$prefix = trim($this->prefix, '/');
+
+		if (is_null($this->domain)) 
+		{
+			if ($forceBase === true)
+			{
+				$prefix = trim($this->basePrefix, '/')."/{$prefix}";
+				$prefix = trim($prefix, '/');
+			}
+		}
+
+		empty($prefix) and $prefix = '/';
+
+		return $prefix;
 	}
 
 	/**

@@ -42,12 +42,6 @@ class ProviderRepository {
 			// Register service provider as a service for 
 			// Illuminate\Foundation\Application.
 			$this->app->register($provider);
-			
-			// During this process, Illuminate\Foundation\Application has 
-			// been booted and it would ignore any of the deferred service 
-			// provider that has a boot method. In this case we should 
-			// manually run the boot method.
-			$provider->boot();
 
 			$this->services[] = $service;
 		}

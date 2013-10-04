@@ -174,6 +174,21 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Test Orchestra\Extension\Finder::resolveExtensionNamespace() method 
+	 * with mixed directory separator.
+	 *
+	 * @test
+	 * @dataProvider extensionManifestProvider
+	 */
+	public function testResolveExtensionNamespace($path, $expected, $output)
+	{
+		$app = $path;
+
+		$stub = new Finder($app);
+		$this->assertEquals($expected, $stub->resolveExtensionNamespace($output));
+	}
+
+	/**
 	 * Test Orchestra\Extension\Finder::resolveExtensionPath() method.
 	 *
 	 * @test
@@ -188,6 +203,70 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 
 		$stub = new Finder($app);
 		$this->assertEquals($expected, $stub->resolveExtensionPath($output));
+	}
+
+	/**
+	 * Extension Path provider.
+	 */
+	public function extensionManifestProvider()
+	{
+		$windowsPath = array(
+			'path'      => 'c:\www\laravel\app',
+			'path.base' => 'c:\www\laravel',
+		);
+
+		$unixPath = array(
+			'path'      => '/var/www/laravel/app',
+			'path.base' => '/var/www/laravel',
+		);
+
+		return array(
+			array(
+				$windowsPath,
+				array("laravel", "app"), 
+				"c:\www\laravel\app/orchestra.json",
+			),
+			array(
+				$windowsPath,
+				array("orchestra", "control"), 
+				"c:\www\laravel\vendor/orchestra/control/orchestra.json",
+			),
+			array(
+				$windowsPath,
+				array("orchestra", "story"), 
+				"c:\www\laravel\vendor/orchestra/story/orchestra.json",
+			),
+			array(
+				$windowsPath,
+				array("laravel", "app"), 
+				"c:\www\laravel\app\orchestra.json",
+			),
+			array(
+				$windowsPath,
+				array("orchestra", "control"), 
+				"c:\www\laravel\vendor\orchestra\control\orchestra.json",
+			),
+			array(
+				$windowsPath,
+				array("orchestra", "story"), 
+				"c:\www\laravel\vendor\orchestra\story\orchestra.json",
+			),
+			array(
+				$unixPath,
+				array("laravel", "app"), 
+				"/var/www/laravel/app/orchestra.json",
+			),
+			array(
+				$unixPath,
+				array("orchestra", "control"), 
+				"/var/www/laravel/vendor/orchestra/control/orchestra.json",
+			),
+			array(
+				$unixPath,
+				array("orchestra", "story"), 
+				"/var/www/laravel/vendor/orchestra/story/orchestra.json",
+			),
+		);
 	}
 
 	/**

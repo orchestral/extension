@@ -243,11 +243,11 @@ class Finder {
 	 * @param  string   $manifest
 	 * @return array
 	 */
-	protected function resolveExtensionNamespace($manifest)
+	public function resolveExtensionNamespace($manifest)
 	{
 		$vendor   = null;
 		$package  = null;
-		$manifest = str_replace('\\', DIRECTORY_SEPARATOR, $manifest);
+		$manifest = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $manifest);
 		$fragment = explode(DIRECTORY_SEPARATOR, $manifest);
 
 		// Remove orchestra.json from fragment as we are only interested with

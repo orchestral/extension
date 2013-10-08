@@ -53,7 +53,7 @@ class ExtensionCommand extends Command {
 		$method = null;
 
 		$migrate = array('install', 'upgrade');
-		$case    = array('detect', 'activate', 'deactivate');
+		$case    = array('detect', 'activate', 'deactivate', 'update');
 		
 		if (in_array($action, $migrate))
 		{
@@ -125,7 +125,7 @@ class ExtensionCommand extends Command {
 	 *
 	 * @return void
 	 */
-	protected function firePublisher()
+	protected function fireUpdate()
 	{
 		$name = $this->argument('name');
 		$this->laravel['orchestra.extension']->publish($name);

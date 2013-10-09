@@ -169,11 +169,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Test Orchestra\Extension\Environment::isAvailable() method.
+	 * Test Orchestra\Extension\Environment::available() method.
 	 *
 	 * @test
 	 */
-	public function testIsAvailableMethod()
+	public function testAvailableMethod()
 	{
 		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
 		$app    = array('orchestra.memory' => $memory);
@@ -183,7 +183,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 
 		$stub = new Environment($app, $this->dispatcher, $this->debugger);
 		$stub->attach($memory);
-		$this->assertTrue($stub->isAvailable('laravel/framework'));
+		$this->assertTrue($stub->available('laravel/framework'));
 	}
 
 	/**
@@ -251,11 +251,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Test Orchestra\Extension\Environment::isActivate() method.
+	 * Test Orchestra\Extension\Environment::activated() method.
 	 *
 	 * @test
 	 */
-	public function testIsActivateMethod()
+	public function testActivatedMethod()
 	{
 		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
 		$app    = array('orchestra.memory' => $memory);
@@ -264,15 +264,15 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 
 		$stub = new Environment($app, $this->dispatcher, $this->debugger);
 		$stub->attach($memory);
-		$this->assertTrue($stub->isActive('laravel/framework'));
+		$this->assertTrue($stub->activated('laravel/framework'));
 	}
 
 	/**
-	 * Test Orchestra\Extension\Environment::isWritableWithAsset() method.
+	 * Test Orchestra\Extension\Environment::permission() method.
 	 *
 	 * @test
 	 */
-	public function testIsWritableWithAssetMethod()
+	public function testPermissionMethod()
 	{
 		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
 		$finder = m::mock('Finder');
@@ -286,21 +286,23 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 
 		$memory->shouldReceive('get')->once()->with('extensions.available.foo.path', 'foo')->andReturn('foo')
 			->shouldReceive('get')->once()->with('extensions.available.bar.path', 'bar')->andReturn('bar')
-			->shouldReceive('get')->once()->with('extensions.available.foobar.path', 'foobar')->andReturn('foobar');
+			->shouldReceive('get')->once()->with('extensions.available.laravel/framework.path', 'laravel/framework')->andReturn('laravel/framework');
 		$finder->shouldReceive('resolveExtensionPath')->once()->with('foo/public')->andReturn('foo/public')
 			->shouldReceive('resolveExtensionPath')->once()->with('bar/public')->andReturn('bar/public')
-			->shouldReceive('resolveExtensionPath')->once()->with('foobar/public')->andReturn('foobar/public');
+			->shouldReceive('resolveExtensionPath')->once()->with('laravel/framework/public')->andReturn('laravel/framework/public');
 		$files->shouldReceive('isDirectory')->once()->with('foo/public')->andReturn(false)
+			->shouldReceive('isWritable')->once()->with('/var/orchestra/packages/foo')->andReturn(false)
 			->shouldReceive('isDirectory')->once()->with('bar/public')->andReturn(true)
 			->shouldReceive('isWritable')->once()->with('/var/orchestra/packages/bar')->andReturn(false)
-			->shouldReceive('isDirectory')->once()->with('foobar/public')->andReturn(true)
-			->shouldReceive('isWritable')->once()->with('/var/orchestra/packages/foobar')->andReturn(true);
+			->shouldReceive('isDirectory')->once()->with('laravel/framework/public')->andReturn(true)
+			->shouldReceive('isDirectory')->once()->with('/var/orchestra/packages/laravel/framework')->andReturn(false)
+			->shouldReceive('isWritable')->once()->with('/var/orchestra/packages/laravel')->andReturn(true);
 
 		$stub = new Environment($app, $this->dispatcher, $this->debugger);
 		$stub->attach($memory);
-		$this->assertTrue($stub->isWritableWithAsset('foo'));
-		$this->assertFalse($stub->isWritableWithAsset('bar'));
-		$this->assertTrue($stub->isWritableWithAsset('foobar'));
+		$this->assertTrue($stub->permission('foo'));
+		$this->assertFalse($stub->permission('bar'));
+		$this->assertTrue($stub->permission('laravel/framework'));
 	}
 
 	/**

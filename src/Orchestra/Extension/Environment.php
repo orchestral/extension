@@ -259,19 +259,6 @@ class Environment extends AbstractableContainer {
 	}
 
 	/**
-	 * Check whether an extension is available.
-	 *
-	 * @deprecated      To be removed in v2.2
-	 * @param  string   $name
-	 * @return boolean
-	 * @see    self::available()
-	 */
-	public function isAvailable($name)
-	{	
-		return $this->available($name);
-	}
-
-	/**
 	 * Check whether an extension is active.
 	 *
 	 * @param  string   $name
@@ -284,19 +271,6 @@ class Environment extends AbstractableContainer {
 	}
 
 	/**
-	 * Check whether an extension is active.
-	 *
-	 * @deprecated      To be removed in v2.2
-	 * @param  string   $name
-	 * @return boolean
-	 * @see    self::activated()
-	 */
-	public function isActive($name)
-	{
-		return $this->activated($name);
-	}
-
-	/**
 	 * Check whether an extension has a writable public asset.
 	 * 
 	 * @param  string   $name
@@ -304,33 +278,44 @@ class Environment extends AbstractableContainer {
 	 */
 	public function permission($name)
 	{
-		$finder     = $this->app['orchestra.extension.finder'];
-		$files      = $this->app['files'];
-		$memory     = $this->memory;
-		$publicPath = $this->app['path.public'];
-
+		$finder   = $this->app['orchestra.extension.finder'];
+		$memory   = $this->memory;
 		$basePath = rtrim($memory->get("extensions.available.{$name}.path", $name), '/');
 		$path     = $finder->resolveExtensionPath("{$basePath}/public");
-
-		if ($files->isDirectory($path) and ! $files->isWritable("{$publicPath}/packages/{$name}")) 
-		{
-			return false;
-		}
-
-		return true;
+		
+		return $this->isWritableWithAsset($name, $path);
 	}
 	
 	/**
 	 * Check whether an extension has a writable public asset.
 	 * 
-	 * @deprecated      To be removed in v2.2
 	 * @param  string   $name
 	 * @return boolean
-	 * @see    self::permission()
 	 */
-	public function isWritableWithAsset($name)
+	protected function isWritableWithAsset($name, $path)
 	{
-		return $this->permission($name);
+		$files      = $this->app['files'];
+		$publicPath = $this->app['path.public'];
+		$targetPath = "{$publicPath}/packages/{$name}";
+		$isWritable = false;
+
+		if (str_contains($name, '/') and ! $files->isDirectory($targetPath)) 
+		{
+			list($vendor) = explode('/', $name);
+			$targetPath   = "{$publicPath}/packages/{$vendor}";
+			$isWritable   = $files->isWritable($targetPath);
+		}
+		else
+		{
+			$isWritable = $files->isWritable($targetPath);
+		}
+
+		if ($files->isDirectory($path) and ! $isWritable) 
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

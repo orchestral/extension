@@ -30,8 +30,12 @@ Next add the following service provider in `app/config/app.php`.
 	'Orchestra\Extension\ExtensionServiceProvider',
 	'Orchestra\Memory\MemoryServiceProvider',
 	'Orchestra\Extension\PublisherServiceProvider',
+
+	'Orchestra\Extension\CommandServiceProvider',
 ),
 ```
+
+> `CommandServiceProvider` are optional, useful for interaction using the Artisan command line tool.
 
 ## Resources
 

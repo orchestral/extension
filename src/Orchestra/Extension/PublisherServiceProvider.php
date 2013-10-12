@@ -21,7 +21,6 @@ class PublisherServiceProvider extends ServiceProvider {
 	{
 		$this->registerMigration();
 		$this->registerAssetPublisher();
-		$this->registerExtensionCommand();
 	}
 
 	/**
@@ -56,21 +55,6 @@ class PublisherServiceProvider extends ServiceProvider {
 	}
 
 	/**
-	 * Register the service provider for Extension commands.
-	 *
-	 * @return void
-	 */
-	protected function registerExtensionCommand()
-	{
-		$this->app['orchestra.commands.extension'] = $this->app->share(function()
-		{
-			return new Console\ExtensionCommand;
-		});
-
-		$this->commands('orchestra.commands.extension');
-	}
-
-	/**
 	 * Get the services provided by the provider.
 	 *
 	 * @return array
@@ -80,7 +64,6 @@ class PublisherServiceProvider extends ServiceProvider {
 		return array(
 			'orchestra.publisher.migrate', 
 			'orchestra.publisher.asset',
-			'orchestra.commands.extension',
 		);
 	}
 }

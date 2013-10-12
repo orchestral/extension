@@ -41,6 +41,8 @@ class RouteGenerator {
 	 * Construct a new instance.
 	 *
 	 * @param  string   $handles
+	 * @param  string   $baseUrl
+	 * @param  boolean  $secure
 	 */
 	public function __construct($handles, $baseUrl = null, $secure = false)
 	{
@@ -101,6 +103,7 @@ class RouteGenerator {
 	/**
 	 * Get route domain.
 	 *
+	 * @param  boolean  $forceBase
 	 * @return string
 	 */
 	public function domain($forceBase = false)
@@ -120,7 +123,8 @@ class RouteGenerator {
 
 	/**
 	 * Get route prefix.
-	 *
+	 * 
+	 * @param  boolean  $forceBase
 	 * @return string
 	 */
 	public function prefix($forceBase = false)

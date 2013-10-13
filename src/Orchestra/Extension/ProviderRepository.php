@@ -20,7 +20,6 @@ class ProviderRepository {
 	 * Construct a new finder.
 	 *
 	 * @param  \Illuminate\Foundation\Application   $app
-	 * @return void
 	 */
 	public function __construct($app)
 	{

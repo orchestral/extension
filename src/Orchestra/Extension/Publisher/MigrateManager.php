@@ -23,7 +23,6 @@ class MigrateManager {
 	 *
 	 * @param  \Illuminate\Foundation\Application       $app
 	 * @param  \Illuminate\Database\Migrations\Migrator $migrator
-	 * @return void
 	 */
 	public function __construct($app, Migrator $migrator)
 	{

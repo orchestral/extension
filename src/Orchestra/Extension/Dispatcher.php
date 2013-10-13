@@ -28,7 +28,6 @@ class Dispatcher implements Contracts\DispatcherInterface {
 	 *
 	 * @param  \Illuminate\Foundation\Application       $app
 	 * @param  \Orchestra\Extension\ProviderRepository  $provider
-	 * @return void
 	 */
 	public function __construct($app, ProviderRepository $provider)
 	{

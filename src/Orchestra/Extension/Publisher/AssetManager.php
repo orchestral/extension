@@ -25,7 +25,6 @@ class AssetManager {
 	 *
 	 * @param  \Illuminate\Foundation\Application       $app
 	 * @param  \Illuminate\Foundation\AssetPublisher    $publisher
-	 * @return void
 	 */
 	public function __construct($app, AssetPublisher $publisher)
 	{

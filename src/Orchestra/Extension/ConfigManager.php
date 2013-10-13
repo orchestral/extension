@@ -13,7 +13,6 @@ class ConfigManager {
 	 * Construct a new Orchestra\Extension\ConfigManager instance.
 	 *
 	 * @param  \Illuminate\Foundation\Application   $app
-	 * @return void
 	 */
 	public function __construct($app)
 	{

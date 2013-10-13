@@ -49,7 +49,6 @@ class Environment extends AbstractableContainer {
 	 * @param  \Illuminate\Foundation\Application   $app
 	 * @param  \Orchestra\Extension\Dispatcher      $dispatcher
 	 * @param  \Orchestra\Extension\Debugger        $debugger
-	 * @return void
 	 */
 	public function __construct($app, DispatcherInterface $dispatcher, DebuggerInterface $debugger)
 	{
@@ -290,6 +289,7 @@ class Environment extends AbstractableContainer {
 	 * Check whether an extension has a writable public asset.
 	 * 
 	 * @param  string   $name
+	 * @param  string   $path
 	 * @return boolean
 	 */
 	protected function isWritableWithAsset($name, $path)

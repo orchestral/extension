@@ -13,7 +13,6 @@ class Debugger implements Contracts\DebuggerInterface {
 	 * Construct a new Application instance.
 	 *
 	 * @param  \Illuminate\Foundation\Application   $app
-	 * @return void
 	 */
 	public function __construct($app)
 	{

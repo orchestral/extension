@@ -1,11 +1,13 @@
 <?php namespace Orchestra\Extension;
 
+use Illuminate\Container\Container;
+
 class ProviderRepository {
 	
 	/**
 	 * Application instance.
 	 *
-	 * @var \Illuminate\Foundation\Application
+	 * @var \Illuminate\Container\Container
 	 */
 	protected $app = null;
 
@@ -19,9 +21,9 @@ class ProviderRepository {
 	/**
 	 * Construct a new finder.
 	 *
-	 * @param  \Illuminate\Foundation\Application   $app
+	 * @param  \Illuminate\Container\Container  $app
 	 */
-	public function __construct($app)
+	public function __construct(Container $app)
 	{
 		$this->app = $app;
 	}
@@ -32,7 +34,7 @@ class ProviderRepository {
 	 * @param  array    $services
 	 * @return void
 	 */
-	public function provides($services)
+	public function provides(array $services)
 	{
 		foreach ($services as $service)
 		{

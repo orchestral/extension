@@ -22,7 +22,8 @@
 	},
 	"require-dev": {
 		"mockery/mockery": "0.8.0",
-		"illuminate/support": "4.1.*"
+		"illuminate/container": "4.1.*",
+		"illuminate/support": "4.0.*"
 	},
 	"suggest": {
 		"laravel/framework": "Allow using orchestra/extension component outside of Orchestra Platform 2",

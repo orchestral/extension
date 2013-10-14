@@ -1,13 +1,14 @@
 <?php namespace Orchestra\Extension;
 
 use RuntimeException;
+use Illuminate\Container\Container;
 
 class Finder {
 
 	/**
 	 * Application instance.
-	 *
-	 * @var \Illuminate\Foundation\Application
+	 * 
+	 * @var \Illuminate\Container\Container	 
 	 */
 	protected $app = null;
 	
@@ -60,10 +61,10 @@ class Finder {
 
 	/**
 	 * Construct a new finder.
-	 *
-	 * @param  \Illuminate\Foundation\Application   $app
+	 * 
+	 * @param  \Illuminate\Container\Container  $app
 	 */
-	public function __construct($app)
+	public function __construct(Container $app)
 	{
 		$this->app = $app;
 		$appPath   = rtrim($app['path'], '/').'/';
@@ -82,7 +83,7 @@ class Finder {
 	 * Add a new path to finder.
 	 *
 	 * @param  string   $path
-	 * @return self
+	 * @return PublisherServiceProvider
 	 */
 	public function addPath($path)
 	{
@@ -131,7 +132,7 @@ class Finder {
 	 *
 	 * @param  string   $manifest
 	 * @return array
-	 * @throws \Orchestra\Extension\ManifestRuntimeException
+	 * @throws ManifestRuntimeException
 	 */
 	protected function getManifestContents($manifest)
 	{

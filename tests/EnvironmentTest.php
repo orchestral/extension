@@ -1,29 +1,38 @@
 <?php namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
+use Illuminate\Container\Container;
 use Orchestra\Extension\Environment;
 
 class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 
 	/**
+	 * Application instance.
+	 *
+	 * @var \Illuminate\Container\Container
+	 */
+	protected $app = null;
+
+	/**
 	 * Dispatcher instance.
 	 *
-	 * @var Orchestra\Extension\Dispatcher
+	 * @var \Orchestra\Extension\Dispatcher
 	 */
-	private $dispatcher = null;
+	protected $dispatcher = null;
 
 	/**
 	 * Debugger (safe mode) instance.
 	 *
 	 * @var \Orchestra\Extension\Debugger
 	 */
-	private $debugger = null;
+	protected $debugger = null;
 
 	/**
 	 * Setup the test environment.
 	 */
 	public function setUp()
 	{
+		$this->app        = new Container;
 		$this->dispatcher = m::mock('\Orchestra\Extension\Dispatcher');
 		$this->debugger   = m::mock('\Orchestra\Extension\Debugger');
 	}
@@ -33,6 +42,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function tearDown()
 	{
+		unset($this->app);
 		unset($this->dispatcher);
 		unset($this->debugger);
 		m::close();
@@ -64,12 +74,12 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testBootMethod()
 	{
+		$app        = $this->app;
 		$dispatcher = $this->dispatcher;
 		$debugger   = $this->debugger;
 		$memory     = m::mock('Orchestra\Memory\Drivers\Driver');
-		$app        = array(
-			'orchestra.memory' => $memory,
-		);
+
+		$app['orchestra.memory'] = $memory;
 
 		list($options1, $options2) = $this->dataProvider();
 
@@ -102,17 +112,16 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testRouteMethod()
 	{
+		$app        = $this->app;
 		$dispatcher = $this->dispatcher;
 		$debugger   = $this->debugger;
 		$memory     = m::mock('Orchestra\Memory\Drivers\Driver');
 		$config     = m::mock('Config');
 		$request    = m::mock('Request');
 
-		$app = array(
-			'orchestra.memory' => $memory,
-			'config' => $config,
-			'request' => $request,
-		);
+		$app['orchestra.memory'] = $memory;
+		$app['config'] = $config;
+		$app['request'] = $request;
 
 		list($options1, $options2) = $this->dataProvider();
 
@@ -158,7 +167,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$dispatcher->shouldReceive('finish')->with('laravel/framework', $options1)->andReturn(null)
 			->shouldReceive('finish')->with('app', $options2)->andReturn(null);
 
-		$stub = new Environment(array(), $dispatcher, $this->debugger);
+		$stub = new Environment($this->app, $dispatcher, $this->debugger);
 
 		$refl = new \ReflectionObject($stub);
 		$extensions = $refl->getProperty('extensions');
@@ -175,8 +184,10 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testAvailableMethod()
 	{
+		$app    = $this->app;
 		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
-		$app    = array('orchestra.memory' => $memory);
+		
+		$app['orchestra.memory'] = $memory;
 
 		$memory->shouldReceive('get')
 				->once()->with('extensions.available.laravel/framework')->andReturn(array());
@@ -193,18 +204,18 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testActivateMethod()
 	{
+		$app        = $this->app;
 		$dispatcher = $this->dispatcher;
 
 		$memory   = m::mock('\Orchestra\Memory\Drivers\Driver');
 		$migrator = m::mock('Migrator');
 		$asset    = m::mock('Asset');
 		$events   = m::mock('Event');
-		$app      = array(
-			'orchestra.memory' => $memory,
-			'orchestra.publisher.migrate' => $migrator,
-			'orchestra.publisher.asset' => $asset,
-			'events' => $events,
-		);
+
+		$app['orchestra.memory'] = $memory;
+		$app['orchestra.publisher.migrate'] = $migrator;
+		$app['orchestra.publisher.asset'] = $asset;
+		$app['events'] = $events;
 
 		$dispatcher->shouldReceive('register')->once()
 				->with('laravel/framework', m::type('Array'))->andReturn(null);
@@ -235,8 +246,9 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testDeactivateMethod()
 	{
+		$app    = $this->app;
 		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
-		$app    = array('orchestra.memory' => $memory);
+		$app['orchestra.memory'] = $memory;
 
 		$memory->shouldReceive('get')
 				->once()->with('extensions.active', array())
@@ -257,8 +269,9 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testActivatedMethod()
 	{
+		$app    = $this->app;
 		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
-		$app    = array('orchestra.memory' => $memory);
+		$app['orchestra.memory'] = $memory;
 
 		$memory->shouldReceive('get')->once()->with('extensions.active.laravel/framework')->andReturn(array());
 
@@ -274,15 +287,15 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testPermissionMethod()
 	{
+		$app    = $this->app;
 		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
 		$finder = m::mock('Finder');
 		$files  = m::mock('Filesystem');
-		$app    = array(
-			'path.public' => '/var/orchestra',
-			'orchestra.memory' => $memory,
-			'files' => $files,
-			'orchestra.extension.finder' => $finder,
-		);
+
+		$app['path.public'] = '/var/orchestra';
+		$app['orchestra.memory'] = $memory;
+		$app['files'] = $files;
+		$app['orchestra.extension.finder'] = $finder;
 
 		$memory->shouldReceive('get')->once()->with('extensions.available.foo.path', 'foo')->andReturn('foo')
 			->shouldReceive('get')->once()->with('extensions.available.bar.path', 'bar')->andReturn('bar')
@@ -312,12 +325,12 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testDetectMethod()
 	{
+		$app    = $this->app;
 		$finder = m::mock('Finder');
 		$memory = m::mock('Orchestra\Memory\Drivers\Driver');
-		$app    = array(
-			'orchestra.extension.finder' => $finder,
-			'orchestra.memory' => $memory,
-		);
+		
+		$app['orchestra.extension.finder'] = $finder;
+		$app['orchestra.memory'] = $memory;
 
 		$finder->shouldReceive('detect')->once()->andReturn('foo');
 		$memory->shouldReceive('put')->once()->with('extensions.available', 'foo')->andReturn('foobar');

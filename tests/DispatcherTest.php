@@ -1,9 +1,17 @@
 <?php namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
+use Illuminate\Container\Container;
 use Orchestra\Extension\Dispatcher;
 
 class DispatcherTest extends \PHPUnit_Framework_TestCase {
+
+	/**
+	 * Application instance.
+	 *
+	 * @var \Illuminate\Container\Container
+	 */
+	protected $app = null;
 
 	/**
 	 * Provider instance.
@@ -17,6 +25,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function setUp()
 	{
+		$this->app      = new Container;
 		$this->provider = m::mock('\Orchestra\Extension\ProviderRepository');
 	}
 
@@ -25,6 +34,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function tearDown()
 	{
+		unset($this->app);
 		unset($this->provider);
 		m::close();
 	}
@@ -36,17 +46,17 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testStartMethod()
 	{
+		$app      = $this->app;
 		$provider = $this->provider;
 		$config   = m::mock('Config');
 		$events   = m::mock('Event');
 		$files    = m::mock('Filesystem');
 		$finder   = m::mock('Finder');
-		$app      = array(
-			'config' => $config,
-			'events' => $events,
-			'files'  => $files,
-			'orchestra.extension.finder' => $finder,
-		);
+
+		$app['config'] = $config;
+		$app['events'] = $events;
+		$app['files'] = $files;
+		$app['orchestra.extension.finder'] = $finder;
 
 		$options1 = array(
 			'config'   => array('handles' => 'laravel'),
@@ -117,8 +127,8 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testFinishMethod()
 	{
-		$events = m::mock('Event');
-		$app    = array('events' => $events);
+		$app = $this->app;
+		$app['events'] = $events = m::mock('Event');
 
 		$events->shouldReceive('fire')
 				->once()->with('extension.done: laravel/framework', array('foo'))->andReturn(null)

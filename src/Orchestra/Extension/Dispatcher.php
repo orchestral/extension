@@ -1,18 +1,20 @@
 <?php namespace Orchestra\Extension;
 
+use Illuminate\Container\Container;
+
 class Dispatcher implements Contracts\DispatcherInterface {
 	
 	/**
 	 * Application instance.
 	 *
-	 * @var \Illuminate\Foundation\Application
+	 * @var \Illuminate\Container\Container
 	 */
 	protected $app = null;
 
 	/**
 	 * Provider instance.
 	 *
-	 * @var Orchestra\Extension\ProviderRepository
+	 * @var ProviderRepository
 	 */
 	protected $provider = null;
 
@@ -25,11 +27,11 @@ class Dispatcher implements Contracts\DispatcherInterface {
 
 	/**
 	 * Construct a new Application instance.
-	 *
-	 * @param  \Illuminate\Foundation\Application       $app
-	 * @param  \Orchestra\Extension\ProviderRepository  $provider
+	 * 
+	 * @param  \Illuminate\Container\Container  $app
+	 * @param  ProviderRepository               $provider
 	 */
-	public function __construct($app, ProviderRepository $provider)
+	public function __construct(Container $app, ProviderRepository $provider)
 	{
 		$this->app      = $app;
 		$this->provider = $provider;

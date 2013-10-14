@@ -1,20 +1,22 @@
 <?php namespace Orchestra\Extension;
 
+use Illuminate\Container\Container;
+
 class Debugger implements Contracts\DebuggerInterface {
 
 	/**
 	 * Application instance.
 	 *
-	 * @var \Illuminate\Foundation\Application
+	 * @var \Illuminate\Container\Container
 	 */
 	protected $app = null;
 
 	/**
 	 * Construct a new Application instance.
-	 *
-	 * @param  \Illuminate\Foundation\Application   $app
+	 * 
+	 * @param  \Illuminate\Container\Container  $app
 	 */
-	public function __construct($app)
+	public function __construct(Container $app)
 	{
 		$this->app = $app;
 	}

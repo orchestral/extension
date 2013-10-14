@@ -1,20 +1,22 @@
 <?php namespace Orchestra\Extension;
 
+use Illuminate\Container\Container;
+
 class ConfigManager {
 	
 	/**
 	 * Application instance.
 	 *
-	 * @var \Illuminate\Foundation\Application
+	 * @var \Illuminate\Container\Container
 	 */
 	protected $app = null;
 
 	/**
-	 * Construct a new Orchestra\Extension\ConfigManager instance.
-	 *
-	 * @param  \Illuminate\Foundation\Application   $app
+	 * Construct a new ConfigManager instance.
+	 * 
+	 * @param  \Illuminate\Container\Container  $app
 	 */
-	public function __construct($app)
+	public function __construct(Container $app)
 	{
 		$this->app = $app;
 	}

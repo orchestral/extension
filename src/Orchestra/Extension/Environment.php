@@ -1,6 +1,7 @@
 <?php namespace Orchestra\Extension;
 
 use Exception;
+use Illuminate\Container\Container;
 use Orchestra\Memory\Abstractable\Container as AbstractableContainer;
 use Orchestra\Memory\Drivers\Driver as MemoryDriver;
 use Orchestra\Extension\Contracts\DebuggerInterface;
@@ -11,7 +12,7 @@ class Environment extends AbstractableContainer {
 	/**
 	 * Application instance.
 	 *
-	 * @var \Illuminate\Foundation\Application
+	 * @var \Illuminate\Container\Container
 	 */
 	protected $app = null;
 
@@ -45,12 +46,12 @@ class Environment extends AbstractableContainer {
 
 	/**
 	 * Construct a new Application instance.
-	 *
-	 * @param  \Illuminate\Foundation\Application   $app
-	 * @param  \Orchestra\Extension\Dispatcher      $dispatcher
-	 * @param  \Orchestra\Extension\Debugger        $debugger
+	 * 
+	 * @param  \Illuminate\Container\Container  $app
+	 * @param  \Orchestra\Extension\Dispatcher  $dispatcher
+	 * @param  \Orchestra\Extension\Debugger    $debugger
 	 */
-	public function __construct($app, DispatcherInterface $dispatcher, DebuggerInterface $debugger)
+	public function __construct(Container $app, DispatcherInterface $dispatcher, DebuggerInterface $debugger)
 	{
 		$this->app        = $app;
 		$this->dispatcher = $dispatcher;

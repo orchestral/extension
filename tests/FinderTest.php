@@ -1,15 +1,32 @@
 <?php namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
+use Illuminate\Container\Container;
 use Orchestra\Extension\Finder;
 
 class FinderTest extends \PHPUnit_Framework_TestCase {
 	
 	/**
+	 * Application instance.
+	 *
+	 * @var \Illuminate\Container\Container
+	 */
+	protected $app = null;
+
+	/**
+	 * Setup the test environment.
+	 */
+	public function setUp()
+	{
+		$this->app = new Container;
+	}
+
+	/**
 	 * Teardown the test environment.
 	 */
 	public function tearDown()
 	{
+		unset($this->app);
 		m::close();
 	}
 
@@ -20,10 +37,9 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testConstructMethod()
 	{
-		$app = array(
-			'path'      => '/foo/app',
-			'path.base' => '/foo/path'
-		);
+		$app = $this->app;
+		$app['path'] = '/foo/app';
+		$app['path.base'] = '/foo/path';
 
 		$stub = new Finder($app);
 
@@ -47,12 +63,10 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testDetectMethod()
 	{
-		$files = m::mock('\Illuminate\Filesystem\Filesystem');
-		$app = array(
-			'path'      => '/foo/app',
-			'path.base' => '/foo/path',
-			'files'     => $files,
-		);
+		$app = $this->app;
+		$app['path'] = '/foo/app';
+		$app['path.base'] = '/foo/path';
+		$app['files'] = $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
 		$files->shouldReceive('glob')->once()
 				->with('/foo/app/orchestra.json')->andReturn(array('/foo/app/orchestra.json'))
@@ -106,12 +120,10 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testDetectMethodGivenReservedNameThrowsException()
 	{
-		$files = m::mock('\Illuminate\Filesystem\Filesystem');
-		$app = array(
-			'path'      => '/foo/app/',
-			'path.base' => '/foo/path/',
-			'files'     => $files,
-		);
+		$app = $this->app;
+		$app['path'] = '/foo/app';
+		$app['path.base'] = '/foo/path';
+		$app['files'] = $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
 		$files->shouldReceive('glob')->once()
 				->with('/foo/app/orchestra.json')->andReturn(array('/foo/app/orchestra.json'))
@@ -133,12 +145,10 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testDetectMethodThrowsException()
 	{
-		$files = m::mock('\Illuminate\Filesystem\Filesystem');
-		$app   = array(
-			'path'      => '/foo/app',
-			'path.base' => '/foo/path',
-			'files'     => $files,
-		);
+		$app = $this->app;
+		$app['path'] = '/foo/app';
+		$app['path.base'] = '/foo/path';
+		$app['files'] = $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
 		$files->shouldReceive('glob')
 				->with('/foo/app/orchestra.json')->once()
@@ -164,10 +174,9 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testGuessExtensionPathMethod($output, $expected)
 	{
-		$app = array(
-			'path'      => '/foo/path/app/',
-			'path.base' => '/foo/path/',
-		);
+		$app = $this->app;
+		$app['path'] = '/foo/path/app';
+		$app['path.base'] = '/foo/path';
 
 		$stub = new Finder($app);
 		$this->assertEquals($expected, $stub->guessExtensionPath($output));
@@ -182,7 +191,9 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testResolveExtensionNamespace($path, $expected, $output)
 	{
-		$app = $path;
+		$app = $this->app;
+		$app['path'] = $path['path'];
+		$app['path.base'] = $path['path.base'];
 
 		$stub = new Finder($app);
 		$this->assertEquals($expected, $stub->resolveExtensionNamespace($output));
@@ -196,10 +207,9 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testResolveExtensionPathMethod($expected, $output)
 	{
-		$app = array(
-			'path'      => '/foo/path/app/',
-			'path.base' => '/foo/path/',
-		);
+		$app = $this->app;
+		$app['path'] = '/foo/path/app';
+		$app['path.base'] = '/foo/path';
 
 		$stub = new Finder($app);
 		$this->assertEquals($expected, $stub->resolveExtensionPath($output));
@@ -210,15 +220,11 @@ class FinderTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function extensionManifestProvider()
 	{
-		$windowsPath = array(
-			'path'      => 'c:\www\laravel\app',
-			'path.base' => 'c:\www\laravel',
-		);
+		$windowsPath['path'] = 'c:\www\laravel\app';
+		$windowsPath['path.base'] = 'c:\www\laravel';
 
-		$unixPath = array(
-			'path'      => '/var/www/laravel/app',
-			'path.base' => '/var/www/laravel',
-		);
+		$unixPath['path'] = '/var/www/laravel/app';
+		$unixPath['path.base'] = '/var/www/laravel';
 
 		return array(
 			array(

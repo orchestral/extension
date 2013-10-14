@@ -1,6 +1,7 @@
 <?php namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
+use Illuminate\Container\Container;
 use Orchestra\Extension\ConfigManager;
 
 class ConfigManagerTest extends \PHPUnit_Framework_TestCase {
@@ -20,12 +21,12 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testMapMethod()
 	{
+		$app    = new Container;
 		$memory = m::mock('Memory');
 		$config = m::mock('Config');
-		$app    = array(
-			'orchestra.memory' => $memory,
-			'config' => $config,
-		);
+		
+		$app['orchestra.memory'] = $memory;
+		$app['config'] = $config;
 
 		$memory->shouldReceive('make')
 				->once()->andReturn($memory)

@@ -1,13 +1,14 @@
 <?php namespace Orchestra\Extension;
 
 use RuntimeException;
+use Illuminate\Container\Container;
 
 class Finder {
 
 	/**
 	 * Application instance.
-	 *
-	 * @var \Illuminate\Foundation\Application
+	 * 
+	 * @var \Illuminate\Container\Container	 
 	 */
 	protected $app = null;
 	
@@ -60,10 +61,10 @@ class Finder {
 
 	/**
 	 * Construct a new finder.
-	 *
-	 * @param  \Illuminate\Foundation\Application   $app
+	 * 
+	 * @param  \Illuminate\Container\Container  $app
 	 */
-	public function __construct($app)
+	public function __construct(Container $app)
 	{
 		$this->app = $app;
 		$appPath   = rtrim($app['path'], '/').'/';

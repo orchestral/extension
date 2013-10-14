@@ -19,14 +19,14 @@ class Environment extends AbstractableContainer {
 	/**
 	 * Dispatcher instance.
 	 *
-	 * @var \Orchestra\Extension\Dispatcher
+	 * @var Dispatcher
 	 */
 	protected $dispatcher = null;
 
 	/**
 	 * Debugger (safe mode) instance.
 	 *
-	 * @var \Orchestra\Extension\Debugger
+	 * @var Debugger
 	 */
 	protected $debugger = null;
 
@@ -48,8 +48,8 @@ class Environment extends AbstractableContainer {
 	 * Construct a new Application instance.
 	 * 
 	 * @param  \Illuminate\Container\Container  $app
-	 * @param  \Orchestra\Extension\Dispatcher  $dispatcher
-	 * @param  \Orchestra\Extension\Debugger    $debugger
+	 * @param  Dispatcher                       $dispatcher
+	 * @param  Debugger                         $debugger
 	 */
 	public function __construct(Container $app, DispatcherInterface $dispatcher, DebuggerInterface $debugger)
 	{
@@ -61,7 +61,7 @@ class Environment extends AbstractableContainer {
 	/**
 	 * Boot active extensions.
 	 *
-	 * @return self
+	 * @return Environment
 	 */
 	public function boot()
 	{
@@ -88,7 +88,7 @@ class Environment extends AbstractableContainer {
 	/**
 	 * Shutdown all extensions.
 	 *
-	 * @return self
+	 * @return Environment
 	 */
 	public function finish()
 	{

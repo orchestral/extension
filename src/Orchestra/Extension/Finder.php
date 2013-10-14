@@ -83,7 +83,7 @@ class Finder {
 	 * Add a new path to finder.
 	 *
 	 * @param  string   $path
-	 * @return self
+	 * @return PublisherServiceProvider
 	 */
 	public function addPath($path)
 	{
@@ -132,7 +132,7 @@ class Finder {
 	 *
 	 * @param  string   $manifest
 	 * @return array
-	 * @throws \Orchestra\Extension\ManifestRuntimeException
+	 * @throws ManifestRuntimeException
 	 */
 	protected function getManifestContents($manifest)
 	{

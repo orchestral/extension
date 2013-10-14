@@ -1,13 +1,14 @@
 <?php namespace Orchestra\Extension\Publisher;
 
+use Illuminate\Container\Container;
 use Illuminate\Database\Migrations\Migrator;
 
 class MigrateManager {
 
 	/**
 	 * Application instance.
-	 *
-	 * @var \Illuminate\Foundation\Application
+	 * 
+	 * @var \Illuminate\Container\Container
 	 */
 	protected $app = null;
 
@@ -20,11 +21,11 @@ class MigrateManager {
 
 	/**
 	 * Construct a new instance.
-	 *
-	 * @param  \Illuminate\Foundation\Application       $app
+	 * 
+	 * @param  \Illuminate\Container\Container          $app
 	 * @param  \Illuminate\Database\Migrations\Migrator $migrator
 	 */
-	public function __construct($app, Migrator $migrator)
+	public function __construct(Container $app, Migrator $migrator)
 	{
 		$this->app      = $app;
 		$this->migrator = $migrator;

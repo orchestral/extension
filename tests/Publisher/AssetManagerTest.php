@@ -1,14 +1,32 @@
 <?php namespace Orchestra\Extension\Publisher\TestCase;
 
 use Mockery as m;
+use Illuminate\Container\Container;
 use Orchestra\Extension\Publisher\AssetManager;
 
 class AssetManagerTest extends \PHPUnit_Framework_TestCase {
+	
+	/**
+	 * Application instance.
+	 *
+	 * @var \Illuminate\Container\Container
+	 */
+	protected $app = null;
+
+	/**
+	 * Setup the test environment.
+	 */
+	public function setUp()
+	{
+		$this->app = new Container;
+	}
+
 	/**
 	 * Teardown the test environment.
 	 */
 	public function tearDown()
 	{
+		unset($this->app);
 		m::close();
 	}
 
@@ -22,7 +40,7 @@ class AssetManagerTest extends \PHPUnit_Framework_TestCase {
 		$publisher = m::mock('\Illuminate\Foundation\AssetPublisher');
 		$publisher->shouldReceive('publish')->once()->with('foo', 'bar')->andReturn(true);
 
-		$stub = new AssetManager(array(), $publisher);
+		$stub = new AssetManager($this->app, $publisher);
 		$this->assertTrue($stub->publish('foo', 'bar'));
 	}
 
@@ -33,15 +51,12 @@ class AssetManagerTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testExtensionMethod()
 	{
-		$files     = m::mock('Filesystem');
-		$extension = m::mock('Extension');
+		$app = $this->app;
+		$app['files'] = $files = m::mock('Filesystem');
+		$app['orchestra.extension'] = $extension = m::mock('Extension');
+		$app['orchestra.extension.finder'] = $finder = m::mock('Finder');
+
 		$publisher = m::mock('\Illuminate\Foundation\AssetPublisher');
-		$finder    = m::mock('FInder');
-		$app       = array(
-			'files' => $files,
-			'orchestra.extension' => $extension,
-			'orchestra.extension.finder' => $finder, 
-		);
 
 		$files->shouldReceive('isDirectory')->once()->with('bar/public')->andReturn(true);
 		$extension->shouldReceive('option')->once()->with('foo', 'path')->andReturn('bar');
@@ -60,15 +75,12 @@ class AssetManagerTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testExtensionMethodThrowsException()
 	{
-		$files     = m::mock('Filesystem');
-		$extension = m::mock('Extension');
+		$app = $this->app;
+		$app['files'] = $files = m::mock('Filesystem');
+		$app['orchestra.extension'] = $extension = m::mock('Extension');
+		$app['orchestra.extension.finder'] = $finder = m::mock('Finder');
+
 		$publisher = m::mock('\Illuminate\Foundation\AssetPublisher');
-		$finder    = m::mock('FInder');
-		$app       = array(
-			'files' => $files,
-			'orchestra.extension' => $extension,
-			'orchestra.extension.finder' => $finder, 
-		);
 
 		$files->shouldReceive('isDirectory')->once()->with('bar/public')->andReturn(true);
 		$extension->shouldReceive('option')->once()->with('foo', 'path')->andReturn('bar');
@@ -86,12 +98,11 @@ class AssetManagerTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testFoundationMethod()
 	{
-		$files     = m::mock('Filesystem');
+		$app = $this->app;
+		$app['files'] = $files = m::mock('Filesystem');
+		$app['path.base'] = '/foo/path/';
+
 		$publisher = m::mock('\Illuminate\Foundation\AssetPublisher');
-		$app       = array(
-			'files' => $files,
-			'path.base' => '/foo/path/',
-		);
 
 		$files->shouldReceive('isDirectory')->once()
 			->with('/foo/path/vendor/orchestra/foundation/src/public')->andReturn(true);
@@ -110,12 +121,11 @@ class AssetManagerTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testFoundationMethodThrowsException()
 	{
-		$files     = m::mock('Filesystem');
+		$app = $this->app;
+		$app['files'] = $files = m::mock('Filesystem');
+		$app['path.base'] = '/foo/path/';
+
 		$publisher = m::mock('\Illuminate\Foundation\AssetPublisher');
-		$app       = array(
-			'files' => $files,
-			'path.base' => '/foo/path/',
-		);
 
 		$files->shouldReceive('isDirectory')->once()
 			->with('/foo/path/vendor/orchestra/foundation/src/public')->andReturn(true);

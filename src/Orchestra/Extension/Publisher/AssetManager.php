@@ -1,6 +1,7 @@
 <?php namespace Orchestra\Extension\Publisher;
 
 use Exception;
+use Illuminate\Container\Container;
 use Illuminate\Foundation\AssetPublisher;
 use Orchestra\Extension\FilePermissionException;
 
@@ -8,9 +9,8 @@ class AssetManager {
 
 	/**
 	 * Application instance.
-	 *
-	 * @var \Illuminate\Foundation\Application
-	 */
+	 *												* @var \Illuminate\Container\Container
+	    */
 	protected $app = null;
 
 	/**
@@ -22,11 +22,10 @@ class AssetManager {
 
 	/**
 	 * Construct a new instance.
-	 *
-	 * @param  \Illuminate\Foundation\Application       $app
+	 * @param  \Illuminate\Container\Container          $app
 	 * @param  \Illuminate\Foundation\AssetPublisher    $publisher
 	 */
-	public function __construct($app, AssetPublisher $publisher)
+	public function __construct(Container $app, AssetPublisher $publisher)
 	{
 		$this->app       = $app;
 		$this->publisher = $publisher;

@@ -1,15 +1,32 @@
 <?php namespace Orchestra\Extension\Publisher\TestCase;
 
 use Mockery as m;
+use Illuminate\Container\Container;
 use Orchestra\Extension\Publisher\MigrateManager;
 
 class MigrateManagerTest extends \PHPUnit_Framework_TestCase {
+
+	/**
+	 * Application instance.
+	 *
+	 * @var \Illuminate\Container\Container
+	 */
+	protected $app = null;
+
+	/**
+	 * Setup the test environment.
+	 */
+	public function setUp()
+	{
+		$this->app = new Container;
+	}
 
 	/**
 	 * Teardown the test environment.
 	 */
 	public function tearDown()
 	{
+		unset($this->app);
 		m::close();
 	}
 
@@ -28,7 +45,7 @@ class MigrateManagerTest extends \PHPUnit_Framework_TestCase {
 		$repository->shouldReceive('repositoryExists')->once()->andReturn(false)
 			->shouldReceive('createRepository')->once()->andReturn(null);
 
-		$stub = new MigrateManager(array(), $migrator);
+		$stub = new MigrateManager($this->app, $migrator);
 		$stub->run('/foo/path/migrations');
 	}
 
@@ -39,17 +56,14 @@ class MigrateManagerTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testExtensionMethod()
 	{
-		$migrator   = m::mock('\Illuminate\Database\Migrations\Migrator');
-		$files      = m::mock('Filesystem');
-		$extension  = m::mock('Extension');
+		$app = $this->app;
+
+		$app['migrator'] = $migrator = m::mock('\Illuminate\Database\Migrations\Migrator');
+		$app['files'] = $files = m::mock('Filesystem');
+		$app['orchestra.extension'] = $extension = m::mock('Extension');
+		$app['orchestra.extension.finder'] = $finder = m::mock('Finder');
+		
 		$repository = m::mock('Repository');
-		$finder     = m::mock('Finder');
-		$app        = array(
-			'migrator' => $migrator,
-			'files' => $files,
-			'orchestra.extension' => $extension,
-			'orchestra.extension.finder' => $finder,
-		);
 
 		$extension->shouldReceive('option')->once()->with('foo/bar', 'path')->andReturn('/foo/path/foo/bar/')
 			->shouldReceive('option')->once()->with('foo/bar', 'source-path')->andReturn('/foo/app/foo/bar/')
@@ -81,13 +95,13 @@ class MigrateManagerTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testFoundationMethod()
 	{
-		$migrator   = m::mock('\Illuminate\Database\Migrations\Migrator');
-		$repository = m::mock('Repository');
-		$app        = array(
-			'migrator'  => $migrator,
-			'path.base' => '/foo/path/',
-		);
+		$app = $this->app;
 
+		$app['migrator'] = $migrator = m::mock('\Illuminate\Database\Migrations\Migrator');
+		$app['path.base'] = '/foo/path/';
+
+		$repository = m::mock('Repository');
+		
 		$migrator->shouldReceive('getRepository')->twice()->andReturn($repository)
 			->shouldReceive('run')->once()->with('/foo/path/vendor/orchestra/memory/src/migrations/')->andReturn(null)
 			->shouldReceive('run')->once()->with('/foo/path/vendor/orchestra/auth/src/migrations/')->andReturn(null);

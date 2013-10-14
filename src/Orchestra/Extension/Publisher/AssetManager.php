@@ -9,8 +9,9 @@ class AssetManager {
 
 	/**
 	 * Application instance.
-	 *												* @var \Illuminate\Container\Container
-	    */
+	 *
+	 * @var \Illuminate\Container\Container
+	 */
 	protected $app = null;
 
 	/**
@@ -22,6 +23,7 @@ class AssetManager {
 
 	/**
 	 * Construct a new instance.
+	 * 
 	 * @param  \Illuminate\Container\Container          $app
 	 * @param  \Illuminate\Foundation\AssetPublisher    $publisher
 	 */

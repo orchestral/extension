@@ -2,4 +2,7 @@
 
 use RuntimeException;
 
-class FilePermissionException extends RuntimeException {}
+class FilePermissionException extends RuntimeException
+{
+    //
+}

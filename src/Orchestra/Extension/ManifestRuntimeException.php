@@ -1,3 +1,6 @@
 <?php namespace Orchestra\Extension;
 
-class ManifestRuntimeException extends \RuntimeException {}
+class ManifestRuntimeException extends \RuntimeException
+{
+    //
+}

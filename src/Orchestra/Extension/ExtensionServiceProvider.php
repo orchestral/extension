@@ -67,8 +67,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerAliases()
     {
-        $this->app->booting(function()
-        {
+        $this->app->booting(function () {
             $loader = AliasLoader::getInstance();
             $loader->alias('Orchestra\Extension', 'Orchestra\Support\Facades\Extension');
             $loader->alias('Orchestra\Config', 'Orchestra\Support\Facades\Config');
@@ -96,16 +95,14 @@ class ExtensionServiceProvider extends ServiceProvider
     {
         $app = $this->app;
 
-        $app->booted(function($app)
-        {
+        $app->booted(function ($app) {
             $env = $app['orchestra.extension'];
 
             $env->attach($app['orchestra.memory']->makeOrFallback());
             $env->boot();
         });
 
-        $app->after(function() use ($app)
-        {
+        $app->after(function () use ($app) {
             $app['orchestra.extension']->finish();
         });
     }

@@ -1,7 +1,7 @@
 Orchestra Platform Extension Component
 ==============
 
-Orchestra\Extension allows components or packages to be added dynamically to Orchestra Platform without the hassle of modifying the configuration.
+`Orchestra\Extension` allows components or packages to be added dynamically to Orchestra Platform without the hassle of modifying the configuration.
 
 [![Latest Stable Version](https://poser.pugx.org/orchestra/extension/v/stable.png)](https://packagist.org/packages/orchestra/extension) 
 [![Total Downloads](https://poser.pugx.org/orchestra/extension/downloads.png)](https://packagist.org/packages/orchestra/extension) 
@@ -35,7 +35,15 @@ Next add the following service provider in `app/config/app.php`.
 ),
 ```
 
-> `CommandServiceProvider` are optional, useful for interaction using the Artisan command line tool.
+### Migrations
+
+Before we can start using `Orchestra\Extension`, please run the following:
+
+```bash
+php artisan orchestra:extension install
+```
+
+> The command utility is enabled via `Orchestra\Extension\CommandServiceProvider`.
 
 ## Resources
 

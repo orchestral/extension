@@ -48,15 +48,21 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("/", $stub1->prefix());
         $this->assertEquals("http://blog.orchestraplatform.com", $stub1->root());
         $this->assertEquals("http://blog.orchestraplatform.com/foo", $stub1->to('foo'));
+        $this->assertEquals("http://blog.orchestraplatform.com/foo?bar", $stub1->to('foo?bar'));
+        $this->assertEquals("http://blog.orchestraplatform.com/foo?bar=foobar", $stub1->to('foo?bar=foobar'));
 
         $this->assertEquals("blog.orchestraplatform.com", $stub2->domain());
         $this->assertEquals("hello", $stub2->prefix());
         $this->assertEquals("http://blog.orchestraplatform.com/hello", $stub2->root());
         $this->assertEquals("http://blog.orchestraplatform.com/hello/foo", $stub2->to('foo'));
+        $this->assertEquals("http://blog.orchestraplatform.com/hello/foo?bar", $stub2->to('foo?bar'));
+        $this->assertEquals("http://blog.orchestraplatform.com/hello/foo?bar=foobar", $stub2->to('foo?bar=foobar'));
 
         $this->assertEquals("blog.orchestraplatform.com", $stub3->domain());
         $this->assertEquals("hello/world", $stub3->prefix());
         $this->assertEquals("http://blog.orchestraplatform.com/hello/world", $stub3->root());
         $this->assertEquals("http://blog.orchestraplatform.com/hello/world/foo", $stub3->to('foo'));
+        $this->assertEquals("http://blog.orchestraplatform.com/hello/world/foo?bar", $stub3->to('foo?bar'));
+        $this->assertEquals("http://blog.orchestraplatform.com/hello/world/foo?bar=foobar", $stub3->to('foo?bar=foobar'));
     }
 }

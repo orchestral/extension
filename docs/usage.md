@@ -66,7 +66,7 @@ Manifest file also allow extension to dynamically register service providers wit
 
 ### Autoloading File
 
-Apart from service providers, you can also pre-define PHP file to be loaded when the extension is booted. Extension start file allows extension to run start script (as Laravel run application start.php file).
+Apart from service providers, you can also set pre-define PHP file to be loaded when the extension is booted. These start files allows extension to any booting script required for the extension to work (as Laravel run application start.php file).
 
 ```json
 {

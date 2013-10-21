@@ -26,6 +26,7 @@ Extension Change Log
 ### v2.0.19@dev
 
 * Move commands to it's own service provider.
+* Implement [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md) coding standard.
 
 ### v2.0.18
 
@@ -34,7 +35,7 @@ Extension Change Log
 
 ### v2.0.17
 
-* Fixed inconsistent directory separator contain both \ and / in Windows environment. 
+* Fixed inconsistent directory separator contain both \ and / in Windows environment.
 
 ### v2.0.16
 

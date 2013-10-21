@@ -96,6 +96,7 @@ class RouteGenerator
     public function to($to)
     {
         $root = $this->root();
+
         return trim("{$root}/{$to}", '/');
     }
 

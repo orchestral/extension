@@ -18,7 +18,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app['orchestra.commands.extension'] = $this->app->share(function () {
+        $this->app->bindShared('orchestra.commands.extension', function () {
             return new Console\ExtensionCommand;
         });
 

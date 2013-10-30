@@ -30,7 +30,7 @@ class PublisherServiceProvider extends ServiceProvider
      */
     protected function registerMigration()
     {
-        $this->app['orchestra.publisher.migrate'] = $this->app->share(function ($app) {
+        $this->app->bindShared('orchestra.publisher.migrate', function ($app) {
             // In order to use migration, we need to boot 'migration.repository'
             // instance.
             $app['migration.repository'];
@@ -46,7 +46,7 @@ class PublisherServiceProvider extends ServiceProvider
      */
     protected function registerAssetPublisher()
     {
-        $this->app['orchestra.publisher.asset'] = $this->app->share(function ($app) {
+        $this->app->bindShared('orchestra.publisher.asset', function ($app) {
             $publisher = new AssetPublisher($app['files'], $app['path.public']);
             return new Publisher\AssetManager($app, $publisher);
         });

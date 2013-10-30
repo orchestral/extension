@@ -27,7 +27,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtension()
     {
-        $this->app['orchestra.extension'] = $this->app->share(function ($app) {
+        $this->app->bindShared('orchestra.extension', function ($app) {
             $provider   = new ProviderRepository($app);
             $dispatcher = new Dispatcher($app, $provider);
             $debugger   = new Debugger($app);
@@ -43,7 +43,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionConfigManager()
     {
-        $this->app['orchestra.extension.config'] = $this->app->share(function ($app) {
+        $this->app->bindShared('orchestra.extension.config', function ($app) {
             return new ConfigManager($app);
         });
     }
@@ -55,7 +55,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionFinder()
     {
-        $this->app['orchestra.extension.finder'] = $this->app->share(function ($app) {
+        $this->app->bindShared('orchestra.extension.finder', function ($app) {
             return new Finder($app);
         });
     }

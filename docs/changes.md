@@ -20,6 +20,7 @@ Extension Change Log
 * Add `php artisan orchestra:extension update {name}` to run migration and asset publish from console.
 * Add ability for extension to handle domain prefix instead of just path prefix via `Orchestra\Extension\RouteGenerator`.
 * Predefined package path to avoid additional overhead to guest package path.
+* Allow wildcard `{{domain}}` for extension routing via `Orchestra\Extension\RouteGenerator`.
 
 ## Version 2.0
 

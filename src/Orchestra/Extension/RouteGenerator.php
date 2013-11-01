@@ -51,9 +51,11 @@ class RouteGenerator
 
         // Build base URL and prefix from Request::root();
         $base = explode('/', $baseUrl, 2);
+
         if (count($base) > 1) {
             $this->basePrefix = array_pop($base);
         }
+
         $this->baseUrl = array_shift($base);
 
         // If the handles doesn't start as "//some.domain.com/foo" we should
@@ -81,10 +83,10 @@ class RouteGenerator
     public function root()
     {
         $http   = ($this->secure ? "https" : "http");
-        $domain = "{$http}://".trim($this->domain(true), '/');
+        $domain = trim($this->domain(true), '/');
         $prefix = $this->prefix(true);
 
-        return trim("{$domain}/{$prefix}", '/');
+        return trim("{$http}://{$domain}/{$prefix}", '/');
     }
 
     /**
@@ -112,6 +114,9 @@ class RouteGenerator
 
         if (is_null($domain) and $forceBase === true) {
             $domain = $this->baseUrl;
+        }
+        elseif (str_contains($domain, '{{domain}}')) {
+            $domain = str_replace('{{domain}}', $this->baseUrl, $domain);
         }
 
         return $domain;

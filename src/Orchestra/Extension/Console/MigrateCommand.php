@@ -1,6 +1,6 @@
 <?php namespace Orchestra\Extension\Console;
 
-class MigrateCommand extends BaseConsole
+class MigrateCommand extends BaseCommand
 {
     /**
      * The console command name.

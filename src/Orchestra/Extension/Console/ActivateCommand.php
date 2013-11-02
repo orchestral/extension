@@ -1,6 +1,6 @@
 <?php namespace Orchestra\Extension\Console;
 
-class ActivateCommand extends ExtensionConsole
+class ActivateCommand extends ExtensionCommand
 {
     /**
      * The console command name.

@@ -1,6 +1,6 @@
 <?php namespace Orchestra\Extension\Console;
 
-class DetectCommand extends BaseConsole
+class DetectCommand extends BaseCommand
 {
     /**
      * The console command name.

@@ -1,6 +1,6 @@
 <?php namespace Orchestra\Extension\Console;
 
-class PublishCommand extends ExtensionConsole
+class PublishCommand extends ExtensionCommand
 {
     /**
      * The console command name.

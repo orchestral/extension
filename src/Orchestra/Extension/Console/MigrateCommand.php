@@ -19,7 +19,7 @@ class MigrateCommand extends BaseCommand
     /**
      * {@inheritdoc}
      */
-    protected function execute()
+    public function fire()
     {
         $this->call('migrate', array('--package' => 'orchestra/memory'));
     }

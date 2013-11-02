@@ -19,7 +19,7 @@ class PublishCommand extends ExtensionCommand
     /**
      * {@inheritdoc}
      */
-    protected function execute()
+    public function fire()
     {
         $name = $this->argument('name');
 

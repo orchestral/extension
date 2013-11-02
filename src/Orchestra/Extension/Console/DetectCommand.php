@@ -19,7 +19,7 @@ class DetectCommand extends BaseCommand
     /**
      * {@inheritdoc}
      */
-    protected function execute()
+    public function fire()
     {
         $service = $this->laravel['orchestra.extension'];
         $extensions = $service->detect();

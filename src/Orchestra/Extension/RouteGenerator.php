@@ -114,8 +114,7 @@ class RouteGenerator
 
         if (is_null($domain) and $forceBase === true) {
             $domain = $this->baseUrl;
-        }
-        elseif (str_contains($domain, '{{domain}}')) {
+        } elseif (str_contains($domain, '{{domain}}')) {
             $domain = str_replace('{{domain}}', $this->baseUrl, $domain);
         }
 

@@ -22,7 +22,7 @@ class CommandServiceProvider extends ServiceProvider
         $this->registerDeactivateCommand();
         $this->registerDetectCommand();
         $this->registerMigrateCommand();
-        $this->registerUpdateCommand();
+        $this->registerPublishCommand();
     }
 
     /**

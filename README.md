@@ -41,7 +41,7 @@ Next add the following service provider in `app/config/app.php`.
 Before we can start using `Orchestra\Extension`, please run the following:
 
 ```bash
-php artisan orchestra:extension install
+php artisan extension:migrate
 ```
 
 > The command utility is enabled via `Orchestra\Extension\CommandServiceProvider`.

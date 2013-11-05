@@ -16,7 +16,6 @@ class ExtensionServiceProvider extends ServiceProvider
         $this->registerExtension();
         $this->registerExtensionConfigManager();
         $this->registerExtensionFinder();
-        $this->registerAliases();
         $this->registerExtensionEvents();
     }
 
@@ -57,20 +56,6 @@ class ExtensionServiceProvider extends ServiceProvider
     {
         $this->app['orchestra.extension.finder'] = $this->app->share(function ($app) {
             return new Finder($app);
-        });
-    }
-
-    /**
-     * Register aliases.
-     *
-     * @return void
-     */
-    protected function registerAliases()
-    {
-        $this->app->booting(function () {
-            $loader = AliasLoader::getInstance();
-            $loader->alias('Orchestra\Extension', 'Orchestra\Support\Facades\Extension');
-            $loader->alias('Orchestra\Config', 'Orchestra\Support\Facades\Config');
         });
     }
 

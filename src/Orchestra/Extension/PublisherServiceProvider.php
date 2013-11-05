@@ -48,6 +48,7 @@ class PublisherServiceProvider extends ServiceProvider
     {
         $this->app['orchestra.publisher.asset'] = $this->app->share(function ($app) {
             $publisher = new AssetPublisher($app['files'], $app['path.public']);
+
             return new Publisher\AssetManager($app, $publisher);
         });
     }

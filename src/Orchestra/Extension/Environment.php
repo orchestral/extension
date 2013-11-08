@@ -1,9 +1,7 @@
 <?php namespace Orchestra\Extension;
 
-use Exception;
 use Illuminate\Container\Container;
 use Orchestra\Memory\Abstractable\Container as AbstractableContainer;
-use Orchestra\Memory\Drivers\Driver as MemoryDriver;
 use Orchestra\Extension\Contracts\DebuggerInterface;
 use Orchestra\Extension\Contracts\DispatcherInterface;
 

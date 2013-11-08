@@ -2,6 +2,7 @@
 
 use RuntimeException;
 use Illuminate\Container\Container;
+use Illuminate\Support\Fluent;
 
 class Finder
 {
@@ -138,13 +139,15 @@ class Finder
     protected function getManifestContents($manifest)
     {
         $path     = $sourcePath = $this->guessExtensionPath($manifest);
-        $jsonable = json_decode($this->app['files']->get($manifest));
+        $jsonable = json_decode($this->app['files']->get($manifest), true);
 
         // If json_decode fail, due to invalid json format. We going to
         // throw an exception so this error can be fixed by the developer
         // instead of allowing the application to run with a buggy config.
         if (is_null($jsonable)) {
             throw new ManifestRuntimeException("Cannot decode file [{$manifest}]");
+        } else {
+            $jsonable = new Fluent($jsonable);
         }
 
         if (isset($jsonable->path)) {
@@ -169,10 +172,10 @@ class Finder
      * to migrate, load service provider as well as preload some
      * configuration.
      *
-     * @param  object   $jsonable
+     * @param  \Illuminate\Support\Fluent  $jsonable
      * @return array
      */
-    protected function generateManifestConfig($jsonable)
+    protected function generateManifestConfig(Fluent $jsonable)
     {
         $manifest = array();
 

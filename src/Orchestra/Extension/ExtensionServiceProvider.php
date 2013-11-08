@@ -1,6 +1,5 @@
 <?php namespace Orchestra\Extension;
 
-use Exception;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 

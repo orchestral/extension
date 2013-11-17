@@ -219,9 +219,9 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
 
         $dispatcher->shouldReceive('register')->once()
                 ->with('laravel/framework', m::type('Array'))->andReturn(null);
-        $memory->shouldReceive('get')->once()
+        $memory->shouldReceive('get')->twice()
                 ->with('extensions.available', array())->andReturn(array('laravel/framework' => array()))
-            ->shouldReceive('get')->once()
+            ->shouldReceive('get')->twice()
                 ->with('extensions.active', array())->andReturn(array())
             ->shouldReceive('put')->once()
                 ->with('extensions.active', array('laravel/framework' => array()))->andReturn(true);
@@ -236,7 +236,8 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
 
         $stub = new Environment($app, $dispatcher, $this->debugger);
         $stub->attach($memory);
-        $stub->activate('laravel/framework');
+        $this->assertTrue($stub->activate('laravel/framework'));
+        $this->assertFalse($stub->activate('laravel'));
     }
 
     /**
@@ -250,16 +251,17 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $memory = m::mock('Orchestra\Memory\Drivers\Driver');
         $app['orchestra.memory'] = $memory;
 
-        $memory->shouldReceive('get')
-                ->once()->with('extensions.active', array())
+        $memory->shouldReceive('get')->twice()
+                ->with('extensions.active', array())
                 ->andReturn(array('laravel/framework' => array(), 'daylerees/doc-reader' => array()))
-            ->shouldReceive('put')
-                ->once()->with('extensions.active', array('daylerees/doc-reader' => array()))
+            ->shouldReceive('put')->once()
+                ->with('extensions.active', array('daylerees/doc-reader' => array()))
                 ->andReturn(true);
 
         $stub = new Environment($app, $this->dispatcher, $this->debugger);
         $stub->attach($memory);
-        $stub->deactivate('laravel/framework');
+        $this->assertTrue($stub->deactivate('laravel/framework'));
+        $this->assertFalse($stub->deactivate('laravel'));
     }
 
     /**

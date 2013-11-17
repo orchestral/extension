@@ -153,10 +153,11 @@ class Environment extends AbstractableContainer
      * Activate an extension.
      *
      * @param  string   $name
-     * @return void
+     * @return boolean
      */
     public function activate($name)
     {
+        $activated  = false;
         $memory     = $this->memory;
         $availables = $memory->get('extensions.available', array());
         $actives    = $memory->get('extensions.active', array());
@@ -168,30 +169,39 @@ class Environment extends AbstractableContainer
             $this->extensions[$name] = $actives[$name] = $availables[$name];
             $this->dispatcher->register($name, $actives[$name]);
             $this->publish($name);
+
+            $memory->put('extensions.active', $actives);
+
+            $activated = true;
         }
 
-        $memory->put('extensions.active', $actives);
+        return $activated;
     }
 
     /**
      * Deactivate an extension.
      *
      * @param  string   $name
-     * @return void
+     * @return boolean
      */
     public function deactivate($name)
     {
-        $memory  = $this->memory;
-        $current = $memory->get('extensions.active', array());
-        $actives = array();
+        $deactivated = false;
+        $memory      = $this->memory;
+        $current     = $memory->get('extensions.active', array());
+        $actives     = array();
 
         foreach ($current as $extension => $config) {
-            if ($extension !== $name) {
+            if ($extension === $name) {
+                $deactivated = true;
+            } else {
                 $actives[$extension] = $config;
             }
         }
 
-        $memory->put('extensions.active', $actives);
+        !! $deactivated and $memory->put('extensions.active', $actives);
+
+        return $deactivated;
     }
 
     /**

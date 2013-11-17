@@ -23,7 +23,12 @@ class ActivateCommand extends ExtensionCommand
     {
         $name = $this->argument('name');
 
-        $this->laravel['orchestra.extension']->activate($name);
-        $this->info("Extension [{$name}] activated.");
+        $activated = $this->laravel['orchestra.extension']->activate($name);
+
+        if (!! $activated) {
+            $this->info("Extension [{$name}] activated.");
+        } else {
+            $this->error("Unable to activate extension [{$name}].");
+        }
     }
 }

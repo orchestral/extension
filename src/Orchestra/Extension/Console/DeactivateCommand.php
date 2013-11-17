@@ -23,7 +23,12 @@ class DeactivateCommand extends ExtensionCommand
     {
         $name = $this->argument('name');
 
-        $this->laravel['orchestra.extension']->deactivate($name);
-        $this->info("Extension [{$name}] deactivated.");
+        $deactivated = $this->laravel['orchestra.extension']->deactivate($name);
+
+        if (!! $deactivated) {
+            $this->info("Extension [{$name}] deactivated.");
+        } else {
+            $this->error("Unable to deactivate extension [{$name}].");
+        }
     }
 }

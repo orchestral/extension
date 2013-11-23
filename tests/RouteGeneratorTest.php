@@ -1,9 +1,18 @@
 <?php namespace Orchestra\Extension\TestCase;
 
+use Mockery as m;
 use Orchestra\Extension\RouteGenerator;
 
 class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Teardown the test environment.
+     */
+    public function tearDown()
+    {
+        m::close();
+    }
+
     /**
      * Test Orchestra\Extension\RouteGenerator construct proper route.
      *
@@ -11,17 +20,20 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructProperRoute()
     {
-        $stub   = new RouteGenerator("foo", "http://localhost/laravel");
+        $request = m::mock('\Illuminate\Http\Request');
+
+        $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
+            ->shouldReceive('secure')->once()->andReturn(false);
+
+        $stub   = new RouteGenerator("foo", $request);
+
         $refl   = new \ReflectionObject($stub);
         $domain = $refl->getProperty('domain');
         $prefix = $refl->getProperty('prefix');
-        $secure = $refl->getProperty('secure');
 
         $domain->setAccessible(true);
         $prefix->setAccessible(true);
-        $secure->setAccessible(true);
 
-        $this->assertFalse($secure->getValue($stub));
         $this->assertNull($domain->getValue($stub));
         $this->assertEquals('foo', $prefix->getValue($stub));
 
@@ -40,9 +52,14 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testRouteWithDomain()
     {
-        $stub1 = new RouteGenerator("//blog.orchestraplatform.com");
-        $stub2 = new RouteGenerator("//blog.orchestraplatform.com/hello");
-        $stub3 = new RouteGenerator("//blog.orchestraplatform.com/hello/world");
+        $request = m::mock('\Illuminate\Http\Request');
+
+        $request->shouldReceive('root')->andReturn(null)
+            ->shouldReceive('secure')->andReturn(false);
+
+        $stub1 = new RouteGenerator("//blog.orchestraplatform.com", $request);
+        $stub2 = new RouteGenerator("//blog.orchestraplatform.com/hello", $request);
+        $stub3 = new RouteGenerator("//blog.orchestraplatform.com/hello/world", $request);
 
         $this->assertEquals("blog.orchestraplatform.com", $stub1->domain());
         $this->assertEquals("/", $stub1->prefix());

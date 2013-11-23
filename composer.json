@@ -12,7 +12,7 @@
 		}
 	],
 	"autoload": {
-		"psr-0": { 
+		"psr-0": {
 			"Orchestra\\Extension" : "src/"
 		}
 	},
@@ -23,6 +23,7 @@
 	"require-dev": {
 		"mockery/mockery": "0.8.0",
 		"illuminate/container": "4.0.*",
+		"illuminate/http": "4.0.*",
 		"illuminate/support": "4.0.*"
 	},
 	"suggest": {

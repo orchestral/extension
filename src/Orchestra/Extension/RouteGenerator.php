@@ -1,20 +1,22 @@
 <?php namespace Orchestra\Extension;
 
+use Illuminate\Http\Request;
+
 class RouteGenerator
 {
+    /**
+     * Request instance.
+     *
+     * @var \Illuminate\Http\Request
+     */
+    protected $request;
+
     /**
      * Domain name.
      *
      * @var string
      */
     protected $domain = null;
-
-    /**
-     * Secured request.
-     *
-     * @var boolean
-     */
-    protected $secure = false;
 
     /**
      * Handles path.
@@ -40,20 +42,21 @@ class RouteGenerator
     /**
      * Construct a new instance.
      *
-     * @param  string   $handles
-     * @param  string   $baseUrl
-     * @param  boolean  $secure
+     * @param  string                      $handles
+     * @param  \Illuminate\Http\Request    $request
      */
-    public function __construct($handles, $baseUrl = null, $secure = false)
+    public function __construct($handles, Request $request)
     {
-        $baseUrl      = str_replace(array('https://', 'http://'), '', $baseUrl);
-        $this->secure = $secure;
+        $this->request = $request;
 
         // Build base URL and prefix from Request::root();
-        $base = explode('/', $baseUrl, 2);
+        $baseUrl = str_replace(array('https://', 'http://'), '', $this->request->root());
+        $base    = explode('/', $baseUrl, 2);
+
         if (count($base) > 1) {
             $this->basePrefix = array_pop($base);
         }
+
         $this->baseUrl = array_shift($base);
 
         // If the handles doesn't start as "//some.domain.com/foo" we should
@@ -80,7 +83,7 @@ class RouteGenerator
      */
     public function root()
     {
-        $http   = ($this->secure ? "https" : "http");
+        $http   = ($this->request->secure() ? "https" : "http");
         $domain = "{$http}://".trim($this->domain(true), '/');
         $prefix = $this->prefix(true);
 

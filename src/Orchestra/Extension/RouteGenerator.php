@@ -96,6 +96,25 @@ class RouteGenerator
     }
 
     /**
+     * Determine if the current request URI matches a pattern.
+     *
+     * @param  string  $pattern
+     * @return boolean
+     */
+    public function is($pattern)
+    {
+        foreach (func_get_args() as $pattern)
+        {
+            if (str_is($pattern, $this->path()))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Get the current path info for the request.
      *
      * @return string
@@ -104,7 +123,7 @@ class RouteGenerator
     {
         $pattern = trim($this->request->path(), '/');
 
-        return $this->to($pattern == '' ? '/' : $pattern);
+        return $pattern === '' ? '/' : $pattern;
     }
 
     /**

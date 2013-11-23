@@ -45,24 +45,87 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('http://localhost/laravel/foo', $stub->root());
     }
 
+    public function isDataProvider()
+    {
+        return array(
+            array('foobar', 'foo*', true),
+            array('hello', '*ello', true),
+            array('helloworld', 'foo*', false),
+        );
+    }
+
     /**
-     * Test Orchestra\Extension\RouteGenerator::path method.
+     * Test Orchestra\Extension\RouteGenerator::is() method without domain.
      *
      * @test
+     * @dataProvider isDataProvider
      */
-    public function testPathMethod()
+    public function testIsMethodWithoutDomain($path, $pattern, $expected)
     {
         $request = m::mock('\Illuminate\Http\Request');
 
         $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
-            ->shouldReceive('secure')->twice()->andReturn(false)
+            ->shouldReceive('path')->once()->andReturn($path);
+
+        $stub = new RouteGenerator("foo", $request);
+
+        $this->assertEquals($expected, $stub->is($pattern));
+    }
+
+    /**
+     * Test Orchestra\Extension\RouteGenerator::path method with domain.
+     *
+     * @test
+     * @dataProvider isDataProvider
+     */
+    public function testIsMethodWithDomain($path, $pattern, $expected)
+    {
+        $request = m::mock('\Illuminate\Http\Request');
+
+        $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
+            ->shouldReceive('path')->once()->andReturn($path);
+
+        $stub = new RouteGenerator("//foobar.com", $request);
+
+        $this->assertEquals($expected, $stub->is($pattern));
+    }
+
+    /**
+     * Test Orchestra\Extension\RouteGenerator::path method without domain.
+     *
+     * @test
+     */
+    public function testPathMethodWithoutDomain()
+    {
+        $request = m::mock('\Illuminate\Http\Request');
+
+        $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
             ->shouldReceive('path')->once()->andReturn('/')
             ->shouldReceive('path')->once()->andReturn('bar');
 
         $stub = new RouteGenerator("foo", $request);
 
-        $this->assertEquals('http://localhost/laravel/foo/', $stub->path());
-        $this->assertEquals('http://localhost/laravel/foo/bar', $stub->path());
+        $this->assertEquals('/', $stub->path());
+        $this->assertEquals('bar', $stub->path());
+    }
+
+    /**
+     * Test Orchestra\Extension\RouteGenerator::path method with domain.
+     *
+     * @test
+     */
+    public function testPathMethodWithDomain()
+    {
+        $request = m::mock('\Illuminate\Http\Request');
+
+        $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
+            ->shouldReceive('path')->once()->andReturn('/')
+            ->shouldReceive('path')->once()->andReturn('bar');
+
+        $stub = new RouteGenerator("//foobar.com", $request);
+
+        $this->assertEquals('/', $stub->path());
+        $this->assertEquals('bar', $stub->path());
     }
 
     /**

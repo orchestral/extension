@@ -65,11 +65,11 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
         $request = m::mock('\Illuminate\Http\Request');
 
         $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
-            ->shouldReceive('path')->once()->andReturn($path);
+            ->shouldReceive('path')->once()->andReturn("acme/$path");
 
-        $stub = new RouteGenerator("foo", $request);
+        $stub = new RouteGenerator("acme", $request);
 
-        $this->assertEquals($expected, $stub->is($pattern));
+        $this->assertEquals($expected, $stub->is("acme/{$pattern}"));
     }
 
     /**
@@ -91,6 +91,25 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test Orchestra\Extension\RouteGenerator::path method with domain
+     * and prefix.
+     *
+     * @test
+     * @dataProvider isDataProvider
+     */
+    public function testIsMethodWithDomainAndPrefix($path, $pattern, $expected)
+    {
+        $request = m::mock('\Illuminate\Http\Request');
+
+        $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
+            ->shouldReceive('path')->once()->andReturn("acme/{$path}");
+
+        $stub = new RouteGenerator("//foobar.com/acme", $request);
+
+        $this->assertEquals($expected, $stub->is("acme/{$pattern}"));
+    }
+
+    /**
      * Test Orchestra\Extension\RouteGenerator::path method without domain.
      *
      * @test
@@ -100,13 +119,13 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
         $request = m::mock('\Illuminate\Http\Request');
 
         $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
-            ->shouldReceive('path')->once()->andReturn('/')
-            ->shouldReceive('path')->once()->andReturn('bar');
+            ->shouldReceive('path')->once()->andReturn('foo')
+            ->shouldReceive('path')->once()->andReturn('foo/bar');
 
         $stub = new RouteGenerator("foo", $request);
 
-        $this->assertEquals('/', $stub->path());
-        $this->assertEquals('bar', $stub->path());
+        $this->assertEquals('foo', $stub->path());
+        $this->assertEquals('foo/bar', $stub->path());
     }
 
     /**

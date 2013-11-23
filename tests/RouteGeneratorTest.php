@@ -46,6 +46,26 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test Orchestra\Extension\RouteGenerator::path method.
+     *
+     * @test
+     */
+    public function testPathMethod()
+    {
+        $request = m::mock('\Illuminate\Http\Request');
+
+        $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
+            ->shouldReceive('secure')->twice()->andReturn(false)
+            ->shouldReceive('path')->once()->andReturn('/')
+            ->shouldReceive('path')->once()->andReturn('bar');
+
+        $stub = new RouteGenerator("foo", $request);
+
+        $this->assertEquals('http://localhost/laravel/foo/', $stub->path());
+        $this->assertEquals('http://localhost/laravel/foo/bar', $stub->path());
+    }
+
+    /**
      * Test Orchestra\Extension\RouteGenerator with domain route.
      *
      * @test

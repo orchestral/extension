@@ -96,6 +96,18 @@ class RouteGenerator
     }
 
     /**
+     * Get the current path info for the request.
+     *
+     * @return string
+     */
+    public function path()
+    {
+        $pattern = trim($this->request->path(), '/');
+
+        return $this->to($pattern == '' ? '/' : $pattern);
+    }
+
+    /**
      * Get route prefix.
      *
      * @param  boolean  $forceBase

@@ -77,34 +77,6 @@ class RouteGenerator
     }
 
     /**
-     * Get route root.
-     *
-     * @return string
-     */
-    public function root()
-    {
-        $http   = ($this->request->secure() ? "https" : "http");
-        $domain = trim($this->domain(true), '/');
-        $prefix = $this->prefix(true);
-
-        return trim("{$http}://{$domain}/{$prefix}", '/');
-    }
-
-    /**
-     * Get route to.
-     *
-     * @param  string   $to
-     * @return string
-     */
-    public function to($to)
-    {
-        $root = $this->root();
-        $to   = trim($to, '/');
-
-        return "{$root}/{$to}";
-    }
-
-    /**
      * Get route domain.
      *
      * @param  boolean  $forceBase
@@ -141,6 +113,34 @@ class RouteGenerator
         empty($prefix) and $prefix = '/';
 
         return $prefix;
+    }
+
+    /**
+     * Get route root.
+     *
+     * @return string
+     */
+    public function root()
+    {
+        $http   = ($this->request->secure() ? "https" : "http");
+        $domain = trim($this->domain(true), '/');
+        $prefix = $this->prefix(true);
+
+        return trim("{$http}://{$domain}/{$prefix}", '/');
+    }
+
+    /**
+     * Get route to.
+     *
+     * @param  string   $to
+     * @return string
+     */
+    public function to($to)
+    {
+        $root = $this->root();
+        $to   = trim($to, '/');
+
+        return "{$root}/{$to}";
     }
 
     /**

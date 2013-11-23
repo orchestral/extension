@@ -84,13 +84,15 @@ class RouteGenerator
      */
     public function domain($forceBase = false)
     {
-        $domain = $this->domain;
+        $pattern = $this->domain;
 
-        if (is_null($domain) and $forceBase === true) {
-            $domain = $this->baseUrl;
+        if (is_null($pattern) and $forceBase === true) {
+            $pattern = $this->baseUrl;
+        } elseif (str_contains($pattern, '{{domain}}')) {
+            $pattern = str_replace('{{domain}}', $this->baseUrl, $pattern);
         }
 
-        return $domain;
+        return $pattern;
     }
 
     /**
@@ -101,16 +103,16 @@ class RouteGenerator
      */
     public function prefix($forceBase = false)
     {
-        $prefix = trim($this->prefix, '/');
+        $pattern = trim($this->prefix, '/');
 
         if (is_null($this->domain) and $forceBase === true) {
-            $prefix = trim($this->basePrefix, '/')."/{$prefix}";
-            $prefix = trim($prefix, '/');
+            $pattern = trim($this->basePrefix, '/')."/{$pattern}";
+            $pattern = trim($pattern, '/');
         }
 
-        empty($prefix) and $prefix = '/';
+        empty($pattern) and $pattern = '/';
 
-        return $prefix;
+        return $pattern;
     }
 
     /**
@@ -135,10 +137,11 @@ class RouteGenerator
      */
     public function to($to)
     {
-        $root = $this->root();
-        $to   = trim($to, '/');
+        $root    = $this->root();
+        $to      = trim($to, '/');
+        $pattern = "{$root}/{$to}";
 
-        return "{$root}/{$to}";
+        return $pattern !== '/' ? $pattern : '';
     }
 
     /**

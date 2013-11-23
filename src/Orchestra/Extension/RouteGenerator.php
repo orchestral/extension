@@ -103,10 +103,8 @@ class RouteGenerator
      */
     public function is($pattern)
     {
-        foreach (func_get_args() as $pattern)
-        {
-            if (str_is($pattern, $this->path()))
-            {
+        foreach (func_get_args() as $pattern) {
+            if (str_is($pattern, $this->path())) {
                 return true;
             }
         }

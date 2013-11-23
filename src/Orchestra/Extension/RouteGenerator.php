@@ -151,7 +151,7 @@ class RouteGenerator
     {
         $root    = $this->root();
         $to      = trim($to, '/');
-        $pattern = "{$root}/{$to}";
+        $pattern = trim("{$root}/{$to}", '/');
 
         return $pattern !== '/' ? $pattern : '';
     }

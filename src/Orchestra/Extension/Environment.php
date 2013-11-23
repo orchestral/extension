@@ -144,8 +144,7 @@ class Environment extends AbstractableContainer
 
         return new RouteGenerator(
             $this->app['config']->get($key, $default),
-            $this->app['request']->root(),
-            $this->app['request']->secure()
+            $this->app['request']
         );
     }
 

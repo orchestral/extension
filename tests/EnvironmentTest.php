@@ -117,7 +117,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $debugger   = $this->debugger;
         $memory     = m::mock('Orchestra\Memory\Drivers\Driver');
         $config     = m::mock('Config');
-        $request    = m::mock('Request');
+        $request    = m::mock('\Illuminate\Http\Request');
 
         $app['orchestra.memory'] = $memory;
         $app['config'] = $config;
@@ -135,7 +135,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $debugger->shouldReceive('check')->once()->andReturn(false);
         $config->shouldReceive('get')->with('orchestra/extension::handles.laravel/framework', '/')->andReturn('laravel');
         $request->shouldReceive('root')->once()->andReturn('http://localhost')
-                ->shouldReceive('secure')->once()->andReturn(false);
+                ->shouldReceive('secure')->twice()->andReturn(false);
 
         $stub = new Environment($app, $dispatcher, $debugger);
         $stub->attach($memory);

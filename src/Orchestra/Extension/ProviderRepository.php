@@ -37,11 +37,9 @@ class ProviderRepository
     public function provides(array $services)
     {
         foreach ($services as $service) {
-            $provider = (is_string($service) ? new $service($this->app) : $service);
-
             // Register service provider as a service for
             // Illuminate\Foundation\Application.
-            $this->app->register($provider);
+            $provider = $this->app->register($service);
 
             // During this process, Illuminate\Foundation\Application has
             // been booted and it would ignore any of the deferred service

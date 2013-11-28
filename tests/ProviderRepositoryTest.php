@@ -24,7 +24,7 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
         $mock = m::mock('FooServiceProviderMock');
         $app = m::mock('\Illuminate\Container\Container');
 
-        $app->shouldReceive('register')->once()->with($mock)->andReturn(null);
+        $app->shouldReceive('register')->once()->with($mock)->andReturn($mock);
 
         $stub = new ProviderRepository($app);
         $stub->provides(array($mock));

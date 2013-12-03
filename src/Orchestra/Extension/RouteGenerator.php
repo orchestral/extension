@@ -104,6 +104,8 @@ class RouteGenerator
     public function is($pattern)
     {
         foreach (func_get_args() as $pattern) {
+            $pattern = trim($this->prefix().'/'.$pattern, '/');
+
             if (str_is($pattern, $this->path())) {
                 return true;
             }

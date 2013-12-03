@@ -69,7 +69,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $stub = new RouteGenerator("acme", $request);
 
-        $this->assertEquals($expected, $stub->is("acme/{$pattern}"));
+        $this->assertEquals($expected, $stub->is("{$pattern}"));
     }
 
     /**
@@ -106,7 +106,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $stub = new RouteGenerator("//foobar.com/acme", $request);
 
-        $this->assertEquals($expected, $stub->is("acme/{$pattern}"));
+        $this->assertEquals($expected, $stub->is("{$pattern}"));
     }
 
     /**

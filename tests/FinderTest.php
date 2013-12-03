@@ -2,6 +2,7 @@
 
 use Mockery as m;
 use Illuminate\Container\Container;
+use Illuminate\Support\Collection;
 use Orchestra\Extension\Finder;
 
 class FinderTest extends \PHPUnit_Framework_TestCase
@@ -86,7 +87,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
                 ->with('/foo/path/workbench/*/*/orchestra.json')->andReturn(array());
 
         $stub     = new Finder($app);
-        $expected = array(
+        $expected = new Collection(array(
             'laravel/framework' => array(
                 'path'        => 'vendor::laravel/framework',
                 'source-path' => 'vendor::laravel/framework',
@@ -111,7 +112,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
                 'autoload'    => array(),
                 'provide'     => array(),
             ),
-        );
+        ));
 
         $this->assertEquals($expected, $stub->detect());
     }

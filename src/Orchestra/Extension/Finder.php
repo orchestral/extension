@@ -2,6 +2,7 @@
 
 use RuntimeException;
 use Illuminate\Container\Container;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Fluent;
 
 class Finder
@@ -126,7 +127,7 @@ class Finder
             }
         }
 
-        return $extensions;
+        return new Collection($extensions);
     }
 
     /**

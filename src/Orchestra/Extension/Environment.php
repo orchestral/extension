@@ -323,7 +323,7 @@ class Environment extends AbstractableContainer
     public function detect()
     {
         $extensions = $this->app['orchestra.extension.finder']->detect();
-        $this->memory->put('extensions.available', $extensions);
+        $this->memory->put('extensions.available', $extensions->all());
 
         return $extensions;
     }

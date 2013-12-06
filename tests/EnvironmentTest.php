@@ -2,6 +2,7 @@
 
 use Mockery as m;
 use Illuminate\Container\Container;
+use Illuminate\Support\Collection;
 use Orchestra\Extension\Environment;
 
 class EnvironmentTest extends \PHPUnit_Framework_TestCase
@@ -334,11 +335,13 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $app['orchestra.extension.finder'] = $finder;
         $app['orchestra.memory'] = $memory;
 
-        $finder->shouldReceive('detect')->once()->andReturn('foo');
-        $memory->shouldReceive('put')->once()->with('extensions.available', 'foo')->andReturn('foobar');
+        $extensions = new Collection(array('foo'));
+
+        $finder->shouldReceive('detect')->once()->andReturn($extensions);
+        $memory->shouldReceive('put')->once()->with('extensions.available', array('foo'))->andReturn('foobar');
 
         $stub = new Environment($app, $this->dispatcher, $this->debugger);
         $stub->attach($memory);
-        $this->assertEquals('foo', $stub->detect());
+        $this->assertEquals($extensions, $stub->detect());
     }
 }

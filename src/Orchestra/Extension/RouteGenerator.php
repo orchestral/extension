@@ -103,13 +103,16 @@ class RouteGenerator
      */
     public function is($pattern)
     {
+        $path   = $this->path();
+        $prefix = $this->prefix();
+
         foreach (func_get_args() as $pattern) {
-            $pattern = ($pattern === '*' ? $this->prefix() : $this->prefix()."/{$pattern}");
+            $pattern = ($pattern === '*' ? "{$prefix}*" : "{$prefix}/{$pattern}");
             $pattern = trim($pattern, '/');
 
             empty($pattern) and $pattern = '/';
 
-            if (str_is($pattern, $this->path())) {
+            if (str_is($pattern, $path)) {
                 return true;
             }
         }

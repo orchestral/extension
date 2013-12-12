@@ -1,7 +1,7 @@
 {
 	"name": "orchestra/extension",
 	"description": "Orchestra Platform 2 Extension Component",
-	"homepage": "http://orchestraplatform.com/docs/2.0/components/extension/",
+	"homepage": "http://orchestraplatform.com/docs/latest/components/extension/",
 	"keywords": ["orchestra-platform", "orchestral", "laravel", "extension"],
 	"license": "MIT",
 	"authors": [
@@ -21,7 +21,7 @@
 		"orchestra/memory": "2.1.*"
 	},
 	"require-dev": {
-		"mockery/mockery": "0.8.0",
+		"mockery/mockery": "0.8.*",
 		"illuminate/console": "4.1.*",
 		"illuminate/container": "4.1.*",
 		"illuminate/http": "4.1.*",

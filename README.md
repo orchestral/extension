@@ -16,7 +16,7 @@ To install through composer, simply put the following in your `composer.json` fi
 ```json
 {
 	"require": {
-		"orchestra/extension": "2.0.*"
+		"orchestra/extension": "2.1.*@dev"
 	}
 }
 ```
@@ -25,7 +25,7 @@ Next add the following service provider in `app/config/app.php`.
 
 ```php
 'providers' => array(
-	
+
 	// ...
 
 	'Orchestra\Extension\ExtensionServiceProvider',
@@ -48,5 +48,5 @@ php artisan extension:migrate
 
 ## Resources
 
-* [Documentation](http://orchestraplatform.com/docs/2.0/components/extension)
-* [Change Log](http://orchestraplatform.com/docs/2.0/components/extension/changes#v2.1)
+* [Documentation](http://orchestraplatform.com/docs/latest/components/extension)
+* [Change Log](http://orchestraplatform.com/docs/latest/components/extension/changes#v2-1)

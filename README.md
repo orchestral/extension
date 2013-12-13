@@ -5,8 +5,8 @@ Orchestra Platform Extension Component
 
 [![Latest Stable Version](https://poser.pugx.org/orchestra/extension/v/stable.png)](https://packagist.org/packages/orchestra/extension) 
 [![Total Downloads](https://poser.pugx.org/orchestra/extension/downloads.png)](https://packagist.org/packages/orchestra/extension) 
-[![Build Status](https://travis-ci.org/orchestral/extension.png?branch=2.1)](https://travis-ci.org/orchestral/extension) 
-[![Coverage Status](https://coveralls.io/repos/orchestral/extension/badge.png?branch=2.1)](https://coveralls.io/r/orchestral/extension?branch=2.1) 
+[![Build Status](https://travis-ci.org/orchestral/extension.png?branch=master](https://travis-ci.org/orchestral/extension) 
+[![Coverage Status](https://coveralls.io/repos/orchestral/extension/badge.png?branch=master](https://coveralls.io/r/orchestral/extension?branch=master) 
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/orchestral/extension/badges/quality-score.png?s=bc07078a1276c92c6b4c25eaa491fd5244925d74)](https://scrutinizer-ci.com/g/orchestral/extension/) 
 
 ## Quick Installation

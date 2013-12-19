@@ -1,18 +1,25 @@
 <?php namespace Orchestra\Extension;
 
 use RuntimeException;
-use Illuminate\Container\Container;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Fluent;
 
 class Finder
 {
     /**
-     * Application instance.
+     * Filesystem instance.
      *
-     * @var \Illuminate\Container\Container
+     * @var \Illuminate\Filesystem\Filesystem
      */
-    protected $app = null;
+    protected $files;
+
+    /**
+     * Application and base path configuration.
+     *
+     * @var array
+     */
+    protected $config = array();
 
     /**
      * List of paths.
@@ -66,20 +73,22 @@ class Finder
     /**
      * Construct a new finder.
      *
-     * @param  \Illuminate\Container\Container  $app
+     * @param  \Illuminate\Filesystem\Filesystem  $files
      */
-    public function __construct(Container $app)
+    public function __construct(Filesystem $files, array $config)
     {
-        $this->app = $app;
-        $appPath   = rtrim($app['path'], '/').'/';
-        $basePath  = rtrim($app['path.base'], '/').'/';
+        $this->files  = $files;
+        $this->config = $config;
+
+        $app  = rtrim($config['path.app'], '/');
+        $base = rtrim($config['path.base'], '/');
 
         // In most cases we would only need to concern with the following
         // path; application folder, vendor folders and workbench folders.
         $this->paths = array(
-            "{$appPath}",
-            "{$basePath}vendor/*/*/",
-            "{$basePath}workbench/*/*/"
+            "{$app}/",
+            "{$base}/vendor/*/*/",
+            "{$base}/workbench/*/*/"
         );
     }
 
@@ -112,7 +121,7 @@ class Finder
         // the paths. We would only treat packages that include orchestra.json
         // as an Orchestra Platform extension.
         foreach ($this->paths as $path) {
-            $manifests = $this->app['files']->glob("{$path}orchestra.json");
+            $manifests = $this->files->glob("{$path}orchestra.json");
 
             // glob() method might return false if there an errors, convert
             // the result to an array.
@@ -140,7 +149,7 @@ class Finder
     protected function getManifestContents($manifest)
     {
         $path     = $sourcePath = $this->guessExtensionPath($manifest);
-        $jsonable = json_decode($this->app['files']->get($manifest), true);
+        $jsonable = json_decode($this->files->get($manifest), true);
 
         // If json_decode fail, due to invalid json format. We going to
         // throw an exception so this error can be fixed by the developer
@@ -202,7 +211,7 @@ class Finder
 
         // Each package should have vendor/package name pattern,
         // except when we deal with app.
-        if (rtrim($this->app['path'], '/') === rtrim($path, '/')) {
+        if (rtrim($this->config['path.app'], '/') === rtrim($path, '/')) {
             $name = 'app';
         } elseif (! is_null($vendor) and ! is_null($package)) {
             $name = "{$vendor}/{$package}";
@@ -226,8 +235,8 @@ class Finder
     public function guessExtensionPath($path)
     {
         $path = str_replace('orchestra.json', '', $path);
-        $app  = rtrim($this->app['path'], '/');
-        $base = rtrim($this->app['path.base'], '/');
+        $app  = rtrim($this->config['path.app'], '/');
+        $base = rtrim($this->config['path.base'], '/');
 
         return str_replace(
             array("{$app}/", "{$base}/vendor/", "{$base}/workbench/", "{$base}/"),
@@ -269,8 +278,8 @@ class Finder
      */
     public function resolveExtensionPath($path)
     {
-        $app  = rtrim($this->app['path'], '/');
-        $base = rtrim($this->app['path.base'], '/');
+        $app  = rtrim($this->config['path.app'], '/');
+        $base = rtrim($this->config['path.base'], '/');
 
         return str_replace(
             array('app::', 'vendor::', 'workbench::', 'base::'),

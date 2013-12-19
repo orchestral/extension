@@ -12,14 +12,14 @@ class AssetManager
      *
      * @var \Illuminate\Container\Container
      */
-    protected $app = null;
+    protected $app;
 
     /**
      * Migrator instance.
      *
      * @var \Illuminate\Foundation\AssetPublisher
      */
-    protected $publisher = null;
+    protected $publisher;
 
     /**
      * Construct a new instance.

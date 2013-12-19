@@ -1,42 +1,28 @@
 <?php namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
-use Illuminate\Container\Container;
 use Orchestra\Extension\Dispatcher;
 
 class DispatcherTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Application instance.
-     *
-     * @var \Illuminate\Container\Container
-     */
-    protected $app = null;
-
-    /**
-     * Provider instance.
-     *
-     * @var Orchestra\Extension\ProviderRepository
-     */
-    private $provider = null;
-
-    /**
-     * Setup the test environment.
-     */
-    public function setUp()
-    {
-        $this->app      = new Container;
-        $this->provider = m::mock('\Orchestra\Extension\ProviderRepository');
-    }
-
-    /**
      * Teardown the test environment.
      */
     public function tearDown()
     {
-        unset($this->app);
-        unset($this->provider);
         m::close();
+    }
+
+    /**
+     * Get mocked Orchestra\Extension\ProviderRepository
+     *
+     * @return \Orchestra\Extension\ProviderRepository
+     */
+    protected function getProvider()
+    {
+        return m::mock('\Orchestra\Extension\ProviderRepository', array(
+            m::mock('\Illuminate\Foundation\Application')
+        ));
     }
 
     /**
@@ -46,17 +32,11 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function testStartMethod()
     {
-        $app      = $this->app;
-        $provider = $this->provider;
-        $config   = m::mock('Config');
-        $events   = m::mock('Event');
-        $files    = m::mock('Filesystem');
-        $finder   = m::mock('Finder');
-
-        $app['config'] = $config;
-        $app['events'] = $events;
-        $app['files'] = $files;
-        $app['orchestra.extension.finder'] = $finder;
+        $provider = $this->getProvider();
+        $config   = m::mock('\Illuminate\Config\Repository');
+        $event    = m::mock('\Illuminate\Events\Dispatcher');
+        $files    = m::mock('\Illuminate\Filesystem\Filesystem');
+        $finder   = m::mock('\Orchestra\Extension\Finder');
 
         $options1 = array(
             'config'      => array('handles' => 'laravel'),
@@ -75,15 +55,15 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         );
 
         $config->shouldReceive('set')->once()
-                ->with('orchestra/extension::handles.laravel/framework', 'laravel')->andReturn(null);
-        $events->shouldReceive('fire')->once()
-                ->with('extension.started: laravel/framework', array($options1))->andReturn(null)
+                ->with('orchestra/extension::handles.laravel/framework', 'laravel')->andReturnNull();
+        $event->shouldReceive('fire')->once()
+                ->with('extension.started: laravel/framework', array($options1))->andReturnNull()
             ->shouldReceive('fire')->once()
-                ->with('extension.started', array('laravel/framework', $options1))->andReturn(null)
+                ->with('extension.started', array('laravel/framework', $options1))->andReturnNull()
             ->shouldReceive('fire')->once()
-                ->with('extension.booted: laravel/framework', array($options1))->andReturn(null)
+                ->with('extension.booted: laravel/framework', array($options1))->andReturnNull()
             ->shouldReceive('fire')->once()
-                ->with('extension.booted', array('laravel/framework', $options1))->andReturn(null);
+                ->with('extension.booted', array('laravel/framework', $options1))->andReturnNull();
         $files->shouldReceive('isFile')->once()->with('/foo/app/hello.php')->andReturn(true)
             ->shouldReceive('isFile')->once()->with('/foo/app/start.php')->andReturn(true)
             ->shouldReceive('isFile')->once()->with('/foo/app/src/orchestra.php')->andReturn(true)
@@ -94,14 +74,14 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $provider->shouldReceive('provides')->once()
                 ->with(array('Laravel\FrameworkServiceProvider'))->andReturn(true);
 
-        $events->shouldReceive('fire')->once()
-                ->with('extension.started: app', array($options2))->andReturn(null)
+        $event->shouldReceive('fire')->once()
+                ->with('extension.started: app', array($options2))->andReturnNull()
             ->shouldReceive('fire')->once()
-                ->with('extension.started', array('app', $options2))->andReturn(null)
+                ->with('extension.started', array('app', $options2))->andReturnNull()
             ->shouldReceive('fire')->once()
-                ->with('extension.booted: app', array($options2))->andReturn(null)
+                ->with('extension.booted: app', array($options2))->andReturnNull()
             ->shouldReceive('fire')->once()
-                ->with('extension.booted', array('app', $options2))->andReturn(null);
+                ->with('extension.booted', array('app', $options2))->andReturnNull();
         $files->shouldReceive('isFile')->once()
                 ->with('/foo/app/src/orchestra.php')->andReturn(false)
             ->shouldReceive('isFile')->once()
@@ -113,7 +93,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             return $p;
         });
 
-        $stub = new Dispatcher($app, $provider);
+        $stub = new Dispatcher($config, $event, $files, $finder, $provider);
 
         $stub->register('laravel/framework', $options1);
         $stub->register('app', $options2);
@@ -127,15 +107,17 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function testFinishMethod()
     {
-        $app = $this->app;
-        $app['events'] = $events = m::mock('Event');
+        $config   = m::mock('\Illuminate\Config\Repository');
+        $event    = m::mock('\Illuminate\Events\Dispatcher');
+        $files    = m::mock('\Illuminate\Filesystem\Filesystem');
+        $finder   = m::mock('\Orchestra\Extension\Finder');
 
-        $events->shouldReceive('fire')
-                ->once()->with('extension.done: laravel/framework', array('foo'))->andReturn(null)
-            ->shouldReceive('fire')
-                ->once()->with('extension.done', array('laravel/framework', 'foo'))->andReturn(null);
+        $event->shouldReceive('fire')->once()
+                ->with('extension.done: laravel/framework', array('foo'))->andReturnNull()
+            ->shouldReceive('fire')->once()
+                ->with('extension.done', array('laravel/framework', 'foo'))->andReturnNull();
 
-        $stub = new Dispatcher($app, $this->provider);
+        $stub = new Dispatcher($config, $event, $files, $finder, $this->getProvider());
         $stub->finish('laravel/framework', 'foo');
     }
 }

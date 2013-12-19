@@ -45,12 +45,15 @@ class Environment extends AbstractableContainer
     /**
      * Construct a new Application instance.
      *
-     * @param  \Illuminate\Container\Container  $app
-     * @param  Dispatcher                       $dispatcher
-     * @param  Debugger                         $debugger
+     * @param  \Illuminate\Container\Container $app
+     * @param  Dispatcher                      $dispatcher
+     * @param  Debugger                        $debugger
      */
-    public function __construct(Container $app, DispatcherInterface $dispatcher, DebuggerInterface $debugger)
-    {
+    public function __construct(
+        Container $app,
+        DispatcherInterface $dispatcher,
+        DebuggerInterface $debugger
+    ) {
         $this->app        = $app;
         $this->dispatcher = $dispatcher;
         $this->debugger   = $debugger;

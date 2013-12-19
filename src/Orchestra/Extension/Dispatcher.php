@@ -1,22 +1,45 @@
 <?php namespace Orchestra\Extension;
 
-use Illuminate\Container\Container;
+use Illuminate\Config\Repository;
+use Illuminate\Events\Dispatcher as EventDispatcher;
+use Illuminate\Filesystem\Filesystem;
 
 class Dispatcher implements Contracts\DispatcherInterface
 {
     /**
-     * Application instance.
+     * Config Repository instance.
      *
-     * @var \Illuminate\Container\Container
+     * @var \Illuminate\Config\Repository
      */
-    protected $app = null;
+    protected $config;
+
+    /**
+     * Filesystem instance.
+     *
+     * @var \Illuminate\Events\Dispatcher
+     */
+    protected $event;
+
+    /**
+     * Filesystem instance.
+     *
+     * @var \Illuminate\Filesystem\Filesystem
+     */
+    protected $files;
+
+    /**
+     * Finder instance.
+     *
+     * @var Finder
+     */
+    protected $finder;
 
     /**
      * Provider instance.
      *
      * @var ProviderRepository
      */
-    protected $provider = null;
+    protected $provider;
 
     /**
      * List of extensions to be boot.
@@ -28,12 +51,23 @@ class Dispatcher implements Contracts\DispatcherInterface
     /**
      * Construct a new Application instance.
      *
-     * @param  \Illuminate\Container\Container  $app
-     * @param  ProviderRepository               $provider
+     * @param  \Illuminate\Config\Repository        $config
+     * @param  \Illuminate\Events\Dispatcher        $event
+     * @param  \Illuminate\Filesystem\Filesystem    $files
+     * @param  Finder                               $finder
+     * @param  ProviderRepository                   $provider
      */
-    public function __construct(Container $app, ProviderRepository $provider)
-    {
-        $this->app      = $app;
+    public function __construct(
+        Repository $config,
+        EventDispatcher $event,
+        Filesystem $files,
+        Finder $finder,
+        ProviderRepository $provider
+    ) {
+        $this->config   = $config;
+        $this->event    = $event;
+        $this->files    = $files;
+        $this->finder   = $finder;
         $this->provider = $provider;
     }
 
@@ -50,7 +84,7 @@ class Dispatcher implements Contracts\DispatcherInterface
 
         // Set the handles to orchestra/extension package config (if available).
         if (! is_null($handles)) {
-            $this->app['config']->set("orchestra/extension::handles.{$name}", $handles);
+            $this->config->set("orchestra/extension::handles.{$name}", $handles);
         }
 
         // Get available service providers from orchestra.json and register
@@ -88,8 +122,8 @@ class Dispatcher implements Contracts\DispatcherInterface
      */
     public function start($name, $options)
     {
-        $file     = $this->app['files'];
-        $finder   = $this->app['orchestra.extension.finder'];
+        $file     = $this->files;
+        $finder   = $this->finder;
         $base     = rtrim($options['path'], '/');
         $source   = rtrim(array_get($options, 'source-path', $base), '/');
         $autoload = array_get($options, 'autoload', array());
@@ -149,7 +183,7 @@ class Dispatcher implements Contracts\DispatcherInterface
      */
     protected function fireEvent($name, $options, $type = 'started')
     {
-        $this->app['events']->fire("extension.{$type}", array($name, $options));
-        $this->app['events']->fire("extension.{$type}: {$name}", array($options));
+        $this->event->fire("extension.{$type}", array($name, $options));
+        $this->event->fire("extension.{$type}: {$name}", array($options));
     }
 }

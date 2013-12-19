@@ -1,32 +1,15 @@
 <?php namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
-use Illuminate\Container\Container;
 use Orchestra\Extension\Debugger;
 
 class DebuggerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Application instance.
-     *
-     * @var \Illuminate\Container\Container
-     */
-    protected $app = null;
-
-    /**
-     * Setup the test environment.
-     */
-    public function setUp()
-    {
-        $this->app = new Container;
-    }
-
-    /**
      * Teardown the test environment.
      */
     public function tearDown()
     {
-        unset($this->app);
         m::close();
     }
 
@@ -38,14 +21,10 @@ class DebuggerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckMethodWhenSafeModeIsOn()
     {
-        $app     = $this->app;
-        $request = m::mock('Request');
-        $session = m::mock('Session');
+        $request = m::mock('\Illuminate\Http\Request');
+        $session = m::mock('\Illuminate\Session\SessionManager');
 
-        $app['request'] = $request;
-        $app['session'] = $session;
-
-        $stub = new Debugger($app);
+        $stub = new Debugger($request, $session);
 
         $request->shouldReceive('input')->once()->with('safe_mode')->andReturn('on');
         $session->shouldReceive('get')->once()->with('orchestra.safemode', 'off')->andReturn('off')
@@ -62,14 +41,10 @@ class DebuggerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckMethodWhenSafeModeIsOff()
     {
-        $app     = $this->app;
-        $request = m::mock('Request');
-        $session = m::mock('Session');
+        $request = m::mock('\Illuminate\Http\Request');
+        $session = m::mock('\Illuminate\Session\SessionManager');
 
-        $app['request'] = $request;
-        $app['session'] = $session;
-
-        $stub = new Debugger($app);
+        $stub = new Debugger($request, $session);
 
         $request->shouldReceive('input')->once()->with('safe_mode')->andReturn('off');
         $session->shouldReceive('forget')->once()->with('orchestra.safemode')->andReturn(null);

@@ -22,7 +22,7 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testServicesMethod()
     {
         $mock = m::mock('FooServiceProviderMock');
-        $app = m::mock('\Illuminate\Container\Container');
+        $app = m::mock('\Illuminate\Foundation\Application');
 
         $app->shouldReceive('register')->once()->with($mock)->andReturn($mock);
 

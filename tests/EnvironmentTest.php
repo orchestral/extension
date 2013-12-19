@@ -329,7 +329,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     public function testDetectMethod()
     {
         $app    = $this->app;
-        $finder = m::mock('Finder');
+        $finder = m::mock('\Orchestra\Extension\Finder');
         $memory = m::mock('Orchestra\Memory\Drivers\Driver');
 
         $app['orchestra.extension.finder'] = $finder;

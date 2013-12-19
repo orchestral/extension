@@ -11,9 +11,9 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerExtension();
-        $this->registerExtensionConfigManager();
         $this->registerExtensionFinder();
+        $this->registerExtensionConfigManager();
+        $this->registerExtension();
         $this->registerExtensionEvents();
     }
 
@@ -25,9 +25,15 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtension()
     {
         $this->app->bindShared('orchestra.extension', function ($app) {
+            $debugger   = new Debugger($app['request'], $app['session']);
             $provider   = new ProviderRepository($app);
-            $dispatcher = new Dispatcher($app, $provider);
-            $debugger   = new Debugger($app);
+            $dispatcher = new Dispatcher(
+                $app['config'],
+                $app['events'],
+                $app['files'],
+                $app['orchestra.extension.finder'],
+                $provider
+            );
 
             return new Environment($app, $dispatcher, $debugger);
         });
@@ -41,7 +47,7 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtensionConfigManager()
     {
         $this->app->bindShared('orchestra.extension.config', function ($app) {
-            return new ConfigManager($app);
+            return new ConfigManager($app['config'], $app['orchestra.memory']);
         });
     }
 
@@ -53,7 +59,12 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtensionFinder()
     {
         $this->app->bindShared('orchestra.extension.finder', function ($app) {
-            return new Finder($app);
+            $config = array(
+                'path.app'  => $app['path'],
+                'path.base' => $app['path.base'],
+            );
+
+            return new Finder($app['files'], $config);
         });
     }
 

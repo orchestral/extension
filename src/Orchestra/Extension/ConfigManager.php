@@ -1,45 +1,56 @@
 <?php namespace Orchestra\Extension;
 
-use Illuminate\Container\Container;
+use Illuminate\Config\Repository;
+use Orchestra\Memory\MemoryManager;
 
 class ConfigManager
 {
     /**
-     * Application instance.
+     * Config instance.
      *
-     * @var \Illuminate\Container\Container
+     * @var \Illuminate\Config\Repository
      */
-    protected $app = null;
+    protected $config;
+
+    /**
+     * Memory instance.
+     *
+     * @var \Orchestra\Memory\MemoryManager
+     */
+    protected $memory;
 
     /**
      * Construct a new ConfigManager instance.
      *
-     * @param  \Illuminate\Container\Container  $app
+     * @param  \Illuminate\Config\Repository    $config
+     * @param  \Orchestra\Memory\MemoryManager  $memory
      */
-    public function __construct(Container $app)
+    public function __construct(Repository $config, MemoryManager $memory)
     {
-        $this->app = $app;
+        $this->config = $config;
+        $this->memory = $memory;
     }
 
     /**
      * Map configuration to allow orchestra to store it in database.
      *
      * @param  string   $name
-     * @param  array    $maps
-     * @return void
+     * @param  array    $aliases
+     * @return boolean
      */
-    public function map($name, $maps)
+    public function map($name, $aliases)
     {
-        $config = $this->app['config'];
-        $memory = $this->app['orchestra.memory']->make();
+        $memory = $this->memory->make();
         $meta   = $memory->get("extension_{$name}", array());
 
-        foreach ($maps as $current => $default) {
-            isset($meta[$current]) and $config->set($default, $meta[$current]);
+        foreach ($aliases as $current => $default) {
+            isset($meta[$current]) and $this->config->set($default, $meta[$current]);
 
-            $meta[$current] = $config->get($default);
+            $meta[$current] = $this->config->get($default);
         }
 
         $memory->put("extension_{$name}", $meta);
+
+        return true;
     }
 }

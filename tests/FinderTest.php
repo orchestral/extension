@@ -8,26 +8,10 @@ use Orchestra\Extension\Finder;
 class FinderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Application instance.
-     *
-     * @var \Illuminate\Container\Container
-     */
-    protected $app = null;
-
-    /**
-     * Setup the test environment.
-     */
-    public function setUp()
-    {
-        $this->app = new Container;
-    }
-
-    /**
      * Teardown the test environment.
      */
     public function tearDown()
     {
-        unset($this->app);
         m::close();
     }
 
@@ -38,11 +22,10 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructMethod()
     {
-        $app = $this->app;
-        $app['path'] = '/foo/app';
-        $app['path.base'] = '/foo/path';
+        $config['path.app'] = '/foo/app';
+        $config['path.base'] = '/foo/path';
 
-        $stub = new Finder($app);
+        $stub = new Finder(m::mock('\Illuminate\Filesystem\Filesystem'), $config);
 
         $refl  = new \ReflectionObject($stub);
         $paths = $refl->getProperty('paths');
@@ -68,10 +51,10 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testDetectMethod()
     {
-        $app = $this->app;
-        $app['path'] = '/foo/app';
-        $app['path.base'] = '/foo/path';
-        $app['files'] = $files = m::mock('\Illuminate\Filesystem\Filesystem');
+        $config['path.app'] = '/foo/app';
+        $config['path.base'] = '/foo/path';
+
+        $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
         $files->shouldReceive('glob')->once()
                 ->with('/foo/app/orchestra.json')->andReturn(array('/foo/app/orchestra.json'))
@@ -86,7 +69,8 @@ class FinderTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('glob')->once()
                 ->with('/foo/path/workbench/*/*/orchestra.json')->andReturn(array());
 
-        $stub     = new Finder($app);
+        $stub = new Finder($files, $config);
+
         $expected = new Collection(array(
             'laravel/framework' => array(
                 'path'        => 'vendor::laravel/framework',
@@ -125,10 +109,10 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testDetectMethodGivenReservedNameThrowsException()
     {
-        $app = $this->app;
-        $app['path'] = '/foo/app';
-        $app['path.base'] = '/foo/path';
-        $app['files'] = $files = m::mock('\Illuminate\Filesystem\Filesystem');
+        $config['path.app'] = '/foo/app';
+        $config['path.base'] = '/foo/path';
+
+        $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
         $files->shouldReceive('glob')->once()
                 ->with('/foo/app/orchestra.json')->andReturn(array('/foo/app/orchestra.json'))
@@ -138,7 +122,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
                 ->with('/foo/path/vendor/*/*/orchestra.json')
                 ->andReturn(array('/foo/path/vendor/orchestra/foundation/orchestra.json'));
 
-        $stub = new Finder($app);
+        $stub = new Finder($files, $config);
         $stub->detect();
     }
 
@@ -150,10 +134,10 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testDetectMethodThrowsException()
     {
-        $app = $this->app;
-        $app['path'] = '/foo/app';
-        $app['path.base'] = '/foo/path';
-        $app['files'] = $files = m::mock('\Illuminate\Filesystem\Filesystem');
+        $config['path.app'] = '/foo/app';
+        $config['path.base'] = '/foo/path';
+
+        $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
         $files->shouldReceive('glob')
                 ->with('/foo/app/orchestra.json')->once()
@@ -168,7 +152,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
                 ->with('/foo/path/vendor/laravel/framework/orchestra.json')->once()
                 ->andReturn('{"name":"Laravel Framework}');
 
-        with(new Finder($app))->detect();
+        with(new Finder($files, $config))->detect();
     }
 
     /**
@@ -179,11 +163,10 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGuessExtensionPathMethod($output, $expected)
     {
-        $app = $this->app;
-        $app['path'] = '/foo/path/app';
-        $app['path.base'] = '/foo/path';
+        $config['path.app'] = '/foo/path/app';
+        $config['path.base'] = '/foo/path';
 
-        $stub = new Finder($app);
+        $stub = new Finder(m::mock('\Illuminate\Filesystem\Filesystem'), $config);
         $this->assertEquals($expected, $stub->guessExtensionPath($output));
     }
 
@@ -196,11 +179,10 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveExtensionNamespace($path, $expected, $output)
     {
-        $app = $this->app;
-        $app['path'] = $path['path'];
-        $app['path.base'] = $path['path.base'];
+        $config['path.app'] = '/foo/path/app';
+        $config['path.base'] = '/foo/path';
 
-        $stub = new Finder($app);
+        $stub = new Finder(m::mock('\Illuminate\Filesystem\Filesystem'), $config);
         $this->assertEquals($expected, $stub->resolveExtensionNamespace($output));
     }
 
@@ -212,11 +194,10 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveExtensionPathMethod($expected, $output)
     {
-        $app = $this->app;
-        $app['path'] = '/foo/path/app';
-        $app['path.base'] = '/foo/path';
+        $config['path.app'] = '/foo/path/app';
+        $config['path.base'] = '/foo/path';
 
-        $stub = new Finder($app);
+        $stub = new Finder(m::mock('\Illuminate\Filesystem\Filesystem'), $config);
         $this->assertEquals($expected, $stub->resolveExtensionPath($output));
     }
 
@@ -225,10 +206,10 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function extensionManifestProvider()
     {
-        $windowsPath['path'] = 'c:\www\laravel\app';
+        $windowsPath['path.app'] = 'c:\www\laravel\app';
         $windowsPath['path.base'] = 'c:\www\laravel';
 
-        $unixPath['path'] = '/var/www/laravel/app';
+        $unixPath['path.app'] = '/var/www/laravel/app';
         $unixPath['path.base'] = '/var/www/laravel';
 
         return array(

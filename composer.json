@@ -22,8 +22,10 @@
 	},
 	"require-dev": {
 		"mockery/mockery": "0.8.*",
+		"illuminate/config": "4.2.*",
 		"illuminate/console": "4.2.*",
 		"illuminate/container": "4.2.*",
+		"illuminate/events": "4.2.*",
 		"illuminate/http": "4.2.*",
 		"illuminate/support": "4.2.*"
 	},

@@ -10,14 +10,14 @@ class MigrateManager
      *
      * @var \Illuminate\Container\Container
      */
-    protected $app = null;
+    protected $app;
 
     /**
      * Migrator instance.
      *
      * @var \Illuminate\Database\Migrations\Migrator
      */
-    protected $migrator = null;
+    protected $migrator;
 
     /**
      * Construct a new instance.

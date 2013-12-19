@@ -1,24 +1,34 @@
 <?php namespace Orchestra\Extension;
 
-use Illuminate\Container\Container;
+use Illuminate\Http\Request;
+use Illuminate\Session\SessionManager;
 
 class Debugger implements Contracts\DebuggerInterface
 {
     /**
-     * Application instance.
+     * Request instance.
      *
-     * @var \Illuminate\Container\Container
+     * @var \Illuminate\Http\Request
      */
-    protected $app = null;
+    protected $request;
+
+    /**
+     * Session Manager instance.
+     *
+     * @var \Illuminate\Session\SessionManager
+     */
+    protected $session;
 
     /**
      * Construct a new Application instance.
      *
-     * @param  \Illuminate\Container\Container  $app
+     * @param  \Illuminate\Http\Request            $request
+     * @param  \Illuminate\Session\SessionManager  $session
      */
-    public function __construct(Container $app)
+    public function __construct(Request $request, SessionManager $session)
     {
-        $this->app = $app;
+        $this->request = $request;
+        $this->session = $session;
     }
 
     /**
@@ -28,8 +38,8 @@ class Debugger implements Contracts\DebuggerInterface
      */
     public function check()
     {
-        $input   = $this->app['request']->input('safe_mode');
-        $session = $this->app['session'];
+        $input   = $this->request->input('safe_mode');
+        $session = $this->session;
 
         if ($input == 'off') {
             $session->forget('orchestra.safemode');

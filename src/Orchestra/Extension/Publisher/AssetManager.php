@@ -66,7 +66,6 @@ class AssetManager
             return $this->publish($name, $path);
         } catch (Exception $e) {
             throw new FilePermissionException("Unable to publish [{$path}].");
-            return false;
         }
     }
 

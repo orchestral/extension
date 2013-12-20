@@ -78,7 +78,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $app        = $this->app;
         $dispatcher = $this->dispatcher;
         $debugger   = $this->debugger;
-        $memory     = m::mock('Orchestra\Memory\Drivers\Driver');
+        $memory     = m::mock('Orchestra\Memory\Provider');
 
         $app['orchestra.memory'] = $memory;
 
@@ -116,7 +116,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $app        = $this->app;
         $dispatcher = $this->dispatcher;
         $debugger   = $this->debugger;
-        $memory     = m::mock('Orchestra\Memory\Drivers\Driver');
+        $memory     = m::mock('Orchestra\Memory\Provider');
         $config     = m::mock('Config');
         $request    = m::mock('\Illuminate\Http\Request');
 
@@ -186,7 +186,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     public function testAvailableMethod()
     {
         $app    = $this->app;
-        $memory = m::mock('Orchestra\Memory\Drivers\Driver');
+        $memory = m::mock('Orchestra\Memory\Provider');
 
         $app['orchestra.memory'] = $memory;
 
@@ -208,7 +208,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $app        = $this->app;
         $dispatcher = $this->dispatcher;
 
-        $memory   = m::mock('\Orchestra\Memory\Drivers\Driver');
+        $memory   = m::mock('\Orchestra\Memory\Provider');
         $migrator = m::mock('Migrator');
         $asset    = m::mock('Asset');
         $events   = m::mock('Event');
@@ -249,7 +249,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     public function testDeactivateMethod()
     {
         $app    = $this->app;
-        $memory = m::mock('Orchestra\Memory\Drivers\Driver');
+        $memory = m::mock('Orchestra\Memory\Provider');
         $app['orchestra.memory'] = $memory;
 
         $memory->shouldReceive('get')->twice()
@@ -273,7 +273,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     public function testActivatedMethod()
     {
         $app    = $this->app;
-        $memory = m::mock('Orchestra\Memory\Drivers\Driver');
+        $memory = m::mock('Orchestra\Memory\Provider');
         $app['orchestra.memory'] = $memory;
 
         $memory->shouldReceive('get')->once()->with('extensions.active.laravel/framework')->andReturn(array());
@@ -291,7 +291,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     public function testPermissionMethod()
     {
         $app    = $this->app;
-        $memory = m::mock('Orchestra\Memory\Drivers\Driver');
+        $memory = m::mock('Orchestra\Memory\Provider');
         $finder = m::mock('Finder');
         $files  = m::mock('Filesystem');
 
@@ -330,7 +330,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     {
         $app    = $this->app;
         $finder = m::mock('\Orchestra\Extension\Finder');
-        $memory = m::mock('Orchestra\Memory\Drivers\Driver');
+        $memory = m::mock('Orchestra\Memory\Provider');
 
         $app['orchestra.extension.finder'] = $finder;
         $app['orchestra.memory'] = $memory;

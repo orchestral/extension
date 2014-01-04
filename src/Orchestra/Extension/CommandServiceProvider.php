@@ -23,6 +23,7 @@ class CommandServiceProvider extends ServiceProvider
         $this->registerDetectCommand();
         $this->registerMigrateCommand();
         $this->registerPublishCommand();
+        $this->registerResetCommand();
     }
 
     /**
@@ -96,6 +97,20 @@ class CommandServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    protected function registerResetCommand()
+    {
+        $this->app->bindShared('orchestra.commands.extension.reset', function () {
+            return new Console\ResetCommand;
+        });
+
+        $this->commands('orchestra.commands.extension.reset');
+    }
+
+    /**
      * Get the services provided by the provider.
      *
      * @return array
@@ -108,6 +123,7 @@ class CommandServiceProvider extends ServiceProvider
             'orchestra.commands.extension.detect',
             'orchestra.commands.extension.migrate',
             'orchestra.commands.extension.publish',
+            'orchestra.commands.extension.reset',
         );
     }
 }

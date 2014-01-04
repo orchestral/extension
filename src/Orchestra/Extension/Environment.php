@@ -239,6 +239,25 @@ class Environment extends AbstractableContainer
     }
 
     /**
+     * Reset ectension.
+     *
+     * @param  string   $name
+     * @return boolean
+     */
+    public function reset($name)
+    {
+        $memory  = $this->memory;
+        $default = $memory->get("extensions.available.{$name}", array());
+        $memory->put("extensions.active.{$name}", $default);
+
+        if ($memory->has("extension_{$name}")) {
+            $memory->put("extension_{$name}", array());
+        }
+
+        return true;
+    }
+
+    /**
      * Get extension route handle.
      *
      * @param  string   $name

@@ -69,116 +69,6 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Orchestra\Extension\Environment::boot() method.
-     *
-     * @test
-     */
-    public function testBootMethod()
-    {
-        $app        = $this->app;
-        $dispatcher = $this->dispatcher;
-        $debugger   = $this->debugger;
-        $memory     = m::mock('Orchestra\Memory\Provider');
-
-        $app['orchestra.memory'] = $memory;
-
-        list($options1, $options2) = $this->dataProvider();
-
-        $extension = array('laravel/framework' => $options1, 'app' => $options2);
-
-        $memory->shouldReceive('get')->once()->with('extensions.available', array())->andReturn($extension)
-            ->shouldReceive('get')->once()->with('extensions.active', array())->andReturn($extension);
-        $dispatcher->shouldReceive('register')->once()->with('laravel/framework', $options1)->andReturn(null)
-            ->shouldReceive('register')->once()->with('app', $options2)->andReturn(null)
-            ->shouldReceive('boot')->once()->andReturn(null);
-        $debugger->shouldReceive('check')->once()->andReturn(false);
-
-        $stub = new Environment($app, $dispatcher, $debugger);
-        $stub->attach($memory);
-
-        $this->assertEquals($memory, $stub->getMemoryProvider());
-
-        $stub->boot();
-
-        $this->assertEquals($options1['config'], $stub->option('laravel/framework', 'config'));
-        $this->assertEquals('bad!', $stub->option('foobar/hello-world', 'config', 'bad!'));
-        $this->assertTrue($stub->started('laravel/framework'));
-        $this->assertFalse($stub->started('foobar/hello-world'));
-    }
-
-    /**
-     * Test Orchestra\Extension\Environment::route() method.
-     *
-     * @test
-     */
-    public function testRouteMethod()
-    {
-        $app        = $this->app;
-        $dispatcher = $this->dispatcher;
-        $debugger   = $this->debugger;
-        $memory     = m::mock('Orchestra\Memory\Provider');
-        $config     = m::mock('Config');
-        $request    = m::mock('\Illuminate\Http\Request');
-
-        $app['orchestra.memory'] = $memory;
-        $app['config'] = $config;
-        $app['request'] = $request;
-
-        list($options1, $options2) = $this->dataProvider();
-
-        $extension = array('laravel/framework' => $options1, 'app' => $options2);
-
-        $memory->shouldReceive('get')->once()->with('extensions.available', array())->andReturn($extension)
-            ->shouldReceive('get')->once()->with('extensions.active', array())->andReturn($extension);
-        $dispatcher->shouldReceive('register')->once()->with('laravel/framework', $options1)->andReturn(null)
-            ->shouldReceive('register')->once()->with('app', $options2)->andReturn(null)
-            ->shouldReceive('boot')->once()->andReturn(null);
-        $debugger->shouldReceive('check')->once()->andReturn(false);
-        $config->shouldReceive('get')->with('orchestra/extension::handles.laravel/framework', '/')->andReturn('laravel');
-        $request->shouldReceive('root')->once()->andReturn('http://localhost')
-                ->shouldReceive('secure')->twice()->andReturn(false);
-
-        $stub = new Environment($app, $dispatcher, $debugger);
-        $stub->attach($memory);
-        $stub->boot();
-
-        $output = $stub->route('laravel/framework', '/');
-
-        $this->assertInstanceOf('\Orchestra\Extension\RouteGenerator', $output);
-        $this->assertEquals('laravel', $output);
-        $this->assertEquals(null, $output->domain());
-        $this->assertEquals('localhost', $output->domain(true));
-        $this->assertEquals('laravel', $output->prefix());
-        $this->assertEquals('laravel', $output->prefix(true));
-        $this->assertEquals('http://localhost/laravel', $output->root());
-        $this->assertEquals('http://localhost/laravel/hello', $output->to('hello'));
-    }
-
-    /**
-     * Test Orchestra\Extension\Environment::finish() method.
-     *
-     * @test
-     */
-    public function testFinishMethod()
-    {
-        $dispatcher = $this->dispatcher;
-
-        list($options1, $options2) = $this->dataProvider();
-
-        $dispatcher->shouldReceive('finish')->with('laravel/framework', $options1)->andReturn(null)
-            ->shouldReceive('finish')->with('app', $options2)->andReturn(null);
-
-        $stub = new Environment($this->app, $dispatcher, $this->debugger);
-
-        $refl = new \ReflectionObject($stub);
-        $extensions = $refl->getProperty('extensions');
-        $extensions->setAccessible(true);
-        $extensions->setValue($stub, array('laravel/framework' => $options1, 'app' => $options2));
-
-        $stub->finish();
-    }
-
-    /**
      * Test Orchestra\Extension\Environment::available() method.
      *
      * @test
@@ -186,7 +76,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     public function testAvailableMethod()
     {
         $app    = $this->app;
-        $memory = m::mock('Orchestra\Memory\Provider');
+        $memory = m::mock('\Orchestra\Memory\Provider');
 
         $app['orchestra.memory'] = $memory;
 
@@ -209,9 +99,9 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $dispatcher = $this->dispatcher;
 
         $memory   = m::mock('\Orchestra\Memory\Provider');
-        $migrator = m::mock('Migrator');
-        $asset    = m::mock('Asset');
-        $events   = m::mock('Event');
+        $migrator = m::mock('\Orchestra\Extension\Publisher\MigrateManager[extension]');
+        $asset    = m::mock('\Orchestra\Extension\Publisher\AssetManager[extension]');
+        $events   = m::mock('\Illuminate\Events\Dispatcher');
 
         $app['orchestra.memory'] = $memory;
         $app['orchestra.publisher.migrate'] = $migrator;
@@ -219,7 +109,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $app['events'] = $events;
 
         $dispatcher->shouldReceive('register')->once()
-                ->with('laravel/framework', m::type('Array'))->andReturn(null);
+                ->with('laravel/framework', m::type('Array'))->andReturnNull();
         $memory->shouldReceive('get')->twice()
                 ->with('extensions.available', array())->andReturn(array('laravel/framework' => array()))
             ->shouldReceive('get')->twice()
@@ -242,6 +132,24 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test Orchestra\Extension\Environment::activated() method.
+     *
+     * @test
+     */
+    public function testActivatedMethod()
+    {
+        $app    = $this->app;
+        $memory = m::mock('\Orchestra\Memory\Provider');
+        $app['orchestra.memory'] = $memory;
+
+        $memory->shouldReceive('get')->once()->with('extensions.active.laravel/framework')->andReturn(array());
+
+        $stub = new Environment($app, $this->dispatcher, $this->debugger);
+        $stub->attach($memory);
+        $this->assertTrue($stub->activated('laravel/framework'));
+    }
+
+    /**
      * Test Orchestra\Extension\Environment::deactive() method.
      *
      * @test
@@ -249,7 +157,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     public function testDeactivateMethod()
     {
         $app    = $this->app;
-        $memory = m::mock('Orchestra\Memory\Provider');
+        $memory = m::mock('\Orchestra\Memory\Provider');
         $app['orchestra.memory'] = $memory;
 
         $memory->shouldReceive('get')->twice()
@@ -265,22 +173,91 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($stub->deactivate('laravel'));
     }
 
+
     /**
-     * Test Orchestra\Extension\Environment::activated() method.
+     * Test Orchestra\Extension\Environment::boot() method.
      *
      * @test
      */
-    public function testActivatedMethod()
+    public function testBootMethod()
     {
-        $app    = $this->app;
-        $memory = m::mock('Orchestra\Memory\Provider');
+        $app        = $this->app;
+        $dispatcher = $this->dispatcher;
+        $debugger   = $this->debugger;
+        $memory     = m::mock('\Orchestra\Memory\Provider');
+
         $app['orchestra.memory'] = $memory;
 
-        $memory->shouldReceive('get')->once()->with('extensions.active.laravel/framework')->andReturn(array());
+        list($options1, $options2) = $this->dataProvider();
+
+        $extension = array('laravel/framework' => $options1, 'app' => $options2);
+
+        $memory->shouldReceive('get')->once()->with('extensions.available', array())->andReturn($extension)
+            ->shouldReceive('get')->once()->with('extensions.active', array())->andReturn($extension);
+        $dispatcher->shouldReceive('register')->once()->with('laravel/framework', $options1)->andReturnNull()
+            ->shouldReceive('register')->once()->with('app', $options2)->andReturnNull()
+            ->shouldReceive('boot')->once()->andReturnNull();
+        $debugger->shouldReceive('check')->once()->andReturn(false);
+
+        $stub = new Environment($app, $dispatcher, $debugger);
+        $stub->attach($memory);
+
+        $this->assertEquals($memory, $stub->getMemoryProvider());
+
+        $stub->boot();
+
+        $this->assertEquals($options1['config'], $stub->option('laravel/framework', 'config'));
+        $this->assertEquals('bad!', $stub->option('foobar/hello-world', 'config', 'bad!'));
+        $this->assertTrue($stub->started('laravel/framework'));
+        $this->assertFalse($stub->started('foobar/hello-world'));
+    }
+
+    /**
+     * Test Orchestra\Extension\Environment::detect() method.
+     *
+     * @test
+     */
+    public function testDetectMethod()
+    {
+        $app    = $this->app;
+        $finder = m::mock('\Orchestra\Extension\Finder');
+        $memory = m::mock('\Orchestra\Memory\Provider');
+
+        $app['orchestra.extension.finder'] = $finder;
+        $app['orchestra.memory'] = $memory;
+
+        $extensions = new Collection(array('foo'));
+
+        $finder->shouldReceive('detect')->once()->andReturn($extensions);
+        $memory->shouldReceive('put')->once()->with('extensions.available', array('foo'))->andReturn('foobar');
 
         $stub = new Environment($app, $this->dispatcher, $this->debugger);
         $stub->attach($memory);
-        $this->assertTrue($stub->activated('laravel/framework'));
+        $this->assertEquals($extensions, $stub->detect());
+    }
+
+    /**
+     * Test Orchestra\Extension\Environment::finish() method.
+     *
+     * @test
+     */
+    public function testFinishMethod()
+    {
+        $dispatcher = $this->dispatcher;
+
+        list($options1, $options2) = $this->dataProvider();
+
+        $dispatcher->shouldReceive('finish')->with('laravel/framework', $options1)->andReturnNull()
+            ->shouldReceive('finish')->with('app', $options2)->andReturnNull();
+
+        $stub = new Environment($this->app, $dispatcher, $this->debugger);
+
+        $refl = new \ReflectionObject($stub);
+        $extensions = $refl->getProperty('extensions');
+        $extensions->setAccessible(true);
+        $extensions->setValue($stub, array('laravel/framework' => $options1, 'app' => $options2));
+
+        $stub->finish();
     }
 
     /**
@@ -291,7 +268,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     public function testPermissionMethod()
     {
         $app    = $this->app;
-        $memory = m::mock('Orchestra\Memory\Provider');
+        $memory = m::mock('\Orchestra\Memory\Provider');
         $finder = m::mock('Finder');
         $files  = m::mock('Filesystem');
 
@@ -322,26 +299,77 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Orchestra\Extension\Environment::detect() method.
+     * Test Orchestra\Extension\Environment::reset() method.
      *
      * @test
      */
-    public function testDetectMethod()
+    public function testResetMethod()
     {
         $app    = $this->app;
-        $finder = m::mock('\Orchestra\Extension\Finder');
-        $memory = m::mock('Orchestra\Memory\Provider');
+        $memory = m::mock('\Orchestra\Memory\Provider');
 
-        $app['orchestra.extension.finder'] = $finder;
         $app['orchestra.memory'] = $memory;
+        $extension = array('config' => array('handles' => 'app'));
 
-        $extensions = new Collection(array('foo'));
-
-        $finder->shouldReceive('detect')->once()->andReturn($extensions);
-        $memory->shouldReceive('put')->once()->with('extensions.available', array('foo'))->andReturn('foobar');
+        $memory->shouldReceive('get')->once()
+                ->with('extensions.available.laravel/framework', array())->andReturn($extension)
+            ->shouldReceive('put')->once()
+                ->with('extensions.active.laravel/framework', $extension)->andReturnNull()
+            ->shouldReceive('has')->once()
+                ->with('extension_laravel/framework')->andReturn(true)
+            ->shouldReceive('put')->once()
+                ->with('extension_laravel/framework', array())->andReturnNull();
 
         $stub = new Environment($app, $this->dispatcher, $this->debugger);
         $stub->attach($memory);
-        $this->assertEquals($extensions, $stub->detect());
+        $this->assertTrue($stub->reset('laravel/framework'));
+    }
+
+    /**
+     * Test Orchestra\Extension\Environment::route() method.
+     *
+     * @test
+     */
+    public function testRouteMethod()
+    {
+        $app        = $this->app;
+        $dispatcher = $this->dispatcher;
+        $debugger   = $this->debugger;
+        $memory     = m::mock('\Orchestra\Memory\Provider');
+        $config     = m::mock('\Illuminate\Config\Repository');
+        $request    = m::mock('\Illuminate\Http\Request');
+
+        $app['orchestra.memory'] = $memory;
+        $app['config'] = $config;
+        $app['request'] = $request;
+
+        list($options1, $options2) = $this->dataProvider();
+
+        $extension = array('laravel/framework' => $options1, 'app' => $options2);
+
+        $memory->shouldReceive('get')->once()->with('extensions.available', array())->andReturn($extension)
+            ->shouldReceive('get')->once()->with('extensions.active', array())->andReturn($extension);
+        $dispatcher->shouldReceive('register')->once()->with('laravel/framework', $options1)->andReturnNull()
+            ->shouldReceive('register')->once()->with('app', $options2)->andReturnNull()
+            ->shouldReceive('boot')->once()->andReturnNull();
+        $debugger->shouldReceive('check')->once()->andReturn(false);
+        $config->shouldReceive('get')->with('orchestra/extension::handles.laravel/framework', '/')->andReturn('laravel');
+        $request->shouldReceive('root')->once()->andReturn('http://localhost')
+                ->shouldReceive('secure')->twice()->andReturn(false);
+
+        $stub = new Environment($app, $dispatcher, $debugger);
+        $stub->attach($memory);
+        $stub->boot();
+
+        $output = $stub->route('laravel/framework', '/');
+
+        $this->assertInstanceOf('\Orchestra\Extension\RouteGenerator', $output);
+        $this->assertEquals('laravel', $output);
+        $this->assertEquals(null, $output->domain());
+        $this->assertEquals('localhost', $output->domain(true));
+        $this->assertEquals('laravel', $output->prefix());
+        $this->assertEquals('laravel', $output->prefix(true));
+        $this->assertEquals('http://localhost/laravel', $output->root());
+        $this->assertEquals('http://localhost/laravel/hello', $output->to('hello'));
     }
 }

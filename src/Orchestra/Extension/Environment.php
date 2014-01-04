@@ -12,21 +12,21 @@ class Environment extends AbstractableContainer
      *
      * @var \Illuminate\Container\Container
      */
-    protected $app = null;
+    protected $app;
 
     /**
      * Dispatcher instance.
      *
      * @var Dispatcher
      */
-    protected $dispatcher = null;
+    protected $dispatcher;
 
     /**
      * Debugger (safe mode) instance.
      *
      * @var Debugger
      */
-    protected $debugger = null;
+    protected $debugger;
 
     /**
      * Booted indicator.
@@ -46,14 +46,11 @@ class Environment extends AbstractableContainer
      * Construct a new Application instance.
      *
      * @param  \Illuminate\Container\Container $app
-     * @param  Dispatcher                      $dispatcher
-     * @param  Debugger                        $debugger
+     * @param  Contracts\Dispatcher            $dispatcher
+     * @param  Contracts\Debugger              $debugger
      */
-    public function __construct(
-        Container $app,
-        DispatcherInterface $dispatcher,
-        DebuggerInterface $debugger
-    ) {
+    public function __construct(Container $app, DispatcherInterface $dispatcher, DebuggerInterface $debugger)
+    {
         $this->app        = $app;
         $this->dispatcher = $dispatcher;
         $this->debugger   = $debugger;
@@ -86,6 +83,19 @@ class Environment extends AbstractableContainer
     }
 
     /**
+     * Detect all extensions.
+     *
+     * @return array
+     */
+    public function detect()
+    {
+        $extensions = $this->app['orchestra.extension.finder']->detect();
+        $this->memory->put('extensions.available', $extensions->all());
+
+        return $extensions;
+    }
+
+    /**
      * Shutdown all extensions.
      *
      * @return Environment
@@ -99,56 +109,6 @@ class Environment extends AbstractableContainer
         $this->extensions = array();
 
         return $this;
-    }
-
-    /**
-     * Register all active extension to dispatcher.
-     *
-     * @return void
-     */
-    protected function registerActiveExtensions()
-    {
-        $memory     = $this->memory;
-        $availables = $memory->get('extensions.available', array());
-        $actives    = $memory->get('extensions.active', array());
-
-        // Loop all active extension and merge the configuration with
-        // available config. Extension registration is handled by dispatcher
-        // process due to complexity of extension boot process.
-        foreach ($actives as $name => $options) {
-            if (isset($availables[$name])) {
-                $config = array_merge(
-                    (array) array_get($availables, "{$name}.config"),
-                    (array) array_get($options, "config")
-                );
-
-                array_set($options, "config", $config);
-                $this->extensions[$name] = $options;
-                $this->dispatcher->register($name, $options);
-            }
-        }
-    }
-
-    /**
-     * Get extension route handle.
-     *
-     * @param  string   $name
-     * @param  string   $default
-     * @return string
-     */
-    public function route($name, $default = '/')
-    {
-        // Boot the extension.
-        $this->boot();
-
-        // All route should be manage via `orchestra/extension::handles.{name}`
-        // config key, except for orchestra/foundation.
-        $key = "orchestra/extension::handles.{$name}";
-
-        return new RouteGenerator(
-            $this->app['config']->get($key, $default),
-            $this->app['request']
-        );
     }
 
     /**
@@ -178,6 +138,30 @@ class Environment extends AbstractableContainer
         }
 
         return $activated;
+    }
+
+    /**
+     * Check whether an extension is active.
+     *
+     * @param  string   $name
+     * @return boolean
+     */
+    public function activated($name)
+    {
+        $memory = $this->memory;
+        return (is_array($memory->get("extensions.active.{$name}")));
+    }
+
+    /**
+     * Check whether an extension is available.
+     *
+     * @param  string   $name
+     * @return boolean
+     */
+    public function available($name)
+    {
+        $memory = $this->memory;
+        return (is_array($memory->get("extensions.available.{$name}")));
     }
 
     /**
@@ -222,17 +206,6 @@ class Environment extends AbstractableContainer
     }
 
     /**
-     * Check if extension is started.
-     *
-     * @param  string   $name
-     * @return boolean
-     */
-    public function started($name)
-    {
-        return (array_key_exists($name, $this->extensions));
-    }
-
-    /**
      * Get an option for a given extension.
      *
      * @param  string   $name
@@ -250,30 +223,6 @@ class Environment extends AbstractableContainer
     }
 
     /**
-     * Check whether an extension is available.
-     *
-     * @param  string   $name
-     * @return boolean
-     */
-    public function available($name)
-    {
-        $memory = $this->memory;
-        return (is_array($memory->get("extensions.available.{$name}")));
-    }
-
-    /**
-     * Check whether an extension is active.
-     *
-     * @param  string   $name
-     * @return boolean
-     */
-    public function activated($name)
-    {
-        $memory = $this->memory;
-        return (is_array($memory->get("extensions.active.{$name}")));
-    }
-
-    /**
      * Check whether an extension has a writable public asset.
      *
      * @param  string   $name
@@ -287,6 +236,58 @@ class Environment extends AbstractableContainer
         $path     = $finder->resolveExtensionPath("{$basePath}/public");
 
         return $this->isWritableWithAsset($name, $path);
+    }
+
+    /**
+     * Reset ectension.
+     *
+     * @param  string   $name
+     * @return boolean
+     */
+    public function reset($name)
+    {
+        $memory  = $this->memory;
+        $default = $memory->get("extensions.available.{$name}", array());
+        $memory->put("extensions.active.{$name}", $default);
+
+        if ($memory->has("extension_{$name}")) {
+            $memory->put("extension_{$name}", array());
+        }
+
+        return true;
+    }
+
+    /**
+     * Get extension route handle.
+     *
+     * @param  string   $name
+     * @param  string   $default
+     * @return string
+     */
+    public function route($name, $default = '/')
+    {
+        // Boot the extension.
+        $this->boot();
+
+        // All route should be manage via `orchestra/extension::handles.{name}`
+        // config key, except for orchestra/foundation.
+        $key = "orchestra/extension::handles.{$name}";
+
+        return new RouteGenerator(
+            $this->app['config']->get($key, $default),
+            $this->app['request']
+        );
+    }
+
+    /**
+     * Check if extension is started.
+     *
+     * @param  string   $name
+     * @return boolean
+     */
+    public function started($name)
+    {
+        return (array_key_exists($name, $this->extensions));
     }
 
     /**
@@ -319,15 +320,30 @@ class Environment extends AbstractableContainer
     }
 
     /**
-     * Detect all extensions.
+     * Register all active extension to dispatcher.
      *
-     * @return array
+     * @return void
      */
-    public function detect()
+    protected function registerActiveExtensions()
     {
-        $extensions = $this->app['orchestra.extension.finder']->detect();
-        $this->memory->put('extensions.available', $extensions->all());
+        $memory     = $this->memory;
+        $availables = $memory->get('extensions.available', array());
+        $actives    = $memory->get('extensions.active', array());
 
-        return $extensions;
+        // Loop all active extension and merge the configuration with
+        // available config. Extension registration is handled by dispatcher
+        // process due to complexity of extension boot process.
+        foreach ($actives as $name => $options) {
+            if (isset($availables[$name])) {
+                $config = array_merge(
+                    (array) array_get($availables, "{$name}.config"),
+                    (array) array_get($options, "config")
+                );
+
+                array_set($options, "config", $config);
+                $this->extensions[$name] = $options;
+                $this->dispatcher->register($name, $options);
+            }
+        }
     }
 }

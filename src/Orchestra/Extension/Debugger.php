@@ -1,7 +1,7 @@
 <?php namespace Orchestra\Extension;
 
 use Illuminate\Http\Request;
-use Illuminate\Session\SessionManager;
+use Illuminate\Session\SessionStore;
 
 class Debugger implements Contracts\DebuggerInterface
 {
@@ -15,7 +15,7 @@ class Debugger implements Contracts\DebuggerInterface
     /**
      * Session Manager instance.
      *
-     * @var \Illuminate\Session\SessionManager
+     * @var \Illuminate\Session\SessionStore
      */
     protected $session;
 
@@ -23,9 +23,9 @@ class Debugger implements Contracts\DebuggerInterface
      * Construct a new Application instance.
      *
      * @param  \Illuminate\Http\Request            $request
-     * @param  \Illuminate\Session\SessionManager  $session
+     * @param  \Illuminate\Session\SessionStore    $session
      */
-    public function __construct(Request $request, SessionManager $session)
+    public function __construct(Request $request, SessionStore $session)
     {
         $this->request = $request;
         $this->session = $session;

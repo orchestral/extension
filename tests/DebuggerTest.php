@@ -22,7 +22,7 @@ class DebuggerTest extends \PHPUnit_Framework_TestCase
     public function testCheckMethodWhenSafeModeIsOn()
     {
         $request = m::mock('\Illuminate\Http\Request');
-        $session = m::mock('\Illuminate\Session\SessionManager');
+        $session = m::mock('\Illuminate\Session\Store');
 
         $stub = new Debugger($request, $session);
 
@@ -42,7 +42,7 @@ class DebuggerTest extends \PHPUnit_Framework_TestCase
     public function testCheckMethodWhenSafeModeIsOff()
     {
         $request = m::mock('\Illuminate\Http\Request');
-        $session = m::mock('\Illuminate\Session\SessionManager');
+        $session = m::mock('\Illuminate\Session\Store');
 
         $stub = new Debugger($request, $session);
 

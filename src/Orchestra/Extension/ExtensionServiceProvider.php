@@ -25,7 +25,7 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtension()
     {
         $this->app->bindShared('orchestra.extension', function ($app) {
-            $debugger   = new Debugger($app['request'], $app['session']);
+            $debugger   = new Debugger($app['request'], $app['session.store']);
             $provider   = new ProviderRepository($app);
             $dispatcher = new Dispatcher(
                 $app['config'],

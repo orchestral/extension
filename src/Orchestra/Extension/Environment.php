@@ -134,6 +134,8 @@ class Environment extends AbstractableContainer
 
             $memory->put('extensions.active', $actives);
 
+            $this->app['events']->fire("orchestra.activating: {$name}", array($name));
+
             $activated = true;
         }
 
@@ -185,7 +187,10 @@ class Environment extends AbstractableContainer
             }
         }
 
-        !! $deactivated and $memory->put('extensions.active', $actives);
+        if (!! $deactivated) {
+            $memory->put('extensions.active', $actives);
+            $this->app['events']->fire("orchestra.deactivating: {$name}", array($name));
+        }
 
         return $deactivated;
     }

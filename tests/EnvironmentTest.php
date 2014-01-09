@@ -123,7 +123,10 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $events->shouldReceive('fire')->once()
                 ->with('orchestra.publishing', array('laravel/framework'))->andReturn(true)
             ->shouldReceive('fire')->once()
-                ->with('orchestra.publishing: laravel/framework')->andReturn(true);
+                ->with('orchestra.publishing: laravel/framework')->andReturn(true)
+            ->shouldReceive('fire')->once()
+                ->with('orchestra.activating: laravel/framework', array('laravel/framework'))
+                ->andReturnNull();
 
         $stub = new Environment($app, $dispatcher, $this->debugger);
         $stub->attach($memory);
@@ -156,9 +159,9 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeactivateMethod()
     {
-        $app    = $this->app;
-        $memory = m::mock('\Orchestra\Memory\Provider');
-        $app['orchestra.memory'] = $memory;
+        $app = $this->app;
+        $app['orchestra.memory'] = $memory = m::mock('\Orchestra\Memory\Provider');
+        $app['events'] = $events = m::mock('\Illuminate\Events\Dispatcher[fire]');
 
         $memory->shouldReceive('get')->twice()
                 ->with('extensions.active', array())
@@ -166,6 +169,9 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('put')->once()
                 ->with('extensions.active', array('daylerees/doc-reader' => array()))
                 ->andReturn(true);
+        $events->shouldReceive('fire')->once()
+                ->with('orchestra.deactivating: laravel/framework', array('laravel/framework'))
+                ->andReturnNull();
 
         $stub = new Environment($app, $this->dispatcher, $this->debugger);
         $stub->attach($memory);

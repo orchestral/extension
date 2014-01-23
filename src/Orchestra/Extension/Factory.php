@@ -5,7 +5,7 @@ use Orchestra\Memory\Abstractable\Container as AbstractableContainer;
 use Orchestra\Extension\Contracts\DebuggerInterface;
 use Orchestra\Extension\Contracts\DispatcherInterface;
 
-class Environment extends AbstractableContainer
+class Factory extends AbstractableContainer
 {
     /**
      * Application instance.

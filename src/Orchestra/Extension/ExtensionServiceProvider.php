@@ -35,7 +35,7 @@ class ExtensionServiceProvider extends ServiceProvider
                 $provider
             );
 
-            return new Environment($app, $dispatcher, $debugger);
+            return new Factory($app, $dispatcher, $debugger);
         });
     }
 

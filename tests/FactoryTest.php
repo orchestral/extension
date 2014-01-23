@@ -3,9 +3,9 @@
 use Mockery as m;
 use Illuminate\Container\Container;
 use Illuminate\Support\Collection;
-use Orchestra\Extension\Environment;
+use Orchestra\Extension\Factory;
 
-class EnvironmentTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Application instance.
@@ -69,7 +69,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Orchestra\Extension\Environment::available() method.
+     * Test Orchestra\Extension\Factory::available() method.
      *
      * @test
      */
@@ -83,13 +83,13 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $memory->shouldReceive('get')
                 ->once()->with('extensions.available.laravel/framework')->andReturn(array());
 
-        $stub = new Environment($app, $this->dispatcher, $this->debugger);
+        $stub = new Factory($app, $this->dispatcher, $this->debugger);
         $stub->attach($memory);
         $this->assertTrue($stub->available('laravel/framework'));
     }
 
     /**
-     * Test Orchestra\Extension\Environment::active() method.
+     * Test Orchestra\Extension\Factory::active() method.
      *
      * @test
      */
@@ -128,14 +128,14 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
                 ->with('orchestra.activating: laravel/framework', array('laravel/framework'))
                 ->andReturnNull();
 
-        $stub = new Environment($app, $dispatcher, $this->debugger);
+        $stub = new Factory($app, $dispatcher, $this->debugger);
         $stub->attach($memory);
         $this->assertTrue($stub->activate('laravel/framework'));
         $this->assertFalse($stub->activate('laravel'));
     }
 
     /**
-     * Test Orchestra\Extension\Environment::activated() method.
+     * Test Orchestra\Extension\Factory::activated() method.
      *
      * @test
      */
@@ -147,13 +147,13 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
 
         $memory->shouldReceive('get')->once()->with('extensions.active.laravel/framework')->andReturn(array());
 
-        $stub = new Environment($app, $this->dispatcher, $this->debugger);
+        $stub = new Factory($app, $this->dispatcher, $this->debugger);
         $stub->attach($memory);
         $this->assertTrue($stub->activated('laravel/framework'));
     }
 
     /**
-     * Test Orchestra\Extension\Environment::deactive() method.
+     * Test Orchestra\Extension\Factory::deactive() method.
      *
      * @test
      */
@@ -173,7 +173,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
                 ->with('orchestra.deactivating: laravel/framework', array('laravel/framework'))
                 ->andReturnNull();
 
-        $stub = new Environment($app, $this->dispatcher, $this->debugger);
+        $stub = new Factory($app, $this->dispatcher, $this->debugger);
         $stub->attach($memory);
         $this->assertTrue($stub->deactivate('laravel/framework'));
         $this->assertFalse($stub->deactivate('laravel'));
@@ -181,7 +181,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * Test Orchestra\Extension\Environment::boot() method.
+     * Test Orchestra\Extension\Factory::boot() method.
      *
      * @test
      */
@@ -205,7 +205,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('boot')->once()->andReturnNull();
         $debugger->shouldReceive('check')->once()->andReturn(false);
 
-        $stub = new Environment($app, $dispatcher, $debugger);
+        $stub = new Factory($app, $dispatcher, $debugger);
         $stub->attach($memory);
 
         $this->assertEquals($memory, $stub->getMemoryProvider());
@@ -219,7 +219,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Orchestra\Extension\Environment::detect() method.
+     * Test Orchestra\Extension\Factory::detect() method.
      *
      * @test
      */
@@ -237,13 +237,13 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $finder->shouldReceive('detect')->once()->andReturn($extensions);
         $memory->shouldReceive('put')->once()->with('extensions.available', array('foo'))->andReturn('foobar');
 
-        $stub = new Environment($app, $this->dispatcher, $this->debugger);
+        $stub = new Factory($app, $this->dispatcher, $this->debugger);
         $stub->attach($memory);
         $this->assertEquals($extensions, $stub->detect());
     }
 
     /**
-     * Test Orchestra\Extension\Environment::finish() method.
+     * Test Orchestra\Extension\Factory::finish() method.
      *
      * @test
      */
@@ -256,7 +256,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $dispatcher->shouldReceive('finish')->with('laravel/framework', $options1)->andReturnNull()
             ->shouldReceive('finish')->with('app', $options2)->andReturnNull();
 
-        $stub = new Environment($this->app, $dispatcher, $this->debugger);
+        $stub = new Factory($this->app, $dispatcher, $this->debugger);
 
         $refl = new \ReflectionObject($stub);
         $extensions = $refl->getProperty('extensions');
@@ -267,7 +267,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Orchestra\Extension\Environment::permission() method.
+     * Test Orchestra\Extension\Factory::permission() method.
      *
      * @test
      */
@@ -297,7 +297,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('isDirectory')->once()->with('/var/orchestra/packages/laravel/framework')->andReturn(false)
             ->shouldReceive('isWritable')->once()->with('/var/orchestra/packages/laravel')->andReturn(true);
 
-        $stub = new Environment($app, $this->dispatcher, $this->debugger);
+        $stub = new Factory($app, $this->dispatcher, $this->debugger);
         $stub->attach($memory);
         $this->assertTrue($stub->permission('foo'));
         $this->assertFalse($stub->permission('bar'));
@@ -305,7 +305,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Orchestra\Extension\Environment::reset() method.
+     * Test Orchestra\Extension\Factory::reset() method.
      *
      * @test
      */
@@ -326,13 +326,13 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('put')->once()
                 ->with('extension_laravel/framework', array())->andReturnNull();
 
-        $stub = new Environment($app, $this->dispatcher, $this->debugger);
+        $stub = new Factory($app, $this->dispatcher, $this->debugger);
         $stub->attach($memory);
         $this->assertTrue($stub->reset('laravel/framework'));
     }
 
     /**
-     * Test Orchestra\Extension\Environment::route() method.
+     * Test Orchestra\Extension\Factory::route() method.
      *
      * @test
      */
@@ -363,7 +363,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $request->shouldReceive('root')->once()->andReturn('http://localhost')
                 ->shouldReceive('secure')->twice()->andReturn(false);
 
-        $stub = new Environment($app, $dispatcher, $debugger);
+        $stub = new Factory($app, $dispatcher, $debugger);
         $stub->attach($memory);
         $stub->boot();
 

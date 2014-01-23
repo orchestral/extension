@@ -48,7 +48,7 @@ class Debugger implements Contracts\DebuggerInterface
 
         $mode = $session->get('orchestra.safemode', 'off');
 
-        if ($input === 'on' and $mode !== $input) {
+        if ($input === 'on' && $mode !== $input) {
             $session->put('orchestra.safemode', $mode = $input);
         }
 

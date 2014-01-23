@@ -125,7 +125,7 @@ class Finder
 
             // glob() method might return false if there an errors, convert
             // the result to an array.
-            is_array($manifests) or $manifests = array();
+            is_array($manifests) || $manifests = array();
 
             foreach ($manifests as $manifest) {
                 $name = $this->guessExtensionNameFromManifest($manifest, $path);
@@ -213,7 +213,7 @@ class Finder
         // except when we deal with app.
         if (rtrim($this->config['path.app'], '/') === rtrim($path, '/')) {
             $name = 'app';
-        } elseif (! is_null($vendor) and ! is_null($package)) {
+        } elseif (! is_null($vendor) && ! is_null($package)) {
             $name = "{$vendor}/{$package}";
         } else {
             return null;

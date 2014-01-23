@@ -62,7 +62,7 @@ class RouteGenerator
         // If the handles doesn't start as "//some.domain.com/foo" we should
         // assume that it doesn't belong to any subdomain, otherwise we
         // need to split the value to "some.domain.com" and "foo".
-        if (is_null($handles) or ! starts_with($handles, '//')) {
+        if (is_null($handles) || ! starts_with($handles, '//')) {
             $this->prefix = $handles;
         } else {
             $handles      = substr($handles, 2);
@@ -73,7 +73,7 @@ class RouteGenerator
 
         // It is possible that prefix would be null, in this case assume
         // it handle the main path under the domain.
-        ! is_null($this->prefix) or $this->prefix = '/';
+        ! is_null($this->prefix) || $this->prefix = '/';
     }
 
     /**
@@ -86,7 +86,7 @@ class RouteGenerator
     {
         $pattern = $this->domain;
 
-        if (is_null($pattern) and $forceBase === true) {
+        if (is_null($pattern) && $forceBase === true) {
             $pattern = $this->baseUrl;
         } elseif (str_contains($pattern, '{{domain}}')) {
             $pattern = str_replace('{{domain}}', $this->baseUrl, $pattern);
@@ -110,7 +110,7 @@ class RouteGenerator
             $pattern = ($pattern === '*' ? "{$prefix}*" : "{$prefix}/{$pattern}");
             $pattern = trim($pattern, '/');
 
-            empty($pattern) and $pattern = '/';
+            empty($pattern) && $pattern = '/';
 
             if (str_is($pattern, $path)) {
                 return true;
@@ -142,12 +142,12 @@ class RouteGenerator
     {
         $pattern = trim($this->prefix, '/');
 
-        if (is_null($this->domain) and $forceBase === true) {
+        if (is_null($this->domain) && $forceBase === true) {
             $pattern = trim($this->basePrefix, '/')."/{$pattern}";
             $pattern = trim($pattern, '/');
         }
 
-        empty($pattern) and $pattern = '/';
+        empty($pattern) && $pattern = '/';
 
         return $pattern;
     }

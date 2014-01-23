@@ -91,7 +91,7 @@ class Dispatcher implements Contracts\DispatcherInterface
         // it to Laravel. In this case all service provider would be eager
         // loaded since the application would require it from any action.
         $services = array_get($options, 'provide', array());
-        ! empty($services) and $this->provider->provides($services);
+        ! empty($services) && $this->provider->provides($services);
 
         // Register the extension so we can boot it later, this action is
         // to allow all service providers to be registered first before we

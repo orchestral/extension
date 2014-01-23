@@ -44,7 +44,7 @@ class ConfigManager
         $meta   = $memory->get("extension_{$name}", array());
 
         foreach ($aliases as $current => $default) {
-            isset($meta[$current]) and $this->config->set($default, $meta[$current]);
+            isset($meta[$current]) && $this->config->set($default, $meta[$current]);
 
             $meta[$current] = $this->config->get($default);
         }

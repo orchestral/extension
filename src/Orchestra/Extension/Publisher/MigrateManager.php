@@ -79,7 +79,7 @@ class MigrateManager
 
         // We don't execute the same migration twice, this little code
         // compare both folder before appending the paths.
-        if ($basePath !== $sourcePath and ! empty($sourcePath)) {
+        if ($basePath !== $sourcePath && ! empty($sourcePath)) {
             $paths = array_merge($paths, array(
                 "{$sourcePath}/database/migrations/",
                 "{$sourcePath}/src/migrations/",

@@ -1,12 +1,14 @@
 <?php namespace Orchestra\Extension;
 
 use Illuminate\Container\Container;
-use Orchestra\Memory\Abstractable\Container as AbstractableContainer;
 use Orchestra\Extension\Contracts\DebuggerInterface;
 use Orchestra\Extension\Contracts\DispatcherInterface;
+use Orchestra\Memory\ContainerTrait;
 
-class Factory extends AbstractableContainer
+class Factory
 {
+    use ContainerTrait;
+
     /**
      * Application instance.
      *

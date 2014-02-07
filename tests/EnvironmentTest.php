@@ -99,8 +99,8 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $dispatcher = $this->dispatcher;
 
         $memory   = m::mock('\Orchestra\Memory\Provider');
-        $migrator = m::mock('\Orchestra\Extension\Publisher\MigrateManager[extension]');
-        $asset    = m::mock('\Orchestra\Extension\Publisher\AssetManager[extension]');
+        $migrator = m::mock('\Orchestra\Extension\Publisher\MigrateManager')->makePartial();
+        $asset    = m::mock('\Orchestra\Extension\Publisher\AssetManager')->makePartial();
         $events   = m::mock('\Illuminate\Events\Dispatcher');
 
         $app['orchestra.memory'] = $memory;

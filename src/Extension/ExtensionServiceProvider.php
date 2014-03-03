@@ -75,7 +75,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $path = realpath(__DIR__.'/../../');
+        $path = realpath(__DIR__.'/../');
 
         $this->package('orchestra/extension', 'orchestra/extension', $path);
     }

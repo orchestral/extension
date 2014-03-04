@@ -12,8 +12,8 @@
 		}
 	],
 	"autoload": {
-		"psr-0": {
-			"Orchestra\\Extension" : "src/"
+		"psr-4": {
+			"Orchestra\\Extension\\" : "src/Extension/"
 		}
 	},
 	"require": {

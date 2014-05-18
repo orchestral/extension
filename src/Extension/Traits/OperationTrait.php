@@ -122,6 +122,6 @@ trait OperationTrait
      */
     public function started($name)
     {
-        return array_key_exists($name, $this->extensions);
+        return $this->extensions->has($name);
     }
 }

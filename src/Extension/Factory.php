@@ -1,6 +1,7 @@
 <?php namespace Orchestra\Extension;
 
 use Illuminate\Container\Container;
+use Illuminate\Support\Collection;
 use Orchestra\Extension\Contracts\DebuggerInterface;
 use Orchestra\Extension\Contracts\DispatcherInterface;
 use Orchestra\Extension\Contracts\FactoryInterface;
@@ -58,6 +59,7 @@ class Factory implements FactoryInterface
         $this->app        = $app;
         $this->dispatcher = $dispatcher;
         $this->debugger   = $debugger;
+        $this->extensions = new Collection;
     }
 
     /**
@@ -110,7 +112,7 @@ class Factory implements FactoryInterface
             $this->dispatcher->finish($name, $options);
         }
 
-        $this->extensions = array();
+        $this->extensions = new Collection;
 
         return $this;
     }

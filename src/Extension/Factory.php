@@ -70,10 +70,20 @@ class Factory implements FactoryInterface
      */
     public function detect()
     {
-        $extensions = $this->app['orchestra.extension.finder']->detect();
+        $extensions = $this->finder()->detect();
         $this->memory->put('extensions.available', $extensions->all());
 
         return $extensions;
+    }
+
+    /**
+     * Get extension finder.
+     *
+     * @return \Orchestra\Extension\Finder
+     */
+    public function finder()
+    {
+        return $this->app['orchestra.extension.finder'];
     }
 
     /**
@@ -101,7 +111,7 @@ class Factory implements FactoryInterface
      */
     public function permission($name)
     {
-        $finder   = $this->app['orchestra.extension.finder'];
+        $finder   = $this->finder();
         $memory   = $this->memory;
         $basePath = rtrim($memory->get("extensions.available.{$name}.path", $name), '/');
         $path     = $finder->resolveExtensionPath("{$basePath}/public");

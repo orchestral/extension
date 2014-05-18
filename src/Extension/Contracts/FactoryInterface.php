@@ -49,6 +49,13 @@ interface FactoryInterface
     public function detect();
 
     /**
+     * Get extension finder.
+     *
+     * @return \Orchestra\Extension\Finder
+     */
+    public function finder();
+
+    /**
      * Shutdown all extensions.
      *
      * @return \Orchestra\Extension\Factory

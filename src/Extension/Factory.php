@@ -121,20 +121,20 @@ class Factory
      */
     public function activate($name)
     {
-        $activated  = false;
-        $memory     = $this->memory;
-        $availables = $memory->get('extensions.available', array());
-        $actives    = $memory->get('extensions.active', array());
+        $activated = false;
+        $memory    = $this->memory;
+        $available = $memory->get('extensions.available', array());
+        $active    = $memory->get('extensions.active', array());
 
-        if (isset($availables[$name])) {
+        if (isset($available[$name])) {
             // Append the activated extension to active extensions, and also
             // publish the extension (migrate the database and publish the
             // asset).
-            $this->extensions[$name] = $actives[$name] = $availables[$name];
-            $this->dispatcher->register($name, $actives[$name]);
+            $this->extensions[$name] = $active[$name] = $available[$name];
+            $this->dispatcher->register($name, $active[$name]);
             $this->publish($name);
 
-            $memory->put('extensions.active', $actives);
+            $memory->put('extensions.active', $active);
 
             $this->app['events']->fire("orchestra.activating: {$name}", array($name));
 

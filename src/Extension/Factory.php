@@ -3,11 +3,12 @@
 use Illuminate\Container\Container;
 use Orchestra\Extension\Contracts\DebuggerInterface;
 use Orchestra\Extension\Contracts\DispatcherInterface;
+use Orchestra\Extension\Traits\OperationTrait;
 use Orchestra\Memory\ContainerTrait;
 
 class Factory
 {
-    use ContainerTrait;
+    use ContainerTrait, OperationTrait;
 
     /**
      * Application instance.
@@ -114,90 +115,6 @@ class Factory
     }
 
     /**
-     * Activate an extension.
-     *
-     * @param  string   $name
-     * @return boolean
-     */
-    public function activate($name)
-    {
-        $activated = false;
-        $memory    = $this->memory;
-        $available = $memory->get('extensions.available', array());
-        $active    = $memory->get('extensions.active', array());
-
-        if (isset($available[$name])) {
-            // Append the activated extension to active extensions, and also
-            // publish the extension (migrate the database and publish the
-            // asset).
-            $this->extensions[$name] = $active[$name] = $available[$name];
-            $this->dispatcher->register($name, $active[$name]);
-            $this->publish($name);
-
-            $memory->put('extensions.active', $active);
-
-            $this->app['events']->fire("orchestra.activating: {$name}", array($name));
-
-            $activated = true;
-        }
-
-        return $activated;
-    }
-
-    /**
-     * Check whether an extension is active.
-     *
-     * @param  string   $name
-     * @return boolean
-     */
-    public function activated($name)
-    {
-        $memory = $this->memory;
-        return (is_array($memory->get("extensions.active.{$name}")));
-    }
-
-    /**
-     * Check whether an extension is available.
-     *
-     * @param  string   $name
-     * @return boolean
-     */
-    public function available($name)
-    {
-        $memory = $this->memory;
-        return (is_array($memory->get("extensions.available.{$name}")));
-    }
-
-    /**
-     * Deactivate an extension.
-     *
-     * @param  string   $name
-     * @return boolean
-     */
-    public function deactivate($name)
-    {
-        $deactivated = false;
-        $memory      = $this->memory;
-        $current     = $memory->get('extensions.active', array());
-        $actives     = array();
-
-        foreach ($current as $extension => $config) {
-            if ($extension === $name) {
-                $deactivated = true;
-            } else {
-                $actives[$extension] = $config;
-            }
-        }
-
-        if (!! $deactivated) {
-            $memory->put('extensions.active', $actives);
-            $this->app['events']->fire("orchestra.deactivating: {$name}", array($name));
-        }
-
-        return $deactivated;
-    }
-
-    /**
      * Publish an extension.
      *
      * @param  string
@@ -246,25 +163,6 @@ class Factory
     }
 
     /**
-     * Reset ectension.
-     *
-     * @param  string   $name
-     * @return boolean
-     */
-    public function reset($name)
-    {
-        $memory  = $this->memory;
-        $default = $memory->get("extensions.available.{$name}", array());
-        $memory->put("extensions.active.{$name}", $default);
-
-        if ($memory->has("extension_{$name}")) {
-            $memory->put("extension_{$name}", array());
-        }
-
-        return true;
-    }
-
-    /**
      * Get extension route handle.
      *
      * @param  string   $name
@@ -284,17 +182,6 @@ class Factory
             $this->app['config']->get($key, $default),
             $this->app['request']
         );
-    }
-
-    /**
-     * Check if extension is started.
-     *
-     * @param  string   $name
-     * @return boolean
-     */
-    public function started($name)
-    {
-        return (array_key_exists($name, $this->extensions));
     }
 
     /**
@@ -333,17 +220,17 @@ class Factory
      */
     protected function registerActiveExtensions()
     {
-        $memory     = $this->memory;
-        $availables = $memory->get('extensions.available', array());
-        $actives    = $memory->get('extensions.active', array());
+        $memory    = $this->memory;
+        $available = $memory->get('extensions.available', array());
+        $actives   = $memory->get('extensions.active', array());
 
         // Loop all active extension and merge the configuration with
         // available config. Extension registration is handled by dispatcher
         // process due to complexity of extension boot process.
         foreach ($actives as $name => $options) {
-            if (isset($availables[$name])) {
+            if (isset($available[$name])) {
                 $config = array_merge(
-                    (array) array_get($availables, "{$name}.config"),
+                    (array) array_get($available, "{$name}.config"),
                     (array) array_get($options, "config")
                 );
 

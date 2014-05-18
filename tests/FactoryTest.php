@@ -110,9 +110,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
         $dispatcher->shouldReceive('register')->once()
                 ->with('laravel/framework', m::type('Array'))->andReturnNull();
-        $memory->shouldReceive('get')->twice()
+        $memory->shouldReceive('get')->once()
                 ->with('extensions.available', array())->andReturn(array('laravel/framework' => array()))
-            ->shouldReceive('get')->twice()
+            ->shouldReceive('has')->once()
+                ->with('extensions.available.laravel/framework')->andReturn(true)
+            ->shouldReceive('has')->once()
+                ->with('extensions.available.laravel')->andReturn(false)
+            ->shouldReceive('get')->once()
                 ->with('extensions.active', array())->andReturn(array())
             ->shouldReceive('put')->once()
                 ->with('extensions.active', array('laravel/framework' => array()))->andReturn(true);

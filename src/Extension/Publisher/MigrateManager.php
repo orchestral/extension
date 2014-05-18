@@ -2,8 +2,9 @@
 
 use Illuminate\Container\Container;
 use Illuminate\Database\Migrations\Migrator;
+use Orchestra\Extension\Contracts\PublisherInterface;
 
-class MigrateManager
+class MigrateManager implements PublisherInterface
 {
     /**
      * Application instance.

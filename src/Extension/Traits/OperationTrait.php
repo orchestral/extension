@@ -26,8 +26,8 @@ trait OperationTrait
     protected function activating($name)
     {
         $memory    = $this->memory;
-        $available = $memory->get('extensions.available', array());
-        $active    = $memory->get('extensions.active', array());
+        $available = $memory->get('extensions.available', []);
+        $active    = $memory->get('extensions.active', []);
 
         // Append the activated extension to active extensions, and also
         // publish the extension (migrate the database and publish the
@@ -38,7 +38,7 @@ trait OperationTrait
 
         $memory->put('extensions.active', $active);
 
-        $this->app['events']->fire("orchestra.activating: {$name}", array($name));
+        $this->app['events']->fire("orchestra.activating: {$name}", [$name]);
 
         return true;
     }
@@ -51,8 +51,7 @@ trait OperationTrait
      */
     public function activated($name)
     {
-        $memory = $this->memory;
-        return (is_array($memory->get("extensions.active.{$name}")));
+        return is_array($this->memory->get("extensions.active.{$name}"));
     }
 
     /**
@@ -63,8 +62,7 @@ trait OperationTrait
      */
     public function available($name)
     {
-        $memory = $this->memory;
-        return (is_array($memory->get("extensions.available.{$name}")));
+        return is_array($this->memory->get("extensions.available.{$name}"));
     }
 
     /**
@@ -77,20 +75,20 @@ trait OperationTrait
     {
         $deactivated = false;
         $memory      = $this->memory;
-        $current     = $memory->get('extensions.active', array());
-        $actives     = array();
+        $current     = $memory->get('extensions.active', []);
+        $active      = [];
 
         foreach ($current as $extension => $config) {
             if ($extension === $name) {
                 $deactivated = true;
             } else {
-                $actives[$extension] = $config;
+                $active[$extension] = $config;
             }
         }
 
         if (!! $deactivated) {
-            $memory->put('extensions.active', $actives);
-            $this->app['events']->fire("orchestra.deactivating: {$name}", array($name));
+            $memory->put('extensions.active', $active);
+            $this->app['events']->fire("orchestra.deactivating: {$name}", [$name]);
         }
 
         return $deactivated;
@@ -105,11 +103,12 @@ trait OperationTrait
     public function reset($name)
     {
         $memory  = $this->memory;
-        $default = $memory->get("extensions.available.{$name}", array());
+        $default = $memory->get("extensions.available.{$name}", []);
+
         $memory->put("extensions.active.{$name}", $default);
 
         if ($memory->has("extension_{$name}")) {
-            $memory->put("extension_{$name}", array());
+            $memory->put("extension_{$name}", []);
         }
 
         return true;
@@ -123,6 +122,6 @@ trait OperationTrait
      */
     public function started($name)
     {
-        return (array_key_exists($name, $this->extensions));
+        return $this->extensions->has($name);
     }
 }

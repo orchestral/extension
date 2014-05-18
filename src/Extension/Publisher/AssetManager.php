@@ -3,9 +3,10 @@
 use Exception;
 use Illuminate\Container\Container;
 use Illuminate\Foundation\AssetPublisher;
+use Orchestra\Extension\Contracts\PublisherInterface;
 use Orchestra\Extension\FilePermissionException;
 
-class AssetManager
+class AssetManager implements PublisherInterface
 {
     /**
      * Application instance.

@@ -1,12 +1,14 @@
 <?php namespace Orchestra\Extension;
 
 use Illuminate\Container\Container;
+use Illuminate\Support\Collection;
 use Orchestra\Extension\Contracts\DebuggerInterface;
 use Orchestra\Extension\Contracts\DispatcherInterface;
+use Orchestra\Extension\Contracts\FactoryInterface;
 use Orchestra\Extension\Traits\OperationTrait;
 use Orchestra\Memory\ContainerTrait;
 
-class Factory
+class Factory implements FactoryInterface
 {
     use ContainerTrait, OperationTrait;
 
@@ -57,12 +59,13 @@ class Factory
         $this->app        = $app;
         $this->dispatcher = $dispatcher;
         $this->debugger   = $debugger;
+        $this->extensions = new Collection;
     }
 
     /**
      * Boot active extensions.
      *
-     * @return Environment
+     * @return Factory
      */
     public function boot()
     {
@@ -101,7 +104,7 @@ class Factory
     /**
      * Shutdown all extensions.
      *
-     * @return Environment
+     * @return Factory
      */
     public function finish()
     {
@@ -109,24 +112,9 @@ class Factory
             $this->dispatcher->finish($name, $options);
         }
 
-        $this->extensions = array();
+        $this->extensions = new Collection;
 
         return $this;
-    }
-
-    /**
-     * Publish an extension.
-     *
-     * @param  string
-     * @return void
-     */
-    public function publish($name)
-    {
-        $this->app['orchestra.publisher.migrate']->extension($name);
-        $this->app['orchestra.publisher.asset']->extension($name);
-
-        $this->app['events']->fire("orchestra.publishing", array($name));
-        $this->app['events']->fire("orchestra.publishing: {$name}");
     }
 
     /**
@@ -160,6 +148,21 @@ class Factory
         $path     = $finder->resolveExtensionPath("{$basePath}/public");
 
         return $this->isWritableWithAsset($name, $path);
+    }
+
+    /**
+     * Publish an extension.
+     *
+     * @param  string
+     * @return void
+     */
+    public function publish($name)
+    {
+        $this->app['orchestra.publisher.migrate']->extension($name);
+        $this->app['orchestra.publisher.asset']->extension($name);
+
+        $this->app['events']->fire("orchestra.publishing", array($name));
+        $this->app['events']->fire("orchestra.publishing: {$name}");
     }
 
     /**
@@ -222,12 +225,12 @@ class Factory
     {
         $memory    = $this->memory;
         $available = $memory->get('extensions.available', array());
-        $actives   = $memory->get('extensions.active', array());
+        $active    = $memory->get('extensions.active', array());
 
         // Loop all active extension and merge the configuration with
         // available config. Extension registration is handled by dispatcher
         // process due to complexity of extension boot process.
-        foreach ($actives as $name => $options) {
+        foreach ($active as $name => $options) {
             if (isset($available[$name])) {
                 $config = array_merge(
                     (array) array_get($available, "{$name}.config"),

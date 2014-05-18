@@ -18,7 +18,7 @@ class Dispatcher implements Contracts\DispatcherInterface
      *
      * @var \Illuminate\Events\Dispatcher
      */
-    protected $event;
+    protected $dispatcher;
 
     /**
      * Filesystem instance.
@@ -52,23 +52,23 @@ class Dispatcher implements Contracts\DispatcherInterface
      * Construct a new Application instance.
      *
      * @param  \Illuminate\Config\Repository        $config
-     * @param  \Illuminate\Events\Dispatcher        $event
+     * @param  \Illuminate\Events\Dispatcher        $dispatcher
      * @param  \Illuminate\Filesystem\Filesystem    $files
      * @param  Finder                               $finder
      * @param  ProviderRepository                   $provider
      */
     public function __construct(
         Repository $config,
-        EventDispatcher $event,
+        EventDispatcher $dispatcher,
         Filesystem $files,
         Finder $finder,
         ProviderRepository $provider
     ) {
-        $this->config   = $config;
-        $this->event    = $event;
-        $this->files    = $files;
-        $this->finder   = $finder;
-        $this->provider = $provider;
+        $this->config     = $config;
+        $this->dispatcher = $dispatcher;
+        $this->files      = $files;
+        $this->finder     = $finder;
+        $this->provider   = $provider;
     }
 
     /**
@@ -183,7 +183,7 @@ class Dispatcher implements Contracts\DispatcherInterface
      */
     protected function fireEvent($name, $options, $type = 'started')
     {
-        $this->event->fire("extension.{$type}", array($name, $options));
-        $this->event->fire("extension.{$type}: {$name}", array($options));
+        $this->dispatcher->fire("extension.{$type}", array($name, $options));
+        $this->dispatcher->fire("extension.{$type}: {$name}", array($options));
     }
 }

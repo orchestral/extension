@@ -1,8 +1,9 @@
 <?php namespace Orchestra\Extension;
 
 use Illuminate\Http\Request;
+use Orchestra\Extension\Contracts\RouteGeneratorInterface;
 
-class RouteGenerator
+class RouteGenerator implements RouteGeneratorInterface
 {
     /**
      * Request instance.

@@ -5,12 +5,13 @@ use Illuminate\Support\Collection;
 use Orchestra\Extension\Contracts\DebuggerInterface;
 use Orchestra\Extension\Contracts\DispatcherInterface;
 use Orchestra\Extension\Contracts\FactoryInterface;
+use Orchestra\Extension\Traits\DispatchableTrait;
 use Orchestra\Extension\Traits\OperationTrait;
 use Orchestra\Memory\ContainerTrait;
 
 class Factory implements FactoryInterface
 {
-    use ContainerTrait, OperationTrait;
+    use ContainerTrait, DispatchableTrait, OperationTrait;
 
     /**
      * Application instance.
@@ -63,58 +64,26 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * Boot active extensions.
-     *
-     * @return Factory
-     */
-    public function boot()
-    {
-        // Extension should be activated only if we're not running under
-        // safe mode (or debug mode). This is to ensure that developer have
-        // a way to disable broken extension without tempering the database.
-        if (! ($this->booted || $this->debugger->check())) {
-
-            // Avoid extension booting being called more than once.
-            $this->booted = true;
-
-            $this->registerActiveExtensions();
-
-            // Boot are executed once all extension has been registered. This
-            // would allow extension to communicate with other extension
-            // without having to known the registration dependencies.
-            $this->dispatcher->boot();
-        }
-
-        return $this;
-    }
-
-    /**
      * Detect all extensions.
      *
      * @return array
      */
     public function detect()
     {
-        $extensions = $this->app['orchestra.extension.finder']->detect();
+        $extensions = $this->finder()->detect();
         $this->memory->put('extensions.available', $extensions->all());
 
         return $extensions;
     }
 
     /**
-     * Shutdown all extensions.
+     * Get extension finder.
      *
-     * @return Factory
+     * @return \Orchestra\Extension\Finder
      */
-    public function finish()
+    public function finder()
     {
-        foreach ($this->extensions as $name => $options) {
-            $this->dispatcher->finish($name, $options);
-        }
-
-        $this->extensions = new Collection;
-
-        return $this;
+        return $this->app['orchestra.extension.finder'];
     }
 
     /**
@@ -142,7 +111,7 @@ class Factory implements FactoryInterface
      */
     public function permission($name)
     {
-        $finder   = $this->app['orchestra.extension.finder'];
+        $finder   = $this->finder();
         $memory   = $this->memory;
         $basePath = rtrim($memory->get("extensions.available.{$name}.path", $name), '/');
         $path     = $finder->resolveExtensionPath("{$basePath}/public");
@@ -214,33 +183,5 @@ class Factory implements FactoryInterface
         }
 
         return true;
-    }
-
-    /**
-     * Register all active extension to dispatcher.
-     *
-     * @return void
-     */
-    protected function registerActiveExtensions()
-    {
-        $memory    = $this->memory;
-        $available = $memory->get('extensions.available', array());
-        $active    = $memory->get('extensions.active', array());
-
-        // Loop all active extension and merge the configuration with
-        // available config. Extension registration is handled by dispatcher
-        // process due to complexity of extension boot process.
-        foreach ($active as $name => $options) {
-            if (isset($available[$name])) {
-                $config = array_merge(
-                    (array) array_get($available, "{$name}.config"),
-                    (array) array_get($options, "config")
-                );
-
-                array_set($options, "config", $config);
-                $this->extensions[$name] = $options;
-                $this->dispatcher->register($name, $options);
-            }
-        }
     }
 }

@@ -247,6 +247,23 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test Orchestra\Extension\Factory::finder() method.
+     *
+     * @test
+     */
+    public function testFinderMethod()
+    {
+        $app    = $this->app;
+        $finder = m::mock('\Orchestra\Extension\Finder');
+
+        $app['orchestra.extension.finder'] = $finder;
+
+        $stub = new Factory($app, $this->dispatcher, $this->debugger);
+
+        $this->assertEquals($finder, $stub->finder());
+    }
+
+    /**
      * Test Orchestra\Extension\Factory::finish() method.
      *
      * @test

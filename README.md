@@ -5,7 +5,7 @@ Orchestra Platform Extension Component
 
 [![Latest Stable Version](https://poser.pugx.org/orchestra/extension/v/stable.png)](https://packagist.org/packages/orchestra/extension) 
 [![Total Downloads](https://poser.pugx.org/orchestra/extension/downloads.png)](https://packagist.org/packages/orchestra/extension) 
-[![Build Status](https://travis-ci.org/orchestral/extension.png?branch=master)](https://travis-ci.org/orchestral/extension) 
+[![Build Status](https://travis-ci.org/orchestral/extension.svg?branch=master)](https://travis-ci.org/orchestral/extension) 
 [![Coverage Status](https://coveralls.io/repos/orchestral/extension/badge.png?branch=master)](https://coveralls.io/r/orchestral/extension?branch=master) 
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/orchestral/extension/badges/quality-score.png?s=bc07078a1276c92c6b4c25eaa491fd5244925d74)](https://scrutinizer-ci.com/g/orchestral/extension/) 
 
@@ -16,7 +16,7 @@ To install through composer, simply put the following in your `composer.json` fi
 ```json
 {
 	"require": {
-		"orchestra/extension": "2.2.*"
+		"orchestra/extension": "2.3.*"
 	}
 }
 ```
@@ -49,4 +49,4 @@ php artisan extension:migrate
 ## Resources
 
 * [Documentation](http://orchestraplatform.com/docs/latest/components/extension)
-* [Change Log](http://orchestraplatform.com/docs/latest/components/extension/changes#v2-2)
+* [Change Log](http://orchestraplatform.com/docs/latest/components/extension/changes#v2-3)

@@ -18,7 +18,8 @@
 	},
 	"require": {
 		"php": ">=5.3.3",
-		"orchestra/memory": "2.1.*"
+		"orchestra/memory": "2.1.*",
+        "orchestra/publisher": "2.1.*"
 	},
 	"require-dev": {
 		"mockery/mockery": "0.9.*",

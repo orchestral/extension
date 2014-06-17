@@ -5,7 +5,7 @@ title: Extension Change Log
 
 ## Version 2.2 {#v2-2}
 
-### v2.2.1@dev {#v2-2-1}
+### v2.2.1 {#v2-2-1}
 
 * Move publishing code to `orchestra/publisher` repository.
 

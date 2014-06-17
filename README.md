@@ -7,7 +7,7 @@ Orchestra Platform Extension Component
 [![Total Downloads](https://poser.pugx.org/orchestra/extension/downloads.png)](https://packagist.org/packages/orchestra/extension) 
 [![Build Status](https://travis-ci.org/orchestral/extension.svg?branch=master)](https://travis-ci.org/orchestral/extension) 
 [![Coverage Status](https://coveralls.io/repos/orchestral/extension/badge.png?branch=master)](https://coveralls.io/r/orchestral/extension?branch=master) 
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/orchestral/extension/badges/quality-score.png?s=bc07078a1276c92c6b4c25eaa491fd5244925d74)](https://scrutinizer-ci.com/g/orchestral/extension/) 
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/orchestral/extension/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/orchestral/extension/) 
 
 ## Quick Installation
 
@@ -30,7 +30,7 @@ Next add the following service provider in `app/config/app.php`.
 
 	'Orchestra\Extension\ExtensionServiceProvider',
 	'Orchestra\Memory\MemoryServiceProvider',
-	'Orchestra\Extension\PublisherServiceProvider',
+	'Orchestra\Publisher\PublisherServiceProvider',
 
 	'Orchestra\Extension\CommandServiceProvider',
 ),

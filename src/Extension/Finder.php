@@ -3,7 +3,6 @@
 use RuntimeException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Fluent;
 
 class Finder
 {
@@ -73,7 +72,8 @@ class Finder
     /**
      * Construct a new finder.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
+     * @param  \Illuminate\Filesystem\Filesystem    $files
+     * @param  array                                $config
      */
     public function __construct(Filesystem $files, array $config)
     {
@@ -96,7 +96,7 @@ class Finder
      * Add a new path to finder.
      *
      * @param  string   $path
-     * @return PublisherServiceProvider
+     * @return Finder
      */
     public function addPath($path)
     {
@@ -156,13 +156,9 @@ class Finder
         // instead of allowing the application to run with a buggy config.
         if (is_null($jsonable)) {
             throw new ManifestRuntimeException("Cannot decode file [{$manifest}]");
-        } else {
-            $jsonable = new Fluent($jsonable);
         }
 
-        if (isset($jsonable->path)) {
-            $path = $jsonable->path;
-        }
+        isset($jsonable['path']) && $path = $jsonable['path'];
 
         $paths = array(
             'path'        => rtrim($path, '/'),
@@ -182,16 +178,16 @@ class Finder
      * to migrate, load service provider as well as preload some
      * configuration.
      *
-     * @param  \Illuminate\Support\Fluent  $jsonable
+     * @param  array    $jsonable
      * @return array
      */
-    protected function generateManifestConfig(Fluent $jsonable)
+    protected function generateManifestConfig(array $jsonable)
     {
         $manifest = array();
 
         // Assign extension manifest option or provide the default value.
         foreach ($this->manifestOptions as $key => $default) {
-            $manifest["{$key}"] = (isset($jsonable->{$key}) ? $jsonable->{$key} : $default);
+            $manifest["{$key}"] = array_get($jsonable, $key, $default);
         }
 
         return $manifest;

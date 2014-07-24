@@ -4,6 +4,7 @@ use Illuminate\Container\Container;
 use Orchestra\Extension\Contracts\DebuggerInterface;
 use Orchestra\Extension\Contracts\DispatcherInterface;
 use Orchestra\Memory\Abstractable\Container as AbstractableContainer;
+use Orchestra\Support\Str;
 
 class Environment extends AbstractableContainer
 {
@@ -307,7 +308,7 @@ class Environment extends AbstractableContainer
         $targetPath = "{$publicPath}/packages/{$name}";
         $isWritable = false;
 
-        if (str_contains($name, '/') && ! $files->isDirectory($targetPath)) {
+        if (Str::contains($name, '/') && ! $files->isDirectory($targetPath)) {
             list($vendor) = explode('/', $name);
             $targetPath   = "{$publicPath}/packages/{$vendor}";
             $isWritable   = $files->isWritable($targetPath);

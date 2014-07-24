@@ -89,7 +89,7 @@ class RouteGenerator
 
         if (is_null($pattern) && $forceBase === true) {
             $pattern = $this->baseUrl;
-        } elseif (str_contains($pattern, '{{domain}}')) {
+        } elseif (Str::contains($pattern, '{{domain}}')) {
             $pattern = str_replace('{{domain}}', $this->baseUrl, $pattern);
         }
 

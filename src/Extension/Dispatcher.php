@@ -4,6 +4,7 @@ use Illuminate\Config\Repository;
 use Illuminate\Events\Dispatcher as EventDispatcher;
 use Illuminate\Filesystem\Filesystem;
 use Orchestra\Extension\Contracts\DispatcherInterface;
+use Orchestra\Support\Str;
 
 class Dispatcher implements DispatcherInterface
 {
@@ -130,7 +131,7 @@ class Dispatcher implements DispatcherInterface
         $autoload = array_get($options, 'autoload', array());
 
         $generatePath = function ($path) use ($base) {
-            if (str_contains($path, '::')) {
+            if (Str::contains($path, '::')) {
                 return $path;
             }
 

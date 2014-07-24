@@ -3,6 +3,7 @@
 use Illuminate\Config\Repository;
 use Illuminate\Events\Dispatcher as EventDispatcher;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 use Orchestra\Extension\Contracts\DispatcherInterface;
 use Orchestra\Support\Str;
 
@@ -82,7 +83,7 @@ class Dispatcher implements DispatcherInterface
      */
     public function register($name, array $options)
     {
-        $handles = array_get($options, 'config.handles');
+        $handles = Arr::get($options, 'config.handles');
 
         // Set the handles to orchestra/extension package config (if available).
         if (! is_null($handles)) {
@@ -92,7 +93,7 @@ class Dispatcher implements DispatcherInterface
         // Get available service providers from orchestra.json and register
         // it to Laravel. In this case all service provider would be eager
         // loaded since the application would require it from any action.
-        $services = array_get($options, 'provide', array());
+        $services = Arr::get($options, 'provide', array());
         ! empty($services) && $this->provider->provides($services);
 
         // Register the extension so we can boot it later, this action is
@@ -128,7 +129,7 @@ class Dispatcher implements DispatcherInterface
         $finder   = $this->finder;
         $base     = rtrim($options['path'], '/');
         $source   = rtrim(array_get($options, 'source-path', $base), '/');
-        $autoload = array_get($options, 'autoload', array());
+        $autoload = Arr::get($options, 'autoload', array());
 
         $generatePath = function ($path) use ($base) {
             if (Str::contains($path, '::')) {

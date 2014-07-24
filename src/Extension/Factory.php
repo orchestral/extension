@@ -1,6 +1,7 @@
 <?php namespace Orchestra\Extension;
 
 use Illuminate\Container\Container;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Orchestra\Extension\Contracts\DebuggerInterface;
 use Orchestra\Extension\Contracts\DispatcherInterface;
@@ -101,7 +102,7 @@ class Factory implements FactoryInterface
             return value($default);
         }
 
-        return array_get($this->extensions[$name], $option, $default);
+        return Arr::get($this->extensions[$name], $option, $default);
     }
 
     /**

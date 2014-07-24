@@ -25,14 +25,14 @@ class Factory implements FactoryInterface
     /**
      * Dispatcher instance.
      *
-     * @var Dispatcher
+     * @var \Orchestra\Extension\Contracts\DispatcherInterface
      */
     protected $dispatcher;
 
     /**
      * Debugger (safe mode) instance.
      *
-     * @var Debugger
+     * @var \Orchestra\Extension\Contracts\DebuggerInterface
      */
     protected $debugger;
 
@@ -46,16 +46,16 @@ class Factory implements FactoryInterface
     /**
      * List of extensions.
      *
-     * @var array
+     * @var \Illuminate\Support\Collection
      */
-    protected $extensions = array();
+    protected $extensions;
 
     /**
      * Construct a new Application instance.
      *
-     * @param  \Illuminate\Container\Container $app
-     * @param  Contracts\DispatcherInterface   $dispatcher
-     * @param  Contracts\DebuggerInterface     $debugger
+     * @param  \Illuminate\Container\Container                      $app
+     * @param  \Orchestra\Extension\Contracts\DispatcherInterface   $dispatcher
+     * @param  \Orchestra\Extension\Contracts\DebuggerInterface     $debugger
      */
     public function __construct(Container $app, DispatcherInterface $dispatcher, DebuggerInterface $debugger)
     {
@@ -170,15 +170,13 @@ class Factory implements FactoryInterface
         $files      = $this->app['files'];
         $publicPath = $this->app['path.public'];
         $targetPath = "{$publicPath}/packages/{$name}";
-        $isWritable = false;
 
         if (Str::contains($name, '/') && ! $files->isDirectory($targetPath)) {
             list($vendor) = explode('/', $name);
             $targetPath   = "{$publicPath}/packages/{$vendor}";
-            $isWritable   = $files->isWritable($targetPath);
-        } else {
-            $isWritable = $files->isWritable($targetPath);
         }
+
+        $isWritable = $files->isWritable($targetPath);
 
         if ($files->isDirectory($path) && ! $isWritable) {
             return false;

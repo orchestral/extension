@@ -1,6 +1,9 @@
 <?php namespace Orchestra\Extension;
 
 use Illuminate\Support\ServiceProvider;
+use Orchestra\Extension\Console\MigrateCommand;
+use Orchestra\Extension\Console\PublishCommand;
+use Orchestra\Extension\Console\ResetCommand;
 
 class CommandServiceProvider extends ServiceProvider
 {
@@ -76,7 +79,7 @@ class CommandServiceProvider extends ServiceProvider
     protected function registerMigrateCommand()
     {
         $this->app->bindShared('orchestra.commands.extension.migrate', function () {
-            return new Console\MigrateCommand;
+            return new MigrateCommand;
         });
 
         $this->commands('orchestra.commands.extension.migrate');
@@ -90,7 +93,7 @@ class CommandServiceProvider extends ServiceProvider
     protected function registerPublishCommand()
     {
         $this->app->bindShared('orchestra.commands.extension.publish', function () {
-            return new Console\PublishCommand;
+            return new PublishCommand;
         });
 
         $this->commands('orchestra.commands.extension.publish');
@@ -104,7 +107,7 @@ class CommandServiceProvider extends ServiceProvider
     protected function registerResetCommand()
     {
         $this->app->bindShared('orchestra.commands.extension.reset', function () {
-            return new Console\ResetCommand;
+            return new ResetCommand;
         });
 
         $this->commands('orchestra.commands.extension.reset');

@@ -1,7 +1,11 @@
 <?php namespace Orchestra\Extension\Console;
 
+use Illuminate\Console\ConfirmableTrait;
+
 class PublishCommand extends ExtensionCommand
 {
+    use ConfirmableTrait;
+
     /**
      * The console command name.
      *
@@ -21,6 +25,10 @@ class PublishCommand extends ExtensionCommand
      */
     public function fire()
     {
+        if (! $this->confirmToProceed()) {
+            return null;
+        }
+
         $name = $this->argument('name');
 
         $this->laravel['orchestra.extension']->publish($name);

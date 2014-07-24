@@ -8,6 +8,7 @@ use Orchestra\Extension\Contracts\FactoryInterface;
 use Orchestra\Extension\Traits\DispatchableTrait;
 use Orchestra\Extension\Traits\OperationTrait;
 use Orchestra\Memory\ContainerTrait;
+use Orchestra\Support\Str;
 
 class Factory implements FactoryInterface
 {
@@ -52,8 +53,8 @@ class Factory implements FactoryInterface
      * Construct a new Application instance.
      *
      * @param  \Illuminate\Container\Container $app
-     * @param  Contracts\Dispatcher            $dispatcher
-     * @param  Contracts\Debugger              $debugger
+     * @param  Contracts\DispatcherInterface   $dispatcher
+     * @param  Contracts\DebuggerInterface     $debugger
      */
     public function __construct(Container $app, DispatcherInterface $dispatcher, DebuggerInterface $debugger)
     {
@@ -170,7 +171,7 @@ class Factory implements FactoryInterface
         $targetPath = "{$publicPath}/packages/{$name}";
         $isWritable = false;
 
-        if (str_contains($name, '/') && ! $files->isDirectory($targetPath)) {
+        if (Str::contains($name, '/') && ! $files->isDirectory($targetPath)) {
             list($vendor) = explode('/', $name);
             $targetPath   = "{$publicPath}/packages/{$vendor}";
             $isWritable   = $files->isWritable($targetPath);

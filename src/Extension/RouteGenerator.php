@@ -1,6 +1,7 @@
 <?php namespace Orchestra\Extension;
 
 use Illuminate\Http\Request;
+use Orchestra\Support\Str;
 
 class RouteGenerator
 {
@@ -62,7 +63,7 @@ class RouteGenerator
         // If the handles doesn't start as "//some.domain.com/foo" we should
         // assume that it doesn't belong to any subdomain, otherwise we
         // need to split the value to "some.domain.com" and "foo".
-        if (is_null($handles) || ! starts_with($handles, '//')) {
+        if (is_null($handles) || ! Str::startsWith($handles, '//')) {
             $this->prefix = $handles;
         } else {
             $handles      = substr($handles, 2);
@@ -112,7 +113,7 @@ class RouteGenerator
 
             empty($pattern) && $pattern = '/';
 
-            if (str_is($pattern, $path)) {
+            if (Str::is($pattern, $path)) {
                 return true;
             }
         }

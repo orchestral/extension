@@ -2,8 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
+use Orchestra\Extension\Contracts\DebuggerInterface;
 
-class Debugger implements Contracts\DebuggerInterface
+class Debugger implements DebuggerInterface
 {
     /**
      * Request instance.

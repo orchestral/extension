@@ -1,9 +1,9 @@
 <?php namespace Orchestra\Extension;
 
 use Illuminate\Container\Container;
-use Orchestra\Memory\Abstractable\Container as AbstractableContainer;
 use Orchestra\Extension\Contracts\DebuggerInterface;
 use Orchestra\Extension\Contracts\DispatcherInterface;
+use Orchestra\Memory\Abstractable\Container as AbstractableContainer;
 
 class Environment extends AbstractableContainer
 {
@@ -150,8 +150,7 @@ class Environment extends AbstractableContainer
      */
     public function activated($name)
     {
-        $memory = $this->memory;
-        return (is_array($memory->get("extensions.active.{$name}")));
+        return (is_array($this->memory->get("extensions.active.{$name}")));
     }
 
     /**
@@ -162,8 +161,7 @@ class Environment extends AbstractableContainer
      */
     public function available($name)
     {
-        $memory = $this->memory;
-        return (is_array($memory->get("extensions.available.{$name}")));
+        return (is_array($this->memory->get("extensions.available.{$name}")));
     }
 
     /**

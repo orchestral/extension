@@ -113,7 +113,6 @@ class Finder
      * Detect available extensions.
      *
      * @return array
-     * @throws \RuntimeException
      */
     public function detect()
     {
@@ -201,6 +200,7 @@ class Finder
      * @param  string   $manifest
      * @param  string   $path
      * @return string
+     * @throws \RuntimeException
      */
     public function guessExtensionNameFromManifest($manifest, $path)
     {

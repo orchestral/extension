@@ -1,7 +1,11 @@
 <?php namespace Orchestra\Extension\Console;
 
+use Illuminate\Console\ConfirmableTrait;
+
 class DeactivateCommand extends ExtensionCommand
 {
+    use ConfirmableTrait;
+
     /**
      * The console command name.
      *
@@ -21,6 +25,10 @@ class DeactivateCommand extends ExtensionCommand
      */
     public function fire()
     {
+        if (! $this->confirmToProceed()) {
+            return null;
+        }
+
         $name = $this->argument('name');
 
         $deactivated = $this->laravel['orchestra.extension']->deactivate($name);

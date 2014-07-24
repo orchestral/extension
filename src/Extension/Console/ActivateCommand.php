@@ -1,7 +1,11 @@
 <?php namespace Orchestra\Extension\Console;
 
+use Illuminate\Console\ConfirmableTrait;
+
 class ActivateCommand extends ExtensionCommand
 {
+    use ConfirmableTrait;
+
     /**
      * The console command name.
      *
@@ -21,6 +25,10 @@ class ActivateCommand extends ExtensionCommand
      */
     public function fire()
     {
+        if (! $this->confirmToProceed()) {
+            return null;
+        }
+
         $name = $this->argument('name');
 
         $activated = $this->laravel['orchestra.extension']->activate($name);

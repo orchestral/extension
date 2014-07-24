@@ -46,9 +46,9 @@ class Environment extends AbstractableContainer
     /**
      * Construct a new Application instance.
      *
-     * @param  \Illuminate\Container\Container $app
-     * @param  Contracts\Dispatcher            $dispatcher
-     * @param  Contracts\Debugger              $debugger
+     * @param  \Illuminate\Container\Container                      $app
+     * @param  \Orchestra\Extension\Contracts\DispatcherInterface   $dispatcher
+     * @param  \Orchestra\Extension\Contracts\DebuggerInterface     $debugger
      */
     public function __construct(Container $app, DispatcherInterface $dispatcher, DebuggerInterface $debugger)
     {

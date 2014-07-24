@@ -170,15 +170,13 @@ class Factory implements FactoryInterface
         $files      = $this->app['files'];
         $publicPath = $this->app['path.public'];
         $targetPath = "{$publicPath}/packages/{$name}";
-        $isWritable = false;
 
         if (Str::contains($name, '/') && ! $files->isDirectory($targetPath)) {
             list($vendor) = explode('/', $name);
             $targetPath   = "{$publicPath}/packages/{$vendor}";
-            $isWritable   = $files->isWritable($targetPath);
-        } else {
-            $isWritable = $files->isWritable($targetPath);
         }
+
+        $isWritable = $files->isWritable($targetPath);
 
         if ($files->isDirectory($path) && ! $isWritable) {
             return false;

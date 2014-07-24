@@ -50,6 +50,7 @@ class Finder
      * @var array
      */
     protected $reserved = array(
+        'app',
         'orchestra',
         'resources',
         'orchestra/asset',
@@ -203,18 +204,18 @@ class Finder
      */
     public function guessExtensionNameFromManifest($manifest, $path)
     {
-        list($vendor, $package) = $this->resolveExtensionNamespace($manifest);
-        $name = null;
-
-        // Each package should have vendor/package name pattern,
-        // except when we deal with app.
         if (rtrim($this->config['path.app'], '/') === rtrim($path, '/')) {
-            $name = 'app';
-        } elseif (! is_null($vendor) && ! is_null($package)) {
-            $name = "{$vendor}/{$package}";
-        } else {
+            return 'app';
+        }
+
+        list($vendor, $package) = $namespace = $this->resolveExtensionNamespace($manifest);
+
+        if (is_null($vendor) && is_null($package)) {
             return null;
         }
+
+        // Each package should have vendor/package name pattern.
+        $name = trim(implode('/', $namespace));
 
         if (in_array($name, $this->reserved)) {
             throw new RuntimeException("Unable to register reserved name [{$name}] as extension.");
@@ -257,9 +258,7 @@ class Finder
 
         // Remove orchestra.json from fragment as we are only interested with
         // the two segment before it.
-        array_pop($fragment);
-
-        if (count($fragment) > 2) {
+        if (array_pop($fragment) == 'orchestra.json') {
             $package = array_pop($fragment);
             $vendor  = array_pop($fragment);
         }

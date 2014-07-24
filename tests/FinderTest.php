@@ -62,7 +62,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
                 ->with('/foo/app/orchestra.json')->andReturn('{"name":"Application"}')
             ->shouldReceive('glob')->once()
                 ->with('/foo/path/vendor/*/*/orchestra.json')
-                ->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json', '/foo/orchestra.json'))
+                ->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json', '/foo/orchestra.js'))
             ->shouldReceive('get')->once()
                 ->with('/foo/path/vendor/laravel/framework/orchestra.json')
                 ->andReturn('{"name":"Laravel Framework","path": "vendor::laravel/framework"}')

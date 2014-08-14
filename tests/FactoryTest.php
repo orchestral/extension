@@ -99,8 +99,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $dispatcher = $this->dispatcher;
 
         $memory   = m::mock('\Orchestra\Memory\Provider');
-        $migrator = m::mock('\Orchestra\Extension\Publisher\MigrateManager')->makePartial();
-        $asset    = m::mock('\Orchestra\Extension\Publisher\AssetManager')->makePartial();
+        $migrator = m::mock('\Orchestra\Publisher\MigrateManager');
+        $asset    = m::mock('\Orchestra\Publisher\AssetManager');
         $events   = m::mock('\Illuminate\Events\Dispatcher');
 
         $app['orchestra.memory'] = $memory;
@@ -108,22 +108,14 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $app['orchestra.publisher.asset'] = $asset;
         $app['events'] = $events;
 
-        $dispatcher->shouldReceive('register')->once()
-                ->with('laravel/framework', m::type('Array'))->andReturnNull();
-        $memory->shouldReceive('get')->once()
+        $dispatcher->shouldReceive('register')->once()->with('laravel/framework', m::type('Array'))->andReturnNull();
+        $memory->shouldReceive('get')->twice()
                 ->with('extensions.available', array())->andReturn(array('laravel/framework' => array()))
-            ->shouldReceive('has')->once()
-                ->with('extensions.available.laravel/framework')->andReturn(true)
-            ->shouldReceive('has')->once()
-                ->with('extensions.available.laravel')->andReturn(false)
-            ->shouldReceive('get')->once()
-                ->with('extensions.active', array())->andReturn(array())
+            ->shouldReceive('get')->twice()->with('extensions.active', array())->andReturn(array())
             ->shouldReceive('put')->once()
                 ->with('extensions.active', array('laravel/framework' => array()))->andReturn(true);
-        $migrator->shouldReceive('extension')->once()
-                ->with('laravel/framework')->andReturn(true);
-        $asset->shouldReceive('extension')->once()
-                ->with('laravel/framework')->andReturn(true);
+        $migrator->shouldReceive('extension')->once()->with('laravel/framework')->andReturn(true);
+        $asset->shouldReceive('extension')->once()->with('laravel/framework')->andReturn(true);
         $events->shouldReceive('fire')->once()
                 ->with('orchestra.publishing', array('laravel/framework'))->andReturn(true)
             ->shouldReceive('fire')->once()

@@ -3,6 +3,7 @@
 use Illuminate\Support\ServiceProvider;
 use Orchestra\Extension\Console\MigrateCommand;
 use Orchestra\Extension\Console\PublishCommand;
+use Orchestra\Extension\Console\RefreshCommand;
 use Orchestra\Extension\Console\ResetCommand;
 
 class CommandServiceProvider extends ServiceProvider
@@ -26,6 +27,7 @@ class CommandServiceProvider extends ServiceProvider
         $this->registerDetectCommand();
         $this->registerMigrateCommand();
         $this->registerPublishCommand();
+        $this->registerRefreshCommand();
         $this->registerResetCommand();
     }
 
@@ -104,6 +106,21 @@ class CommandServiceProvider extends ServiceProvider
      *
      * @return void
      */
+    protected function registerRefreshCommand()
+    {
+        $this->app->bindShared('orchestra.commands.extension.refresh', function () {
+            return new RefreshCommand;
+        });
+
+        $this->commands('orchestra.commands.extension.refresh');
+    }
+
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
     protected function registerResetCommand()
     {
         $this->app->bindShared('orchestra.commands.extension.reset', function () {
@@ -126,6 +143,7 @@ class CommandServiceProvider extends ServiceProvider
             'orchestra.commands.extension.detect',
             'orchestra.commands.extension.migrate',
             'orchestra.commands.extension.publish',
+            'orchestra.commands.extension.refresh',
             'orchestra.commands.extension.reset',
         );
     }

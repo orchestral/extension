@@ -8,6 +8,8 @@ title: Extension Change Log
 ### v2.2.2@dev {#v2-2-2}
 
 * Add confirmation when running `activate`, `deactivate`, `publish` and `reset` command on `"production"` environment.
+* Add `Orchestra\Extension\Factory::refresh()` helper method.
+* Add `php artisan extension:refresh {name}` command.
 
 ### v2.2.1 {#v2-2-1}
 
@@ -19,6 +21,11 @@ title: Extension Change Log
 * Rename `Orchestra\Extension\Environment` to `Orchestra\Extension\Factory`.
 
 ## Version 2.1 {#v2-1}
+
+### v2.1.4 {#v2-1-4}
+
+* Add `Orchestra\Extension\Environment::refresh()` method.
+* Add `php artisan extension:refresh {name}` command.
 
 ### v2.1.3 {#v2-1-3}
 

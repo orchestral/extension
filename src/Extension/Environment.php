@@ -116,38 +116,39 @@ class Environment extends AbstractableContainer
      * Activate an extension.
      *
      * @param  string   $name
-     * @return boolean
+     * @return bool
      */
     public function activate($name)
     {
-        $activated = false;
-        $memory    = $this->memory;
-        $available = $memory->get('extensions.available', array());
-        $active    = $memory->get('extensions.active', array());
+        return $this->activating($name);
+    }
 
-        if (isset($available[$name])) {
-            // Append the activated extension to active extensions, and also
-            // publish the extension (migrate the database and publish the
-            // asset).
-            $this->extensions[$name] = $active[$name] = $available[$name];
-            $this->dispatcher->register($name, $active[$name]);
-            $this->publish($name);
-
-            $memory->put('extensions.active', $active);
-
-            $this->app['events']->fire("orchestra.activating: {$name}", array($name));
-
-            $activated = true;
+    /**
+     * Activating an extension.
+     *
+     * @param  string   $name
+     * @return bool
+     */
+    protected function activating($name)
+    {
+        if (is_null($active = $this->refresh($name))) {
+            return false;
         }
 
-        return $activated;
+        $this->extensions[$name] = $active[$name];
+        $this->dispatcher->register($name, $active[$name]);
+        $this->publish($name);
+
+        $this->app['events']->fire("orchestra.activating: {$name}", array($name));
+
+        return true;
     }
 
     /**
      * Check whether an extension is active.
      *
      * @param  string   $name
-     * @return boolean
+     * @return bool
      */
     public function activated($name)
     {
@@ -158,7 +159,7 @@ class Environment extends AbstractableContainer
      * Check whether an extension is available.
      *
      * @param  string   $name
-     * @return boolean
+     * @return bool
      */
     public function available($name)
     {
@@ -169,7 +170,7 @@ class Environment extends AbstractableContainer
      * Deactivate an extension.
      *
      * @param  string   $name
-     * @return boolean
+     * @return bool
      */
     public function deactivate($name)
     {
@@ -230,7 +231,7 @@ class Environment extends AbstractableContainer
      * Check whether an extension has a writable public asset.
      *
      * @param  string   $name
-     * @return boolean
+     * @return bool
      */
     public function permission($name)
     {
@@ -243,10 +244,36 @@ class Environment extends AbstractableContainer
     }
 
     /**
+     * Refresh extension configuration.
+     *
+     * @param  string   $name
+     * @return array|null
+     */
+    public function refresh($name)
+    {
+        $memory    = $this->memory;
+        $available = $memory->get('extensions.available', array());
+        $active    = $memory->get('extensions.active', array());
+
+        if (! isset($available[$name])) {
+            return null;
+        }
+
+        // Append the activated extension to active extensions, and also
+        // publish the extension (migrate the database and publish the
+        // asset).
+        $active[$name] = $available[$name];
+
+        $memory->put('extensions.active', $active);
+
+        return $active;
+    }
+
+    /**
      * Reset ectension.
      *
      * @param  string   $name
-     * @return boolean
+     * @return bool
      */
     public function reset($name)
     {
@@ -287,7 +314,7 @@ class Environment extends AbstractableContainer
      * Check if extension is started.
      *
      * @param  string   $name
-     * @return boolean
+     * @return bool
      */
     public function started($name)
     {
@@ -299,7 +326,7 @@ class Environment extends AbstractableContainer
      *
      * @param  string   $name
      * @param  string   $path
-     * @return boolean
+     * @return bool
      */
     protected function isWritableWithAsset($name, $path)
     {

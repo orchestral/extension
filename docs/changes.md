@@ -8,6 +8,7 @@ title: Extension Change Log
 ### v2.2.2@dev {#v2-2-2}
 
 * Add confirmation when running `activate`, `deactivate`, `publish` and `reset` command on `"production"` environment.
+* Add `Orchestra\Extension\Factory::refresh()` helper method.
 
 ### v2.2.1 {#v2-2-1}
 

@@ -6,37 +6,28 @@ trait OperationTrait
      * Activate an extension.
      *
      * @param  string   $name
-     * @return boolean
+     * @return bool
      */
     public function activate($name)
     {
-        if ($this->memory->has("extensions.available.{$name}")) {
-            return $this->activating($name);
-        }
-
-        return false;
+        return $this->activating($name);
     }
 
     /**
      * Activating an extension.
      *
      * @param  string   $name
-     * @return boolean
+     * @return bool
      */
     protected function activating($name)
     {
-        $memory    = $this->memory;
-        $available = $memory->get('extensions.available', []);
-        $active    = $memory->get('extensions.active', []);
+        if (is_null($active = $this->refresh($name))) {
+            return false;
+        }
 
-        // Append the activated extension to active extensions, and also
-        // publish the extension (migrate the database and publish the
-        // asset).
-        $this->extensions[$name] = $active[$name] = $available[$name];
+        $this->extensions[$name] = $active[$name];
         $this->dispatcher->register($name, $active[$name]);
         $this->publish($name);
-
-        $memory->put('extensions.active', $active);
 
         $this->app['events']->fire("orchestra.activating: {$name}", [$name]);
 
@@ -47,7 +38,7 @@ trait OperationTrait
      * Check whether an extension is active.
      *
      * @param  string   $name
-     * @return boolean
+     * @return bool
      */
     public function activated($name)
     {
@@ -58,7 +49,7 @@ trait OperationTrait
      * Check whether an extension is available.
      *
      * @param  string   $name
-     * @return boolean
+     * @return bool
      */
     public function available($name)
     {
@@ -69,7 +60,7 @@ trait OperationTrait
      * Deactivate an extension.
      *
      * @param  string   $name
-     * @return boolean
+     * @return bool
      */
     public function deactivate($name)
     {
@@ -95,10 +86,36 @@ trait OperationTrait
     }
 
     /**
+     * Refresh extension configuration.
+     *
+     * @param  string   $name
+     * @return array|null
+     */
+    public function refresh($name)
+    {
+        $memory    = $this->memory;
+        $available = $memory->get('extensions.available', []);
+        $active    = $memory->get('extensions.active', []);
+
+        if (! isset($available[$name])) {
+            return null;
+        }
+
+        // Append the activated extension to active extensions, and also
+        // publish the extension (migrate the database and publish the
+        // asset).
+        $active[$name] = $available[$name];
+
+        $memory->put('extensions.active', $active);
+
+        return $active;
+    }
+
+    /**
      * Reset extension.
      *
      * @param  string   $name
-     * @return boolean
+     * @return bool
      */
     public function reset($name)
     {
@@ -118,7 +135,7 @@ trait OperationTrait
      * Check if extension is started.
      *
      * @param  string   $name
-     * @return boolean
+     * @return bool
      */
     public function started($name)
     {

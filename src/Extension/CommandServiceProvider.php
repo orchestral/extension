@@ -109,8 +109,8 @@ class CommandServiceProvider extends ServiceProvider
     protected function registerRefreshCommand()
     {
         $this->app->bindShared('orchestra.commands.extension.refresh', function () {
-                return new RefreshCommand;
-            });
+            return new RefreshCommand;
+        });
 
         $this->commands('orchestra.commands.extension.refresh');
     }

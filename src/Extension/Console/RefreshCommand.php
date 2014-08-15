@@ -28,7 +28,7 @@ class RefreshCommand extends ExtensionCommand
         if (! $this->confirmToProceed()) {
             return null;
         }
-        
+
         $name = $this->argument('name');
 
         $activated = $this->laravel['orchestra.extension']->refresh($name);

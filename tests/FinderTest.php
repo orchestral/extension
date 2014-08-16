@@ -58,11 +58,15 @@ class FinderTest extends \PHPUnit_Framework_TestCase
 
         $files->shouldReceive('glob')->once()
                 ->with('/foo/app/orchestra.json')->andReturn(array('/foo/app/orchestra.json'))
+            ->shouldReceive('isFile')->once()
+                ->with('/foo/app/orchestra.json')->andReturn(true)
             ->shouldReceive('get')->once()
                 ->with('/foo/app/orchestra.json')->andReturn('{"name":"Application"}')
             ->shouldReceive('glob')->once()
                 ->with('/foo/path/vendor/*/*/orchestra.json')
                 ->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json', '/foo/orchestra.js'))
+            ->shouldReceive('isFile')->once()
+                ->with('/foo/path/vendor/laravel/framework/orchestra.json')->andReturn(true)
             ->shouldReceive('get')->once()
                 ->with('/foo/path/vendor/laravel/framework/orchestra.json')
                 ->andReturn('{"name":"Laravel Framework","path": "vendor::laravel/framework"}')
@@ -116,6 +120,8 @@ class FinderTest extends \PHPUnit_Framework_TestCase
 
         $files->shouldReceive('glob')->once()
                 ->with('/foo/app/orchestra.json')->andReturn(array('/foo/app/orchestra.json'))
+            ->shouldReceive('isFile')->once()
+                ->with('/foo/app/orchestra.json')->andReturn(true)
             ->shouldReceive('get')->once()
                 ->with('/foo/app/orchestra.json')->andReturn('{"name":"Application"}')
             ->shouldReceive('glob')->once()
@@ -139,17 +145,17 @@ class FinderTest extends \PHPUnit_Framework_TestCase
 
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
-        $files->shouldReceive('glob')
-                ->with('/foo/app/orchestra.json')->once()
-                ->andReturn(array())
-            ->shouldReceive('glob')
-                ->with('/foo/path/vendor/*/*/orchestra.json')->once()
+        $files->shouldReceive('glob')->once()
+                ->with('/foo/app/orchestra.json')->andReturn(array())
+            ->shouldReceive('glob')->once()
+                ->with('/foo/path/vendor/*/*/orchestra.json')
                 ->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json'))
-            ->shouldReceive('glob')
-                ->with('/foo/path/workbench/*/*/orchestra.json')->never()
-                ->andReturn(array())
-            ->shouldReceive('get')
-                ->with('/foo/path/vendor/laravel/framework/orchestra.json')->once()
+            ->shouldReceive('glob')->never()
+                ->with('/foo/path/workbench/*/*/orchestra.json')->andReturn(array())
+            ->shouldReceive('isFile')->once()
+                ->with('/foo/path/vendor/laravel/framework/orchestra.json')->andReturn(true)
+            ->shouldReceive('get')->once()
+                ->with('/foo/path/vendor/laravel/framework/orchestra.json')
                 ->andReturn('{"name":"Laravel Framework}');
 
         with(new Finder($files, $config))->detect();
@@ -199,6 +205,44 @@ class FinderTest extends \PHPUnit_Framework_TestCase
 
         $stub = new Finder(m::mock('\Illuminate\Filesystem\Filesystem'), $config);
         $this->assertEquals($expected, $stub->resolveExtensionPath($output));
+    }
+
+    /**
+     * Test  Orchestra\Extension\Finder::registerExtension() method.
+     */
+    public function testRegisterExtensionMethod()
+    {
+        $config['path.app'] = '/foo/app';
+        $config['path.base'] = '/foo/path';
+
+        $files = m::mock('\Illuminate\Filesystem\Filesystem');
+
+        $files->shouldReceive('isFile')->once()->with('/foo/path/modules/orchestra.json')->andReturn(true);
+
+        $stub = m::mock('\Orchestra\Extension\Finder[getManifestContents]', array($files, $config))
+                    ->shouldAllowMockingProtectedMethods();
+
+        $stub->shouldReceive('getManifestContents')->once()->with('/foo/path/modules/orchestra.json')->andReturnNull();
+
+        $this->assertTrue($stub->registerExtension('hello', '/foo/path/modules/'));
+    }
+
+    /**
+     * Test Orchestra\Extension\Finder::registerExtension() method
+     * when manifest file doesn't exist.
+     */
+    public function testRegisterExtensionMethodWhenManifestDoesNotExist()
+    {
+        $config['path.app'] = '/foo/app';
+        $config['path.base'] = '/foo/path';
+
+        $files = m::mock('\Illuminate\Filesystem\Filesystem');
+
+        $files->shouldReceive('isFile')->once()->with('/foo/path/modules/orchestra.json')->andReturn(false);
+
+        $stub = new Finder($files, $config);
+
+        $this->assertFalse($stub->registerExtension('hello', '/foo/path/modules/'));
     }
 
     /**

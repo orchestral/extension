@@ -318,6 +318,27 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test Orchestra\Extension\Factory::register() method.
+     *
+     * @test
+     */
+    public function testRegisterMethod()
+    {
+        $app    = $this->app;
+        $finder = m::mock('\Orchestra\Extension\Finder');
+        $memory = m::mock('\Orchestra\Memory\Provider');
+
+        $app['orchestra.extension.finder'] = $finder;
+        $app['orchestra.memory'] = $memory;
+
+        $stub = new Factory($app, $this->dispatcher, $this->debugger);
+
+        $finder->shouldReceive('registerExtension')->once()->with('hello', '/path/hello')->andReturn(true);
+
+        $this->assertTrue($stub->register('hello', '/path/hello'));
+    }
+
+    /**
      * Test Orchestra\Extension\Factory::reset() method.
      *
      * @test

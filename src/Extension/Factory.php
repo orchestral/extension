@@ -137,6 +137,18 @@ class Factory implements FactoryInterface
     }
 
     /**
+     * Register an extension.
+     *
+     * @param  string   $name
+     * @param  string   $path
+     * @return bool
+     */
+    public function register($name, $path)
+    {
+        return $this->finder()->registerExtension($name, $path);
+    }
+
+    /**
      * Get extension route handle.
      *
      * @param  string   $name

@@ -1,5 +1,6 @@
 <?php namespace Orchestra\Extension;
 
+use Orchestra\Support\Str;
 use RuntimeException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
@@ -19,6 +20,13 @@ class Finder
      * @var array
      */
     protected $config = array();
+
+    /**
+     * Extension lists.
+     *
+     * @var \Illuminate\Support\Collection|array
+     */
+    protected $extensions = array();
 
     /**
      * List of paths.
@@ -49,7 +57,6 @@ class Finder
      * @var array
      */
     protected $reserved = array(
-        'app',
         'orchestra',
         'resources',
         'orchestra/asset',
@@ -79,8 +86,9 @@ class Finder
      */
     public function __construct(Filesystem $files, array $config)
     {
-        $this->files  = $files;
-        $this->config = $config;
+        $this->files      = $files;
+        $this->config     = $config;
+        $this->extensions = new Collection($this->extensions);
 
         $app  = rtrim($config['path.app'], '/');
         $base = rtrim($config['path.base'], '/');
@@ -116,8 +124,6 @@ class Finder
      */
     public function detect()
     {
-        $extensions = array();
-
         // Loop each path to check if there orchestra.json available within
         // the paths. We would only treat packages that include orchestra.json
         // as an Orchestra Platform extension.
@@ -132,12 +138,12 @@ class Finder
                 $name = $this->guessExtensionNameFromManifest($manifest, $path);
 
                 if (! is_null($name)) {
-                    $extensions[$name] = $this->getManifestContents($manifest);
+                    $this->registerExtension($name, $manifest);
                 }
             }
         }
 
-        return new Collection($extensions);
+        return $this->extensions;
     }
 
     /**
@@ -217,11 +223,7 @@ class Finder
         // Each package should have vendor/package name pattern.
         $name = trim(implode('/', $namespace));
 
-        if (in_array($name, $this->reserved)) {
-            throw new RuntimeException("Unable to register reserved name [{$name}] as extension.");
-        }
-
-        return $name;
+        return $this->validateExtensionName($name);
     }
 
     /**
@@ -241,6 +243,28 @@ class Finder
             array('app::', 'vendor::', 'workbench::', 'base::'),
             $path
         );
+    }
+
+    /**
+     * Register the extension.
+     *
+     * @param  string   $name
+     * @param  string   $manifest
+     * @return bool
+     */
+    public function registerExtension($name, $manifest)
+    {
+        if (! Str::endsWith($manifest, 'orchestra.json')) {
+            $manifest = rtrim($manifest, '/').'/orchestra.json';
+        }
+
+        if (! $this->files->isFile($manifest)) {
+            return false;
+        }
+
+        $this->extensions[$name] = $this->getManifestContents($manifest);
+
+        return true;
     }
 
     /**
@@ -282,5 +306,21 @@ class Finder
             array("{$app}/", "{$base}/vendor/", "{$base}/workbench/", "{$base}/"),
             $path
         );
+    }
+
+    /**
+     * Validate extension name.
+     *
+     * @param  string   $name
+     * @return string
+     * @throws \RuntimeException
+     */
+    public function validateExtensionName($name)
+    {
+        if (in_array($name, $this->reserved)) {
+            throw new RuntimeException("Unable to register reserved name [{$name}] as extension.");
+        }
+
+        return $name;
     }
 }

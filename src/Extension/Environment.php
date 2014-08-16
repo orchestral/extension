@@ -244,6 +244,18 @@ class Environment extends AbstractableContainer
     }
 
     /**
+     * Register an extension.
+     *
+     * @param  string   $name
+     * @param  string   $path
+     * @return bool
+     */
+    public function register($name, $path)
+    {
+        return $this->app['orchestra.extension.finder']->registerExtension($name, $path);
+    }
+
+    /**
      * Refresh extension configuration.
      *
      * @param  string   $name

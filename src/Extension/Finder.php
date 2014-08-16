@@ -61,6 +61,7 @@ class Finder
         'orchestra/html',
         'orchestra/memory',
         'orchestra/model',
+        'orchestra/notifier',
         'orchestra/optimize',
         'orchestra/platform',
         'orchestra/resources',

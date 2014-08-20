@@ -1,6 +1,5 @@
 <?php namespace Orchestra\Extension;
 
-use Orchestra\Support\Str;
 use RuntimeException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
@@ -129,7 +128,7 @@ class Finder
         // Loop each path to check if there orchestra.json available within
         // the paths. We would only treat packages that include orchestra.json
         // as an Orchestra Platform extension.
-        foreach ($this->paths as $path) {
+        foreach ($this->paths as $key => $path) {
             $manifests = $this->files->glob("{$path}orchestra.json");
 
             // glob() method might return false if there an errors, convert
@@ -137,10 +136,10 @@ class Finder
             is_array($manifests) || $manifests = array();
 
             foreach ($manifests as $manifest) {
-                $name = $this->guessExtensionNameFromManifest($manifest, $path);
+                $name = (is_numeric($key) ? $this->guessExtensionNameFromManifest($manifest, $path) : $key);
 
                 if (! is_null($name)) {
-                    $this->registerExtension($name, $manifest);
+                    $this->extensions[$name] = $this->getManifestContents($manifest);
                 }
             }
         }
@@ -251,20 +250,12 @@ class Finder
      * Register the extension.
      *
      * @param  string   $name
-     * @param  string   $manifest
+     * @param  string   $path
      * @return bool
      */
-    public function registerExtension($name, $manifest)
+    public function registerExtension($name, $path)
     {
-        if (! Str::endsWith($manifest, 'orchestra.json')) {
-            $manifest = rtrim($manifest, '/').'/orchestra.json';
-        }
-
-        if (! $this->files->isFile($manifest)) {
-            return false;
-        }
-
-        $this->extensions[$name] = $this->getManifestContents($manifest);
+        $this->paths[$name] = rtrim($path, '/');
 
         return true;
     }

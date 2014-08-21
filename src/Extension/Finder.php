@@ -22,13 +22,6 @@ class Finder
     protected $config = array();
 
     /**
-     * Extension lists.
-     *
-     * @var \Illuminate\Support\Collection|array
-     */
-    protected $extensions = array();
-
-    /**
      * List of paths.
      *
      * @var array
@@ -87,9 +80,8 @@ class Finder
      */
     public function __construct(Filesystem $files, array $config)
     {
-        $this->files      = $files;
-        $this->config     = $config;
-        $this->extensions = new Collection($this->extensions);
+        $this->files  = $files;
+        $this->config = $config;
 
         $app  = rtrim($config['path.app'], '/');
         $base = rtrim($config['path.base'], '/');
@@ -125,6 +117,8 @@ class Finder
      */
     public function detect()
     {
+        $extensions = array();
+
         // Loop each path to check if there orchestra.json available within
         // the paths. We would only treat packages that include orchestra.json
         // as an Orchestra Platform extension.
@@ -139,12 +133,12 @@ class Finder
                 $name = (is_numeric($key) ? $this->guessExtensionNameFromManifest($manifest, $path) : $key);
 
                 if (! is_null($name)) {
-                    $this->extensions[$name] = $this->getManifestContents($manifest);
+                    $extensions[$name] = $this->getManifestContents($manifest);
                 }
             }
         }
 
-        return $this->extensions;
+        return new Collection($extensions);
     }
 
     /**

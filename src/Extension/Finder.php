@@ -121,7 +121,7 @@ class Finder
         // the paths. We would only treat packages that include orchestra.json
         // as an Orchestra Platform extension.
         foreach ($this->paths as $key => $path) {
-            $manifests = $this->files->glob("{$path}orchestra.json");
+            $manifests = $this->files->glob($this->resolveExtensionPath("{$path}orchestra.json"));
 
             // glob() method might return false if there an errors, convert
             // the result to an array.

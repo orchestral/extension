@@ -222,14 +222,17 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testDetectMethod()
     {
         $app    = $this->app;
+        $events = m::mock('\Illuminate\Events\Dispatcher');
         $finder = m::mock('\Orchestra\Extension\Finder');
         $memory = m::mock('\Orchestra\Memory\Provider');
 
+        $app['events'] = $events;
         $app['orchestra.extension.finder'] = $finder;
         $app['orchestra.memory'] = $memory;
 
         $extensions = new Collection(array('foo'));
 
+        $events->shouldReceive('fire')->once()->with('orchestra.extension: detecting')->andReturnNull();
         $finder->shouldReceive('detect')->once()->andReturn($extensions);
         $memory->shouldReceive('put')->once()->with('extensions.available', array('foo'))->andReturn('foobar');
 

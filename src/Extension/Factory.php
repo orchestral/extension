@@ -72,6 +72,8 @@ class Factory implements FactoryInterface
      */
     public function detect()
     {
+        $this->app['events']->fire('orchestra.extension: detecting');
+
         $extensions = $this->finder()->detect();
         $this->memory->put('extensions.available', $extensions->all());
 

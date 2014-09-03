@@ -21,7 +21,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     protected function getProvider()
     {
         return m::mock('\Orchestra\Extension\ProviderRepository', array(
-            m::mock('\Illuminate\Foundation\Application')
+            m::mock('\Illuminate\Contracts\Foundation\Application')
         ));
     }
 
@@ -33,8 +33,8 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     public function testStartMethod()
     {
         $provider = $this->getProvider();
-        $config   = m::mock('\Illuminate\Config\Repository');
-        $event    = m::mock('\Illuminate\Events\Dispatcher');
+        $config   = m::mock('\Illuminate\Contracts\Config\Config');
+        $event    = m::mock('\Illuminate\Contracts\Events\Dispatcher');
         $files    = m::mock('\Illuminate\Filesystem\Filesystem');
         $finder   = m::mock('\Orchestra\Extension\Finder');
 
@@ -107,8 +107,8 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function testFinishMethod()
     {
-        $config   = m::mock('\Illuminate\Config\Repository');
-        $event    = m::mock('\Illuminate\Events\Dispatcher');
+        $config   = m::mock('\Illuminate\Contracts\Config\Config');
+        $event    = m::mock('\Illuminate\Contracts\Events\Dispatcher');
         $files    = m::mock('\Illuminate\Filesystem\Filesystem');
         $finder   = m::mock('\Orchestra\Extension\Finder');
 

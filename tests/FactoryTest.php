@@ -101,7 +101,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $memory   = m::mock('\Orchestra\Memory\Provider');
         $migrator = m::mock('\Orchestra\Publisher\MigrateManager');
         $asset    = m::mock('\Orchestra\Publisher\AssetManager');
-        $events   = m::mock('\Illuminate\Events\Dispatcher');
+        $events   = m::mock('\Illuminate\Contracts\Events\Dispatcher');
 
         $app['orchestra.memory'] = $memory;
         $app['orchestra.publisher.migrate'] = $migrator;
@@ -157,7 +157,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $app = $this->app;
         $app['orchestra.memory'] = $memory = m::mock('\Orchestra\Memory\Provider');
-        $app['events'] = $events = m::mock('\Illuminate\Events\Dispatcher[fire]');
+        $app['events'] = $events = m::mock('\Illuminate\Contracts\Events\Dispatcher[fire]');
 
         $memory->shouldReceive('get')->twice()
                 ->with('extensions.active', array())
@@ -222,7 +222,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testDetectMethod()
     {
         $app    = $this->app;
-        $events = m::mock('\Illuminate\Events\Dispatcher');
+        $events = m::mock('\Illuminate\Contracts\Events\Dispatcher');
         $finder = m::mock('\Orchestra\Extension\Finder');
         $memory = m::mock('\Orchestra\Memory\Provider');
 
@@ -379,7 +379,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $dispatcher = $this->dispatcher;
         $debugger   = $this->debugger;
         $memory     = m::mock('\Orchestra\Memory\Provider');
-        $config     = m::mock('\Illuminate\Config\Repository');
+        $config     = m::mock('\Illuminate\Contracts\Config\Config');
         $request    = m::mock('\Illuminate\Http\Request');
 
         $app['orchestra.memory'] = $memory;

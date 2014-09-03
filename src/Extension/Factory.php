@@ -1,6 +1,6 @@
 <?php namespace Orchestra\Extension;
 
-use Illuminate\Container\Container;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Orchestra\Extension\Contracts\DebuggerInterface;
@@ -18,7 +18,7 @@ class Factory implements FactoryInterface
     /**
      * Application instance.
      *
-     * @var \Illuminate\Container\Container
+     * @var \Illuminate\Contracts\Container\Container
      */
     protected $app;
 
@@ -53,7 +53,7 @@ class Factory implements FactoryInterface
     /**
      * Construct a new Application instance.
      *
-     * @param  \Illuminate\Container\Container                      $app
+     * @param  \Illuminate\Contracts\Container\Container            $app
      * @param  \Orchestra\Extension\Contracts\DispatcherInterface   $dispatcher
      * @param  \Orchestra\Extension\Contracts\DebuggerInterface     $debugger
      */

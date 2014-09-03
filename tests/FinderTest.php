@@ -1,7 +1,6 @@
 <?php namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
-use Illuminate\Container\Container;
 use Illuminate\Support\Collection;
 use Orchestra\Extension\Finder;
 

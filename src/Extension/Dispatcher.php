@@ -1,7 +1,7 @@
 <?php namespace Orchestra\Extension;
 
-use Illuminate\Config\Repository;
-use Illuminate\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\Config\Config;
+use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
 use Orchestra\Extension\Contracts\DispatcherInterface;
@@ -12,14 +12,14 @@ class Dispatcher implements DispatcherInterface
     /**
      * Config Repository instance.
      *
-     * @var \Illuminate\Config\Repository
+     * @var \Illuminate\Contracts\Config\Config
      */
     protected $config;
 
     /**
      * Filesystem instance.
      *
-     * @var \Illuminate\Events\Dispatcher
+     * @var \Illuminate\Contracts\Events\Dispatcher
      */
     protected $dispatcher;
 
@@ -54,14 +54,14 @@ class Dispatcher implements DispatcherInterface
     /**
      * Construct a new Application instance.
      *
-     * @param  \Illuminate\Config\Repository        $config
-     * @param  \Illuminate\Events\Dispatcher        $dispatcher
-     * @param  \Illuminate\Filesystem\Filesystem    $files
-     * @param  Finder                               $finder
-     * @param  ProviderRepository                   $provider
+     * @param  \Illuminate\Contracts\Config\Config      $config
+     * @param  \Illuminate\Contracts\Events\Dispatcher  $dispatcher
+     * @param  \Illuminate\Filesystem\Filesystem        $files
+     * @param  Finder                                   $finder
+     * @param  ProviderRepository                       $provider
      */
     public function __construct(
-        Repository $config,
+        Config $config,
         EventDispatcher $dispatcher,
         Filesystem $files,
         Finder $finder,

@@ -37,8 +37,6 @@ class ProviderRepository
     public function provides(array $services)
     {
         foreach ($services as $service) {
-            // Register service provider as a service for
-            // Illuminate\Foundation\Application.
             $this->app->register($service);
 
             $this->services[] = $service;

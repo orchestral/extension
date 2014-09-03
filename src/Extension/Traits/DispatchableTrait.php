@@ -8,7 +8,7 @@ trait DispatchableTrait
     /**
      * Boot active extensions.
      *
-     * @return \Orchestra\Extension\Factory
+     * @return $this
      */
     public function boot()
     {
@@ -34,7 +34,7 @@ trait DispatchableTrait
     /**
      * Shutdown all extensions.
      *
-     * @return \Orchestra\Extension\Factory
+     * @return $this
      */
     public function finish()
     {

@@ -1,6 +1,8 @@
 <?php namespace Orchestra\Extension;
 
 use Illuminate\Support\ServiceProvider;
+use Orchestra\Extension\Console\ActivateCommand;
+use Orchestra\Extension\Console\DeactivateCommand;
 use Orchestra\Extension\Console\MigrateCommand;
 use Orchestra\Extension\Console\PublishCommand;
 use Orchestra\Extension\Console\RefreshCommand;
@@ -39,7 +41,7 @@ class CommandServiceProvider extends ServiceProvider
     protected function registerActivateCommand()
     {
         $this->app->bindShared('orchestra.commands.extension.activate', function () {
-            return new Console\ActivateCommand;
+            return new ActivateCommand;
         });
 
         $this->commands('orchestra.commands.extension.activate');
@@ -53,7 +55,7 @@ class CommandServiceProvider extends ServiceProvider
     protected function registerDeactivateCommand()
     {
         $this->app->bindShared('orchestra.commands.extension.deactivate', function () {
-            return new Console\DeactivateCommand;
+            return new DeactivateCommand;
         });
 
         $this->commands('orchestra.commands.extension.deactivate');

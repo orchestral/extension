@@ -128,7 +128,7 @@ class Dispatcher implements DispatcherInterface
         $file     = $this->files;
         $finder   = $this->finder;
         $base     = rtrim($options['path'], '/');
-        $source   = rtrim(array_get($options, 'source-path', $base), '/');
+        $source   = rtrim(Arr::get($options, 'source-path', $base), '/');
         $autoload = Arr::get($options, 'autoload', array());
 
         $generatePath = function ($path) use ($base) {

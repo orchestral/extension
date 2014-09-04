@@ -89,9 +89,9 @@ class Finder
         // In most cases we would only need to concern with the following
         // path; application folder, vendor folders and workbench folders.
         $this->paths = array(
-            "{$app}/",
-            "{$base}/vendor/*/*/",
-            "{$base}/workbench/*/*/"
+            "{$app}",
+            "{$base}/vendor/*/*",
+            "{$base}/workbench/*/*"
         );
     }
 
@@ -103,6 +103,8 @@ class Finder
      */
     public function addPath($path)
     {
+        $path = rtrim($path, '/');
+
         if (! in_array($path, $this->paths)) {
             $this->paths[] = $path;
         }
@@ -123,7 +125,7 @@ class Finder
         // the paths. We would only treat packages that include orchestra.json
         // as an Orchestra Platform extension.
         foreach ($this->paths as $key => $path) {
-            $manifests = $this->files->glob($this->resolveExtensionPath("{$path}orchestra.json"));
+            $manifests = $this->files->glob($this->resolveExtensionPath("{$path}/orchestra.json"));
 
             // glob() method might return false if there an errors, convert
             // the result to an array.

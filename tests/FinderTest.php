@@ -32,14 +32,14 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $paths->setAccessible(true);
 
         $this->assertEquals(
-            array('/foo/app/', '/foo/path/vendor/*/*/', '/foo/path/workbench/*/*/'),
+            array('/foo/app', '/foo/path/vendor/*/*', '/foo/path/workbench/*/*'),
             $paths->getValue($stub)
         );
 
         $stub->addPath('/foo/public');
 
         $this->assertEquals(
-            array('/foo/app/', '/foo/path/vendor/*/*/', '/foo/path/workbench/*/*/', '/foo/public'),
+            array('/foo/app', '/foo/path/vendor/*/*', '/foo/path/workbench/*/*', '/foo/public'),
             $paths->getValue($stub)
         );
     }
@@ -208,9 +208,9 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($stub->registerExtension('hello', '/foo/path/modules/'));
 
         $expected = array(
-            "/foo/app/",
-            "/foo/path/vendor/*/*/",
-            "/foo/path/workbench/*/*/",
+            "/foo/app",
+            "/foo/path/vendor/*/*",
+            "/foo/path/workbench/*/*",
             'hello' => '/foo/path/modules'
         );
         $this->assertEquals($expected, $paths->getValue($stub));

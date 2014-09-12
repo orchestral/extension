@@ -1,13 +1,13 @@
 Orchestra Platform Extension Component
 ==============
 
-`Orchestra\Extension` allows components or packages to be added dynamically to Orchestra Platform without the hassle of modifying the configuration.
+Extension Component allows components or packages to be added dynamically to Orchestra Platform without the hassle of modifying the configuration.
 
-[![Latest Stable Version](https://poser.pugx.org/orchestra/extension/v/stable.png)](https://packagist.org/packages/orchestra/extension) 
-[![Total Downloads](https://poser.pugx.org/orchestra/extension/downloads.png)](https://packagist.org/packages/orchestra/extension) 
-[![Build Status](https://travis-ci.org/orchestral/extension.svg?branch=master)](https://travis-ci.org/orchestral/extension) 
-[![Coverage Status](https://coveralls.io/repos/orchestral/extension/badge.png?branch=master)](https://coveralls.io/r/orchestral/extension?branch=master) 
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/orchestral/extension/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/orchestral/extension/) 
+[![Latest Stable Version](https://poser.pugx.org/orchestra/extension/v/stable.png)](https://packagist.org/packages/orchestra/extension)
+[![Total Downloads](https://poser.pugx.org/orchestra/extension/downloads.png)](https://packagist.org/packages/orchestra/extension)
+[![Build Status](https://travis-ci.org/orchestral/extension.svg?branch=master)](https://travis-ci.org/orchestral/extension)
+[![Coverage Status](https://coveralls.io/repos/orchestral/extension/badge.png?branch=master)](https://coveralls.io/r/orchestral/extension?branch=master)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/orchestral/extension/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/orchestral/extension/)
 
 ## Quick Installation
 
@@ -16,7 +16,7 @@ To install through composer, simply put the following in your `composer.json` fi
 ```json
 {
 	"require": {
-		"orchestra/extension": "2.3.*"
+		"orchestra/extension": "3.0.*"
 	}
 }
 ```
@@ -49,4 +49,4 @@ php artisan extension:migrate
 ## Resources
 
 * [Documentation](http://orchestraplatform.com/docs/latest/components/extension)
-* [Change Log](http://orchestraplatform.com/docs/latest/components/extension/changes#v2-3)
+* [Change Log](http://orchestraplatform.com/docs/latest/components/extension/changes#v3-0)

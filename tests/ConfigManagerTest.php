@@ -21,7 +21,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
     public function testMapMethod()
     {
         $memory = m::mock('\Orchestra\Memory\MemoryManager')->makePartial();
-        $config = m::mock('\Illuminate\Contracts\Config\Config');
+        $config = m::mock('\Illuminate\Contracts\Config\Repository');
 
         $memory->shouldReceive('make')->once()->andReturn($memory)
             ->shouldReceive('get')->once()

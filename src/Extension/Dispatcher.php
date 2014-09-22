@@ -54,7 +54,7 @@ class Dispatcher implements DispatcherInterface
     /**
      * Construct a new Application instance.
      *
-     * @param  \Illuminate\Contracts\Config\Repository      $config
+     * @param  \Illuminate\Contracts\Config\Repository  $config
      * @param  \Illuminate\Contracts\Events\Dispatcher  $dispatcher
      * @param  \Illuminate\Filesystem\Filesystem        $files
      * @param  Finder                                   $finder

@@ -1,8 +1,8 @@
 <?php namespace Orchestra\Extension;
 
+use Orchestra\Support\Str;
 use Illuminate\Http\Request;
 use Orchestra\Extension\Contracts\RouteGeneratorInterface;
-use Orchestra\Support\Str;
 
 class RouteGenerator implements RouteGeneratorInterface
 {

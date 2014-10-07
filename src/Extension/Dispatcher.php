@@ -1,11 +1,11 @@
 <?php namespace Orchestra\Extension;
 
-use Illuminate\Config\Repository;
-use Illuminate\Events\Dispatcher as EventDispatcher;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Arr;
-use Orchestra\Extension\Contracts\DispatcherInterface;
 use Orchestra\Support\Str;
+use Illuminate\Support\Arr;
+use Illuminate\Config\Repository;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Events\Dispatcher as EventDispatcher;
+use Orchestra\Extension\Contracts\DispatcherInterface;
 
 class Dispatcher implements DispatcherInterface
 {

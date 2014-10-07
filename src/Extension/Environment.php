@@ -1,10 +1,10 @@
 <?php namespace Orchestra\Extension;
 
+use Orchestra\Support\Str;
 use Illuminate\Container\Container;
 use Orchestra\Extension\Contracts\DebuggerInterface;
 use Orchestra\Extension\Contracts\DispatcherInterface;
 use Orchestra\Memory\Abstractable\Container as AbstractableContainer;
-use Orchestra\Support\Str;
 
 class Environment extends AbstractableContainer
 {

@@ -1,7 +1,7 @@
 <?php namespace Orchestra\Extension;
 
-use Illuminate\Http\Request;
 use Orchestra\Support\Str;
+use Illuminate\Http\Request;
 
 class RouteGenerator
 {

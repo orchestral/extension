@@ -1,8 +1,8 @@
 <?php namespace Orchestra\Extension;
 
 use RuntimeException;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
+use Illuminate\Filesystem\Filesystem;
 
 class Finder
 {

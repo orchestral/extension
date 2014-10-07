@@ -101,7 +101,7 @@ interface FactoryInterface
      *
      * @param  string   $name
      * @param  string   $default
-     * @return string
+     * @return \Orchestra\Extension\Contracts\RouteGeneratorInterface
      */
     public function route($name, $default = '/');
 

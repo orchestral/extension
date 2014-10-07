@@ -1,15 +1,15 @@
 <?php namespace Orchestra\Extension;
 
-use Illuminate\Contracts\Container\Container;
+use Orchestra\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Orchestra\Memory\ContainerTrait;
+use Illuminate\Contracts\Container\Container;
+use Orchestra\Extension\Traits\OperationTrait;
+use Orchestra\Extension\Traits\DispatchableTrait;
+use Orchestra\Extension\Contracts\FactoryInterface;
 use Orchestra\Extension\Contracts\DebuggerInterface;
 use Orchestra\Extension\Contracts\DispatcherInterface;
-use Orchestra\Extension\Contracts\FactoryInterface;
-use Orchestra\Extension\Traits\DispatchableTrait;
-use Orchestra\Extension\Traits\OperationTrait;
-use Orchestra\Memory\ContainerTrait;
-use Orchestra\Support\Str;
 
 class Factory implements FactoryInterface
 {

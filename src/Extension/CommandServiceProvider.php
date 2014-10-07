@@ -1,12 +1,12 @@
 <?php namespace Orchestra\Extension;
 
 use Illuminate\Support\ServiceProvider;
-use Orchestra\Extension\Console\ActivateCommand;
-use Orchestra\Extension\Console\DeactivateCommand;
+use Orchestra\Extension\Console\ResetCommand;
 use Orchestra\Extension\Console\MigrateCommand;
 use Orchestra\Extension\Console\PublishCommand;
 use Orchestra\Extension\Console\RefreshCommand;
-use Orchestra\Extension\Console\ResetCommand;
+use Orchestra\Extension\Console\ActivateCommand;
+use Orchestra\Extension\Console\DeactivateCommand;
 
 class CommandServiceProvider extends ServiceProvider
 {

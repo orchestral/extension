@@ -44,7 +44,7 @@ interface FactoryInterface
     /**
      * Detect all extensions.
      *
-     * @return array
+     * @return \Illuminate\Support\Collection|array
      */
     public function detect();
 

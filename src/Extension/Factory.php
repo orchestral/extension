@@ -155,7 +155,7 @@ class Factory implements FactoryInterface
      *
      * @param  string   $name
      * @param  string   $default
-     * @return string
+     * @return \Orchestra\Extension\RouteGenerator
      */
     public function route($name, $default = '/')
     {

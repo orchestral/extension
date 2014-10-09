@@ -96,7 +96,7 @@ class ExtensionServiceProvider extends ServiceProvider
             $env->boot();
         });
 
-        $app->after(function () use ($app) {
+        $app['router']->after(function () use ($app) {
             $app['orchestra.extension']->finish();
         });
     }

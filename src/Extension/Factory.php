@@ -30,20 +30,6 @@ class Factory implements FactoryContract
     protected $dispatcher;
 
     /**
-     * Debugger (safe mode) instance.
-     *
-     * @var \Orchestra\Contracts\Extension\\SafeMode
-     */
-    protected $debugger;
-
-    /**
-     * Booted indicator.
-     *
-     * @var boolean
-     */
-    protected $booted = false;
-
-    /**
      * List of extensions.
      *
      * @var \Illuminate\Support\Collection
@@ -55,13 +41,13 @@ class Factory implements FactoryContract
      *
      * @param  \Illuminate\Contracts\Container\Container  $app
      * @param  \Orchestra\Contracts\Extension\Dispatcher  $dispatcher
-     * @param  \Orchestra\Contracts\Extension\SafeMode  $debugger
+     * @param  \Orchestra\Contracts\Extension\SafeMode  $safe
      */
-    public function __construct(Container $app, DispatcherContract $dispatcher, SafeMode $debugger)
+    public function __construct(Container $app, DispatcherContract $dispatcher, SafeMode $safe)
     {
         $this->app        = $app;
         $this->dispatcher = $dispatcher;
-        $this->debugger   = $debugger;
+        $this->safe       = $safe;
         $this->extensions = new Collection;
     }
 

@@ -6,6 +6,20 @@ use Illuminate\Support\Collection;
 trait DispatchableTrait
 {
     /**
+     * Booted indicator.
+     *
+     * @var boolean
+     */
+    protected $booted = false;
+
+    /**
+     * Debugger (safe mode) instance.
+     *
+     * @var \Orchestra\Contracts\Extension\SafeMode
+     */
+    protected $safe;
+
+    /**
      * Boot active extensions.
      *
      * @return $this
@@ -15,7 +29,7 @@ trait DispatchableTrait
         // Extension should be activated only if we're not running under
         // safe mode (or debug mode). This is to ensure that developer have
         // a way to disable broken extension without tempering the database.
-        if (! ($this->booted || $this->debugger->check())) {
+        if (! ($this->booted || $this->safe->check())) {
 
             // Avoid extension booting being called more than once.
             $this->booted = true;

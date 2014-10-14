@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Session\Store;
 use Orchestra\Contracts\Extension\SafeMode;
 
-class Debugger implements SafeMode
+class SafeModeChecker implements SafeMode
 {
     /**
      * Request instance.

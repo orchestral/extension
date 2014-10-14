@@ -24,7 +24,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Debugger (safe mode) instance.
      *
-     * @var \Orchestra\Extension\Debugger
+     * @var \Orchestra\Extension\SafeMode
      */
     protected $debugger = null;
 
@@ -35,7 +35,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->app        = new Container;
         $this->dispatcher = m::mock('\Orchestra\Extension\Dispatcher');
-        $this->debugger   = m::mock('\Orchestra\Extension\Debugger');
+        $this->debugger   = m::mock('\Orchestra\Extension\SafeModeChecker');
     }
 
     /**

@@ -1,9 +1,9 @@
 <?php namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
-use Orchestra\Extension\Debugger;
+use Orchestra\Extension\SafeModeChecker;
 
-class DebuggerTest extends \PHPUnit_Framework_TestCase
+class SafeModeCheckerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Teardown the test environment.
@@ -24,7 +24,7 @@ class DebuggerTest extends \PHPUnit_Framework_TestCase
         $request = m::mock('\Illuminate\Http\Request');
         $session = m::mock('\Illuminate\Session\Store');
 
-        $stub = new Debugger($request, $session);
+        $stub = new SafeModeChecker($request, $session);
 
         $request->shouldReceive('input')->once()->with('safe_mode')->andReturn('on');
         $session->shouldReceive('get')->once()->with('orchestra.safemode', 'off')->andReturn('off')
@@ -44,7 +44,7 @@ class DebuggerTest extends \PHPUnit_Framework_TestCase
         $request = m::mock('\Illuminate\Http\Request');
         $session = m::mock('\Illuminate\Session\Store');
 
-        $stub = new Debugger($request, $session);
+        $stub = new SafeModeChecker($request, $session);
 
         $request->shouldReceive('input')->once()->with('safe_mode')->andReturn('off');
         $session->shouldReceive('forget')->once()->with('orchestra.safemode')->andReturn(null);

@@ -1,7 +1,7 @@
 <?php namespace Orchestra\Extension;
 
-use Illuminate\Contracts\Config\Repository as Config;
 use Orchestra\Memory\MemoryManager;
+use Illuminate\Contracts\Config\Repository as Config;
 
 class ConfigManager
 {

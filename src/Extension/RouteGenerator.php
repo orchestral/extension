@@ -2,9 +2,9 @@
 
 use Orchestra\Support\Str;
 use Illuminate\Http\Request;
-use Orchestra\Extension\Contracts\RouteGeneratorInterface;
+use Orchestra\Contracts\Extension\RouteGenerator as RouteGeneratorContract;
 
-class RouteGenerator implements RouteGeneratorInterface
+class RouteGenerator implements RouteGeneratorContract
 {
     /**
      * Request instance.

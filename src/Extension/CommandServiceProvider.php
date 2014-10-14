@@ -139,7 +139,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array(
+        return [
             'orchestra.commands.extension.activate',
             'orchestra.commands.extension.deactivate',
             'orchestra.commands.extension.detect',
@@ -147,6 +147,6 @@ class CommandServiceProvider extends ServiceProvider
             'orchestra.commands.extension.publish',
             'orchestra.commands.extension.refresh',
             'orchestra.commands.extension.reset',
-        );
+        ];
     }
 }

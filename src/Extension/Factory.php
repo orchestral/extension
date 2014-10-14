@@ -4,14 +4,14 @@ use Orchestra\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Orchestra\Memory\ContainerTrait;
+use Orchestra\Contracts\Extension\SafeMode;
 use Illuminate\Contracts\Container\Container;
 use Orchestra\Extension\Traits\OperationTrait;
 use Orchestra\Extension\Traits\DispatchableTrait;
-use Orchestra\Extension\Contracts\FactoryInterface;
-use Orchestra\Extension\Contracts\DebuggerInterface;
-use Orchestra\Extension\Contracts\DispatcherInterface;
+use Orchestra\Contracts\Extension\Factory as FactoryContract;
+use Orchestra\Contracts\Extension\Dispatcher as DispatcherContract;
 
-class Factory implements FactoryInterface
+class Factory implements FactoryContract
 {
     use ContainerTrait, DispatchableTrait, OperationTrait;
 
@@ -25,14 +25,14 @@ class Factory implements FactoryInterface
     /**
      * Dispatcher instance.
      *
-     * @var \Orchestra\Extension\Contracts\DispatcherInterface
+     * @var \Orchestra\Contracts\Extension\Dispatcher
      */
     protected $dispatcher;
 
     /**
      * Debugger (safe mode) instance.
      *
-     * @var \Orchestra\Extension\Contracts\DebuggerInterface
+     * @var \Orchestra\Contracts\Extension\\SafeMode
      */
     protected $debugger;
 
@@ -53,11 +53,11 @@ class Factory implements FactoryInterface
     /**
      * Construct a new Application instance.
      *
-     * @param  \Illuminate\Contracts\Container\Container            $app
-     * @param  \Orchestra\Extension\Contracts\DispatcherInterface   $dispatcher
-     * @param  \Orchestra\Extension\Contracts\DebuggerInterface     $debugger
+     * @param  \Illuminate\Contracts\Container\Container  $app
+     * @param  \Orchestra\Contracts\Extension\Dispatcher  $dispatcher
+     * @param  \Orchestra\Contracts\Extension\SafeMode  $debugger
      */
-    public function __construct(Container $app, DispatcherInterface $dispatcher, DebuggerInterface $debugger)
+    public function __construct(Container $app, DispatcherContract $dispatcher, SafeMode $debugger)
     {
         $this->app        = $app;
         $this->dispatcher = $dispatcher;
@@ -83,7 +83,7 @@ class Factory implements FactoryInterface
     /**
      * Get extension finder.
      *
-     * @return \Orchestra\Extension\Finder
+     * @return \Orchestra\Contracts\Extension\Finder
      */
     public function finder()
     {

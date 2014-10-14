@@ -2,9 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
-use Orchestra\Extension\Contracts\DebuggerInterface;
+use Orchestra\Contracts\Extension\SafeMode;
 
-class Debugger implements DebuggerInterface
+class Debugger implements SafeMode
 {
     /**
      * Request instance.
@@ -35,7 +35,7 @@ class Debugger implements DebuggerInterface
     /**
      * Determine whether current request is in safe mode or not.
      *
-     * @return boolean
+     * @return bool
      */
     public function check()
     {

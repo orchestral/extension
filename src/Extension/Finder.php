@@ -4,8 +4,9 @@ use RuntimeException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Filesystem\Filesystem;
+use Orchestra\Contracts\Extension\Finder as FinderContract;
 
-class Finder
+class Finder implements FinderContract
 {
     /**
      * Filesystem instance.
@@ -19,37 +20,37 @@ class Finder
      *
      * @var array
      */
-    protected $config = array();
+    protected $config = [];
 
     /**
      * List of paths.
      *
      * @var array
      */
-    protected $paths = array();
+    protected $paths = [];
 
     /**
      * Default manifest options.
      *
      * @var array
      */
-    protected $manifestOptions =  array(
+    protected $manifestOptions =  [
         'name'        => null,
         'description' => null,
         'author'      => null,
         'url'         => null,
         'version'     => '>0',
-        'config'      => array(),
-        'autoload'    => array(),
-        'provide'     => array(),
-    );
+        'config'      => [],
+        'autoload'    => [],
+        'provide'     => [],
+    ];
 
     /**
      * List of reserved name.
      *
      * @var array
      */
-    protected $reserved = array(
+    protected $reserved = [
         'orchestra',
         'resources',
         'orchestra/asset',
@@ -70,7 +71,7 @@ class Finder
         'orchestra/testbench',
         'orchestra/view',
         'orchestra/widget',
-    );
+    ];
 
     /**
      * Construct a new finder.
@@ -88,11 +89,11 @@ class Finder
 
         // In most cases we would only need to concern with the following
         // path; application folder, vendor folders and workbench folders.
-        $this->paths = array(
+        $this->paths = [
             "{$app}",
             "{$base}/vendor/*/*",
             "{$base}/workbench/*/*"
-        );
+        ];
     }
 
     /**
@@ -119,7 +120,7 @@ class Finder
      */
     public function detect()
     {
-        $extensions = array();
+        $extensions = [];
 
         // Loop each path to check if there orchestra.json available within
         // the paths. We would only treat packages that include orchestra.json
@@ -129,7 +130,7 @@ class Finder
 
             // glob() method might return false if there an errors, convert
             // the result to an array.
-            is_array($manifests) || $manifests = array();
+            is_array($manifests) || $manifests = [];
 
             foreach ($manifests as $manifest) {
                 $name = (is_numeric($key) ? $this->guessExtensionNameFromManifest($manifest, $path) : $key);
@@ -164,10 +165,10 @@ class Finder
 
         isset($jsonable['path']) && $path = $jsonable['path'];
 
-        $paths = array(
+        $paths = [
             'path'        => rtrim($path, '/'),
             'source-path' => rtrim($sourcePath, '/'),
-        );
+        ];
 
         // Generate a proper manifest configuration for the extension. This
         // would allow other part of the application to use this configuration
@@ -187,7 +188,7 @@ class Finder
      */
     protected function generateManifestConfig(array $jsonable)
     {
-        $manifest = array();
+        $manifest = [];
 
         // Assign extension manifest option or provide the default value.
         foreach ($this->manifestOptions as $key => $default) {
@@ -236,8 +237,8 @@ class Finder
         $base = rtrim($this->config['path.base'], '/');
 
         return str_replace(
-            array("{$app}/", "{$base}/vendor/", "{$base}/workbench/", "{$base}/"),
-            array('app::', 'vendor::', 'workbench::', 'base::'),
+            ["{$app}/", "{$base}/vendor/", "{$base}/workbench/", "{$base}/"],
+            ['app::', 'vendor::', 'workbench::', 'base::'],
             $path
         );
     }
@@ -266,7 +267,7 @@ class Finder
     {
         $vendor   = null;
         $package  = null;
-        $manifest = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $manifest);
+        $manifest = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $manifest);
         $fragment = explode(DIRECTORY_SEPARATOR, $manifest);
 
         // Remove orchestra.json from fragment as we are only interested with
@@ -276,7 +277,7 @@ class Finder
             $vendor  = array_pop($fragment);
         }
 
-        return array($vendor, $package);
+        return [$vendor, $package];
     }
 
     /**
@@ -291,8 +292,8 @@ class Finder
         $base = rtrim($this->config['path.base'], '/');
 
         return str_replace(
-            array('app::', 'vendor::', 'workbench::', 'base::'),
-            array("{$app}/", "{$base}/vendor/", "{$base}/workbench/", "{$base}/"),
+            ['app::', 'vendor::', 'workbench::', 'base::'],
+            ["{$app}/", "{$base}/vendor/", "{$base}/workbench/", "{$base}/"],
             $path
         );
     }

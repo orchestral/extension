@@ -4,10 +4,10 @@ use Orchestra\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Config\Repository as Config;
-use Orchestra\Extension\Contracts\DispatcherInterface;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Orchestra\Contracts\Extension\Dispatcher as DispatcherContract;
 
-class Dispatcher implements DispatcherInterface
+class Dispatcher implements DispatcherContract
 {
     /**
      * Config Repository instance.

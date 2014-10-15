@@ -8,7 +8,7 @@ trait DispatchableTrait
     /**
      * Booted indicator.
      *
-     * @var boolean
+     * @var bool
      */
     protected $booted = false;
 

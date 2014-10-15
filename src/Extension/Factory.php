@@ -54,7 +54,7 @@ class Factory implements FactoryContract
     /**
      * Detect all extensions.
      *
-     * @return array
+     * @return \Illuminate\Support\Collection|array
      */
     public function detect()
     {
@@ -97,7 +97,7 @@ class Factory implements FactoryContract
      * Check whether an extension has a writable public asset.
      *
      * @param  string   $name
-     * @return boolean
+     * @return bool
      */
     public function permission($name)
     {
@@ -141,7 +141,7 @@ class Factory implements FactoryContract
      *
      * @param  string   $name
      * @param  string   $default
-     * @return \Orchestra\Extension\RouteGenerator
+     * @return \Orchestra\Contracts\Extension\RouteGenerator
      */
     public function route($name, $default = '/')
     {
@@ -163,7 +163,7 @@ class Factory implements FactoryContract
      *
      * @param  string   $name
      * @param  string   $path
-     * @return boolean
+     * @return bool
      */
     protected function isWritableWithAsset($name, $path)
     {

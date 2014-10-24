@@ -1,7 +1,7 @@
 <?php namespace Orchestra\Extension;
 
 use Illuminate\Contracts\Foundation\Application;
-use Orchestra\Contracts\Kernel\DeferrableServiceContainer;
+use Orchestra\Contracts\Foundation\DeferrableServiceContainer;
 
 class ProviderRepository
 {

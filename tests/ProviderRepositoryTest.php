@@ -46,7 +46,7 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testServicesMethodWhenDeferred()
     {
         $mock = m::mock('\Orchestra\Extension\TestCase\FooServiceProvider');
-        $app = m::mock('\Orchestra\Contracts\Kernel\DeferrableServiceContainer', '\Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('\Orchestra\Contracts\Foundation\DeferrableServiceContainer', '\Illuminate\Contracts\Foundation\Application');
 
         $app->shouldReceive('resolveProviderClass')->once()
                 ->with('Orchestra\Extension\TestCase\FooServiceProvider')->andReturn($mock)

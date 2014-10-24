@@ -88,14 +88,7 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtensionEvents()
     {
         $app = $this->app;
-
-        $app->booted(function ($app) {
-            $env = $app['orchestra.extension'];
-
-            $env->attach($app['orchestra.memory']->makeOrFallback());
-            $env->boot();
-        });
-
+        
         $app['router']->after(function () use ($app) {
             $app['orchestra.extension']->finish();
         });

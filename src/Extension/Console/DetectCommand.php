@@ -28,15 +28,15 @@ class DetectCommand extends BaseCommand
             return $this->line("<comment>No extension detected!</comment>");
         }
 
-        $header = array('Extension', 'Version', 'Activate');
-        $content = array();
+        $header = ['Extension', 'Version', 'Activate'];
+        $content = [];
 
         foreach ($extensions as $name => $options) {
-            $content[] = array(
+            $content[] = [
                 $name,
                 $options['version'],
                 $service->started($name) ? '    ✓' : '',
-            );
+            ];
         }
 
         $this->table($header, $content);

@@ -17,7 +17,7 @@ class ProviderRepository
      *
      * @var array
      */
-    protected $services = array();
+    protected $services = [];
 
     /**
      * Construct a new finder.

@@ -12,9 +12,9 @@ abstract class ExtensionCommand extends BaseCommand
      */
     protected function getArguments()
     {
-        return array(
-            array('name', InputArgument::REQUIRED, 'Extension Name.'),
-        );
+        return [
+            ['name', InputArgument::REQUIRED, 'Extension Name.'],
+        ];
     }
 
     /**
@@ -24,8 +24,8 @@ abstract class ExtensionCommand extends BaseCommand
      */
     protected function getOptions()
     {
-        return array(
-            array('force', null, InputOption::VALUE_NONE, 'Force the operation to run when in production.'),
-        );
+        return [
+            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when in production.'],
+        ];
     }
 }

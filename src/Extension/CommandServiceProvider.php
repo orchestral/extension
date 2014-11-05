@@ -25,11 +25,17 @@ class CommandServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerActivateCommand();
+
         $this->registerDeactivateCommand();
+
         $this->registerDetectCommand();
+
         $this->registerMigrateCommand();
+
         $this->registerPublishCommand();
+
         $this->registerRefreshCommand();
+
         $this->registerResetCommand();
     }
 
@@ -40,7 +46,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     protected function registerActivateCommand()
     {
-        $this->app->bindShared('orchestra.commands.extension.activate', function () {
+        $this->app->singleton('orchestra.commands.extension.activate', function () {
             return new ActivateCommand;
         });
 
@@ -54,7 +60,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     protected function registerDeactivateCommand()
     {
-        $this->app->bindShared('orchestra.commands.extension.deactivate', function () {
+        $this->app->singleton('orchestra.commands.extension.deactivate', function () {
             return new DeactivateCommand;
         });
 
@@ -68,7 +74,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     protected function registerDetectCommand()
     {
-        $this->app->bindShared('orchestra.commands.extension.detect', function () {
+        $this->app->singleton('orchestra.commands.extension.detect', function () {
             return new Console\DetectCommand;
         });
 
@@ -82,7 +88,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     protected function registerMigrateCommand()
     {
-        $this->app->bindShared('orchestra.commands.extension.migrate', function () {
+        $this->app->singleton('orchestra.commands.extension.migrate', function () {
             return new MigrateCommand;
         });
 
@@ -96,7 +102,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     protected function registerPublishCommand()
     {
-        $this->app->bindShared('orchestra.commands.extension.publish', function () {
+        $this->app->singleton('orchestra.commands.extension.publish', function () {
             return new PublishCommand;
         });
 
@@ -110,7 +116,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     protected function registerRefreshCommand()
     {
-        $this->app->bindShared('orchestra.commands.extension.refresh', function () {
+        $this->app->singleton('orchestra.commands.extension.refresh', function () {
             return new RefreshCommand;
         });
 
@@ -125,7 +131,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     protected function registerResetCommand()
     {
-        $this->app->bindShared('orchestra.commands.extension.reset', function () {
+        $this->app->singleton('orchestra.commands.extension.reset', function () {
             return new ResetCommand;
         });
 

@@ -23,7 +23,7 @@ class ConfigManager
      * Construct a new ConfigManager instance.
      *
      * @param  \Illuminate\Contracts\Config\Repository  $config
-     * @param  \Orchestra\Memory\MemoryManager          $memory
+     * @param  \Orchestra\Memory\MemoryManager  $memory
      */
     public function __construct(Config $config, MemoryManager $memory)
     {
@@ -36,12 +36,12 @@ class ConfigManager
      *
      * @param  string   $name
      * @param  array    $aliases
-     * @return boolean
+     * @return bool
      */
     public function map($name, $aliases)
     {
         $memory = $this->memory->make();
-        $meta   = $memory->get("extension_{$name}", array());
+        $meta   = $memory->get("extension_{$name}", []);
 
         foreach ($aliases as $current => $default) {
             isset($meta[$current]) && $this->config->set($default, $meta[$current]);

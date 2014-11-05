@@ -1,6 +1,6 @@
 <?php namespace Orchestra\Extension;
 
-use Illuminate\Support\ServiceProvider;
+use Orchestra\Support\Providers\ServiceProvider;
 
 class ExtensionServiceProvider extends ServiceProvider
 {
@@ -12,8 +12,11 @@ class ExtensionServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerExtensionFinder();
+
         $this->registerExtensionConfigManager();
+
         $this->registerExtension();
+
         $this->registerExtensionEvents();
     }
 
@@ -24,7 +27,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtension()
     {
-        $this->app->bindShared('orchestra.extension', function ($app) {
+        $this->app->singleton('orchestra.extension', function ($app) {
             $safe       = new SafeModeChecker($app['request'], $app['session.store']);
             $provider   = new ProviderRepository($app);
             $dispatcher = new Dispatcher(
@@ -46,7 +49,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionConfigManager()
     {
-        $this->app->bindShared('orchestra.extension.config', function ($app) {
+        $this->app->singleton('orchestra.extension.config', function ($app) {
             return new ConfigManager($app['config'], $app['orchestra.memory']);
         });
     }
@@ -58,11 +61,11 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionFinder()
     {
-        $this->app->bindShared('orchestra.extension.finder', function ($app) {
-            $config = array(
+        $this->app->singleton('orchestra.extension.finder', function ($app) {
+            $config = [
                 'path.app'  => $app['path'],
                 'path.base' => $app['path.base'],
-            );
+            ];
 
             return new Finder($app['files'], $config);
         });
@@ -77,7 +80,7 @@ class ExtensionServiceProvider extends ServiceProvider
     {
         $path = realpath(__DIR__.'/../');
 
-        $this->package('orchestra/extension', 'orchestra/extension', $path);
+        $this->addConfigComponent('orchestra/extension', 'orchestra/extension', $path.'/config');
     }
 
     /**
@@ -88,7 +91,7 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtensionEvents()
     {
         $app = $this->app;
-        
+
         $app['router']->after(function () use ($app) {
             $app['orchestra.extension']->finish();
         });

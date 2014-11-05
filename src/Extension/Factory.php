@@ -1,6 +1,6 @@
 <?php namespace Orchestra\Extension;
 
-use Orchestra\Support\Str;
+use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Orchestra\Memory\ContainerTrait;
@@ -120,7 +120,7 @@ class Factory implements FactoryContract
         $this->app['orchestra.publisher.migrate']->extension($name);
         $this->app['orchestra.publisher.asset']->extension($name);
 
-        $this->app['events']->fire("orchestra.publishing", array($name));
+        $this->app['events']->fire("orchestra.publishing", [$name]);
         $this->app['events']->fire("orchestra.publishing: {$name}");
     }
 

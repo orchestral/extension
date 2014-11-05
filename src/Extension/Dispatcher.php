@@ -1,6 +1,6 @@
 <?php namespace Orchestra\Extension;
 
-use Orchestra\Support\Str;
+use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Config\Repository as Config;
@@ -49,16 +49,16 @@ class Dispatcher implements DispatcherContract
      *
      * @var array
      */
-    protected $extensions = array();
+    protected $extensions = [];
 
     /**
      * Construct a new Application instance.
      *
      * @param  \Illuminate\Contracts\Config\Repository  $config
      * @param  \Illuminate\Contracts\Events\Dispatcher  $dispatcher
-     * @param  \Illuminate\Filesystem\Filesystem        $files
-     * @param  Finder                                   $finder
-     * @param  ProviderRepository                       $provider
+     * @param  \Illuminate\Filesystem\Filesystem  $files
+     * @param  \Orchestra\Contracts\Extension\Finder  $finder
+     * @param  \Orchestra\Extension\ProviderRepository  $provider
      */
     public function __construct(
         Config $config,
@@ -93,7 +93,7 @@ class Dispatcher implements DispatcherContract
         // Get available service providers from orchestra.json and register
         // it to Laravel. In this case all service provider would be eager
         // loaded since the application would require it from any action.
-        $services = Arr::get($options, 'provide', array());
+        $services = Arr::get($options, 'provide', []);
         ! empty($services) && $this->provider->provides($services);
 
         // Register the extension so we can boot it later, this action is
@@ -129,7 +129,7 @@ class Dispatcher implements DispatcherContract
         $finder   = $this->finder;
         $base     = rtrim($options['path'], '/');
         $source   = rtrim(Arr::get($options, 'source-path', $base), '/');
-        $autoload = Arr::get($options, 'autoload', array());
+        $autoload = Arr::get($options, 'autoload', []);
 
         $generatePath = function ($path) use ($base) {
             if (Str::contains($path, '::')) {
@@ -142,15 +142,15 @@ class Dispatcher implements DispatcherContract
         $paths = array_map($generatePath, $autoload);
         $paths = array_merge(
             $paths,
-            array("source-path::src/orchestra.php", "source-path::orchestra.php")
+            ["source-path::src/orchestra.php", "source-path::orchestra.php"]
         );
 
         // By now, extension should already exist as an extension. We should
         // be able start orchestra.php start file on each package.
         foreach ($paths as $path) {
             $path = str_replace(
-                array('source-path::', 'app::/'),
-                array("{$source}/", 'app::'),
+                ['source-path::', 'app::/'],
+                ["{$source}/", 'app::'],
                 $path
             );
 
@@ -186,7 +186,7 @@ class Dispatcher implements DispatcherContract
      */
     protected function fireEvent($name, $options, $type = 'started')
     {
-        $this->dispatcher->fire("extension.{$type}", array($name, $options));
-        $this->dispatcher->fire("extension.{$type}: {$name}", array($options));
+        $this->dispatcher->fire("extension.{$type}", [$name, $options]);
+        $this->dispatcher->fire("extension.{$type}: {$name}", [$options]);
     }
 }

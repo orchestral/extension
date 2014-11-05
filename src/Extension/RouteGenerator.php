@@ -1,6 +1,6 @@
 <?php namespace Orchestra\Extension;
 
-use Orchestra\Support\Str;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Orchestra\Contracts\Extension\RouteGenerator as RouteGeneratorContract;
 
@@ -52,7 +52,7 @@ class RouteGenerator implements RouteGeneratorContract
         $this->request = $request;
 
         // Build base URL and prefix from Request::root();
-        $baseUrl = str_replace(array('https://', 'http://'), '', $this->request->root());
+        $baseUrl = str_replace(['https://', 'http://'], '', $this->request->root());
         $base    = explode('/', $baseUrl, 2);
 
         if (count($base) > 1) {

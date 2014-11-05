@@ -21,6 +21,6 @@ class MigrateCommand extends BaseCommand
      */
     public function fire()
     {
-        $this->call('migrate', array('--package' => 'orchestra/memory'));
+        $this->call('migrate', ['--package' => 'orchestra/memory']);
     }
 }

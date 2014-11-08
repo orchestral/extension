@@ -4,6 +4,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Config\Repository as Config;
+use Orchestra\Contracts\Extension\Finder as FinderContract;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Orchestra\Contracts\Extension\Dispatcher as DispatcherContract;
 
@@ -64,7 +65,7 @@ class Dispatcher implements DispatcherContract
         Config $config,
         EventDispatcher $dispatcher,
         Filesystem $files,
-        Finder $finder,
+        FinderContract $finder,
         ProviderRepository $provider
     ) {
         $this->config     = $config;
@@ -123,31 +124,16 @@ class Dispatcher implements DispatcherContract
      * @param  array    $options
      * @return void
      */
-    public function start($name, $options)
+    public function start($name, array $options)
     {
-        $file     = $this->files;
-        $finder   = $this->finder;
-        $base     = rtrim($options['path'], '/');
-        $source   = rtrim(Arr::get($options, 'source-path', $base), '/');
-        $autoload = Arr::get($options, 'autoload', []);
-
-        $generatePath = function ($path) use ($base) {
-            if (Str::contains($path, '::')) {
-                return $path;
-            }
-
-            return "source-path::".ltrim($path, '/');
-        };
-
-        $paths = array_map($generatePath, $autoload);
-        $paths = array_merge(
-            $paths,
-            ["source-path::src/orchestra.php", "source-path::orchestra.php"]
-        );
+        $file   = $this->files;
+        $finder = $this->finder;
+        $base   = rtrim($options['path'], '/');
+        $source = rtrim(Arr::get($options, 'source-path', $base), '/');
 
         // By now, extension should already exist as an extension. We should
         // be able start orchestra.php start file on each package.
-        foreach ($paths as $path) {
+        foreach ($this->getExtensionPaths($base, $options) as $path) {
             $path = str_replace(
                 ['source-path::', 'app::/'],
                 ["{$source}/", 'app::'],
@@ -171,7 +157,7 @@ class Dispatcher implements DispatcherContract
      * @param  array    $options
      * @return void
      */
-    public function finish($name, $options)
+    public function finish($name, array $options)
     {
         $this->fireEvent($name, $options, 'done');
     }
@@ -188,5 +174,32 @@ class Dispatcher implements DispatcherContract
     {
         $this->dispatcher->fire("extension.{$type}", [$name, $options]);
         $this->dispatcher->fire("extension.{$type}: {$name}", [$options]);
+    }
+
+    /**
+     * Get list of available paths for the extension.
+     *
+     * @param  string   $base
+     * @param  array    $options
+     * @return array
+     */
+    protected function getExtensionPaths($base, array $options)
+    {
+        $autoload = Arr::get($options, 'autoload', []);
+
+        $resolver = function ($path) use ($base) {
+            if (Str::contains($path, '::')) {
+                return $path;
+            }
+
+            return "source-path::" . ltrim($path, '/');
+        };
+
+        $paths = array_map($resolver, $autoload);
+
+        return array_merge(
+            $paths,
+            ["source-path::src/orchestra.php", "source-path::orchestra.php"]
+        );
     }
 }

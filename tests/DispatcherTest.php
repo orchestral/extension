@@ -113,11 +113,13 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $finder   = m::mock('\Orchestra\Extension\Finder');
 
         $event->shouldReceive('fire')->once()
-                ->with('extension.done: laravel/framework', array('foo'))->andReturnNull()
+                ->with('extension.done: laravel/framework', array(array('foo')))
+                ->andReturnNull()
             ->shouldReceive('fire')->once()
-                ->with('extension.done', array('laravel/framework', 'foo'))->andReturnNull();
+                ->with('extension.done', array('laravel/framework', array('foo')))
+                ->andReturnNull();
 
         $stub = new Dispatcher($config, $event, $files, $finder, $this->getProvider());
-        $stub->finish('laravel/framework', 'foo');
+        $stub->finish('laravel/framework', array('foo'));
     }
 }

@@ -34,14 +34,14 @@ class Dispatcher implements DispatcherContract
     /**
      * Finder instance.
      *
-     * @var Finder
+     * @var \Orchestra\Contracts\Extension\Finder
      */
     protected $finder;
 
     /**
      * Provider instance.
      *
-     * @var ProviderRepository
+     * @var \Orchestra\Extension\ProviderRepository
      */
     protected $provider;
 

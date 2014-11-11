@@ -44,8 +44,8 @@ class RouteGenerator implements RouteGeneratorContract
     /**
      * Construct a new instance.
      *
-     * @param  string                      $handles
-     * @param  \Illuminate\Http\Request    $request
+     * @param  string  $handles
+     * @param  \Illuminate\Http\Request  $request
      */
     public function __construct($handles, Request $request)
     {
@@ -81,7 +81,7 @@ class RouteGenerator implements RouteGeneratorContract
     /**
      * Get route domain.
      *
-     * @param  boolean  $forceBase
+     * @param  bool  $forceBase
      * @return string
      */
     public function domain($forceBase = false)
@@ -101,7 +101,7 @@ class RouteGenerator implements RouteGeneratorContract
      * Determine if the current request URI matches a pattern.
      *
      * @param  string  $pattern
-     * @return boolean
+     * @return bool
      */
     public function is($pattern)
     {
@@ -137,7 +137,7 @@ class RouteGenerator implements RouteGeneratorContract
     /**
      * Get route prefix.
      *
-     * @param  boolean  $forceBase
+     * @param  bool  $forceBase
      * @return string
      */
     public function prefix($forceBase = false)
@@ -171,7 +171,7 @@ class RouteGenerator implements RouteGeneratorContract
     /**
      * Get route to.
      *
-     * @param  string   $to
+     * @param  string  $to
      * @return string
      */
     public function to($to)

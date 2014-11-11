@@ -5,7 +5,7 @@ trait OperationTrait
     /**
      * Activate an extension.
      *
-     * @param  string   $name
+     * @param  string  $name
      * @return bool
      */
     public function activate($name)
@@ -16,7 +16,7 @@ trait OperationTrait
     /**
      * Activating an extension.
      *
-     * @param  string   $name
+     * @param  string  $name
      * @return bool
      */
     protected function activating($name)
@@ -37,7 +37,7 @@ trait OperationTrait
     /**
      * Check whether an extension is active.
      *
-     * @param  string   $name
+     * @param  string  $name
      * @return bool
      */
     public function activated($name)
@@ -48,7 +48,7 @@ trait OperationTrait
     /**
      * Check whether an extension is available.
      *
-     * @param  string   $name
+     * @param  string  $name
      * @return bool
      */
     public function available($name)
@@ -59,7 +59,7 @@ trait OperationTrait
     /**
      * Deactivate an extension.
      *
-     * @param  string   $name
+     * @param  string  $name
      * @return bool
      */
     public function deactivate($name)
@@ -88,7 +88,7 @@ trait OperationTrait
     /**
      * Refresh extension configuration.
      *
-     * @param  string   $name
+     * @param  string  $name
      * @return array|null
      */
     public function refresh($name)
@@ -114,7 +114,7 @@ trait OperationTrait
     /**
      * Reset extension.
      *
-     * @param  string   $name
+     * @param  string  $name
      * @return bool
      */
     public function reset($name)
@@ -134,7 +134,7 @@ trait OperationTrait
     /**
      * Check if extension is started.
      *
-     * @param  string   $name
+     * @param  string  $name
      * @return bool
      */
     public function started($name)

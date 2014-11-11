@@ -78,8 +78,8 @@ class Dispatcher implements DispatcherContract
     /**
      * Register the extension.
      *
-     * @param  string   $name
-     * @param  array    $options
+     * @param  string  $name
+     * @param  array   $options
      * @return void
      */
     public function register($name, array $options)
@@ -120,20 +120,22 @@ class Dispatcher implements DispatcherContract
     /**
      * Start the extension.
      *
-     * @param  string   $name
-     * @param  array    $options
+     * @param  string  $name
+     * @param  array   $options
      * @return void
      */
     public function start($name, array $options)
     {
         $file   = $this->files;
         $finder = $this->finder;
-        $base   = rtrim($options['path'], '/');
-        $source = rtrim(Arr::get($options, 'source-path', $base), '/');
+
+        $base     = rtrim($options['path'], '/');
+        $source   = rtrim(Arr::get($options, 'source-path', $base), '/');
+        $autoload = Arr::get($options, 'autoload', []);
 
         // By now, extension should already exist as an extension. We should
         // be able start orchestra.php start file on each package.
-        foreach ($this->getExtensionPaths($base, $options) as $path) {
+        foreach ($this->getAutoloadFiles($autoload) as $path) {
             $path = str_replace(
                 ['source-path::', 'app::/'],
                 ["{$source}/", 'app::'],
@@ -153,8 +155,8 @@ class Dispatcher implements DispatcherContract
     /**
      * Shutdown an extension.
      *
-     * @param  string   $name
-     * @param  array    $options
+     * @param  string  $name
+     * @param  array   $options
      * @return void
      */
     public function finish($name, array $options)
@@ -165,9 +167,9 @@ class Dispatcher implements DispatcherContract
     /**
      * Fire events.
      *
-     * @param  string   $name
-     * @param  array    $options
-     * @param  string   $type
+     * @param  string  $name
+     * @param  array   $options
+     * @param  string  $type
      * @return void
      */
     protected function fireEvent($name, $options, $type = 'started')
@@ -179,15 +181,12 @@ class Dispatcher implements DispatcherContract
     /**
      * Get list of available paths for the extension.
      *
-     * @param  string   $base
-     * @param  array    $options
+     * @param  array  $autoload
      * @return array
      */
-    protected function getExtensionPaths($base, array $options)
+    protected function getAutoloadFiles(array $autoload)
     {
-        $autoload = Arr::get($options, 'autoload', []);
-
-        $resolver = function ($path) use ($base) {
+        $resolver = function ($path) {
             if (Str::contains($path, '::')) {
                 return $path;
             }

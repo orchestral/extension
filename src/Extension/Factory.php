@@ -79,9 +79,9 @@ class Factory implements FactoryContract
     /**
      * Get an option for a given extension.
      *
-     * @param  string   $name
-     * @param  string   $option
-     * @param  mixed    $default
+     * @param  string  $name
+     * @param  string  $option
+     * @param  mixed   $default
      * @return mixed
      */
     public function option($name, $option, $default = null)
@@ -96,7 +96,7 @@ class Factory implements FactoryContract
     /**
      * Check whether an extension has a writable public asset.
      *
-     * @param  string   $name
+     * @param  string  $name
      * @return bool
      */
     public function permission($name)
@@ -127,8 +127,8 @@ class Factory implements FactoryContract
     /**
      * Register an extension.
      *
-     * @param  string   $name
-     * @param  string   $path
+     * @param  string  $name
+     * @param  string  $path
      * @return bool
      */
     public function register($name, $path)
@@ -161,8 +161,8 @@ class Factory implements FactoryContract
     /**
      * Check whether an extension has a writable public asset.
      *
-     * @param  string   $name
-     * @param  string   $path
+     * @param  string  $name
+     * @param  string  $path
      * @return bool
      */
     protected function isWritableWithAsset($name, $path)

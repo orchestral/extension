@@ -34,8 +34,8 @@ class ConfigManager
     /**
      * Map configuration to allow orchestra to store it in database.
      *
-     * @param  string   $name
-     * @param  array    $aliases
+     * @param  string  $name
+     * @param  array   $aliases
      * @return bool
      */
     public function map($name, $aliases)

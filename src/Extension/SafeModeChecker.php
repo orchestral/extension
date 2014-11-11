@@ -23,8 +23,8 @@ class SafeModeChecker implements SafeMode
     /**
      * Construct a new Application instance.
      *
-     * @param  \Illuminate\Http\Request    $request
-     * @param  \Illuminate\Session\Store   $session
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Session\Store  $session
      */
     public function __construct(Request $request, Store $session)
     {

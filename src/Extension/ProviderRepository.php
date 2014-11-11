@@ -32,7 +32,7 @@ class ProviderRepository
     /**
      * Load available service providers.
      *
-     * @param  array    $services
+     * @param  array  $services
      * @return void
      */
     public function provides(array $services)
@@ -53,8 +53,8 @@ class ProviderRepository
     /**
      * Register deferred service provider.
      *
-     * @param  object   $instance
-     * @param  string   $provider
+     * @param  object  $instance
+     * @param  string  $provider
      * @return void
      */
     protected function registerDeferredServiceProvider($instance, $provider)
@@ -71,7 +71,7 @@ class ProviderRepository
     /**
      * Register eager service provider.
      *
-     * @param  object   $instance
+     * @param  object  $instance
      * @return void
      */
     protected function registerEagerServiceProvider($instance)

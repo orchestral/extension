@@ -31,9 +31,9 @@ class RefreshCommand extends ExtensionCommand
 
         $name = $this->argument('name');
 
-        $activated = $this->laravel['orchestra.extension']->refresh($name);
+        $refresh = $this->laravel['orchestra.extension']->refresh($name);
 
-        if (!! $activated) {
+        if (!! $refresh) {
             $this->info("Extension [{$name}] refreshed.");
         } else {
             $this->error("Unable to refresh extension [{$name}].");

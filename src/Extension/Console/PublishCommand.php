@@ -32,6 +32,7 @@ class PublishCommand extends ExtensionCommand
         $name = $this->argument('name');
 
         $this->laravel['orchestra.extension']->publish($name);
+
         $this->info("Extension [{$name}] updated.");
     }
 }

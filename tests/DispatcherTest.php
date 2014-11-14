@@ -46,7 +46,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
                 'source-path::hello.php',
                 'start.php',
             ),
-            'provide'     => array('Laravel\FrameworkServiceProvider'),
+            'provides'    => array('Laravel\FrameworkServiceProvider'),
         );
 
         $options2 = array(

@@ -42,7 +42,7 @@ class Finder implements FinderContract
         'version'     => '>0',
         'config'      => [],
         'autoload'    => [],
-        'provide'     => [],
+        'provides'    => [],
     ];
 
     /**
@@ -194,6 +194,8 @@ class Finder implements FinderContract
         foreach ($this->manifestOptions as $key => $default) {
             $manifest["{$key}"] = Arr::get($jsonable, $key, $default);
         }
+
+        $manifest['provides'] = Arr::get($jsonable, 'provide', $manifest['provides']);
 
         return $manifest;
     }

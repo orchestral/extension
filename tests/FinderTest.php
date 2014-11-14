@@ -77,7 +77,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
                 'version'     => '>0',
                 'config'      => array(),
                 'autoload'    => array(),
-                'provide'     => array(),
+                'provides'    => array(),
             ),
             'app' => array(
                 'path'        => 'app::',
@@ -89,7 +89,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
                 'version'     => '>0',
                 'config'      => array(),
                 'autoload'    => array(),
-                'provide'     => array(),
+                'provides'    => array(),
             ),
         ));
 

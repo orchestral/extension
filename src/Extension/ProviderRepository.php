@@ -1,5 +1,6 @@
 <?php namespace Orchestra\Extension;
 
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Orchestra\Contracts\Foundation\DeferrableServiceContainer;
 
@@ -53,11 +54,11 @@ class ProviderRepository
     /**
      * Register deferred service provider.
      *
-     * @param  object  $instance
+     * @param  \Illuminate\Support\ServiceProvider  $instance
      * @param  string  $provider
      * @return void
      */
-    protected function registerDeferredServiceProvider($instance, $provider)
+    protected function registerDeferredServiceProvider(ServiceProvider $instance, $provider)
     {
         $services = $this->app->getDeferredServices();
 
@@ -71,10 +72,10 @@ class ProviderRepository
     /**
      * Register eager service provider.
      *
-     * @param  object  $instance
+     * @param  \Illuminate\Support\ServiceProvider  $instance
      * @return void
      */
-    protected function registerEagerServiceProvider($instance)
+    protected function registerEagerServiceProvider(ServiceProvider $instance)
     {
         $this->app->register($instance);
     }

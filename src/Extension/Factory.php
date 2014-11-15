@@ -146,7 +146,7 @@ class Factory implements FactoryContract
     public function route($name, $default = '/')
     {
         // Boot the extension.
-        $this->boot();
+        ! $this->booted() && $this->app->make('Orchestra\Extension\Bootstrap\LoadExtension')->bootstrap($this->app);
 
         // All route should be manage via `orchestra/extension::handles.{name}`
         // config key, except for orchestra/foundation.

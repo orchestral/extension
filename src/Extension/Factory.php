@@ -37,6 +37,13 @@ class Factory implements FactoryContract
     protected $extensions;
 
     /**
+     * List of routes.
+     *
+     * @var array
+     */
+    protected $routes = [];
+
+    /**
      * Construct a new Application instance.
      *
      * @param  \Illuminate\Contracts\Container\Container  $app
@@ -148,14 +155,19 @@ class Factory implements FactoryContract
         // Boot the extension.
         ! $this->booted() && $this->app->make('Orchestra\Extension\Bootstrap\LoadExtension')->bootstrap($this->app);
 
-        // All route should be manage via `orchestra/extension::handles.{name}`
-        // config key, except for orchestra/foundation.
-        $key = "orchestra/extension::handles.{$name}";
+        if (! isset($this->routes[$name])) {
 
-        return new RouteGenerator(
-            $this->app['config']->get($key, $default),
-            $this->app['request']
-        );
+            // All route should be manage via `orchestra/extension::handles.{name}`
+            // config key, except for orchestra/foundation.
+            $key = "orchestra/extension::handles.{$name}";
+
+            $this->routes[$name] = new RouteGenerator(
+                $this->app['config']->get($key, $default),
+                $this->app['request']
+            );
+        }
+
+        return $this->routes[$name];
     }
 
     /**

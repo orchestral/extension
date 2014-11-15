@@ -64,10 +64,10 @@ class RouteGenerator implements RouteGeneratorContract
         // If the handles doesn't start as "//some.domain.com/foo" we should
         // assume that it doesn't belong to any subdomain, otherwise we
         // need to split the value to "some.domain.com" and "foo".
-        if (is_null($handles) || ! Str::startsWith($handles, '//')) {
+        if (is_null($handles) || ! Str::startsWith($handles, ['//', 'http://', 'https://'])) {
             $this->prefix = $handles;
         } else {
-            $handles      = substr($handles, 2);
+            $handles      = substr(str_replace(["http://", "https://"], "//", $handles), 2);
             $fragments    = explode('/', $handles, 2);
             $this->domain = array_shift($fragments);
             $this->prefix = array_shift($fragments);

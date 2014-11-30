@@ -1,5 +1,6 @@
 <?php namespace Orchestra\Extension;
 
+use Orchestra\Extension\Config\Repository;
 use Orchestra\Support\Providers\ServiceProvider;
 
 class ExtensionServiceProvider extends ServiceProvider
@@ -50,7 +51,7 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtensionConfigManager()
     {
         $this->app->singleton('orchestra.extension.config', function ($app) {
-            return new ConfigManager($app['config'], $app['orchestra.memory']);
+            return new Repository($app['config'], $app['orchestra.memory']);
         });
     }
 

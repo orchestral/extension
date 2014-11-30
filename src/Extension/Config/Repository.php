@@ -1,9 +1,9 @@
-<?php namespace Orchestra\Extension;
+<?php namespace Orchestra\Extension\Config;
 
 use Orchestra\Memory\MemoryManager;
 use Illuminate\Contracts\Config\Repository as Config;
 
-class ConfigManager
+class Repository
 {
     /**
      * Config instance.
@@ -20,7 +20,7 @@ class ConfigManager
     protected $memory;
 
     /**
-     * Construct a new ConfigManager instance.
+     * Construct a new Config Repository instance.
      *
      * @param  \Illuminate\Contracts\Config\Repository  $config
      * @param  \Orchestra\Memory\MemoryManager  $memory

@@ -1,9 +1,9 @@
-<?php namespace Orchestra\Extension\TestCase;
+<?php namespace Orchestra\Extension\Config\TestCase;
 
 use Mockery as m;
-use Orchestra\Extension\ConfigManager;
+use Orchestra\Extension\Config\Repository;
 
-class ConfigManagerTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Teardown the test environment.
@@ -14,7 +14,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Orchestra\Extension\ConfigManager::map() method.
+     * Test Orchestra\Extension\Config\Repository::map() method.
      *
      * @test
      */
@@ -38,7 +38,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('get')->once()
                 ->with('laravel/framework::foo')->andReturn('foobar');
 
-        $stub = new ConfigManager($config, $memory);
+        $stub = new Repository($config, $memory);
 
         $stub->map('laravel/framework', array(
             'foo'    => 'laravel/framework::foo',

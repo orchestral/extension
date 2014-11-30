@@ -123,7 +123,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      * Test Orchestra\Extension\Finder::detect() method throws
      * exception when unable to parse json manifest file.
      *
-     * @expectedException \Orchestra\Extension\ManifestRuntimeException
+     * @expectedException \Orchestra\Contracts\Support\ManifestRuntimeException
      */
     public function testDetectMethodThrowsException()
     {

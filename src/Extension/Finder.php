@@ -4,6 +4,7 @@ use RuntimeException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Filesystem\Filesystem;
+use Orchestra\Contracts\Support\ManifestRuntimeException;
 use Orchestra\Contracts\Extension\Finder as FinderContract;
 
 class Finder implements FinderContract
@@ -149,7 +150,7 @@ class Finder implements FinderContract
      *
      * @param  string  $manifest
      * @return array
-     * @throws \Orchestra\Extension\ManifestRuntimeException
+     * @throws \Orchestra\Contracts\Support\ManifestRuntimeException
      */
     protected function getManifestContents($manifest)
     {

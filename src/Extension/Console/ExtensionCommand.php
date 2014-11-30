@@ -1,10 +1,21 @@
 <?php namespace Orchestra\Extension\Console;
 
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
+use Orchestra\Contracts\Extension\Listener\Extension;
 
-abstract class ExtensionCommand extends BaseCommand
+abstract class ExtensionCommand extends BaseCommand implements Extension
 {
+    /**
+     * Abort request when extension requirement mismatched.
+     *
+     * @return mixed
+     */
+    public function abortWhenRequirementMismatched()
+    {
+        //
+    }
+
     /**
      * Get the console command arguments.
      *

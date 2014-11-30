@@ -60,14 +60,4 @@ class ActivateCommand extends ExtensionCommand implements Listener
     {
         $this->info("Extension [{$extension->get('name')}] activated.");
     }
-
-    /**
-     * Abort request when extension requirement mismatched.
-     *
-     * @return mixed
-     */
-    public function abortWhenRequirementMismatched()
-    {
-        //
-    }
 }

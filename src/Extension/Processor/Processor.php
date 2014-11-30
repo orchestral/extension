@@ -3,6 +3,7 @@
 use Closure;
 use Illuminate\Support\Fluent;
 use Orchestra\Contracts\Extension\Factory;
+use Orchestra\Publisher\FilePermissionException;
 
 abstract class Processor
 {

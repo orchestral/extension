@@ -1,8 +1,11 @@
 <?php namespace Orchestra\Extension\Console;
 
+use Illuminate\Support\Fluent;
 use Illuminate\Console\ConfirmableTrait;
+use Orchestra\Extension\Processor\Deactivator as Processor;
+use Orchestra\Contracts\Extension\Listener\Deactivator as Listener;
 
-class DeactivateCommand extends ExtensionCommand
+class DeactivateCommand extends ExtensionCommand implements Listener
 {
     use ConfirmableTrait;
 
@@ -21,22 +24,28 @@ class DeactivateCommand extends ExtensionCommand
     protected $description = 'Deactivate an extension.';
 
     /**
-     * {@inheritdoc}
+     * Execute the console command.
+     *
+     * @param  \Orchestra\Extension\Processor\Deactivator  $deactivator
+     * @return void
      */
-    public function fire()
+    public function fire(Processor $deactivator)
     {
         if (! $this->confirmToProceed()) {
             return null;
         }
 
-        $name = $this->argument('name');
+        return $deactivator->deactivate($this, new Fluent(['name' => $this->argument('name')]));
+    }
 
-        $deactivated = $this->laravel['orchestra.extension']->deactivate($name);
-
-        if (!! $deactivated) {
-            $this->info("Extension [{$name}] deactivated.");
-        } else {
-            $this->error("Unable to deactivate extension [{$name}].");
-        }
+    /**
+     * Response when extension deactivation has succeed.
+     *
+     * @param  \Illuminate\Support\Fluent  $extension
+     * @return mixed
+     */
+    public function deactivationHasSucceed(Fluent $extension)
+    {
+        $this->info("Extension [{$extension->get('name')}] deactivated.");
     }
 }

@@ -1,8 +1,11 @@
 <?php namespace Orchestra\Extension\Console;
 
+use Illuminate\Support\Fluent;
 use Illuminate\Console\ConfirmableTrait;
+use Orchestra\Extension\Processor\Migrator as Processor;
+use Orchestra\Contracts\Extension\Listener\Migrator as Listener;
 
-class PublishCommand extends ExtensionCommand
+class PublishCommand extends ExtensionCommand implements Listener
 {
     use ConfirmableTrait;
 
@@ -21,18 +24,40 @@ class PublishCommand extends ExtensionCommand
     protected $description = 'Run migration and asset publishing for an extension.';
 
     /**
-     * {@inheritdoc}
+     * Execute the console command.
+     *
+     * @param  \Orchestra\Extension\Processor\Migrator  $migrator
+     * @return void
      */
-    public function fire()
+    public function fire(Processor $migrator)
     {
         if (! $this->confirmToProceed()) {
             return null;
         }
 
-        $name = $this->argument('name');
+        return $migrator->migrate($this, new Fluent(['name' => $this->argument('name')]));
+    }
 
-        $this->laravel['orchestra.extension']->publish($name);
+    /**
+     * Response when extension migration has failed.
+     *
+     * @param  \Illuminate\Support\Fluent  $extension
+     * @param  array  $errors
+     * @return mixed
+     */
+    public function migrationHasFailed(Fluent $extension, array $errors)
+    {
+        $this->error("Extension [{$extension->get('name')}] update has failed.");
+    }
 
-        $this->info("Extension [{$name}] updated.");
+    /**
+     * Response when extension migration has succeed.
+     *
+     * @param  \Illuminate\Support\Fluent  $extension
+     * @return mixed
+     */
+    public function migrationHasSucceed(Fluent $extension)
+    {
+        $this->info("Extension [{$extension->get('name')}] updated.");
     }
 }

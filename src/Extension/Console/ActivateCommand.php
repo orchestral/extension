@@ -1,8 +1,11 @@
 <?php namespace Orchestra\Extension\Console;
 
+use Illuminate\Support\Fluent;
 use Illuminate\Console\ConfirmableTrait;
+use Orchestra\Extension\Processor\Activator as Processor;
+use Orchestra\Contracts\Extension\Listener\Activator as Listener;
 
-class ActivateCommand extends ExtensionCommand
+class ActivateCommand extends ExtensionCommand implements Listener
 {
     use ConfirmableTrait;
 
@@ -21,22 +24,50 @@ class ActivateCommand extends ExtensionCommand
     protected $description = 'Activate an extension.';
 
     /**
-     * {@inheritdoc}
+     * Execute the console command.
+     *
+     * @param  \Orchestra\Extension\Processor\Activator  $activator
+     * @return void
      */
-    public function fire()
+    public function fire(Processor $activator)
     {
         if (! $this->confirmToProceed()) {
             return null;
         }
 
-        $name = $this->argument('name');
+        return $activator->activate($this, new Fluent(['name' => $this->argument('name')]));
+    }
 
-        $activated = $this->laravel['orchestra.extension']->activate($name);
+    /**
+     * Response when extension activation has failed.
+     *
+     * @param  \Illuminate\Support\Fluent  $extension
+     * @param  array  $errors
+     * @return mixed
+     */
+    public function activationHasFailed(Fluent $extension, array $errors)
+    {
+        $this->error("Unable to activate extension [{$extension->get('name')}].");
+    }
 
-        if (!! $activated) {
-            $this->info("Extension [{$name}] activated.");
-        } else {
-            $this->error("Unable to activate extension [{$name}].");
-        }
+    /**
+     * Response when extension activation has succeed.
+     *
+     * @param  \Illuminate\Support\Fluent  $extension
+     * @return mixed
+     */
+    public function activationHasSucceed(Fluent $extension)
+    {
+        $this->info("Extension [{$extension->get('name')}] activated.");
+    }
+
+    /**
+     * Abort request when extension requirement mismatched.
+     *
+     * @return mixed
+     */
+    public function abortWhenRequirementMismatched()
+    {
+        //
     }
 }

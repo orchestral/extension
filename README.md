@@ -1,4 +1,4 @@
-Orchestra Platform Extension Component
+Extension Component for Orchestra Platform
 ==============
 
 Extension Component allows components or packages to be added dynamically to Orchestra Platform without the hassle of modifying the configuration.

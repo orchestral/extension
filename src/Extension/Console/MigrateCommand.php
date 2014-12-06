@@ -21,6 +21,8 @@ class MigrateCommand extends BaseCommand
      */
     public function fire()
     {
-        $this->call('migrate', ['--package' => 'orchestra/memory']);
+        $path = $this->laravel['path.base'].'/vendor/orchestra/memory/src/migrations';
+
+        $this->call('migrate', ['--path' => $path]);
     }
 }

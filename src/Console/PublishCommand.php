@@ -29,7 +29,7 @@ class PublishCommand extends ExtensionCommand implements Listener
      * @param  \Orchestra\Extension\Processor\Migrator  $migrator
      * @return void
      */
-    public function fire(Processor $migrator)
+    public function handle(Processor $migrator)
     {
         if (! $this->confirmToProceed()) {
             return null;

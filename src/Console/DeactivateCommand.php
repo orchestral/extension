@@ -29,7 +29,7 @@ class DeactivateCommand extends ExtensionCommand implements Listener
      * @param  \Orchestra\Extension\Processor\Deactivator  $deactivator
      * @return void
      */
-    public function fire(Processor $deactivator)
+    public function handle(Processor $deactivator)
     {
         if (! $this->confirmToProceed()) {
             return null;

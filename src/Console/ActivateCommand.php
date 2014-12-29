@@ -29,7 +29,7 @@ class ActivateCommand extends ExtensionCommand implements Listener
      * @param  \Orchestra\Extension\Processor\Activator  $activator
      * @return void
      */
-    public function fire(Processor $activator)
+    public function handle(Processor $activator)
     {
         if (! $this->confirmToProceed()) {
             return null;

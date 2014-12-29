@@ -19,7 +19,7 @@ class MigrateCommand extends BaseCommand
     /**
      * {@inheritdoc}
      */
-    public function fire()
+    public function handle()
     {
         $path = 'vendor/orchestra/memory/resources/database/migrations';
 

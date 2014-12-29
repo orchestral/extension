@@ -23,7 +23,7 @@ class RefreshCommand extends ExtensionCommand
     /**
      * {@inheritdoc}
      */
-    public function fire()
+    public function handle()
     {
         if (! $this->confirmToProceed()) {
             return null;

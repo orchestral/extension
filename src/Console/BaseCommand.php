@@ -15,7 +15,8 @@ abstract class BaseCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->laravel->call([$this, 'fire']);
+        parent::execute($input, $output);
+
         $this->finish();
     }
 

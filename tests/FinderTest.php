@@ -31,14 +31,14 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $paths->setAccessible(true);
 
         $this->assertEquals(
-            array('/foo/app', '/foo/path/vendor/*/*', '/foo/path/workbench/*/*'),
+            array('/foo/app', '/foo/path/vendor/*/*'),
             $paths->getValue($stub)
         );
 
         $stub->addPath('/foo/public');
 
         $this->assertEquals(
-            array('/foo/app', '/foo/path/vendor/*/*', '/foo/path/workbench/*/*', '/foo/public'),
+            array('/foo/app', '/foo/path/vendor/*/*', '/foo/public'),
             $paths->getValue($stub)
         );
     }
@@ -61,8 +61,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('glob')->once()->with('/foo/path/vendor/*/*/orchestra.json')
                 ->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json', '/foo/orchestra.js'))
             ->shouldReceive('get')->once()->with('/foo/path/vendor/laravel/framework/orchestra.json')
-                ->andReturn('{"name":"Laravel Framework","path": "vendor::laravel/framework"}')
-            ->shouldReceive('glob')->once()->with('/foo/path/workbench/*/*/orchestra.json')->andReturn(array());
+                ->andReturn('{"name":"Laravel Framework","path": "vendor::laravel/framework"}');
 
         $stub = new Finder($files, $config);
 
@@ -135,7 +134,6 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $files->shouldReceive('glob')->once()->with('/foo/app/orchestra.json')->andReturn(array())
             ->shouldReceive('glob')->once()->with('/foo/path/vendor/*/*/orchestra.json')
                 ->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json'))
-            ->shouldReceive('glob')->never()->with('/foo/path/workbench/*/*/orchestra.json')->andReturn(array())
             ->shouldReceive('get')->once()->with('/foo/path/vendor/laravel/framework/orchestra.json')
                 ->andReturn('{"name":"Laravel Framework}');
 
@@ -209,7 +207,6 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $expected = array(
             "/foo/app",
             "/foo/path/vendor/*/*",
-            "/foo/path/workbench/*/*",
             'hello' => '/foo/path/modules'
         );
         $this->assertEquals($expected, $paths->getValue($stub));
@@ -284,7 +281,6 @@ class FinderTest extends \PHPUnit_Framework_TestCase
             array("foobar", "foobar"),
             array("/foo/path/app/foobar", "app::foobar"),
             array("/foo/path/vendor/foobar", "vendor::foobar"),
-            array("/foo/path/workbench/foobar", "workbench::foobar"),
             array("/foo/path/foobar", "base::foobar"),
         );
     }

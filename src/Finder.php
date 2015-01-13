@@ -92,8 +92,7 @@ class Finder implements FinderContract
         // path; application folder, vendor folders and workbench folders.
         $this->paths = [
             "{$app}",
-            "{$base}/vendor/*/*",
-            "{$base}/workbench/*/*"
+            "{$base}/vendor/*/*"
         ];
     }
 
@@ -240,8 +239,8 @@ class Finder implements FinderContract
         $base = rtrim($this->config['path.base'], '/');
 
         return str_replace(
-            ["{$app}/", "{$base}/vendor/", "{$base}/workbench/", "{$base}/"],
-            ['app::', 'vendor::', 'workbench::', 'base::'],
+            ["{$app}/", "{$base}/vendor/", "{$base}/"],
+            ['app::', 'vendor::', 'base::'],
             $path
         );
     }
@@ -295,8 +294,8 @@ class Finder implements FinderContract
         $base = rtrim($this->config['path.base'], '/');
 
         return str_replace(
-            ['app::', 'vendor::', 'workbench::', 'base::'],
-            ["{$app}/", "{$base}/vendor/", "{$base}/workbench/", "{$base}/"],
+            ['app::', 'vendor::', 'base::'],
+            ["{$app}/", "{$base}/vendor/", "{$base}/"],
             $path
         );
     }

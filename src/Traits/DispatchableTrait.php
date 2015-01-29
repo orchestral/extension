@@ -17,7 +17,7 @@ trait DispatchableTrait
      *
      * @var \Orchestra\Contracts\Extension\SafeMode
      */
-    protected $safe;
+    protected $mode;
 
     /**
      * Boot active extensions.
@@ -29,7 +29,7 @@ trait DispatchableTrait
         // Extension should be activated only if we're not running under
         // safe mode (or debug mode). This is to ensure that developer have
         // a way to disable broken extension without tempering the database.
-        if (! ($this->booted() || $this->safe->check())) {
+        if (! ($this->booted() || $this->mode->check())) {
 
             // Avoid extension booting being called more than once.
             $this->booted = true;

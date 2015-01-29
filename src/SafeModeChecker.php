@@ -1,11 +1,19 @@
 <?php namespace Orchestra\Extension;
 
 use Illuminate\Http\Request;
-use Illuminate\Session\Store;
+use Illuminate\Filesystem\Filesystem;
 use Orchestra\Contracts\Extension\SafeMode;
+use Illuminate\Contracts\Config\Repository;
 
 class SafeModeChecker implements SafeMode
 {
+    /**
+     * Config instance.
+     *
+     * @var \Illuminate\Contracts\Config\Repository
+     */
+    protected $config;
+
     /**
      * Request instance.
      *
@@ -14,22 +22,22 @@ class SafeModeChecker implements SafeMode
     protected $request;
 
     /**
-     * Session Manager instance.
+     * Mode status.
      *
-     * @var \Illuminate\Session\Store
+     * @var string|null
      */
-    protected $session;
+    protected $status;
 
     /**
      * Construct a new Application instance.
      *
+     * @param  \Illuminate\Contracts\Config\Repository  $config
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Session\Store  $session
      */
-    public function __construct(Request $request, Store $session)
+    public function __construct(Repository $config, Request $request)
     {
+        $this->config = $config;
         $this->request = $request;
-        $this->session = $session;
     }
 
     /**
@@ -39,20 +47,47 @@ class SafeModeChecker implements SafeMode
      */
     public function check()
     {
-        $input   = $this->request->input('safe_mode');
-        $session = $this->session;
-
-        if ($input == 'off') {
-            $session->forget('orchestra.safemode');
-            return false;
+        if (is_null($this->status)) {
+            $this->verifyStatus();
         }
 
-        $mode = $session->get('orchestra.safemode', 'off');
+        return ($this->status === 'safe');
+    }
 
-        if ($input === 'on' && $mode !== $input) {
-            $session->put('orchestra.safemode', $mode = $input);
+    /**
+     * Verify safe mode status.
+     *
+     * @return void
+     */
+    protected function verifyStatus()
+    {
+        $config = $this->config->get('orchestra/extension::mode', 'normal');
+        $input = $this->request->input('_mode', $config);
+
+        if ($input == 'safe') {
+            $this->enableSafeMode();
+        } else {
+            $this->disableSafeMode();
         }
+    }
 
-        return ($mode === 'on');
+    /**
+     * Disable safe mode.
+     *
+     * @return void
+     */
+    protected function disableSafeMode()
+    {
+        $this->config->set('orchestra/extension::mode', $this->status = 'normal');
+    }
+
+    /**
+     * Enable safe mode.
+     *
+     * @return void
+     */
+    protected function enableSafeMode()
+    {
+        $this->config->set('orchestra/extension::mode', $this->status = 'safe');
     }
 }

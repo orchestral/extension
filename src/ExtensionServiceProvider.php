@@ -16,6 +16,8 @@ class ExtensionServiceProvider extends ServiceProvider
 
         $this->registerExtensionConfigManager();
 
+        $this->registerExtensionSafeModeChecker();
+
         $this->registerExtension();
 
         $this->registerExtensionEvents();
@@ -29,17 +31,15 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtension()
     {
         $this->app->singleton('orchestra.extension', function ($app) {
-            $safe       = new SafeModeChecker($app['request'], $app['session.store']);
-            $provider   = new ProviderRepository($app);
             $dispatcher = new Dispatcher(
                 $app['config'],
                 $app['events'],
                 $app['files'],
                 $app['orchestra.extension.finder'],
-                $provider
+                new ProviderRepository($app)
             );
 
-            return new Factory($app, $dispatcher, $safe);
+            return new Factory($app, $dispatcher, $app['orchestra.extension.mode']);
         });
     }
 
@@ -69,6 +69,18 @@ class ExtensionServiceProvider extends ServiceProvider
             ];
 
             return new Finder($app['files'], $config);
+        });
+    }
+
+    /**
+     * Register the service provider for Extension Safe Mode Checker.
+     *
+     * @return void
+     */
+    protected function registerExtensionSafeModeChecker()
+    {
+        $this->app->singleton('orchestra.extension.mode', function ($app) {
+            return new SafeModeChecker($app['config'], $app['request']);
         });
     }
 

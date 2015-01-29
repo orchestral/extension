@@ -22,13 +22,13 @@ class SafeModeCheckerTest extends \PHPUnit_Framework_TestCase
     public function testCheckMethodWhenSafeModeIsOn()
     {
         $request = m::mock('\Illuminate\Http\Request');
-        $session = m::mock('\Illuminate\Session\Store');
+        $config = m::mock('\Illuminate\Contracts\Config\Repository');
 
-        $stub = new SafeModeChecker($request, $session);
+        $stub = new SafeModeChecker($config, $request);
 
-        $request->shouldReceive('input')->once()->with('safe_mode')->andReturn('on');
-        $session->shouldReceive('get')->once()->with('orchestra.safemode', 'off')->andReturn('off')
-            ->shouldReceive('put')->once()->with('orchestra.safemode', 'on')->andReturn(null);
+        $request->shouldReceive('input')->once()->with('_mode', 'safe')->andReturn('safe');
+        $config->shouldReceive('get')->once()->with('orchestra/extension::mode', 'normal')->andReturn('safe')
+            ->shouldReceive('set')->once()->with('orchestra/extension::mode', 'safe')->andReturn(null);
 
         $this->assertTrue($stub->check());
     }
@@ -42,12 +42,13 @@ class SafeModeCheckerTest extends \PHPUnit_Framework_TestCase
     public function testCheckMethodWhenSafeModeIsOff()
     {
         $request = m::mock('\Illuminate\Http\Request');
-        $session = m::mock('\Illuminate\Session\Store');
+        $config = m::mock('\Illuminate\Contracts\Config\Repository');
 
-        $stub = new SafeModeChecker($request, $session);
+        $stub = new SafeModeChecker($config, $request);
 
-        $request->shouldReceive('input')->once()->with('safe_mode')->andReturn('off');
-        $session->shouldReceive('forget')->once()->with('orchestra.safemode')->andReturn(null);
+        $request->shouldReceive('input')->once()->with('_mode', 'normal')->andReturn(null);
+        $config->shouldReceive('get')->once()->with('orchestra/extension::mode', 'normal')->andReturn('normal')
+            ->shouldReceive('set')->once()->with('orchestra/extension::mode', 'normal')->andReturn(null);
 
         $this->assertFalse($stub->check());
     }

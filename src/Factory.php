@@ -48,14 +48,14 @@ class Factory implements FactoryContract
      *
      * @param  \Illuminate\Contracts\Container\Container  $app
      * @param  \Orchestra\Contracts\Extension\Dispatcher  $dispatcher
-     * @param  \Orchestra\Contracts\Extension\SafeMode  $safe
+     * @param  \Orchestra\Contracts\Extension\SafeMode  $mode
      */
-    public function __construct(Container $app, DispatcherContract $dispatcher, SafeMode $safe)
+    public function __construct(Container $app, DispatcherContract $dispatcher, SafeMode $mode)
     {
         $this->app        = $app;
         $this->dispatcher = $dispatcher;
-        $this->safe       = $safe;
         $this->extensions = new Collection;
+        $this->mode       = $mode;
     }
 
     /**

@@ -24,7 +24,7 @@ title: Extension Change Log
 * Rework on how `Orchestra\Extension\SafeModeChecker` detect for safe mode from just using query string to config/environment variable (`EXTENSION_MODE`) as well.
 * Resolve `Orchestra\Extension\RouteGenerator` through IoC Container.
 * Add `Orchestra\Extension\RouteGenerator::setBaseUrl()` helper method.
-* Add optional `Orchestra\Extension\DomainAwareServiceProvider`.
+* Add optional `Orchestra\Extension\Traits\DomainAwareTrait` to allow setting up domain based on `app.url` config.
 
 ## Version 2.2 {#v2-2}
 

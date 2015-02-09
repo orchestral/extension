@@ -1,15 +1,31 @@
-Orchestra Platform Extension Component
+Extension Component for Orchestra Platform
 ==============
 
-`Orchestra\Extension` allows components or packages to be added dynamically to Orchestra Platform without the hassle of modifying the configuration.
+Extension Component allows components or packages to be added dynamically to Orchestra Platform without the hassle of modifying the configuration.
 
-[![Latest Stable Version](https://poser.pugx.org/orchestra/extension/v/stable.png)](https://packagist.org/packages/orchestra/extension) 
-[![Total Downloads](https://poser.pugx.org/orchestra/extension/downloads.png)](https://packagist.org/packages/orchestra/extension) 
-[![Build Status](https://travis-ci.org/orchestral/extension.svg?branch=2.2)](https://travis-ci.org/orchestral/extension) 
-[![Coverage Status](https://coveralls.io/repos/orchestral/extension/badge.png?branch=2.2)](https://coveralls.io/r/orchestral/extension?branch=2.2) 
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/orchestral/extension/badges/quality-score.png?b=2.2)](https://scrutinizer-ci.com/g/orchestral/extension/) 
+[![Latest Stable Version](https://img.shields.io/github/release/orchestral/extension.svg?style=flat)](https://packagist.org/packages/orchestra/extension)
+[![Total Downloads](https://img.shields.io/packagist/dt/orchestra/extension.svg?style=flat)](https://packagist.org/packages/orchestra/extension)
+[![MIT License](https://img.shields.io/packagist/l/orchestra/extension.svg?style=flat)](https://packagist.org/packages/orchestra/extension)
+[![Build Status](https://img.shields.io/travis/orchestral/extension/2.2.svg?style=flat)](https://travis-ci.org/orchestral/extension)
+[![Coverage Status](https://img.shields.io/coveralls/orchestral/extension/2.2.svg?style=flat)](https://coveralls.io/r/orchestral/extension?branch=2.2)
+[![Scrutinizer Quality Score](https://img.shields.io/scrutinizer/g/orchestral/extension/2.2.svg?style=flat)](https://scrutinizer-ci.com/g/orchestral/extension/)
 
-## Quick Installation
+## Table of Content
+
+* [Version Compatibility](#version-compatibility)
+* [Installation](#installation)
+* [Configuration](#configuration)
+* [Resources](#resources)
+
+## Version Compatibility
+
+Laravel    | Extension
+:----------|:----------
+ 4.0.x     | 2.0.x
+ 4.1.x     | 2.1.x
+ 4.2.x     | 2.2.x
+
+## Installation
 
 To install through composer, simply put the following in your `composer.json` file:
 
@@ -20,6 +36,16 @@ To install through composer, simply put the following in your `composer.json` fi
 	}
 }
 ```
+
+And then run `composer install` from the terminal.
+
+### Quick Installation
+
+Above installation can also be simplify by using the following command:
+
+    composer require "orchestra/extension=2.2.*"
+
+## Configuration
 
 Next add the following service provider in `app/config/app.php`.
 
@@ -38,7 +64,7 @@ Next add the following service provider in `app/config/app.php`.
 
 ### Migrations
 
-Before we can start using `Orchestra\Extension`, please run the following:
+Before we can start using Extension Component, please run the following:
 
 ```bash
 php artisan extension:migrate

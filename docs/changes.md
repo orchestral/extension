@@ -22,6 +22,9 @@ title: Extension Change Log
 * Rename `Orchestra\Extension\ConfigManager` to `Orchestra\Extension\Config\Repository`.
 * Move publishing code to `orchestra/publisher` repository.
 * Rework on how `Orchestra\Extension\SafeModeChecker` detect for safe mode from just using query string to config/environment variable (`EXTENSION_MODE`) as well.
+* Resolve `Orchestra\Extension\RouteGenerator` through IoC Container.
+* Add `Orchestra\Extension\RouteGenerator::setBaseUrl()` helper method.
+* Add optional `Orchestra\Extension\DomainAwareServiceProvider`.
 
 ## Version 2.2 {#v2-2}
 

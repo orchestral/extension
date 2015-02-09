@@ -51,15 +51,7 @@ class RouteGenerator implements RouteGeneratorContract
     {
         $this->request = $request;
 
-        // Build base URL and prefix from Request::root();
-        $baseUrl = str_replace(['https://', 'http://'], '', $this->request->root());
-        $base    = explode('/', $baseUrl, 2);
-
-        if (count($base) > 1) {
-            $this->basePrefix = array_pop($base);
-        }
-
-        $this->baseUrl = array_shift($base);
+        $this->setBaseUrl($this->request->root());
 
         // If the handles doesn't start as "//some.domain.com/foo" we should
         // assume that it doesn't belong to any subdomain, otherwise we
@@ -166,6 +158,27 @@ class RouteGenerator implements RouteGeneratorContract
         $prefix = $this->prefix(true);
 
         return trim("{$http}://{$domain}/{$prefix}", '/');
+    }
+
+    /**
+     * Set base URL.
+     *
+     * @param  string  $root
+     * @return $this
+     */
+    public function setBaseUrl($root)
+    {
+        // Build base URL and prefix.
+        $baseUrl = str_replace(['https://', 'http://'], '', $root);
+        $base = explode('/', $baseUrl, 2);
+
+        if (count($base) > 1) {
+            $this->basePrefix = array_pop($base);
+        }
+
+        $this->baseUrl = array_shift($base);
+
+        return $this;
     }
 
     /**

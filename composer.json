@@ -1,7 +1,7 @@
 {
 	"name": "orchestra/extension",
-	"description": "Orchestra Platform 2 Extension Component",
-	"homepage": "http://orchestraplatform.com/docs/2.0/components/extension/",
+	"description": "Extension Component for Orchestra Platform",
+	"homepage": "http://orchestraplatform.com/docs/latest/components/extension/",
 	"keywords": ["orchestra-platform", "orchestral", "laravel", "extension"],
 	"license": "MIT",
 	"authors": [
@@ -27,12 +27,12 @@
 		"illuminate/support": "4.0.*"
 	},
 	"suggest": {
-		"laravel/framework": "Allow using orchestra/extension component outside of Orchestra Platform 2",
-		"orchestra/foundation": "Allow using orchestra/extension with Orchestra Platform 2"
+		"laravel/framework": "Allow using orchestra/extension component outside of Orchestra Platform",
+		"orchestra/foundation": "Allow using orchestra/extension with Orchestra Platform"
 	},
 	"extra": {
 		"branch-alias": {
-			"dev-master": "2.1-dev"
+			"dev-master": "3.1-dev"
 		}
 	},
 	"minimum-stability": "dev"

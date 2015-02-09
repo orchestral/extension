@@ -1,4 +1,6 @@
-<?php namespace Orchestra\Extension;
+<?php namespace Orchestra\Extension\Traits;
+
+use Orchestra\Extension\RouteGenerator;
 
 trait DomainAwareTrait
 {

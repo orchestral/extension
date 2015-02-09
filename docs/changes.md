@@ -5,7 +5,7 @@ title: Extension Change Log
 
 ## Version 3.0 {#v3-0}
 
-### v3.0.0@dev {#v3-0-0}
+### v3.0.0 {#v3-0-0}
 
 * Update support to Laravel Framework v5.0.
 * Simplify PSR-4 path.

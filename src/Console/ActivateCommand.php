@@ -32,7 +32,7 @@ class ActivateCommand extends ExtensionCommand implements Listener
     public function handle(Processor $activator)
     {
         if (! $this->confirmToProceed()) {
-            return null;
+            return;
         }
 
         return $activator->activate($this, new Fluent(['name' => $this->argument('name')]));

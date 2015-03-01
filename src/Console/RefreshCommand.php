@@ -26,7 +26,7 @@ class RefreshCommand extends ExtensionCommand
     public function handle()
     {
         if (! $this->confirmToProceed()) {
-            return null;
+            return;
         }
 
         $name = $this->argument('name');

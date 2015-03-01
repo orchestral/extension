@@ -123,7 +123,6 @@ class CommandServiceProvider extends ServiceProvider
         $this->commands('orchestra.commands.extension.refresh');
     }
 
-
     /**
      * Register the service provider.
      *

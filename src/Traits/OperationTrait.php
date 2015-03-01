@@ -98,7 +98,7 @@ trait OperationTrait
         $active    = $memory->get('extensions.active', []);
 
         if (! isset($available[$name])) {
-            return null;
+            return;
         }
 
         // Append the activated extension to active extensions, and also

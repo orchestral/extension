@@ -192,7 +192,7 @@ class Dispatcher implements DispatcherContract
                 return $path;
             }
 
-            return "source-path::" . ltrim($path, '/');
+            return "source-path::".ltrim($path, '/');
         };
 
         $paths = array_map($resolver, $autoload);

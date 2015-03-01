@@ -217,7 +217,7 @@ class Finder implements FinderContract
         list($vendor, $package) = $namespace = $this->resolveExtensionNamespace($manifest);
 
         if (is_null($vendor) && is_null($package)) {
-            return null;
+            return;
         }
 
         // Each package should have vendor/package name pattern.

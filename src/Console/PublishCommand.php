@@ -32,7 +32,7 @@ class PublishCommand extends ExtensionCommand implements Listener
     public function handle(Processor $migrator)
     {
         if (! $this->confirmToProceed()) {
-            return null;
+            return;
         }
 
         return $migrator->migrate($this, new Fluent(['name' => $this->argument('name')]));

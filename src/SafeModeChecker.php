@@ -1,7 +1,6 @@
 <?php namespace Orchestra\Extension;
 
 use Illuminate\Http\Request;
-use Illuminate\Filesystem\Filesystem;
 use Orchestra\Contracts\Extension\SafeMode;
 use Illuminate\Contracts\Config\Repository;
 

@@ -32,7 +32,7 @@ class DeactivateCommand extends ExtensionCommand implements Listener
     public function handle(Processor $deactivator)
     {
         if (! $this->confirmToProceed()) {
-            return null;
+            return;
         }
 
         return $deactivator->deactivate($this, new Fluent(['name' => $this->argument('name')]));

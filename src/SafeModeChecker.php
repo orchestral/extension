@@ -35,7 +35,7 @@ class SafeModeChecker implements SafeMode
      */
     public function __construct(Repository $config, Request $request)
     {
-        $this->config = $config;
+        $this->config  = $config;
         $this->request = $request;
     }
 
@@ -61,7 +61,7 @@ class SafeModeChecker implements SafeMode
     protected function verifyStatus()
     {
         $config = $this->config->get('orchestra/extension::mode', 'normal');
-        $input = $this->request->input('_mode', $config);
+        $input  = $this->request->input('_mode', $config);
 
         if ($input == 'safe') {
             $this->enableSafeMode();

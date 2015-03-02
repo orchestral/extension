@@ -21,14 +21,14 @@ class DetectCommand extends BaseCommand
      */
     public function handle()
     {
-        $service = $this->laravel['orchestra.extension'];
+        $service    = $this->laravel['orchestra.extension'];
         $extensions = $service->detect();
 
         if (empty($extensions)) {
             return $this->line("<comment>No extension detected!</comment>");
         }
 
-        $header = ['Extension', 'Version', 'Activate'];
+        $header  = ['Extension', 'Version', 'Activate'];
         $content = [];
 
         foreach ($extensions as $name => $options) {

@@ -74,6 +74,7 @@ class RouteGenerator implements RouteGeneratorContract
      * Get route domain.
      *
      * @param  bool  $forceBase
+     *
      * @return string
      */
     public function domain($forceBase = false)
@@ -93,6 +94,7 @@ class RouteGenerator implements RouteGeneratorContract
      * Determine if the current request URI matches a pattern.
      *
      * @param  string  $pattern
+     *
      * @return bool
      */
     public function is($pattern)
@@ -130,6 +132,7 @@ class RouteGenerator implements RouteGeneratorContract
      * Get route prefix.
      *
      * @param  bool  $forceBase
+     *
      * @return string
      */
     public function prefix($forceBase = false)
@@ -164,13 +167,14 @@ class RouteGenerator implements RouteGeneratorContract
      * Set base URL.
      *
      * @param  string  $root
+     *
      * @return $this
      */
     public function setBaseUrl($root)
     {
         // Build base URL and prefix.
         $baseUrl = str_replace(['https://', 'http://'], '', $root);
-        $base = explode('/', $baseUrl, 2);
+        $base    = explode('/', $baseUrl, 2);
 
         if (count($base) > 1) {
             $this->basePrefix = array_pop($base);
@@ -185,6 +189,7 @@ class RouteGenerator implements RouteGeneratorContract
      * Get route to.
      *
      * @param  string  $to
+     *
      * @return string
      */
     public function to($to)

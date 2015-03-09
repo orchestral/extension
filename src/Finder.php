@@ -92,7 +92,7 @@ class Finder implements FinderContract
         // path; application folder, vendor folders and workbench folders.
         $this->paths = [
             "{$app}",
-            "{$base}/vendor/*/*"
+            "{$base}/vendor/*/*",
         ];
     }
 
@@ -100,6 +100,7 @@ class Finder implements FinderContract
      * Add a new path to finder.
      *
      * @param  string  $path
+     *
      * @return $this
      */
     public function addPath($path)
@@ -148,7 +149,9 @@ class Finder implements FinderContract
      * Get manifest contents.
      *
      * @param  string  $manifest
+     *
      * @return array
+     *
      * @throws \Orchestra\Contracts\Support\ManifestRuntimeException
      */
     protected function getManifestContents($manifest)
@@ -184,6 +187,7 @@ class Finder implements FinderContract
      * configuration.
      *
      * @param  array  $jsonable
+     *
      * @return array
      */
     protected function generateManifestConfig(array $jsonable)
@@ -205,7 +209,9 @@ class Finder implements FinderContract
      *
      * @param  string  $manifest
      * @param  string  $path
+     *
      * @return string
+     *
      * @throws \RuntimeException
      */
     public function guessExtensionNameFromManifest($manifest, $path)
@@ -230,6 +236,7 @@ class Finder implements FinderContract
      * Guess extension path from manifest file.
      *
      * @param  string  $path
+     *
      * @return string
      */
     public function guessExtensionPath($path)
@@ -250,6 +257,7 @@ class Finder implements FinderContract
      *
      * @param  string  $name
      * @param  string  $path
+     *
      * @return bool
      */
     public function registerExtension($name, $path)
@@ -263,6 +271,7 @@ class Finder implements FinderContract
      * Resolve extension namespace name from manifest.
      *
      * @param  string  $manifest
+     *
      * @return array
      */
     public function resolveExtensionNamespace($manifest)
@@ -286,6 +295,7 @@ class Finder implements FinderContract
      * Resolve extension path.
      *
      * @param  string  $path
+     *
      * @return string
      */
     public function resolveExtensionPath($path)
@@ -304,7 +314,9 @@ class Finder implements FinderContract
      * Validate extension name.
      *
      * @param  string  $name
+     *
      * @return string
+     *
      * @throws \RuntimeException
      */
     public function validateExtensionName($name)

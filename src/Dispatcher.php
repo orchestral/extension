@@ -80,6 +80,7 @@ class Dispatcher implements DispatcherContract
      *
      * @param  string  $name
      * @param  array   $options
+     *
      * @return void
      */
     public function register($name, array $options)
@@ -123,6 +124,7 @@ class Dispatcher implements DispatcherContract
      *
      * @param  string  $name
      * @param  array   $options
+     *
      * @return void
      */
     public function start($name, array $options)
@@ -158,6 +160,7 @@ class Dispatcher implements DispatcherContract
      *
      * @param  string  $name
      * @param  array   $options
+     *
      * @return void
      */
     public function finish($name, array $options)
@@ -171,6 +174,7 @@ class Dispatcher implements DispatcherContract
      * @param  string  $name
      * @param  array   $options
      * @param  string  $type
+     *
      * @return void
      */
     protected function fireEvent($name, $options, $type = 'started')
@@ -183,6 +187,7 @@ class Dispatcher implements DispatcherContract
      * Get list of available paths for the extension.
      *
      * @param  array  $autoload
+     *
      * @return array
      */
     protected function getAutoloadFiles(array $autoload)

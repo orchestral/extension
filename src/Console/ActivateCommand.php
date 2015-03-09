@@ -27,6 +27,7 @@ class ActivateCommand extends ExtensionCommand implements Listener
      * Execute the console command.
      *
      * @param  \Orchestra\Extension\Processor\Activator  $activator
+     *
      * @return void
      */
     public function handle(Processor $activator)
@@ -43,6 +44,7 @@ class ActivateCommand extends ExtensionCommand implements Listener
      *
      * @param  \Illuminate\Support\Fluent  $extension
      * @param  array  $errors
+     *
      * @return mixed
      */
     public function activationHasFailed(Fluent $extension, array $errors)
@@ -54,6 +56,7 @@ class ActivateCommand extends ExtensionCommand implements Listener
      * Response when extension activation has succeed.
      *
      * @param  \Illuminate\Support\Fluent  $extension
+     *
      * @return mixed
      */
     public function activationHasSucceed(Fluent $extension)

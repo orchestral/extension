@@ -31,6 +31,7 @@ abstract class Processor
      * @param  string  $type
      * @param  \Illuminate\Support\Fluent  $extension
      * @param  \Closure  $callback
+     *
      * @return mixed
      */
     protected function execute($listener, $type, Fluent $extension, Closure $callback)

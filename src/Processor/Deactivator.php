@@ -11,6 +11,7 @@ class Deactivator extends Processor implements Command
      *
      * @param  \Orchestra\Contracts\Extension\Listener\Deactivator  $listener
      * @param  \Illuminate\Support\Fluent  $extension
+     *
      * @return mixed
      */
     public function deactivate(Listener $listener, Fluent $extension)

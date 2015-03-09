@@ -54,7 +54,7 @@ class Factory implements FactoryContract
     {
         $this->app        = $app;
         $this->dispatcher = $dispatcher;
-        $this->extensions = new Collection;
+        $this->extensions = new Collection();
         $this->mode       = $mode;
     }
 
@@ -89,6 +89,7 @@ class Factory implements FactoryContract
      * @param  string  $name
      * @param  string  $option
      * @param  mixed   $default
+     *
      * @return mixed
      */
     public function option($name, $option, $default = null)
@@ -104,6 +105,7 @@ class Factory implements FactoryContract
      * Check whether an extension has a writable public asset.
      *
      * @param  string  $name
+     *
      * @return bool
      */
     public function permission($name)
@@ -120,6 +122,7 @@ class Factory implements FactoryContract
      * Publish an extension.
      *
      * @param  string
+     *
      * @return void
      */
     public function publish($name)
@@ -136,6 +139,7 @@ class Factory implements FactoryContract
      *
      * @param  string  $name
      * @param  string  $path
+     *
      * @return bool
      */
     public function register($name, $path)
@@ -148,6 +152,7 @@ class Factory implements FactoryContract
      *
      * @param  string   $name
      * @param  string   $default
+     *
      * @return \Orchestra\Contracts\Extension\RouteGenerator
      */
     public function route($name, $default = '/')
@@ -163,7 +168,7 @@ class Factory implements FactoryContract
 
             $this->routes[$name] = $this->app->make('Orchestra\Extension\RouteGenerator', [
                 $this->app['config']->get($key, $default),
-                $this->app['request']
+                $this->app['request'],
             ]);
         }
 
@@ -175,6 +180,7 @@ class Factory implements FactoryContract
      *
      * @param  string  $name
      * @param  string  $path
+     *
      * @return bool
      */
     protected function isWritableWithAsset($name, $path)

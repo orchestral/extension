@@ -34,6 +34,7 @@ class ProviderRepository
      * Load available service providers.
      *
      * @param  array  $services
+     *
      * @return void
      */
     public function provides(array $services)
@@ -56,6 +57,7 @@ class ProviderRepository
      *
      * @param  \Illuminate\Support\ServiceProvider  $instance
      * @param  string  $provider
+     *
      * @return void
      */
     protected function registerDeferredServiceProvider(ServiceProvider $instance, $provider)
@@ -73,6 +75,7 @@ class ProviderRepository
      * Register eager service provider.
      *
      * @param  \Illuminate\Support\ServiceProvider  $instance
+     *
      * @return void
      */
     protected function registerEagerServiceProvider(ServiceProvider $instance)

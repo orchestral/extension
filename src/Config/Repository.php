@@ -36,6 +36,7 @@ class Repository
      *
      * @param  string  $name
      * @param  array   $aliases
+     *
      * @return bool
      */
     public function map($name, $aliases)

@@ -68,7 +68,7 @@ trait DispatchableTrait
             $this->dispatcher->finish($name, $options);
         }
 
-        $this->extensions = new Collection;
+        $this->extensions = new Collection();
 
         return $this;
     }

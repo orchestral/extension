@@ -21,7 +21,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructMethod()
     {
-        $config['path.app'] = '/foo/app';
+        $config['path.app']  = '/foo/app';
         $config['path.base'] = '/foo/path';
 
         $stub = new Finder(m::mock('\Illuminate\Filesystem\Filesystem'), $config);
@@ -31,14 +31,14 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $paths->setAccessible(true);
 
         $this->assertEquals(
-            array('/foo/app', '/foo/path/vendor/*/*'),
+            ['/foo/app', '/foo/path/vendor/*/*'],
             $paths->getValue($stub)
         );
 
         $stub->addPath('/foo/public');
 
         $this->assertEquals(
-            array('/foo/app', '/foo/path/vendor/*/*', '/foo/public'),
+            ['/foo/app', '/foo/path/vendor/*/*', '/foo/public'],
             $paths->getValue($stub)
         );
     }
@@ -50,23 +50,23 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testDetectMethod()
     {
-        $config['path.app'] = '/foo/app';
+        $config['path.app']  = '/foo/app';
         $config['path.base'] = '/foo/path';
 
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
         $files->shouldReceive('glob')->once()->with('/foo/app/orchestra.json')
-                ->andReturn(array('/foo/app/orchestra.json'))
+                ->andReturn(['/foo/app/orchestra.json'])
             ->shouldReceive('get')->once()->with('/foo/app/orchestra.json')->andReturn('{"name":"Application"}')
             ->shouldReceive('glob')->once()->with('/foo/path/vendor/*/*/orchestra.json')
-                ->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json', '/foo/orchestra.js'))
+                ->andReturn(['/foo/path/vendor/laravel/framework/orchestra.json', '/foo/orchestra.js'])
             ->shouldReceive('get')->once()->with('/foo/path/vendor/laravel/framework/orchestra.json')
                 ->andReturn('{"name":"Laravel Framework","path": "vendor::laravel/framework"}');
 
         $stub = new Finder($files, $config);
 
-        $expected = new Collection(array(
-            'laravel/framework' => array(
+        $expected = new Collection([
+            'laravel/framework' => [
                 'path'        => 'vendor::laravel/framework',
                 'source-path' => 'vendor::laravel/framework',
                 'name'        => 'Laravel Framework',
@@ -74,11 +74,11 @@ class FinderTest extends \PHPUnit_Framework_TestCase
                 'author'      => null,
                 'url'         => null,
                 'version'     => '>0',
-                'config'      => array(),
-                'autoload'    => array(),
-                'provides'    => array(),
-            ),
-            'app' => array(
+                'config'      => [],
+                'autoload'    => [],
+                'provides'    => [],
+            ],
+            'app' => [
                 'path'        => 'app::',
                 'source-path' => 'app::',
                 'name'        => 'Application',
@@ -86,11 +86,11 @@ class FinderTest extends \PHPUnit_Framework_TestCase
                 'author'      => null,
                 'url'         => null,
                 'version'     => '>0',
-                'config'      => array(),
-                'autoload'    => array(),
-                'provides'    => array(),
-            ),
-        ));
+                'config'      => [],
+                'autoload'    => [],
+                'provides'    => [],
+            ],
+        ]);
 
         $this->assertEquals($expected, $stub->detect());
     }
@@ -103,16 +103,16 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testDetectMethodGivenReservedNameThrowsException()
     {
-        $config['path.app'] = '/foo/app';
+        $config['path.app']  = '/foo/app';
         $config['path.base'] = '/foo/path';
 
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
         $files->shouldReceive('glob')->once()->with('/foo/app/orchestra.json')
-                ->andReturn(array('/foo/app/orchestra.json'))
+                ->andReturn(['/foo/app/orchestra.json'])
             ->shouldReceive('get')->once()->with('/foo/app/orchestra.json')->andReturn('{"name":"Application"}')
             ->shouldReceive('glob')->once()->with('/foo/path/vendor/*/*/orchestra.json')
-                ->andReturn(array('/foo/path/vendor/orchestra/foundation/orchestra.json'));
+                ->andReturn(['/foo/path/vendor/orchestra/foundation/orchestra.json']);
 
         $stub = new Finder($files, $config);
         $stub->detect();
@@ -126,14 +126,14 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testDetectMethodThrowsException()
     {
-        $config['path.app'] = '/foo/app';
+        $config['path.app']  = '/foo/app';
         $config['path.base'] = '/foo/path';
 
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
-        $files->shouldReceive('glob')->once()->with('/foo/app/orchestra.json')->andReturn(array())
+        $files->shouldReceive('glob')->once()->with('/foo/app/orchestra.json')->andReturn([])
             ->shouldReceive('glob')->once()->with('/foo/path/vendor/*/*/orchestra.json')
-                ->andReturn(array('/foo/path/vendor/laravel/framework/orchestra.json'))
+                ->andReturn(['/foo/path/vendor/laravel/framework/orchestra.json'])
             ->shouldReceive('get')->once()->with('/foo/path/vendor/laravel/framework/orchestra.json')
                 ->andReturn('{"name":"Laravel Framework}');
 
@@ -148,7 +148,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGuessExtensionPathMethod($output, $expected)
     {
-        $config['path.app'] = '/foo/path/app';
+        $config['path.app']  = '/foo/path/app';
         $config['path.base'] = '/foo/path';
 
         $stub = new Finder(m::mock('\Illuminate\Filesystem\Filesystem'), $config);
@@ -164,7 +164,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveExtensionNamespace($path, $expected, $output)
     {
-        $config['path.app'] = '/foo/path/app';
+        $config['path.app']  = '/foo/path/app';
         $config['path.base'] = '/foo/path';
 
         $stub = new Finder(m::mock('\Illuminate\Filesystem\Filesystem'), $config);
@@ -179,7 +179,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveExtensionPathMethod($expected, $output)
     {
-        $config['path.app'] = '/foo/path/app';
+        $config['path.app']  = '/foo/path/app';
         $config['path.base'] = '/foo/path';
 
         $stub = new Finder(m::mock('\Illuminate\Filesystem\Filesystem'), $config);
@@ -191,7 +191,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testRegisterExtensionMethod()
     {
-        $config['path.app'] = '/foo/app';
+        $config['path.app']  = '/foo/app';
         $config['path.base'] = '/foo/path';
 
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
@@ -204,11 +204,11 @@ class FinderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($stub->registerExtension('hello', '/foo/path/modules/'));
 
-        $expected = array(
+        $expected = [
             "/foo/app",
             "/foo/path/vendor/*/*",
-            'hello' => '/foo/path/modules'
-        );
+            'hello' => '/foo/path/modules',
+        ];
         $this->assertEquals($expected, $paths->getValue($stub));
     }
 
@@ -217,59 +217,59 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function extensionManifestProvider()
     {
-        $windowsPath['path.app'] = 'c:\www\laravel\app';
+        $windowsPath['path.app']  = 'c:\www\laravel\app';
         $windowsPath['path.base'] = 'c:\www\laravel';
 
-        $unixPath['path.app'] = '/var/www/laravel/app';
+        $unixPath['path.app']  = '/var/www/laravel/app';
         $unixPath['path.base'] = '/var/www/laravel';
 
-        return array(
-            array(
+        return [
+            [
                 $windowsPath,
-                array("laravel", "app"),
+                ["laravel", "app"],
                 "c:\www\laravel\app/orchestra.json",
-            ),
-            array(
+            ],
+            [
                 $windowsPath,
-                array("orchestra", "control"),
+                ["orchestra", "control"],
                 "c:\www\laravel\vendor/orchestra/control/orchestra.json",
-            ),
-            array(
+            ],
+            [
                 $windowsPath,
-                array("orchestra", "story"),
+                ["orchestra", "story"],
                 "c:\www\laravel\vendor/orchestra/story/orchestra.json",
-            ),
-            array(
+            ],
+            [
                 $windowsPath,
-                array("laravel", "app"),
+                ["laravel", "app"],
                 "c:\www\laravel\app\orchestra.json",
-            ),
-            array(
+            ],
+            [
                 $windowsPath,
-                array("orchestra", "control"),
+                ["orchestra", "control"],
                 "c:\www\laravel\vendor\orchestra\control\orchestra.json",
-            ),
-            array(
+            ],
+            [
                 $windowsPath,
-                array("orchestra", "story"),
+                ["orchestra", "story"],
                 "c:\www\laravel\vendor\orchestra\story\orchestra.json",
-            ),
-            array(
+            ],
+            [
                 $unixPath,
-                array("laravel", "app"),
+                ["laravel", "app"],
                 "/var/www/laravel/app/orchestra.json",
-            ),
-            array(
+            ],
+            [
                 $unixPath,
-                array("orchestra", "control"),
+                ["orchestra", "control"],
                 "/var/www/laravel/vendor/orchestra/control/orchestra.json",
-            ),
-            array(
+            ],
+            [
                 $unixPath,
-                array("orchestra", "story"),
+                ["orchestra", "story"],
                 "/var/www/laravel/vendor/orchestra/story/orchestra.json",
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -277,11 +277,11 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function extensionPathProvider()
     {
-        return array(
-            array("foobar", "foobar"),
-            array("/foo/path/app/foobar", "app::foobar"),
-            array("/foo/path/vendor/foobar", "vendor::foobar"),
-            array("/foo/path/foobar", "base::foobar"),
-        );
+        return [
+            ["foobar", "foobar"],
+            ["/foo/path/app/foobar", "app::foobar"],
+            ["/foo/path/vendor/foobar", "vendor::foobar"],
+            ["/foo/path/foobar", "base::foobar"],
+        ];
     }
 }

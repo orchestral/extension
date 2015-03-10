@@ -25,10 +25,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
         $memory->shouldReceive('make')->once()->andReturn($memory)
             ->shouldReceive('get')->once()
-                ->with('extension_laravel/framework', array())
-                ->andReturn(array('foobar' => 'foobar is awesome'))
+                ->with('extension_laravel/framework', [])
+                ->andReturn(['foobar' => 'foobar is awesome'])
             ->shouldReceive('put')->once()
-                ->with('extension_laravel/framework', array('foobar' => 'foobar is awesome', 'foo' => 'foobar'))
+                ->with('extension_laravel/framework', ['foobar' => 'foobar is awesome', 'foo' => 'foobar'])
                 ->andReturn(true);
         $config->shouldReceive('set')->once()
                 ->with('laravel/framework::foobar', 'foobar is awesome')
@@ -40,9 +40,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
         $stub = new Repository($config, $memory);
 
-        $stub->map('laravel/framework', array(
+        $stub->map('laravel/framework', [
             'foo'    => 'laravel/framework::foo',
             'foobar' => 'laravel/framework::foobar',
-        ));
+        ]);
     }
 }

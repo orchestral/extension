@@ -33,7 +33,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->app        = new Container;
+        $this->app        = new Container();
         $this->dispatcher = m::mock('\Orchestra\Extension\Dispatcher');
         $this->debugger   = m::mock('\Orchestra\Extension\SafeModeChecker');
     }
@@ -54,18 +54,18 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function dataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'path'    => '/foo/path/laravel/framework/',
-                'config'  => array('foo' => 'bar', 'handles' => 'laravel'),
-                'provide' => array('Laravel\FrameworkServiceProvider'),
-            ),
-            array(
+                'config'  => ['foo' => 'bar', 'handles' => 'laravel'],
+                'provide' => ['Laravel\FrameworkServiceProvider'],
+            ],
+            [
                 'path'    => '/foo/app/',
-                'config'  => array('foo' => 'bar'),
-                'provide' => array(),
-            ),
-        );
+                'config'  => ['foo' => 'bar'],
+                'provide' => [],
+            ],
+        ];
     }
 
     /**
@@ -81,7 +81,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $app['orchestra.memory'] = $memory;
 
         $memory->shouldReceive('get')
-                ->once()->with('extensions.available.laravel/framework')->andReturn(array());
+                ->once()->with('extensions.available.laravel/framework')->andReturn([]);
 
         $stub = new Factory($app, $this->dispatcher, $this->debugger);
         $stub->attach($memory);
@@ -103,25 +103,25 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $asset    = m::mock('\Orchestra\Publisher\AssetManager');
         $events   = m::mock('\Illuminate\Contracts\Events\Dispatcher');
 
-        $app['orchestra.memory'] = $memory;
+        $app['orchestra.memory']            = $memory;
         $app['orchestra.publisher.migrate'] = $migrator;
-        $app['orchestra.publisher.asset'] = $asset;
-        $app['events'] = $events;
+        $app['orchestra.publisher.asset']   = $asset;
+        $app['events']                      = $events;
 
         $dispatcher->shouldReceive('register')->once()->with('laravel/framework', m::type('Array'))->andReturnNull();
         $memory->shouldReceive('get')->twice()
-                ->with('extensions.available', array())->andReturn(array('laravel/framework' => array()))
-            ->shouldReceive('get')->twice()->with('extensions.active', array())->andReturn(array())
+                ->with('extensions.available', [])->andReturn(['laravel/framework' => []])
+            ->shouldReceive('get')->twice()->with('extensions.active', [])->andReturn([])
             ->shouldReceive('put')->once()
-                ->with('extensions.active', array('laravel/framework' => array()))->andReturn(true);
+                ->with('extensions.active', ['laravel/framework' => []])->andReturn(true);
         $migrator->shouldReceive('extension')->once()->with('laravel/framework')->andReturn(true);
         $asset->shouldReceive('extension')->once()->with('laravel/framework')->andReturn(true);
         $events->shouldReceive('fire')->once()
-                ->with('orchestra.publishing', array('laravel/framework'))->andReturn(true)
+                ->with('orchestra.publishing', ['laravel/framework'])->andReturn(true)
             ->shouldReceive('fire')->once()
                 ->with('orchestra.publishing: laravel/framework')->andReturn(true)
             ->shouldReceive('fire')->once()
-                ->with('orchestra.activating: laravel/framework', array('laravel/framework'))
+                ->with('orchestra.activating: laravel/framework', ['laravel/framework'])
                 ->andReturnNull();
 
         $stub = new Factory($app, $dispatcher, $this->debugger);
@@ -139,9 +139,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $app    = $this->app;
         $memory = m::mock('\Orchestra\Contracts\Memory\Provider');
+
         $app['orchestra.memory'] = $memory;
 
-        $memory->shouldReceive('get')->once()->with('extensions.active.laravel/framework')->andReturn(array());
+        $memory->shouldReceive('get')->once()->with('extensions.active.laravel/framework')->andReturn([]);
 
         $stub = new Factory($app, $this->dispatcher, $this->debugger);
         $stub->attach($memory);
@@ -155,18 +156,18 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeactivateMethod()
     {
-        $app = $this->app;
+        $app                     = $this->app;
         $app['orchestra.memory'] = $memory = m::mock('\Orchestra\Contracts\Memory\Provider');
-        $app['events'] = $events = m::mock('\Illuminate\Contracts\Events\Dispatcher[fire]');
+        $app['events']           = $events           = m::mock('\Illuminate\Contracts\Events\Dispatcher[fire]');
 
         $memory->shouldReceive('get')->twice()
-                ->with('extensions.active', array())
-                ->andReturn(array('laravel/framework' => array(), 'daylerees/doc-reader' => array()))
+                ->with('extensions.active', [])
+                ->andReturn(['laravel/framework' => [], 'daylerees/doc-reader' => []])
             ->shouldReceive('put')->once()
-                ->with('extensions.active', array('daylerees/doc-reader' => array()))
+                ->with('extensions.active', ['daylerees/doc-reader' => []])
                 ->andReturn(true);
         $events->shouldReceive('fire')->once()
-                ->with('orchestra.deactivating: laravel/framework', array('laravel/framework'))
+                ->with('orchestra.deactivating: laravel/framework', ['laravel/framework'])
                 ->andReturnNull();
 
         $stub = new Factory($app, $this->dispatcher, $this->debugger);
@@ -174,7 +175,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($stub->deactivate('laravel/framework'));
         $this->assertFalse($stub->deactivate('laravel'));
     }
-
 
     /**
      * Test Orchestra\Extension\Factory::boot() method.
@@ -190,15 +190,15 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $memory     = m::mock('\Orchestra\Contracts\Memory\Provider');
 
         $app['orchestra.memory'] = $memory;
-        $app['events'] = $events;
+        $app['events']           = $events;
 
         list($options1, $options2) = $this->dataProvider();
 
-        $extension = array('laravel/framework' => $options1, 'app' => $options2);
+        $extension = ['laravel/framework' => $options1, 'app' => $options2];
 
         $events->shouldReceive('fire')->once()->with('orchestra.extension: booted')->andReturnNull();
-        $memory->shouldReceive('get')->once()->with('extensions.available', array())->andReturn($extension)
-            ->shouldReceive('get')->once()->with('extensions.active', array())->andReturn($extension);
+        $memory->shouldReceive('get')->once()->with('extensions.available', [])->andReturn($extension)
+            ->shouldReceive('get')->once()->with('extensions.active', [])->andReturn($extension);
         $dispatcher->shouldReceive('register')->once()->with('laravel/framework', $options1)->andReturnNull()
             ->shouldReceive('register')->once()->with('app', $options2)->andReturnNull()
             ->shouldReceive('boot')->once()->andReturnNull();
@@ -229,15 +229,15 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $finder = m::mock('\Orchestra\Contracts\Extension\Finder');
         $memory = m::mock('\Orchestra\Contracts\Memory\Provider');
 
-        $app['events'] = $events;
+        $app['events']                     = $events;
         $app['orchestra.extension.finder'] = $finder;
-        $app['orchestra.memory'] = $memory;
+        $app['orchestra.memory']           = $memory;
 
-        $extensions = new Collection(array('foo'));
+        $extensions = new Collection(['foo']);
 
         $events->shouldReceive('fire')->once()->with('orchestra.extension: detecting')->andReturnNull();
         $finder->shouldReceive('detect')->once()->andReturn($extensions);
-        $memory->shouldReceive('put')->once()->with('extensions.available', array('foo'))->andReturn('foobar');
+        $memory->shouldReceive('put')->once()->with('extensions.available', ['foo'])->andReturn('foobar');
 
         $stub = new Factory($app, $this->dispatcher, $this->debugger);
         $stub->attach($memory);
@@ -277,10 +277,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
         $stub = new Factory($this->app, $dispatcher, $this->debugger);
 
-        $refl = new \ReflectionObject($stub);
+        $refl       = new \ReflectionObject($stub);
         $extensions = $refl->getProperty('extensions');
         $extensions->setAccessible(true);
-        $extensions->setValue($stub, array('laravel/framework' => $options1, 'app' => $options2));
+        $extensions->setValue($stub, ['laravel/framework' => $options1, 'app' => $options2]);
 
         $stub->finish();
     }
@@ -297,9 +297,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $finder = m::mock('Finder');
         $files  = m::mock('Filesystem');
 
-        $app['path.public'] = '/var/orchestra';
-        $app['orchestra.memory'] = $memory;
-        $app['files'] = $files;
+        $app['path.public']                = '/var/orchestra';
+        $app['orchestra.memory']           = $memory;
+        $app['files']                      = $files;
         $app['orchestra.extension.finder'] = $finder;
 
         $memory->shouldReceive('get')->once()->with('extensions.available.foo.path', 'foo')->andReturn('foo')
@@ -335,7 +335,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $memory = m::mock('\Orchestra\Contracts\Memory\Provider');
 
         $app['orchestra.extension.finder'] = $finder;
-        $app['orchestra.memory'] = $memory;
+        $app['orchestra.memory']           = $memory;
 
         $stub = new Factory($app, $this->dispatcher, $this->debugger);
 
@@ -355,16 +355,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $memory = m::mock('\Orchestra\Contracts\Memory\Provider');
 
         $app['orchestra.memory'] = $memory;
-        $extension = array('config' => array('handles' => 'app'));
+        $extension               = ['config' => ['handles' => 'app']];
 
         $memory->shouldReceive('get')->once()
-                ->with('extensions.available.laravel/framework', array())->andReturn($extension)
+                ->with('extensions.available.laravel/framework', [])->andReturn($extension)
             ->shouldReceive('put')->once()
                 ->with('extensions.active.laravel/framework', $extension)->andReturnNull()
             ->shouldReceive('has')->once()
                 ->with('extension_laravel/framework')->andReturn(true)
             ->shouldReceive('put')->once()
-                ->with('extension_laravel/framework', array())->andReturnNull();
+                ->with('extension_laravel/framework', [])->andReturnNull();
 
         $stub = new Factory($app, $this->dispatcher, $this->debugger);
         $stub->attach($memory);
@@ -387,17 +387,17 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $request    = m::mock('\Illuminate\Http\Request');
 
         $app['orchestra.memory'] = $memory;
-        $app['events'] = $events;
-        $app['config'] = $config;
-        $app['request'] = $request;
+        $app['events']           = $events;
+        $app['config']           = $config;
+        $app['request']          = $request;
 
         list($options1, $options2) = $this->dataProvider();
 
-        $extension = array('laravel/framework' => $options1, 'app' => $options2);
+        $extension = ['laravel/framework' => $options1, 'app' => $options2];
 
         $events->shouldReceive('fire')->once()->with('orchestra.extension: booted')->andReturnNull();
-        $memory->shouldReceive('get')->once()->with('extensions.available', array())->andReturn($extension)
-            ->shouldReceive('get')->once()->with('extensions.active', array())->andReturn($extension);
+        $memory->shouldReceive('get')->once()->with('extensions.available', [])->andReturn($extension)
+            ->shouldReceive('get')->once()->with('extensions.active', [])->andReturn($extension);
         $dispatcher->shouldReceive('register')->once()->with('laravel/framework', $options1)->andReturnNull()
             ->shouldReceive('register')->once()->with('app', $options2)->andReturnNull()
             ->shouldReceive('boot')->once()->andReturnNull();

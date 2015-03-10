@@ -23,7 +23,7 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testServicesMethodWhenEager()
     {
         $mock = m::mock('\Orchestra\Extension\TestCase\FooServiceProvider');
-        $app = m::mock('\Illuminate\Contracts\Foundation\Application');
+        $app  = m::mock('\Illuminate\Contracts\Foundation\Application');
 
         $app->shouldReceive('resolveProviderClass')->once()
                 ->with('Orchestra\Extension\TestCase\FooServiceProvider')->andReturn($mock)
@@ -46,14 +46,14 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testServicesMethodWhenDeferred()
     {
         $mock = m::mock('\Orchestra\Extension\TestCase\FooServiceProvider');
-        $app = m::mock('\Orchestra\Contracts\Foundation\DeferrableServiceContainer', '\Illuminate\Contracts\Foundation\Application');
+        $app  = m::mock('\Orchestra\Contracts\Foundation\DeferrableServiceContainer', '\Illuminate\Contracts\Foundation\Application');
 
         $app->shouldReceive('resolveProviderClass')->once()
                 ->with('Orchestra\Extension\TestCase\FooServiceProvider')->andReturn($mock)
             ->shouldReceive('getDeferredServices')->once()->andReturn(['events' => '\Illuminate\Events\EventsServiceProvider'])
             ->shouldReceive('setDeferredServices')->once()->andReturn([
                 'events' => 'Illuminate\Events\EventsServiceProvider',
-                'foo' => 'Orchestra\Extension\TestCase\FooServiceProvider',
+                'foo'    => 'Orchestra\Extension\TestCase\FooServiceProvider',
             ]);
 
         $mock->shouldReceive('isDeferred')->once()->andReturn(true)

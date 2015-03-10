@@ -47,11 +47,11 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function isDataProvider()
     {
-        return array(
-            array('foobar', 'foo*', true),
-            array('hello', '*ello', true),
-            array('helloworld', 'foo*', false),
-        );
+        return [
+            ['foobar', 'foo*', true],
+            ['hello', '*ello', true],
+            ['helloworld', 'foo*', false],
+        ];
     }
 
     /**

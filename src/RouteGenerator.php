@@ -59,7 +59,7 @@ class RouteGenerator implements RouteGeneratorContract
         if (is_null($handles) || ! Str::startsWith($handles, ['//', 'http://', 'https://'])) {
             $this->prefix = $handles;
         } else {
-            $handles      = substr(str_replace(["http://", "https://"], "//", $handles), 2);
+            $handles      = substr(str_replace(['http://', 'https://'], '//', $handles), 2);
             $fragments    = explode('/', $handles, 2);
             $this->domain = array_shift($fragments);
             $this->prefix = array_shift($fragments);
@@ -156,7 +156,7 @@ class RouteGenerator implements RouteGeneratorContract
      */
     public function root()
     {
-        $http   = ($this->request->secure() ? "https" : "http");
+        $http   = ($this->request->secure() ? 'https' : 'http');
         $domain = trim($this->domain(true), '/');
         $prefix = $this->prefix(true);
 

@@ -90,10 +90,10 @@ trait DispatchableTrait
             if (isset($available[$name])) {
                 $config = array_merge(
                     (array) Arr::get($available, "{$name}.config"),
-                    (array) Arr::get($options, "config")
+                    (array) Arr::get($options, 'config')
                 );
 
-                Arr::set($options, "config", $config);
+                Arr::set($options, 'config', $config);
                 $this->extensions[$name] = $options;
                 $this->dispatcher->register($name, $options);
             }

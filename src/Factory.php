@@ -130,7 +130,7 @@ class Factory implements FactoryContract
         $this->app['orchestra.publisher.migrate']->extension($name);
         $this->app['orchestra.publisher.asset']->extension($name);
 
-        $this->app['events']->fire("orchestra.publishing", [$name]);
+        $this->app['events']->fire('orchestra.publishing', [$name]);
         $this->app['events']->fire("orchestra.publishing: {$name}");
     }
 

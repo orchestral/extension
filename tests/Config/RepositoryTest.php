@@ -1,6 +1,7 @@
 <?php namespace Orchestra\Extension\Config\TestCase;
 
 use Mockery as m;
+use Illuminate\Container\Container;
 use Orchestra\Extension\Config\Repository;
 
 class RepositoryTest extends \PHPUnit_Framework_TestCase
@@ -20,11 +21,13 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testMapMethod()
     {
-        $memory = m::mock('\Orchestra\Memory\MemoryManager')->makePartial();
-        $config = m::mock('\Illuminate\Contracts\Config\Repository');
+        $app     = new Container();
+        $manager = m::mock('\Orchestra\Memory\MemoryManager', [$app]);
+        $memory  = m::mock('\Orchestra\Contracts\Memory\Provider');
+        $config  = m::mock('\Illuminate\Contracts\Config\Repository');
 
-        $memory->shouldReceive('make')->once()->andReturn($memory)
-            ->shouldReceive('get')->once()
+        $manager->shouldReceive('make')->once()->andReturn($memory);
+        $memory->shouldReceive('get')->once()
                 ->with('extension_laravel/framework', [])
                 ->andReturn(['foobar' => 'foobar is awesome'])
             ->shouldReceive('put')->once()
@@ -38,7 +41,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('get')->once()
                 ->with('laravel/framework::foo')->andReturn('foobar');
 
-        $stub = new Repository($config, $memory);
+        $stub = new Repository($config, $manager);
 
         $stub->map('laravel/framework', [
             'foo'    => 'laravel/framework::foo',

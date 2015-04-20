@@ -25,7 +25,7 @@ class DetectCommand extends BaseCommand
         $extensions = $service->detect();
 
         if (empty($extensions)) {
-            return $this->line("<comment>No extension detected!</comment>");
+            return $this->line('<comment>No extension detected!</comment>');
         }
 
         $header  = ['Extension', 'Version', 'Activate'];

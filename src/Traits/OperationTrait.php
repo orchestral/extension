@@ -1,5 +1,7 @@
 <?php namespace Orchestra\Extension\Traits;
 
+use Illuminate\Support\Arr;
+
 trait OperationTrait
 {
     /**
@@ -110,6 +112,10 @@ trait OperationTrait
         // Append the activated extension to active extensions, and also
         // publish the extension (migrate the database and publish the
         // asset).
+        if (! is_null($handles = Arr::get($active, "{$name}.config.handles"))) {
+            Arr::set($available, "{$name}.config.handles", $handles);
+        }
+
         $active[$name] = $available[$name];
 
         $memory->put('extensions.active', $active);

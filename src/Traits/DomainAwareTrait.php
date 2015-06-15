@@ -12,7 +12,7 @@ trait DomainAwareTrait
     public function registerDomainAwareness()
     {
         $this->app->afterResolving(function (RouteGenerator $generator, $app) {
-            $generator->setBaseUrl($app['config']->get('app.url'));
+            $generator->setBaseUrl($app->make('config')->get('app.url'));
         });
     }
 }

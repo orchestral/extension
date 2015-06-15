@@ -41,7 +41,7 @@ trait DispatchableTrait
             // without having to known the registration dependencies.
             $this->dispatcher->boot();
 
-            $this->app['events']->fire('orchestra.extension: booted');
+            $this->app->make('events')->fire('orchestra.extension: booted');
         }
 
         return $this;

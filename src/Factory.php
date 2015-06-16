@@ -65,7 +65,7 @@ class Factory implements FactoryContract
      */
     public function detect()
     {
-        $this->app['events']->fire('orchestra.extension: detecting');
+        $this->app->make('events')->fire('orchestra.extension: detecting');
 
         $extensions = $this->finder()->detect();
         $this->memory->put('extensions.available', $extensions->all());
@@ -80,7 +80,7 @@ class Factory implements FactoryContract
      */
     public function finder()
     {
-        return $this->app['orchestra.extension.finder'];
+        return $this->app->make('orchestra.extension.finder');
     }
 
     /**
@@ -127,11 +127,13 @@ class Factory implements FactoryContract
      */
     public function publish($name)
     {
-        $this->app['orchestra.publisher.migrate']->extension($name);
-        $this->app['orchestra.publisher.asset']->extension($name);
+        $this->app->make('orchestra.publisher.migrate')->extension($name);
+        $this->app->make('orchestra.publisher.asset')->extension($name);
 
-        $this->app['events']->fire('orchestra.publishing', [$name]);
-        $this->app['events']->fire("orchestra.publishing: {$name}");
+        $events = $this->app->make('events');
+
+        $events->fire('orchestra.publishing', [$name]);
+        $events->fire("orchestra.publishing: {$name}");
     }
 
     /**
@@ -158,7 +160,7 @@ class Factory implements FactoryContract
     public function route($name, $default = '/')
     {
         // Boot the extension.
-        ! $this->booted() && $this->app->make('Orchestra\Extension\Bootstrap\LoadExtension')->bootstrap($this->app);
+        ! $this->booted() && $this->app->make(Bootstrap\LoadExtension::class)->bootstrap($this->app);
 
         if (! isset($this->routes[$name])) {
 
@@ -166,9 +168,9 @@ class Factory implements FactoryContract
             // config key, except for orchestra/foundation.
             $key = "orchestra/extension::handles.{$name}";
 
-            $this->routes[$name] = $this->app->make('Orchestra\Extension\RouteGenerator', [
-                $this->app['config']->get($key, $default),
-                $this->app['request'],
+            $this->routes[$name] = $this->app->make(RouteGenerator::class, [
+                $this->app->make('config')->get($key, $default),
+                $this->app->make('request'),
             ]);
         }
 
@@ -185,7 +187,7 @@ class Factory implements FactoryContract
      */
     protected function isWritableWithAsset($name, $path)
     {
-        $files      = $this->app['files'];
+        $files      = $this->app->make('files');
         $publicPath = $this->app['path.public'];
         $targetPath = "{$publicPath}/packages/{$name}";
 

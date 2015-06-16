@@ -33,7 +33,7 @@ trait OperationTrait
         $this->dispatcher->register($name, $active[$name]);
         $this->publish($name);
 
-        $this->app['events']->fire("orchestra.activating: {$name}", [$name]);
+        $this->app->make('events')->fire("orchestra.activating: {$name}", [$name]);
 
         return true;
     }
@@ -86,7 +86,7 @@ trait OperationTrait
 
         if (!! $deactivated) {
             $memory->put('extensions.active', $active);
-            $this->app['events']->fire("orchestra.deactivating: {$name}", [$name]);
+            $this->app->make('events')->fire("orchestra.deactivating: {$name}", [$name]);
         }
 
         return $deactivated;

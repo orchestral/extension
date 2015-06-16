@@ -32,14 +32,14 @@ class ExtensionServiceProvider extends ServiceProvider
     {
         $this->app->singleton('orchestra.extension', function ($app) {
             $dispatcher = new Dispatcher(
-                $app['config'],
-                $app['events'],
-                $app['files'],
-                $app['orchestra.extension.finder'],
+                $app->make('config'),
+                $app->make('events'),
+                $app->make('files'),
+                $app->make('orchestra.extension.finder'),
                 new ProviderRepository($app)
             );
 
-            return new Factory($app, $dispatcher, $app['orchestra.extension.mode']);
+            return new Factory($app, $dispatcher, $app->make('orchestra.extension.mode'));
         });
     }
 
@@ -51,7 +51,10 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtensionConfigManager()
     {
         $this->app->singleton('orchestra.extension.config', function ($app) {
-            return new Repository($app['config'], $app['orchestra.memory']);
+            return new Repository(
+                $app->make('config'),
+                $app->make('orchestra.memory')
+            );
         });
     }
 
@@ -64,11 +67,11 @@ class ExtensionServiceProvider extends ServiceProvider
     {
         $this->app->singleton('orchestra.extension.finder', function ($app) {
             $config = [
-                'path.app'  => $app['path'],
-                'path.base' => $app['path.base'],
+                'path.app'  => $app->path(),
+                'path.base' => $app->basePath(),
             ];
 
-            return new Finder($app['files'], $config);
+            return new Finder($app->make('files'), $config);
         });
     }
 
@@ -80,7 +83,10 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtensionSafeModeChecker()
     {
         $this->app->singleton('orchestra.extension.mode', function ($app) {
-            return new SafeModeChecker($app['config'], $app['request']);
+            return new SafeModeChecker(
+                $app->make('config'),
+                $app->make('request')
+            );
         });
     }
 
@@ -93,7 +99,7 @@ class ExtensionServiceProvider extends ServiceProvider
     {
         $path = realpath(__DIR__.'/../');
 
-        $this->addConfigComponent('orchestra/extension', 'orchestra/extension', $path.'/resources/config');
+        $this->addConfigComponent('orchestra/extension', 'orchestra/extension', "{$path}/resources/config");
     }
 
     /**
@@ -103,10 +109,8 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionEvents()
     {
-        $app = $this->app;
-
-        $app->terminating(function () use ($app) {
-            $app['orchestra.extension']->finish();
+        $this->app->terminating(function () {
+            $this->app->make('orchestra.extension')->finish();
         });
     }
 }

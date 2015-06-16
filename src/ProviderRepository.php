@@ -21,6 +21,13 @@ class ProviderRepository
     protected $services = [];
 
     /**
+     * List of deferred services.
+     *
+     * @var array
+     */
+    protected $deferredServices = [];
+
+    /**
      * Construct a new finder.
      *
      * @param  \Illuminate\Contracts\Foundation\Application  $app
@@ -50,6 +57,25 @@ class ProviderRepository
 
             $this->services[] = $provider;
         }
+
+        $this->registerDeferredServiceProviders();
+    }
+
+    /**
+     * Register all deferred service providers.
+     *
+     * @return void
+     */
+    protected function registerDeferredServiceProviders()
+    {
+        if (! $this->app instanceof DeferrableServiceContainer) {
+            return ;
+        }
+
+        $this->app->setDeferredServices(array_merge(
+            $this->app->getDeferredServices(),
+            $this->deferredServices
+        ));
     }
 
     /**
@@ -62,13 +88,9 @@ class ProviderRepository
      */
     protected function registerDeferredServiceProvider(ServiceProvider $instance, $provider)
     {
-        $services = $this->app->getDeferredServices();
-
         foreach ($instance->provides() as $service) {
-            $services[$service] = $provider;
+            $this->deferredServices[$service] = $provider;
         }
-
-        $this->app->setDeferredServices($services);
     }
 
     /**

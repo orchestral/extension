@@ -1,5 +1,6 @@
 <?php namespace Orchestra\Extension\Traits;
 
+use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
@@ -41,7 +42,7 @@ trait DispatchableTrait
             // without having to known the registration dependencies.
             $this->dispatcher->boot();
 
-            $this->app->make('events')->fire('orchestra.extension: booted');
+            $this->events->fire('orchestra.extension: booted');
         }
 
         return $this;
@@ -98,5 +99,21 @@ trait DispatchableTrait
                 $this->dispatcher->register($name, $options);
             }
         }
+    }
+
+    /**
+     * Create an event listener or execute it directly.
+     *
+     * @param  \Closure|null  $callback
+     *
+     * @return void
+     */
+    public function after(Closure $callback = null)
+    {
+        if ($this->booted()) {
+            $this->app->call($callback);
+        }
+
+        $this->events->listen('orchestra.extension: booted', $callback);
     }
 }

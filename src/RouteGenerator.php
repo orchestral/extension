@@ -75,7 +75,7 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @param  bool  $forceBase
      *
-     * @return string
+     * @return string|null
      */
     public function domain($forceBase = false)
     {
@@ -88,6 +88,26 @@ class RouteGenerator implements RouteGeneratorContract
         }
 
         return $pattern;
+    }
+
+    /**
+     * Get route group.
+     *
+     * @param  bool  $forceBase
+     *
+     * @return array
+     */
+    public function group($forceBase = false)
+    {
+        $group = [
+            'prefix' => $this->prefix($forceBase),
+        ];
+
+        if (! is_null($domain = $this->domain($forceBase))) {
+            $group['domain'] = $domain;
+        }
+
+        return $group;
     }
 
     /**

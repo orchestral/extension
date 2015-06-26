@@ -23,6 +23,13 @@ class Factory implements FactoryContract
     protected $app;
 
     /**
+     * The event dispatcher implementation.
+     *
+     * @var \Illuminate\Contracts\Events\Dispatcher
+     */
+    protected $events;
+
+    /**
      * Dispatcher instance.
      *
      * @var \Orchestra\Contracts\Extension\Dispatcher
@@ -53,6 +60,7 @@ class Factory implements FactoryContract
     public function __construct(Container $app, DispatcherContract $dispatcher, SafeMode $mode)
     {
         $this->app        = $app;
+        $this->events     = $this->app->make('events');
         $this->dispatcher = $dispatcher;
         $this->extensions = new Collection();
         $this->mode       = $mode;
@@ -65,7 +73,7 @@ class Factory implements FactoryContract
      */
     public function detect()
     {
-        $this->app->make('events')->fire('orchestra.extension: detecting');
+        $this->events->fire('orchestra.extension: detecting');
 
         $extensions = $this->finder()->detect();
         $this->memory->put('extensions.available', $extensions->all());
@@ -130,10 +138,8 @@ class Factory implements FactoryContract
         $this->app->make('orchestra.publisher.migrate')->extension($name);
         $this->app->make('orchestra.publisher.asset')->extension($name);
 
-        $events = $this->app->make('events');
-
-        $events->fire('orchestra.publishing', [$name]);
-        $events->fire("orchestra.publishing: {$name}");
+        $this->events->fire('orchestra.publishing', [$name]);
+        $this->events->fire("orchestra.publishing: {$name}");
     }
 
     /**

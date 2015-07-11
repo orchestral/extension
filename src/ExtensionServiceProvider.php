@@ -1,6 +1,7 @@
 <?php namespace Orchestra\Extension;
 
 use Orchestra\Extension\Config\Repository;
+use Illuminate\Contracts\Foundation\Application;
 use Orchestra\Support\Providers\ServiceProvider;
 
 class ExtensionServiceProvider extends ServiceProvider
@@ -30,7 +31,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtension()
     {
-        $this->app->singleton('orchestra.extension', function ($app) {
+        $this->app->singleton('orchestra.extension', function (Application $app) {
             $dispatcher = new Dispatcher(
                 $app->make('config'),
                 $app->make('events'),
@@ -50,7 +51,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionConfigManager()
     {
-        $this->app->singleton('orchestra.extension.config', function ($app) {
+        $this->app->singleton('orchestra.extension.config', function (Application $app) {
             return new Repository(
                 $app->make('config'),
                 $app->make('orchestra.memory')
@@ -65,7 +66,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionFinder()
     {
-        $this->app->singleton('orchestra.extension.finder', function ($app) {
+        $this->app->singleton('orchestra.extension.finder', function (Application $app) {
             $config = [
                 'path.app'  => $app->path(),
                 'path.base' => $app->basePath(),
@@ -82,7 +83,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionSafeModeChecker()
     {
-        $this->app->singleton('orchestra.extension.mode', function ($app) {
+        $this->app->singleton('orchestra.extension.mode', function (Application $app) {
             return new SafeModeChecker(
                 $app->make('config'),
                 $app->make('request')

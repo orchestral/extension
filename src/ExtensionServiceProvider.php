@@ -40,7 +40,9 @@ class ExtensionServiceProvider extends ServiceProvider
                 new ProviderRepository($app)
             );
 
-            return new Factory($app, $dispatcher, $app->make('orchestra.extension.mode'));
+            $status = $app->make('orchestra.extension.status');
+
+            return new Factory($app, $dispatcher, $status);
         });
     }
 

@@ -68,9 +68,7 @@ Next add the following service provider in `config/app.php`.
 
 Before we can start using Extension Component, please run the following:
 
-```bash
-php artisan extension:migrate
-```
+    php artisan extension:migrate
 
 > The command utility is enabled via `Orchestra\Extension\CommandServiceProvider`.
 

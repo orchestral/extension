@@ -55,7 +55,7 @@ class Factory implements FactoryContract
      *
      * @param  \Illuminate\Contracts\Container\Container  $app
      * @param  \Orchestra\Contracts\Extension\Dispatcher  $dispatcher
-     * @param  \Orchestra\Contracts\Extension\StatusChecker  $mode
+     * @param  \Orchestra\Contracts\Extension\StatusChecker  $status
      */
     public function __construct(Container $app, DispatcherContract $dispatcher, StatusCheckerContract $status)
     {

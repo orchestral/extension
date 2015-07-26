@@ -61,6 +61,10 @@ class ActivateCommand extends ExtensionCommand implements Listener
      */
     public function activationHasSucceed(Fluent $extension)
     {
+        if ($this->laravel->routesAreCached()) {
+            $this->call('route:cache');
+        }
+
         $this->info("Extension [{$extension->get('name')}] activated.");
     }
 }

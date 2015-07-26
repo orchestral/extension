@@ -6,7 +6,7 @@ title: Extension Change Log
 
 ### v3.1.6@dev {#v3-1-6}
 
-* Add `Orchestra\Extension\Jobs\RefreshRouteCache` to replace `Orchestra\Foundation\Jobs\RefreshRouteCache`.
+* Recache routes after activating an extension via artisan.
 
 ### v3.1.5 {#v3-1-5}
 

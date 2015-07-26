@@ -4,10 +4,9 @@ title: Extension Change Log
 ---
 ## Version 3.1 {#v3-1}
 
-### v3.1.6@dev {#v3-1-6}
+### v3.1.6 {#v3-1-6}
 
-* Recache routes after activating an extension via artisan.
-* Recache routes after deactivating an extension via artisan.
+* Recache routes after activating and deactivating an extension via artisan.
 
 ### v3.1.5 {#v3-1-5}
 

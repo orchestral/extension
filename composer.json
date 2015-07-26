@@ -1,41 +1,41 @@
 {
-	"name": "orchestra/extension",
-	"description": "Extension Component for Orchestra Platform",
-	"homepage": "http://orchestraplatform.com/docs/latest/components/extension/",
-	"keywords": ["orchestra-platform", "orchestral", "laravel", "extension"],
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Mior Muhammad Zaki",
-			"email": "crynobone@gmail.com",
-			"homepage": "https://github.com/crynobone"
-		}
-	],
-	"autoload": {
-		"psr-4": {
-			"Orchestra\\Extension\\" : "src/"
-		}
-	},
-	"require": {
-		"php": ">=5.5.0",
-		"orchestra/contracts": "~3.1.6",
-		"orchestra/memory": "~3.1.0"
-	},
-	"require-dev": {
-		"mockery/mockery": "0.9.*",
-		"illuminate/console": "~5.1.0",
-		"illuminate/container": "~5.1.0",
-		"illuminate/filesystem": "~5.1.0",
-		"illuminate/http": "~5.1.0"
-	},
-	"suggest": {
-		"laravel/framework": "Allow using orchestra/extension component outside of Orchestra Platform (~5.1).",
-		"orchestra/foundation": "Allow using orchestra/extension with Orchestra Platform (~3.1)."
-	},
-	"extra": {
-		"branch-alias": {
-			"dev-master": "3.2-dev"
-		}
-	},
-	"minimum-stability": "dev"
+    "name": "orchestra/extension",
+    "description": "Extension Component for Orchestra Platform",
+    "homepage": "http://orchestraplatform.com/docs/latest/components/extension/",
+    "keywords": ["orchestra-platform", "orchestral", "laravel", "extension"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mior Muhammad Zaki",
+            "email": "crynobone@gmail.com",
+            "homepage": "https://github.com/crynobone"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Orchestra\\Extension\\" : "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.5.0",
+        "orchestra/contracts": "~3.1.6",
+        "orchestra/memory": "~3.1.0"
+    },
+    "require-dev": {
+        "mockery/mockery": "0.9.*",
+        "illuminate/console": "~5.1.0",
+        "illuminate/container": "~5.1.0",
+        "illuminate/filesystem": "~5.1.0",
+        "illuminate/http": "~5.1.0"
+    },
+    "suggest": {
+        "laravel/framework": "Allow using orchestra/extension component outside of Orchestra Platform (~5.1).",
+        "orchestra/foundation": "Allow using orchestra/extension with Orchestra Platform (~3.1)."
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.2-dev"
+        }
+    },
+    "minimum-stability": "dev"
 }

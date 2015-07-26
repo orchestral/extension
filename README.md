@@ -33,9 +33,9 @@ To install through composer, simply put the following in your `composer.json` fi
 
 ```json
 {
-	"require": {
-		"orchestra/extension": "~3.0"
-	}
+    "require": {
+        "orchestra/extension": "~3.0"
+    }
 }
 ```
 
@@ -54,13 +54,13 @@ Next add the following service provider in `config/app.php`.
 ```php
 'providers' => [
 
-	// ...
+    // ...
 
-	'Orchestra\Extension\ExtensionServiceProvider',
-	'Orchestra\Memory\MemoryServiceProvider',
-	'Orchestra\Publisher\PublisherServiceProvider',
+    Orchestra\Extension\ExtensionServiceProvider::class,
+    Orchestra\Memory\MemoryServiceProvider::class,
+    Orchestra\Publisher\PublisherServiceProvider::class,
 
-	'Orchestra\Extension\CommandServiceProvider',
+    Orchestra\Extension\CommandServiceProvider::class,
 ],
 ```
 
@@ -77,4 +77,4 @@ php artisan extension:migrate
 ## Resources
 
 * [Documentation](http://orchestraplatform.com/docs/latest/components/extension)
-* [Change Log](http://orchestraplatform.com/docs/latest/components/extension/changes#v3-0)
+* [Change Log](http://orchestraplatform.com/docs/latest/components/extension/changes#v3-1)

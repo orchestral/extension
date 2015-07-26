@@ -4,6 +4,10 @@ title: Extension Change Log
 ---
 ## Version 3.1 {#v3-1}
 
+### v3.1.6@dev {#v3-1-6}
+
+* Add `Orchestra\Extension\Jobs\RefreshRouteCache` to replace `Orchestra\Foundation\Jobs\RefreshRouteCache`.
+
 ### v3.1.5 {#v3-1-5}
 
 * Replace `Orchestra\Contracts\Extension\SafeMode` with `Orchestra\Contracts\Extension\StatusChecker`.

@@ -40,17 +40,27 @@ class SafeModeChecker implements SafeMode
     }
 
     /**
+     * Get current mode.
+     *
+     * @return string
+     */
+    public function mode()
+    {
+        if (is_null($this->status)) {
+            $this->verifyStatus();
+        }
+
+        return $this->status;
+    }
+
+    /**
      * Determine whether current request is in safe mode or not.
      *
      * @return bool
      */
     public function check()
     {
-        if (is_null($this->status)) {
-            $this->verifyStatus();
-        }
-
-        return ($this->status === 'safe');
+        return ($this->mode() === 'safe');
     }
 
     /**

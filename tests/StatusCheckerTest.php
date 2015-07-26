@@ -1,9 +1,9 @@
 <?php namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
-use Orchestra\Extension\SafeModeChecker;
+use Orchestra\Extension\StatusChecker;
 
-class SafeModeCheckerTest extends \PHPUnit_Framework_TestCase
+class StatusCheckerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Teardown the test environment.
@@ -24,13 +24,16 @@ class SafeModeCheckerTest extends \PHPUnit_Framework_TestCase
         $request = m::mock('\Illuminate\Http\Request');
         $config  = m::mock('\Illuminate\Contracts\Config\Repository');
 
-        $stub = new SafeModeChecker($config, $request);
+        $stub = new StatusChecker($config, $request);
 
         $request->shouldReceive('input')->once()->with('_mode', 'safe')->andReturn('safe');
         $config->shouldReceive('get')->once()->with('orchestra/extension::mode', 'normal')->andReturn('safe')
             ->shouldReceive('set')->once()->with('orchestra/extension::mode', 'safe')->andReturn(null);
 
-        $this->assertTrue($stub->check());
+        $this->assertTrue($stub->is('safe'));
+        $this->assertFalse($stub->isNot('safe'));
+        $this->assertFalse($stub->is('normal'));
+        $this->assertEquals('safe', $stub->mode());
     }
 
     /**
@@ -44,12 +47,15 @@ class SafeModeCheckerTest extends \PHPUnit_Framework_TestCase
         $request = m::mock('\Illuminate\Http\Request');
         $config  = m::mock('\Illuminate\Contracts\Config\Repository');
 
-        $stub = new SafeModeChecker($config, $request);
+        $stub = new StatusChecker($config, $request);
 
         $request->shouldReceive('input')->once()->with('_mode', 'normal')->andReturn(null);
         $config->shouldReceive('get')->once()->with('orchestra/extension::mode', 'normal')->andReturn('normal')
             ->shouldReceive('set')->once()->with('orchestra/extension::mode', 'normal')->andReturn(null);
 
-        $this->assertFalse($stub->check());
+        $this->assertFalse($stub->is('safe'));
+        $this->assertTrue($stub->isNot('safe'));
+        $this->assertTrue($stub->is('normal'));
+        $this->assertEquals('normal', $stub->mode());
     }
 }

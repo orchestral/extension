@@ -40,13 +40,27 @@ class StatusChecker implements StatusCheckerContract
     }
 
     /**
-     * Check current mode.
+     * Check current mode is equal given $mode.
+     *
+     * @param  string  $mode
      *
      * @return bool
      */
     public function is($mode)
     {
         return ($this->mode() === $mode);
+    }
+
+    /**
+     * Check current mode is not equal given $mode.
+     *
+     * @param  string  $mode
+     *
+     * @return bool
+     */
+    public function isNot($mode)
+    {
+        return ($this->mode() !== $mode);
     }
 
     /**

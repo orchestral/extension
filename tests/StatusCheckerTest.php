@@ -31,6 +31,7 @@ class StatusCheckerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('set')->once()->with('orchestra/extension::mode', 'safe')->andReturn(null);
 
         $this->assertTrue($stub->is('safe'));
+        $this->assertFalse($stub->isNot('safe'));
         $this->assertFalse($stub->is('normal'));
         $this->assertEquals('safe', $stub->mode());
     }
@@ -53,6 +54,7 @@ class StatusCheckerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('set')->once()->with('orchestra/extension::mode', 'normal')->andReturn(null);
 
         $this->assertFalse($stub->is('safe'));
+        $this->assertTrue($stub->isNot('safe'));
         $this->assertTrue($stub->is('normal'));
         $this->assertEquals('normal', $stub->mode());
     }

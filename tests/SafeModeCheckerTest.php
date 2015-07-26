@@ -31,6 +31,7 @@ class SafeModeCheckerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('set')->once()->with('orchestra/extension::mode', 'safe')->andReturn(null);
 
         $this->assertTrue($stub->check());
+        $this->assertEquals('safe', $stub->mode());
     }
 
     /**

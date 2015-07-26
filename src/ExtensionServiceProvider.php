@@ -17,7 +17,7 @@ class ExtensionServiceProvider extends ServiceProvider
 
         $this->registerExtensionConfigManager();
 
-        $this->registerExtensionSafeModeChecker();
+        $this->registerExtensionStatusChecker();
 
         $this->registerExtension();
 
@@ -81,13 +81,10 @@ class ExtensionServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function registerExtensionSafeModeChecker()
+    protected function registerExtensionStatusChecker()
     {
-        $this->app->singleton('orchestra.extension.mode', function (Application $app) {
-            return new SafeModeChecker(
-                $app->make('config'),
-                $app->make('request')
-            );
+        $this->app->singleton('orchestra.extension.status', function (Application $app) {
+            return new StatusChecker($app->make('config'), $app->make('request'));
         });
     }
 

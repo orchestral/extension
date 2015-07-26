@@ -4,12 +4,12 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Orchestra\Memory\ContainerTrait;
-use Orchestra\Contracts\Extension\SafeMode;
 use Illuminate\Contracts\Container\Container;
 use Orchestra\Extension\Traits\OperationTrait;
 use Orchestra\Extension\Traits\DispatchableTrait;
 use Orchestra\Contracts\Extension\Factory as FactoryContract;
 use Orchestra\Contracts\Extension\Dispatcher as DispatcherContract;
+use Orchestra\Contracts\Extension\StatusChecker as StatusCheckerContract;
 
 class Factory implements FactoryContract
 {
@@ -55,15 +55,15 @@ class Factory implements FactoryContract
      *
      * @param  \Illuminate\Contracts\Container\Container  $app
      * @param  \Orchestra\Contracts\Extension\Dispatcher  $dispatcher
-     * @param  \Orchestra\Contracts\Extension\SafeMode  $mode
+     * @param  \Orchestra\Contracts\Extension\StatusChecker  $mode
      */
-    public function __construct(Container $app, DispatcherContract $dispatcher, SafeMode $mode)
+    public function __construct(Container $app, DispatcherContract $dispatcher, StatusCheckerContract $status)
     {
         $this->app        = $app;
         $this->events     = $this->app->make('events');
         $this->dispatcher = $dispatcher;
         $this->extensions = new Collection();
-        $this->mode       = $mode;
+        $this->status     = $status;
     }
 
     /**

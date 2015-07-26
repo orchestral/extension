@@ -1,10 +1,10 @@
 <?php namespace Orchestra\Extension;
 
 use Illuminate\Http\Request;
-use Orchestra\Contracts\Extension\SafeMode;
 use Illuminate\Contracts\Config\Repository;
+use Orchestra\Contracts\Extension\StatusChecker as StatusCheckerContract;
 
-class SafeModeChecker implements SafeMode
+class StatusChecker implements StatusCheckerContract
 {
     /**
      * Config instance.
@@ -40,6 +40,16 @@ class SafeModeChecker implements SafeMode
     }
 
     /**
+     * Check current mode.
+     *
+     * @return bool
+     */
+    public function is($mode)
+    {
+        return ($this->mode() === $mode);
+    }
+
+    /**
      * Get current mode.
      *
      * @return string
@@ -51,16 +61,6 @@ class SafeModeChecker implements SafeMode
         }
 
         return $this->status;
-    }
-
-    /**
-     * Determine whether current request is in safe mode or not.
-     *
-     * @return bool
-     */
-    public function check()
-    {
-        return ($this->mode() === 'safe');
     }
 
     /**

@@ -61,6 +61,8 @@ class ActivateCommand extends ExtensionCommand implements Listener
      */
     public function activationHasSucceed(Fluent $extension)
     {
+        $this->refreshRouteCache();
+
         $this->info("Extension [{$extension->get('name')}] activated.");
     }
 }

@@ -48,6 +48,8 @@ class DeactivateCommand extends ExtensionCommand implements Listener
      */
     public function deactivationHasSucceed(Fluent $extension)
     {
+        $this->refreshRouteCache();
+
         $this->info("Extension [{$extension->get('name')}] deactivated.");
     }
 }

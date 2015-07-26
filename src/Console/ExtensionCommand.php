@@ -17,6 +17,18 @@ abstract class ExtensionCommand extends BaseCommand implements Extension
     }
 
     /**
+     * Refresh route cache.
+     *
+     * @return void
+     */
+    protected function refreshRouteCache()
+    {
+        if ($this->laravel->routesAreCached()) {
+            $this->call('route:cache');
+        }
+    }
+
+    /**
      * Get the console command arguments.
      *
      * @return array

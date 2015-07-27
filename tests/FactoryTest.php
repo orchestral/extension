@@ -241,11 +241,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $app['orchestra.extension.finder'] = $finder;
         $app['orchestra.memory'] = $memory;
 
-        $extensions = new Collection(['foo']);
+        $extensions = new Collection([
+            'foo' => [
+                'name' => 'Foo',
+                'description' => 'Foobar',
+            ]
+        ]);
 
         $events->shouldReceive('fire')->once()->with('orchestra.extension: detecting')->andReturnNull();
         $finder->shouldReceive('detect')->once()->andReturn($extensions);
-        $memory->shouldReceive('put')->once()->with('extensions.available', ['foo'])->andReturn('foobar');
+        $memory->shouldReceive('put')->once()->with('extensions.available', ['foo' => ['name' => 'Foo']])->andReturnNull();
 
         $stub = new Factory($app, $this->dispatcher, $this->status);
         $stub->attach($memory);

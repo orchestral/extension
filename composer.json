@@ -21,7 +21,7 @@
         "orchestra/memory": "~3.2.0"
     },
     "require-dev": {
-        "mockery/mockery": "0.9.*",
+        "mockery/mockery": "^0.9.1",
         "illuminate/console": "~5.2.0",
         "illuminate/container": "~5.2.0",
         "illuminate/filesystem": "~5.2.0",

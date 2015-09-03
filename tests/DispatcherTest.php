@@ -33,6 +33,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     public function testStartMethod()
     {
         $provider = $this->getProvider();
+        $app      = m::mock('\Illuminate\Contracts\Foundation\Application');
         $config   = m::mock('\Illuminate\Contracts\Config\Repository');
         $event    = m::mock('\Illuminate\Contracts\Events\Dispatcher');
         $files    = m::mock('\Illuminate\Filesystem\Filesystem');
@@ -93,7 +94,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             return $p;
         });
 
-        $stub = new Dispatcher($config, $event, $files, $finder, $provider);
+        $stub = new Dispatcher($app, $config, $event, $files, $finder, $provider);
 
         $stub->register('laravel/framework', $options1);
         $stub->register('app', $options2);
@@ -107,10 +108,11 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function testFinishMethod()
     {
-        $config   = m::mock('\Illuminate\Contracts\Config\Repository');
-        $event    = m::mock('\Illuminate\Contracts\Events\Dispatcher');
-        $files    = m::mock('\Illuminate\Filesystem\Filesystem');
-        $finder   = m::mock('\Orchestra\Extension\Finder');
+        $app    = m::mock('\Illuminate\Contracts\Foundation\Application');
+        $config = m::mock('\Illuminate\Contracts\Config\Repository');
+        $event  = m::mock('\Illuminate\Contracts\Events\Dispatcher');
+        $files  = m::mock('\Illuminate\Filesystem\Filesystem');
+        $finder = m::mock('\Orchestra\Extension\Finder');
 
         $event->shouldReceive('fire')->once()
                 ->with('extension.done: laravel/framework', [['foo']])
@@ -119,7 +121,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
                 ->with('extension.done', ['laravel/framework', ['foo']])
                 ->andReturnNull();
 
-        $stub = new Dispatcher($config, $event, $files, $finder, $this->getProvider());
+        $stub = new Dispatcher($app, $config, $event, $files, $finder, $this->getProvider());
         $stub->finish('laravel/framework', ['foo']);
     }
 }

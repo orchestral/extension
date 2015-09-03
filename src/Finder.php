@@ -44,6 +44,7 @@ class Finder implements FinderContract
         'config'      => [],
         'autoload'    => [],
         'provides'    => [],
+        'plugin'      => null,
     ];
 
     /**

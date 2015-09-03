@@ -1,8 +1,9 @@
 <?php namespace Orchestra\Extension;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Config\Repository as Config;
 use Orchestra\Contracts\Extension\Finder as FinderContract;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
@@ -62,12 +63,14 @@ class Dispatcher implements DispatcherContract
      * @param  \Orchestra\Extension\ProviderRepository  $provider
      */
     public function __construct(
+        Application $app,
         Config $config,
         EventDispatcher $dispatcher,
         Filesystem $files,
         FinderContract $finder,
         ProviderRepository $provider
     ) {
+        $this->app        = $app;
         $this->config     = $config;
         $this->dispatcher = $dispatcher;
         $this->files      = $files;
@@ -85,26 +88,69 @@ class Dispatcher implements DispatcherContract
      */
     public function register($name, array $options)
     {
-        $handles = Arr::get($options, 'config.handles');
-
-        // Set the handles to orchestra/extension package config (if available).
-        if (! is_null($handles)) {
-            $this->config->set("orchestra/extension::handles.{$name}", $handles);
-        }
+        $this->registerExtensionHandles($name, $options);
 
         // Get available service providers from orchestra.json and register
         // it to Laravel. In this case all service provider would be eager
         // loaded since the application would require it from any action.
-        $services = Arr::get($options, 'provides', []);
+        $this->registerExtensionProviders($name, $options);
 
-        ! empty($services) && $this->provider->provides($services);
+        $this->registerExtensionPlugin($name, $options);
 
         // Register the extension so we can boot it later, this action is
         // to allow all service providers to be registered first before we
         // start the extension. An extension might be using another extension
         // to work.
         $this->extensions[$name] = $options;
+
         $this->start($name, $options);
+    }
+
+    /**
+     * Set the handles to orchestra/extension package config (if available).
+     *
+     * @param  string  $name
+     * @param  array   $options
+     *
+     * @return void
+     */
+    protected function registerExtensionHandles($name, array $options)
+    {
+        $handles = Arr::get($options, 'config.handles');
+
+        if (! is_null($handles)) {
+            $this->config->set("orchestra/extension::handles.{$name}", $handles);
+        }
+    }
+
+    /**
+     * Register extension service providers.
+     *
+     * @param  string  $name
+     * @param  array   $options
+     *
+     * @return void
+     */
+    protected function registerExtensionProviders($name, array $options)
+    {
+        $services = Arr::get($options, 'provides', []);
+
+        ! empty($services) && $this->provider->provides($services);
+    }
+
+    /**
+     * Register extension plugin.
+     *
+     * @param  string  $name
+     * @param  array   $options
+     *
+     * @return void
+     */
+    protected function registerExtensionPlugin($name, array $options)
+    {
+        $plugin = Arr::get($options, 'plugin');
+
+        ! is_null($plugin) && $this->app->make($plugin)->bootstrap($plugin);
     }
 
     /**

@@ -33,6 +33,7 @@ class ExtensionServiceProvider extends ServiceProvider
     {
         $this->app->singleton('orchestra.extension', function (Application $app) {
             $dispatcher = new Dispatcher(
+                $app,
                 $app->make('config'),
                 $app->make('events'),
                 $app->make('files'),

@@ -84,7 +84,7 @@ abstract class Plugin
     protected function bootstrapForm(Application $app)
     {
         $this->attachListenerOn($app, 'form', function (Fluent $model, FormBuilder $form) {
-            $this->form($model, $form)
+            $this->form($model, $form);
         });
     }
 

@@ -5,12 +5,11 @@ use Illuminate\Console\Command;
 class DetectCommand extends Command
 {
     /**
-     * The console command signature.
+     * The console command name.
      *
      * @var string
      */
-    protected $signature = 'extension:detect
-        {--quiet : Do not output any message. }';
+    protected $name = 'extension:detect';
 
     /**
      * The console command description.

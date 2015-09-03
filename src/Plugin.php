@@ -1,5 +1,6 @@
 <?php namespace Orchestra\Extension;
 
+use Closure;
 use Illuminate\Support\Fluent;
 use Illuminate\Contracts\Foundation\Application;
 use Orchestra\Contracts\Html\Form\Builder as FormBuilder;
@@ -98,9 +99,11 @@ abstract class Plugin
         $widget      = $app->make('orchestra.widget');
         $placeholder = $widget->make('placeholder.orchestra.extensions');
 
-        foreach ($sidebar as $name => $view) {
-            $placeholder->add($name)->value(view($view));
-        }
+        $this->attachListenerOn($app, 'form', function () use ($placeholder) {
+            foreach ($this->sidebar as $name => $view) {
+                $placeholder->add($name)->value(view($view));
+            }
+        });
     }
 
     /**
@@ -112,12 +115,25 @@ abstract class Plugin
      */
     protected function bootstrapValidationRules(Application $app)
     {
-        $app->make('events')
-            ->listen('orchestra.validate: extension.orchestra/story', function (Fluent $rules) {
-                foreach ($this->rules as $name => $validation) {
-                    $rules[$name] = $validation;
-                }
-            });
+        $this->attachListenerOn($app, 'validate', function (Fluent $rules) {
+            foreach ($this->rules as $name => $validation) {
+                $rules[$name] = $validation;
+            }
+        });
+    }
+
+    /**
+     * Attach event listener.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  string  $event
+     * @param  \Closure  $callback
+     *
+     * @return void
+     */
+    protected function attachListenerOn(Application $app, $event, Closure $callback)
+    {
+        $app->make('events')->listen("orchestra.{$event}: extension.{$this->extension}", $callback);
     }
 
     /**

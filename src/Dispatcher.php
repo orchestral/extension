@@ -150,7 +150,7 @@ class Dispatcher implements DispatcherContract
     {
         $plugin = Arr::get($options, 'plugin');
 
-        ! is_null($plugin) && $this->app->make($plugin)->bootstrap($plugin);
+        ! is_null($plugin) && $this->app->make($plugin)->bootstrap($this->app);
     }
 
     /**

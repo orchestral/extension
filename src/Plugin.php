@@ -53,6 +53,8 @@ abstract class Plugin
     {
         $this->bootstrapConfiguration($app);
 
+        $this->bootstrapForm($app);
+
         $this->bootstrapMenuHandler($app);
 
         $this->bootstrapSidebarPlaceholders($app);
@@ -70,6 +72,20 @@ abstract class Plugin
     protected function bootstrapConfiguration(Application $app)
     {
         $app->make('orchestra.extension.config')->map($this->extension, $this->config);
+    }
+
+    /**
+     * Bootstrap the form.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     *
+     * @return void
+     */
+    protected function bootstrapForm(Application $app)
+    {
+        $this->attachListenerOn($app, 'form', function (Fluent $model, FormBuilder $form) {
+            $this->form($model, $form)
+        });
     }
 
     /**
@@ -144,5 +160,5 @@ abstract class Plugin
      *
      * @return void
      */
-    abstract public function form(Fluent $model, FormBuilder $form);
+    abstract protected function form(Fluent $model, FormBuilder $form);
 }

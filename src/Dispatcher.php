@@ -12,6 +12,13 @@ use Orchestra\Contracts\Extension\Dispatcher as DispatcherContract;
 class Dispatcher implements DispatcherContract
 {
     /**
+     * The Application implementation.
+     *
+     * @var \Illuminate\Contracts\Foundation\Application
+     */
+    protected $app;
+
+    /**
      * Config Repository instance.
      *
      * @var \Illuminate\Contracts\Config\Repository
@@ -93,9 +100,9 @@ class Dispatcher implements DispatcherContract
         // Get available service providers from orchestra.json and register
         // it to Laravel. In this case all service provider would be eager
         // loaded since the application would require it from any action.
-        $this->registerExtensionProviders($name, $options);
+        $this->registerExtensionProviders($options);
 
-        $this->registerExtensionPlugin($name, $options);
+        $this->registerExtensionPlugin($options);
 
         // Register the extension so we can boot it later, this action is
         // to allow all service providers to be registered first before we
@@ -126,12 +133,11 @@ class Dispatcher implements DispatcherContract
     /**
      * Register extension service providers.
      *
-     * @param  string  $name
-     * @param  array   $options
+     * @param  array  $options
      *
      * @return void
      */
-    protected function registerExtensionProviders($name, array $options)
+    protected function registerExtensionProviders(array $options)
     {
         $services = Arr::get($options, 'provides', []);
 
@@ -141,12 +147,11 @@ class Dispatcher implements DispatcherContract
     /**
      * Register extension plugin.
      *
-     * @param  string  $name
-     * @param  array   $options
+     * @param  array  $options
      *
      * @return void
      */
-    protected function registerExtensionPlugin($name, array $options)
+    protected function registerExtensionPlugin(array $options)
     {
         $plugin = Arr::get($options, 'plugin');
 

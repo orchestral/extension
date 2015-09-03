@@ -123,7 +123,7 @@ class Finder implements FinderContract
     public function detect()
     {
         $extensions = [];
-        $packages = new Collection(json_decode($this->files->get($this->config['path.base'].'/composer.lock'), true)['packages']);
+        $packages   = $this->getComposerLockData();
 
         // Loop each path to check if there orchestra.json available within
         // the paths. We would only treat packages that include orchestra.json
@@ -139,7 +139,8 @@ class Finder implements FinderContract
                 $name = (is_numeric($key) ? $this->guessExtensionNameFromManifest($manifest, $path) : $key);
 
                 if (! is_null($name)) {
-                    $extensions[$name] = $this->getManifestContents($manifest, $packages->where('name', $name)->pop());
+                    $lockContent = $packages->where('name', $name)->first();
+                    $extensions[$name] = $this->getManifestContents($manifest, $lockContent);
                 }
             }
         }
@@ -151,26 +152,28 @@ class Finder implements FinderContract
      * Get manifest contents.
      *
      * @param  string  $manifest
-     * @param  array  $lockContent
+     * @param  array|null  $lockContent
      *
      * @return array
      *
      * @throws \Orchestra\Contracts\Support\ManifestRuntimeException
      */
-    protected function getManifestContents($manifest, array $lockContent = [])
+    protected function getManifestContents($manifest, $lockContent)
     {
         $path     = $sourcePath = $this->guessExtensionPath($manifest);
         $jsonable = json_decode($this->files->get($manifest), true);
-
-        foreach (['description', 'version'] as $type) {
-            $jsonable[$type] = Arr::get($lockContent, $type, $jsonable[$type]);
-        }
 
         // If json_decode fail, due to invalid json format. We going to
         // throw an exception so this error can be fixed by the developer
         // instead of allowing the application to run with a buggy config.
         if (is_null($jsonable)) {
             throw new ManifestRuntimeException("Cannot decode file [{$manifest}]");
+        }
+
+        if (is_array($lockContent)) {
+            foreach (['description', 'version'] as $type) {
+                $jsonable[$type] = Arr::get($lockContent, $type, isset($jsonable[$type]) ? $jsonable[$type] : null);
+            }
         }
 
         isset($jsonable['path']) && $path = $jsonable['path'];
@@ -209,6 +212,18 @@ class Finder implements FinderContract
         $manifest['provides'] = Arr::get($jsonable, 'provide', $manifest['provides']);
 
         return $manifest;
+    }
+
+    /**
+     * Get composer.lock data.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    protected function getComposerLockData()
+    {
+        return new Collection(
+            json_decode($this->files->get($this->config['path.base'].'/composer.lock'), true)['packages']
+        );
     }
 
     /**

@@ -10,11 +10,13 @@ class DeactivateCommand extends ExtensionCommand implements Listener
     use ConfirmableTrait;
 
     /**
-     * The console command name.
+     * The console command signature.
      *
      * @var string
      */
-    protected $name = 'extension:deactivate';
+    protected $signature = 'extension:deactivate
+        {name : Extension name.}
+        {--force : Force the operation to run when in production.}';
 
     /**
      * The console command description.

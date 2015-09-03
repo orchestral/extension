@@ -1,13 +1,16 @@
 <?php namespace Orchestra\Extension\Console;
 
-class DetectCommand extends BaseCommand
+use Illuminate\Console\Command;
+
+class DetectCommand extends Command
 {
     /**
-     * The console command name.
+     * The console command signature.
      *
      * @var string
      */
-    protected $name = 'extension:detect';
+    protected $signature = 'extension:detect
+        {--quiet : Do not output any message. }';
 
     /**
      * The console command description.
@@ -23,6 +26,10 @@ class DetectCommand extends BaseCommand
     {
         $service    = $this->laravel['orchestra.extension'];
         $extensions = $service->detect();
+
+        if ($this->option('quiet')) {
+            return ;
+        }
 
         if (empty($extensions)) {
             return $this->line('<comment>No extension detected!</comment>');

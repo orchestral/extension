@@ -7,11 +7,13 @@ class ResetCommand extends ExtensionCommand
     use ConfirmableTrait;
 
     /**
-     * The console command name.
+     * The console command signature.
      *
      * @var string
      */
-    protected $name = 'extension:reset';
+    protected $signature = 'extension:reset
+        {name : Extension name.}
+        {--force : Force the operation to run when in production.}';
 
     /**
      * The console command description.

@@ -1,10 +1,9 @@
 <?php namespace Orchestra\Extension\Console;
 
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
+use Illuminate\Console\Command;
 use Orchestra\Contracts\Extension\Listener\Extension;
 
-abstract class ExtensionCommand extends BaseCommand implements Extension
+abstract class ExtensionCommand extends Command implements Extension
 {
     /**
      * Abort request when extension requirement mismatched.
@@ -26,29 +25,5 @@ abstract class ExtensionCommand extends BaseCommand implements Extension
         if ($this->laravel->routesAreCached()) {
             $this->call('route:cache');
         }
-    }
-
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            ['name', InputArgument::REQUIRED, 'Extension Name.'],
-        ];
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when in production.'],
-        ];
     }
 }

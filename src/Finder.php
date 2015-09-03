@@ -123,6 +123,7 @@ class Finder implements FinderContract
     public function detect()
     {
         $extensions = [];
+        $packages = new Collection(json_decode($this->files->get($this->config['path.base'].'/composer.lock'), true)['packages']);
 
         // Loop each path to check if there orchestra.json available within
         // the paths. We would only treat packages that include orchestra.json
@@ -138,7 +139,7 @@ class Finder implements FinderContract
                 $name = (is_numeric($key) ? $this->guessExtensionNameFromManifest($manifest, $path) : $key);
 
                 if (! is_null($name)) {
-                    $extensions[$name] = $this->getManifestContents($manifest);
+                    $extensions[$name] = $this->getManifestContents($manifest, $packages->where('name', $name)->pop());
                 }
             }
         }
@@ -150,15 +151,20 @@ class Finder implements FinderContract
      * Get manifest contents.
      *
      * @param  string  $manifest
+     * @param  array  $lockContent
      *
      * @return array
      *
      * @throws \Orchestra\Contracts\Support\ManifestRuntimeException
      */
-    protected function getManifestContents($manifest)
+    protected function getManifestContents($manifest, array $lockContent = [])
     {
         $path     = $sourcePath = $this->guessExtensionPath($manifest);
         $jsonable = json_decode($this->files->get($manifest), true);
+
+        foreach (['description', 'version'] as $type) {
+            $jsonable[$type] = Arr::get($lockContent, $type, $jsonable[$type]);
+        }
 
         // If json_decode fail, due to invalid json format. We going to
         // throw an exception so this error can be fixed by the developer

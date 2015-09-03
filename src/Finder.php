@@ -40,7 +40,7 @@ class Finder implements FinderContract
         'description' => null,
         'author'      => null,
         'url'         => null,
-        'version'     => '>0',
+        'version'     => '*',
         'config'      => [],
         'autoload'    => [],
         'provides'    => [],

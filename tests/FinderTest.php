@@ -88,7 +88,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
                 'description' => null,
                 'author'      => null,
                 'url'         => null,
-                'version'     => '>0',
+                'version'     => '*',
                 'config'      => [],
                 'autoload'    => [],
                 'provides'    => [],

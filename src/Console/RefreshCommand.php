@@ -7,11 +7,13 @@ class RefreshCommand extends ExtensionCommand
     use ConfirmableTrait;
 
     /**
-     * The console command name.
+     * The console command signature.
      *
      * @var string
      */
-    protected $name = 'extension:refresh';
+    protected $signature = 'extension:refresh
+        {name : Extension name.}
+        {--force : Force the operation to run when in production.}';
 
     /**
      * The console command description.

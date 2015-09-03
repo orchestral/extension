@@ -3,6 +3,7 @@
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Orchestra\Contracts\Foundation\DeferrableServiceContainer;
+use Illuminate\Contracts\Events\Dispatcher as EventDispatcherContract;
 
 class ProviderRepository
 {
@@ -12,6 +13,13 @@ class ProviderRepository
      * @var \Illuminate\Contracts\Foundation\Application
      */
     protected $app;
+
+    /**
+     * The event dispatcher implementation.
+     *
+     * @var \Illuminate\Contracts\Events\Dispatcher
+     */
+    protected $events;
 
     /**
      * List of services.
@@ -31,10 +39,12 @@ class ProviderRepository
      * Construct a new finder.
      *
      * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
      */
-    public function __construct(Application $app)
+    public function __construct(Application $app, EventDispatcherContract $events)
     {
-        $this->app = $app;
+        $this->app    = $app;
+        $this->events = $events;
     }
 
     /**
@@ -88,6 +98,14 @@ class ProviderRepository
      */
     protected function registerDeferredServiceProvider(ServiceProvider $instance, $provider)
     {
+        $when = $instance->when();
+
+        foreach ($when as $listen) {
+            $this->events->listen($listen, function () use ($instance) {
+                $this->app->register($instance);
+            });
+        }
+
         foreach ($instance->provides() as $service) {
             $this->deferredServices[$service] = $provider;
         }

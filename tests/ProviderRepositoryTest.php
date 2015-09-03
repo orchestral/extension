@@ -22,8 +22,9 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testServicesMethodWhenEager()
     {
-        $mock = m::mock('\Orchestra\Extension\TestCase\FooServiceProvider');
-        $app  = m::mock('\Illuminate\Contracts\Foundation\Application');
+        $mock   = m::mock('\Orchestra\Extension\TestCase\FooServiceProvider');
+        $app    = m::mock('\Illuminate\Contracts\Foundation\Application');
+        $events = m::mock('\Illuminate\Contracts\Events\Dispatcher');
 
         $app->shouldReceive('resolveProviderClass')->once()
                 ->with('Orchestra\Extension\TestCase\FooServiceProvider')->andReturn($mock)
@@ -31,7 +32,7 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $mock->shouldReceive('isDeferred')->once()->andReturn(false);
 
-        $stub = new ProviderRepository($app);
+        $stub = new ProviderRepository($app, $events);
         $stub->provides([
             'Orchestra\Extension\TestCase\FooServiceProvider',
         ]);
@@ -45,8 +46,9 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testServicesMethodWhenDeferred()
     {
-        $mock = m::mock('\Orchestra\Extension\TestCase\FooServiceProvider');
-        $app  = m::mock('\Orchestra\Contracts\Foundation\DeferrableServiceContainer', '\Illuminate\Contracts\Foundation\Application');
+        $mock   = m::mock('\Orchestra\Extension\TestCase\FooServiceProvider');
+        $app    = m::mock('\Orchestra\Contracts\Foundation\DeferrableServiceContainer', '\Illuminate\Contracts\Foundation\Application');
+        $events = m::mock('\Illuminate\Contracts\Events\Dispatcher');
 
         $app->shouldReceive('resolveProviderClass')->once()
                 ->with('Orchestra\Extension\TestCase\FooServiceProvider')->andReturn($mock)
@@ -57,9 +59,10 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
             ]);
 
         $mock->shouldReceive('isDeferred')->once()->andReturn(true)
-            ->shouldReceive('provides')->once()->andReturn(['foo']);
+            ->shouldReceive('provides')->once()->andReturn(['foo'])
+            ->shouldReceive('when')->once()->andReturn([]);
 
-        $stub = new ProviderRepository($app);
+        $stub = new ProviderRepository($app, $events);
         $stub->provides([
             'Orchestra\Extension\TestCase\FooServiceProvider',
         ]);
@@ -71,5 +74,10 @@ class FooServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    public function when()
+    {
+        return [];
     }
 }

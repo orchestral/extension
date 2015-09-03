@@ -10,11 +10,13 @@ class ActivateCommand extends ExtensionCommand implements Listener
     use ConfirmableTrait;
 
     /**
-     * The console command name.
+     * The console command signature.
      *
      * @var string
      */
-    protected $name = 'extension:activate';
+    protected $signature = 'extension:activate
+        {name : Extension name.}
+        {--force : Force the operation to run when in production.}';
 
     /**
      * The console command description.

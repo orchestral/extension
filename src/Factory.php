@@ -77,7 +77,7 @@ class Factory implements FactoryContract
 
         $extensions = $this->finder()->detect();
 
-        $collection = $extensions->map(function ($item, $key) {
+        $collection = $extensions->map(function ($item) {
             return Arr::except($item, ['description', 'author', 'url', 'version']);
         });
 

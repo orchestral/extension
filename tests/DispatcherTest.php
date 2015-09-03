@@ -22,6 +22,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     {
         return m::mock('\Orchestra\Extension\ProviderRepository', [
             m::mock('\Illuminate\Contracts\Foundation\Application'),
+            m::mock('\Illuminate\Contracts\Events\Dispatcher'),
         ]);
     }
 

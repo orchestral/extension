@@ -139,7 +139,7 @@ class Finder implements FinderContract
                 $name = (is_numeric($key) ? $this->guessExtensionNameFromManifest($manifest, $path) : $key);
 
                 if (! is_null($name)) {
-                    $lockContent = $packages->where('name', $name)->first();
+                    $lockContent       = $packages->where('name', $name)->first();
                     $extensions[$name] = $this->getManifestContents($manifest, $lockContent);
                 }
             }

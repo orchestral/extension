@@ -32,13 +32,15 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtension()
     {
         $this->app->singleton('orchestra.extension', function (Application $app) {
+            $events = $app->make('events');
+
             $dispatcher = new Dispatcher(
                 $app,
                 $app->make('config'),
-                $app->make('events'),
+                $events,
                 $app->make('files'),
                 $app->make('orchestra.extension.finder'),
-                new ProviderRepository($app)
+                new ProviderRepository($app, $events)
             );
 
             $status = $app->make('orchestra.extension.status');

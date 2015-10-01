@@ -157,9 +157,7 @@ class ProviderRepository
     public function writeManifest()
     {
         if ($this->shouldRecompile()) {
-            $this->files->put(
-                $this->manifestPath, json_encode($this->compiled, JSON_PRETTY_PRINT)
-            );
+            $this->writeManifestFile($this->compiled);
         }
     }
 
@@ -170,9 +168,19 @@ class ProviderRepository
      */
     public function writeFreshManifest()
     {
-        $this->files->put(
-            $this->manifestPath, json_encode([], JSON_PRETTY_PRINT)
-        );
+        $this->writeManifestFile($this->manifest = []);
+    }
+
+    /**
+     * Write the manifest file.
+     *
+     * @param  array  $manifest
+     *
+     * @return void
+     */
+    protected function writeManifestFile(array $manifest = [])
+    {
+        $this->files->put($this->manifestPath, json_encode($manifest, JSON_PRETTY_PRINT));
     }
 
     /**

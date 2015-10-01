@@ -123,7 +123,7 @@ class Dispatcher implements DispatcherContract
      */
     public function activate($name, array $options)
     {
-        $this->dispatcher->register($name, $active[$name]);
+        $this->register($name, $options);
 
         $this->fireEvent($name, $options, 'activating');
 

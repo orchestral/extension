@@ -88,13 +88,19 @@ class ProviderRepository
         $this->dispatch($services);
     }
 
+    /**
+     * Recompile provider by reviewing the class configuration.
+     *
+     * @param  string  $provider
+     * @return array
+     */
     protected function recompileProvider($provider)
     {
         $instance = $this->app->resolveProviderClass($provider);
 
         $type = $instance->isDeferred() && $this->app instanceof DeferrableServiceContainer ? 'Deferred' : 'Eager';
 
-        return $this->{"register{$type}ServiceProvider"}($instance);
+        return $this->{"register{$type}ServiceProvider"}($provider, $instance);
     }
 
     /**
@@ -171,28 +177,36 @@ class ProviderRepository
     /**
      * Register deferred service provider.
      *
+     * @param  string  $provider
      * @param  \Illuminate\Support\ServiceProvider  $instance
      *
      * @return void
      */
-    protected function registerDeferredServiceProvider(ServiceProvider $instance)
+    protected function registerDeferredServiceProvider($provider, ServiceProvider $instance)
     {
+        $deferred = [];
+
+        foreach ($instance->provides() as $provide) {
+            $deferred[$provide] = $provider;
+        }
+
         return [
             'instance' => $instance,
             'eager'    => false,
             'when'     => $instance->when(),
-            'deferred' => $instance->provides(),
+            'deferred' => $deferred,
         ];
     }
 
     /**
      * Register eager service provider.
      *
+     * @param  string  $provider
      * @param  \Illuminate\Support\ServiceProvider  $instance
      *
      * @return void
      */
-    protected function registerEagerServiceProvider(ServiceProvider $instance)
+    protected function registerEagerServiceProvider($provider, ServiceProvider $instance)
     {
         return [
             'instance' => $instance,
@@ -220,11 +234,7 @@ class ProviderRepository
             return $this->app->register($provider);
         }
 
-        $deferred = array_map(function ($index) use ($provider) {
-            return $provider;
-        }, array_flip($options['deferred']));
-
-        $this->app->setDeferredServices(array_merge( $this->app->getDeferredServices(), $deferred));
+        $this->app->setDeferredServices(array_merge($this->app->getDeferredServices(), $options['deferred']));
     }
 
     /**

@@ -75,7 +75,9 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
         $schema = [
             'eager' => false,
             'when' => [],
-            'deferred' => ['foo'],
+            'deferred' => [
+                'foo' => $service,
+            ],
         ];
 
         $app->shouldReceive('getCachedServicesPath')->once()->andReturn("{$manifestPath}/services.json")
@@ -95,7 +97,7 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
                 ->andReturnNull();
 
         $mock->shouldReceive('isDeferred')->once()->andReturn(! $schema['eager'])
-            ->shouldReceive('provides')->once()->andReturn($schema['deferred'])
+            ->shouldReceive('provides')->once()->andReturn(array_keys($schema['deferred']))
             ->shouldReceive('when')->once()->andReturn($schema['when']);
 
         $stub = new ProviderRepository($app, $events, $files);

@@ -20,9 +20,14 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
      */
     protected function getProvider()
     {
+        $app = m::mock('\Illuminate\Contracts\Foundation\Application');
+
+        $app->shouldReceive('getCachedServicesPath')->andReturn('/var/www/laravel/bootstrap/cache/service.json');
+
         return m::mock('\Orchestra\Extension\ProviderRepository', [
-            m::mock('\Illuminate\Contracts\Foundation\Application'),
+            $app,
             m::mock('\Illuminate\Contracts\Events\Dispatcher'),
+            m::mock('\Illuminate\Filesystem\Filesystem'),
         ]);
     }
 
@@ -34,26 +39,26 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     public function testStartMethod()
     {
         $provider = $this->getProvider();
-        $app      = m::mock('\Illuminate\Contracts\Foundation\Application');
-        $config   = m::mock('\Illuminate\Contracts\Config\Repository');
-        $event    = m::mock('\Illuminate\Contracts\Events\Dispatcher');
-        $files    = m::mock('\Illuminate\Filesystem\Filesystem');
-        $finder   = m::mock('\Orchestra\Extension\Finder');
+        $app = m::mock('\Illuminate\Contracts\Foundation\Application');
+        $config = m::mock('\Illuminate\Contracts\Config\Repository');
+        $event = m::mock('\Illuminate\Contracts\Events\Dispatcher');
+        $files = m::mock('\Illuminate\Filesystem\Filesystem');
+        $finder = m::mock('\Orchestra\Extension\Finder');
 
         $options1 = [
-            'config'      => ['handles' => 'laravel'],
-            'path'        => '/foo/app/laravel/framework/',
+            'config' => ['handles' => 'laravel'],
+            'path' => '/foo/app/laravel/framework/',
             'source-path' => '/foo/app',
-            'autoload'    => [
+            'autoload' => [
                 'source-path::hello.php',
                 'start.php',
             ],
-            'provides'    => ['Laravel\FrameworkServiceProvider'],
+            'provides' => ['Laravel\FrameworkServiceProvider'],
         ];
 
         $options2 = [
             'config' => [],
-            'path'   => '/foo/app/',
+            'path' => '/foo/app/',
         ];
 
         $config->shouldReceive('set')->once()
@@ -74,7 +79,8 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getRequire')->once()->with('/foo/app/start.php')->andReturn(true)
             ->shouldReceive('getRequire')->once()->with('/foo/app/src/orchestra.php')->andReturn(true);
         $provider->shouldReceive('provides')->once()
-                ->with(['Laravel\FrameworkServiceProvider'])->andReturn(true);
+                    ->with(['Laravel\FrameworkServiceProvider'])->andReturn(true)
+                ->shouldReceive('writeManifest')->once()->andReturnNull();
 
         $event->shouldReceive('fire')->once()
                 ->with('extension.started: app', [$options2])->andReturnNull()
@@ -109,10 +115,10 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function testFinishMethod()
     {
-        $app    = m::mock('\Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('\Illuminate\Contracts\Foundation\Application');
         $config = m::mock('\Illuminate\Contracts\Config\Repository');
-        $event  = m::mock('\Illuminate\Contracts\Events\Dispatcher');
-        $files  = m::mock('\Illuminate\Filesystem\Filesystem');
+        $event = m::mock('\Illuminate\Contracts\Events\Dispatcher');
+        $files = m::mock('\Illuminate\Filesystem\Filesystem');
         $finder = m::mock('\Orchestra\Extension\Finder');
 
         $event->shouldReceive('fire')->once()

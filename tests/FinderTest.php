@@ -21,12 +21,12 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructMethod()
     {
-        $config['path.app']  = '/var/www/laravel/app';
+        $config['path.app'] = '/var/www/laravel/app';
         $config['path.base'] = '/var/www/laravel';
 
         $stub = new Finder(m::mock('\Illuminate\Filesystem\Filesystem'), $config);
 
-        $refl  = new \ReflectionObject($stub);
+        $refl = new \ReflectionObject($stub);
         $paths = $refl->getProperty('paths');
         $paths->setAccessible(true);
 
@@ -50,7 +50,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testDetectMethod()
     {
-        $config['path.app']  = '/var/www/laravel/app';
+        $config['path.app'] = '/var/www/laravel/app';
         $config['path.base'] = '/var/www/laravel';
 
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
@@ -69,30 +69,30 @@ class FinderTest extends \PHPUnit_Framework_TestCase
 
         $expected = new Collection([
             'laravel/framework' => [
-                'path'        => 'vendor::laravel/framework',
+                'path' => 'vendor::laravel/framework',
                 'source-path' => 'vendor::laravel/framework',
-                'name'        => 'laravel/framework',
+                'name' => 'laravel/framework',
                 'description' => 'Laravel Framework',
-                'author'      => null,
-                'url'         => null,
-                'version'     => 'v5.1.10',
-                'config'      => [],
-                'autoload'    => [],
-                'provides'    => [],
-                'plugin'      => null,
+                'author' => null,
+                'url' => null,
+                'version' => 'v5.1.10',
+                'config' => [],
+                'autoload' => [],
+                'provides' => [],
+                'plugin' => null,
             ],
             'app' => [
-                'path'        => 'app::',
+                'path' => 'app::',
                 'source-path' => 'app::',
-                'name'        => 'Application',
+                'name' => 'Application',
                 'description' => null,
-                'author'      => null,
-                'url'         => null,
-                'version'     => '*',
-                'config'      => [],
-                'autoload'    => [],
-                'provides'    => [],
-                'plugin'      => null,
+                'author' => null,
+                'url' => null,
+                'version' => '*',
+                'config' => [],
+                'autoload' => [],
+                'provides' => [],
+                'plugin' => null,
             ],
         ]);
 
@@ -107,7 +107,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testDetectMethodGivenReservedNameThrowsException()
     {
-        $config['path.app']  = '/var/www/laravel/app';
+        $config['path.app'] = '/var/www/laravel/app';
         $config['path.base'] = '/var/www/laravel';
 
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
@@ -132,7 +132,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testDetectMethodThrowsException()
     {
-        $config['path.app']  = '/var/www/laravel/app';
+        $config['path.app'] = '/var/www/laravel/app';
         $config['path.base'] = '/var/www/laravel';
 
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
@@ -156,7 +156,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGuessExtensionPathMethod($output, $expected)
     {
-        $config['path.app']  = '/var/www/laravel/app';
+        $config['path.app'] = '/var/www/laravel/app';
         $config['path.base'] = '/var/www/laravel';
 
         $stub = new Finder(m::mock('\Illuminate\Filesystem\Filesystem'), $config);
@@ -172,7 +172,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveExtensionNamespace($path, $expected, $output)
     {
-        $config['path.app']  = '/var/www/laravel/app';
+        $config['path.app'] = '/var/www/laravel/app';
         $config['path.base'] = '/var/www/laravel';
 
         $stub = new Finder(m::mock('\Illuminate\Filesystem\Filesystem'), $config);
@@ -187,7 +187,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveExtensionPathMethod($expected, $output)
     {
-        $config['path.app']  = '/var/www/laravel/app';
+        $config['path.app'] = '/var/www/laravel/app';
         $config['path.base'] = '/var/www/laravel';
 
         $stub = new Finder(m::mock('\Illuminate\Filesystem\Filesystem'), $config);
@@ -199,14 +199,14 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testRegisterExtensionMethod()
     {
-        $config['path.app']  = '/var/www/laravel/app';
+        $config['path.app'] = '/var/www/laravel/app';
         $config['path.base'] = '/var/www/laravel';
 
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
         $stub = new Finder($files, $config);
 
-        $refl  = new \ReflectionObject($stub);
+        $refl = new \ReflectionObject($stub);
         $paths = $refl->getProperty('paths');
         $paths->setAccessible(true);
 
@@ -225,10 +225,10 @@ class FinderTest extends \PHPUnit_Framework_TestCase
      */
     public function extensionManifestProvider()
     {
-        $windowsPath['path.app']  = 'c:\www\laravel\app';
+        $windowsPath['path.app'] = 'c:\www\laravel\app';
         $windowsPath['path.base'] = 'c:\www\laravel';
 
-        $unixPath['path.app']  = '/var/www/laravel/app';
+        $unixPath['path.app'] = '/var/www/laravel/app';
         $unixPath['path.base'] = '/var/www/laravel';
 
         return [

@@ -114,6 +114,38 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
+     * Activate the extension.
+     *
+     * @param  string  $name
+     * @param  array   $options
+     *
+     * @return void
+     */
+    public function activate($name, array $options)
+    {
+        $this->dispatcher->register($name, $active[$name]);
+
+        $this->fireEvent($name, $options, 'activating');
+
+        $this->provider->writeFreshManifest();
+    }
+
+    /**
+     * Deactivate the extension.
+     *
+     * @param  string  $name
+     * @param  array   $options
+     *
+     * @return void
+     */
+    public function deactivating($name, array $options)
+    {
+        $this->fireEvent($name, $options, 'deactivating');
+
+        $this->provider->writeFreshManifest();
+    }
+
+    /**
      * Set the handles to orchestra/extension package config (if available).
      *
      * @param  string  $name
@@ -168,6 +200,8 @@ class Dispatcher implements DispatcherContract
         foreach ($this->extensions as $name => $options) {
             $this->fireEvent($name, $options, 'booted');
         }
+
+        $this->provider->writeManifest();
     }
 
     /**

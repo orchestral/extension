@@ -95,6 +95,7 @@ trait DispatchableTrait
                 );
 
                 Arr::set($options, 'config', $config);
+
                 $this->extensions[$name] = $options;
                 $this->dispatcher->register($name, $options);
             }

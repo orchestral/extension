@@ -67,13 +67,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'path'    => '/foo/path/laravel/framework/',
-                'config'  => ['foo' => 'bar', 'handles' => 'laravel'],
+                'path' => '/foo/path/laravel/framework/',
+                'config' => ['foo' => 'bar', 'handles' => 'laravel'],
                 'provide' => ['Laravel\FrameworkServiceProvider'],
             ],
             [
-                'path'    => '/foo/app/',
-                'config'  => ['foo' => 'bar'],
+                'path' => '/foo/app/',
+                'config' => ['foo' => 'bar'],
                 'provide' => [],
             ],
         ];
@@ -118,7 +118,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $app['orchestra.publisher.migrate'] = $migrator;
         $app['orchestra.publisher.asset'] = $asset;
 
-        $dispatcher->shouldReceive('register')->once()->with('laravel/framework', m::type('Array'))->andReturnNull();
+        $dispatcher->shouldReceive('activating')->once()->with('laravel/framework', m::type('Array'))->andReturnNull();
         $memory->shouldReceive('get')->twice()
                 ->with('extensions.available', [])->andReturn(['laravel/framework' => []])
             ->shouldReceive('get')->twice()->with('extensions.active', [])->andReturn([])
@@ -129,10 +129,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $events->shouldReceive('fire')->once()
                 ->with('orchestra.publishing', ['laravel/framework'])->andReturn(true)
             ->shouldReceive('fire')->once()
-                ->with('orchestra.publishing: laravel/framework')->andReturn(true)
-            ->shouldReceive('fire')->once()
-                ->with('orchestra.activating: laravel/framework', ['laravel/framework'])
-                ->andReturnNull();
+                ->with('orchestra.publishing: laravel/framework')->andReturn(true);
 
         $stub = new Factory($app, $dispatcher, $this->status);
         $stub->attach($memory);
@@ -148,6 +145,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testActivatedMethod()
     {
         $app = $this->app;
+        $dispatcher = $this->dispatcher;
         $memory = m::mock('\Orchestra\Contracts\Memory\Provider');
 
         $app['orchestra.memory'] = $memory;
@@ -167,7 +165,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testDeactivateMethod()
     {
         $app = $this->app;
-        $events = $this->events;
+        $dispatcher = $this->dispatcher;
         $app['orchestra.memory'] = $memory = m::mock('\Orchestra\Contracts\Memory\Provider');
 
         $memory->shouldReceive('get')->twice()
@@ -176,9 +174,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('put')->once()
                 ->with('extensions.active', ['daylerees/doc-reader' => []])
                 ->andReturn(true);
-        $events->shouldReceive('fire')->once()
-                ->with('orchestra.deactivating: laravel/framework', ['laravel/framework'])
-                ->andReturnNull();
+        $dispatcher->shouldReceive('deactivating')->once()->with('laravel/framework', m::type('Array'))->andReturnNull();
 
         $stub = new Factory($app, $this->dispatcher, $this->status);
         $stub->attach($memory);
@@ -245,7 +241,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             'foo' => [
                 'name' => 'Foo',
                 'description' => 'Foobar',
-            ]
+            ],
         ]);
 
         $events->shouldReceive('fire')->once()->with('orchestra.extension: detecting')->andReturnNull();
@@ -308,7 +304,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $app = $this->app;
         $memory = m::mock('\Orchestra\Contracts\Memory\Provider');
         $finder = m::mock('\Orchestra\Contracts\Extension\Finder');
-        $files  = m::mock('\Illuminate\Filesystem\Filesystem');
+        $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
         $app['path.public'] = '/var/orchestra';
         $app['orchestra.memory'] = $memory;
@@ -343,7 +339,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testRegisterMethod()
     {
-        $app    = $this->app;
+        $app = $this->app;
         $finder = m::mock('\Orchestra\Contracts\Extension\Finder');
         $memory = m::mock('\Orchestra\Contracts\Memory\Provider');
 

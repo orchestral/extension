@@ -84,7 +84,11 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtensionProvider()
     {
         $this->app->singleton('orchestra.extension.provider', function (Application $app) {
-            return new ProviderRepository($app, $app->make('events'));
+            $provider = new ProviderRepository($app, $app->make('events'), $app->make('files'));
+
+            $provider->loadManifest();
+
+            return $provider;
         });
     }
 

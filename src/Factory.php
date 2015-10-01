@@ -1,11 +1,12 @@
 <?php namespace Orchestra\Extension;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Orchestra\Memory\ContainerTrait;
 use Illuminate\Contracts\Container\Container;
 use Orchestra\Extension\Traits\OperationTrait;
+use Orchestra\Extension\Bootstrap\LoadExtension;
 use Orchestra\Extension\Traits\DispatchableTrait;
 use Orchestra\Contracts\Extension\Factory as FactoryContract;
 use Orchestra\Contracts\Extension\Dispatcher as DispatcherContract;
@@ -171,7 +172,7 @@ class Factory implements FactoryContract
     public function route($name, $default = '/')
     {
         // Boot the extension.
-        ! $this->booted() && $this->app->make(Bootstrap\LoadExtension::class)->bootstrap($this->app);
+        ! $this->booted() && $this->app->make(LoadExtension::class)->bootstrap($this->app);
 
         if (! isset($this->routes[$name])) {
 

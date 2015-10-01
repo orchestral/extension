@@ -30,10 +30,9 @@ trait OperationTrait
         }
 
         $this->extensions[$name] = $active[$name];
-        $this->dispatcher->register($name, $active[$name]);
         $this->publish($name);
 
-        $this->events->fire("orchestra.activating: {$name}", [$name]);
+        $this->dispatcher->activating($name, $active[$name]);
 
         return true;
     }
@@ -71,25 +70,17 @@ trait OperationTrait
      */
     public function deactivate($name)
     {
-        $deactivated = false;
-        $memory      = $this->memory;
-        $current     = $memory->get('extensions.active', []);
-        $active      = [];
+        $memory = $this->memory;
+        $active = $memory->get('extensions.active', []);
 
-        foreach ($current as $extension => $config) {
-            if ($extension === $name) {
-                $deactivated = true;
-            } else {
-                $active[$extension] = $config;
-            }
+        if (! isset($active[$name])) {
+            return false;
         }
 
-        if (!! $deactivated) {
-            $memory->put('extensions.active', $active);
-            $this->events->fire("orchestra.deactivating: {$name}", [$name]);
-        }
+        $memory->put('extensions.active', Arr::except($active, $name));
+        $this->dispatcher->deactivating($name, $active[$name]);
 
-        return $deactivated;
+        return true;
     }
 
     /**

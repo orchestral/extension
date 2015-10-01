@@ -25,9 +25,9 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
         $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
             ->shouldReceive('secure')->once()->andReturn(false);
 
-        $stub   = new RouteGenerator("foo", $request);
+        $stub = new RouteGenerator("foo", $request);
 
-        $refl   = new \ReflectionObject($stub);
+        $refl = new \ReflectionObject($stub);
         $domain = $refl->getProperty('domain');
         $prefix = $refl->getProperty('prefix');
 

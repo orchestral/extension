@@ -114,14 +114,14 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * Activate the extension.
+     * Activating the extension.
      *
      * @param  string  $name
      * @param  array   $options
      *
      * @return void
      */
-    public function activate($name, array $options)
+    public function activating($name, array $options)
     {
         $this->register($name, $options);
 
@@ -131,7 +131,7 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * Deactivate the extension.
+     * Deactivating the extension.
      *
      * @param  string  $name
      * @param  array   $options

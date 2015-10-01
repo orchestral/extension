@@ -92,6 +92,7 @@ class ProviderRepository
      * Recompile provider by reviewing the class configuration.
      *
      * @param  string  $provider
+     *
      * @return array
      */
     protected function recompileProvider($provider)

@@ -146,4 +146,13 @@ trait OperationTrait
     {
         return $this->extensions->has($name);
     }
+
+    /**
+     * Publish an extension.
+     *
+     * @param  string
+     *
+     * @return void
+     */
+    abstract public function publish($name);
 }

@@ -220,10 +220,11 @@ class ProviderRepository
             return $this->app->register($provider);
         }
 
-        $this->app->setDeferredServices(array_merge(
-            $this->app->getDeferredServices(),
-            $options['deferred']
-        ));
+        $deferred = array_map(function ($index) use ($provider) {
+            return $provider;
+        }, array_flip($options['deferred']));
+
+        $this->app->setDeferredServices(array_merge( $this->app->getDeferredServices(), $deferred));
     }
 
     /**

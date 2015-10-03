@@ -3,7 +3,6 @@
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
 use Orchestra\Contracts\Foundation\Application;
-use Orchestra\Contracts\Foundation\DeferrableServiceContainer;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcherContract;
 
 class ProviderRepository

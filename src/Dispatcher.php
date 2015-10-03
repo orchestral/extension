@@ -114,6 +114,38 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
+     * Activating the extension.
+     *
+     * @param  string  $name
+     * @param  array   $options
+     *
+     * @return void
+     */
+    public function activating($name, array $options)
+    {
+        $this->register($name, $options);
+
+        $this->fireEvent($name, $options, 'activating');
+
+        $this->provider->writeFreshManifest();
+    }
+
+    /**
+     * Deactivating the extension.
+     *
+     * @param  string  $name
+     * @param  array   $options
+     *
+     * @return void
+     */
+    public function deactivating($name, array $options)
+    {
+        $this->fireEvent($name, $options, 'deactivating');
+
+        $this->provider->writeFreshManifest();
+    }
+
+    /**
      * Set the handles to orchestra/extension package config (if available).
      *
      * @param  string  $name
@@ -168,6 +200,8 @@ class Dispatcher implements DispatcherContract
         foreach ($this->extensions as $name => $options) {
             $this->fireEvent($name, $options, 'booted');
         }
+
+        $this->provider->writeManifest();
     }
 
     /**
@@ -180,27 +214,17 @@ class Dispatcher implements DispatcherContract
      */
     public function start($name, array $options)
     {
-        $file   = $this->files;
-        $finder = $this->finder;
+        $basePath   = rtrim($options['path'], '/');
+        $sourcePath = rtrim(Arr::get($options, 'source-path', $basePath), '/');
+        $autoload   = Arr::get($options, 'autoload', []);
 
-        $base     = rtrim($options['path'], '/');
-        $source   = rtrim(Arr::get($options, 'source-path', $base), '/');
-        $autoload = Arr::get($options, 'autoload', []);
+        $search      = ['source-path::', 'app::/'];
+        $replacement = ["{$sourcePath}/", 'app::'];
 
         // By now, extension should already exist as an extension. We should
         // be able start orchestra.php start file on each package.
-        foreach ($this->getAutoloadFiles($autoload) as $path) {
-            $path = str_replace(
-                ['source-path::', 'app::/'],
-                ["{$source}/", 'app::'],
-                $path
-            );
-
-            $path = $finder->resolveExtensionPath($path);
-
-            if ($file->isFile($path)) {
-                $file->getRequire($path);
-            }
+        foreach ($this->getAutoloadFiles($autoload) as $filePath) {
+            $this->loadAutoloaderFile(str_replace($search, $replacement, $filePath));
         }
 
         $this->fireEvent($name, $options, 'started');
@@ -257,5 +281,21 @@ class Dispatcher implements DispatcherContract
             $paths,
             ['source-path::src/orchestra.php', 'source-path::orchestra.php']
         );
+    }
+
+    /**
+     * Load autoloader file.
+     *
+     * @param  string  $filePath
+     *
+     * @return void
+     */
+    protected function loadAutoloaderFile($filePath)
+    {
+        $filePath = $this->finder->resolveExtensionPath($filePath);
+
+        if ($this->files->isFile($filePath)) {
+            $this->files->getRequire($filePath);
+        }
     }
 }

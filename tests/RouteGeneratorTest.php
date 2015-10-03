@@ -25,9 +25,9 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
         $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
             ->shouldReceive('secure')->once()->andReturn(false);
 
-        $stub   = new RouteGenerator("foo", $request);
+        $stub = new RouteGenerator("foo", $request);
 
-        $refl   = new \ReflectionObject($stub);
+        $refl = new \ReflectionObject($stub);
         $domain = $refl->getProperty('domain');
         $prefix = $refl->getProperty('prefix');
 
@@ -73,7 +73,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Orchestra\Extension\RouteGenerator::path method with domain.
+     * Test Orchestra\Extension\RouteGenerator::is() method with domain.
      *
      * @test
      * @dataProvider isDataProvider
@@ -91,7 +91,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Orchestra\Extension\RouteGenerator::path method with domain
+     * Test Orchestra\Extension\RouteGenerator::is() method with domain
      * and prefix.
      *
      * @test
@@ -126,10 +126,12 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $stub->path());
         $this->assertEquals('foo/bar', $stub->path());
+
+        $this->assertEquals(['prefix' => 'foo'], $stub->group());
     }
 
     /**
-     * Test Orchestra\Extension\RouteGenerator::path method with domain.
+     * Test Orchestra\Extension\RouteGenerator::path() method with domain.
      *
      * @test
      */
@@ -145,6 +147,8 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('/', $stub->path());
         $this->assertEquals('bar', $stub->path());
+
+        $this->assertEquals(['prefix' => '/', 'domain' => 'foobar.com'], $stub->group());
     }
 
     /**
@@ -165,6 +169,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals("blog.orchestraplatform.com", $stub1->domain());
         $this->assertEquals("/", $stub1->prefix());
+        $this->assertEquals(['prefix' => '/', 'domain' => 'blog.orchestraplatform.com'], $stub1->group());
         $this->assertEquals("http://blog.orchestraplatform.com", $stub1->root());
         $this->assertEquals("http://blog.orchestraplatform.com/foo", $stub1->to('foo'));
         $this->assertEquals("http://blog.orchestraplatform.com/foo?bar", $stub1->to('foo?bar'));
@@ -172,6 +177,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals("blog.orchestraplatform.com", $stub2->domain());
         $this->assertEquals("hello", $stub2->prefix());
+        $this->assertEquals(['prefix' => 'hello', 'domain' => 'blog.orchestraplatform.com'], $stub2->group());
         $this->assertEquals("http://blog.orchestraplatform.com/hello", $stub2->root());
         $this->assertEquals("http://blog.orchestraplatform.com/hello/foo", $stub2->to('foo'));
         $this->assertEquals("http://blog.orchestraplatform.com/hello/foo?bar", $stub2->to('foo?bar'));
@@ -179,6 +185,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals("blog.orchestraplatform.com", $stub3->domain());
         $this->assertEquals("hello/world", $stub3->prefix());
+        $this->assertEquals(['prefix' => 'hello/world', 'domain' => 'blog.orchestraplatform.com'], $stub3->group());
         $this->assertEquals("http://blog.orchestraplatform.com/hello/world", $stub3->root());
         $this->assertEquals("http://blog.orchestraplatform.com/hello/world/foo", $stub3->to('foo'));
         $this->assertEquals("http://blog.orchestraplatform.com/hello/world/foo?bar", $stub3->to('foo?bar'));
@@ -204,6 +211,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals("blog.localhost", $stub1->domain());
         $this->assertEquals("/", $stub1->prefix());
+        $this->assertEquals(['prefix' => '/', 'domain' => 'blog.localhost'], $stub1->group());
         $this->assertEquals("http://blog.localhost", $stub1->root());
         $this->assertEquals("http://blog.localhost/foo", $stub1->to('foo'));
         $this->assertEquals("http://blog.localhost/foo?bar", $stub1->to('foo?bar'));
@@ -211,6 +219,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals("blog.localhost", $stub2->domain());
         $this->assertEquals("hello", $stub2->prefix());
+        $this->assertEquals(['prefix' => 'hello', 'domain' => 'blog.localhost'], $stub2->group());
         $this->assertEquals("http://blog.localhost/hello", $stub2->root());
         $this->assertEquals("http://blog.localhost/hello/foo", $stub2->to('foo'));
         $this->assertEquals("http://blog.localhost/hello/foo?bar", $stub2->to('foo?bar'));
@@ -218,6 +227,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals("blog.localhost", $stub3->domain());
         $this->assertEquals("hello/world", $stub3->prefix());
+        $this->assertEquals(['prefix' => 'hello/world', 'domain' => 'blog.localhost'], $stub3->group());
         $this->assertEquals("http://blog.localhost/hello/world", $stub3->root());
         $this->assertEquals("http://blog.localhost/hello/world/foo", $stub3->to('foo'));
         $this->assertEquals("http://blog.localhost/hello/world/foo?bar", $stub3->to('foo?bar'));

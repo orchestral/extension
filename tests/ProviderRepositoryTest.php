@@ -15,57 +15,134 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Orchestra\Extension\ProviderRepository::services()
+     * Test Orchestra\Extension\ProviderRepository::provides()
      * method.
      *
      * @test
      */
     public function testServicesMethodWhenEager()
     {
-        $mock   = m::mock('\Orchestra\Extension\TestCase\FooServiceProvider');
-        $app    = m::mock('\Illuminate\Contracts\Foundation\Application');
+        $service = 'Orchestra\Extension\TestCase\FooServiceProvider';
+        $manifestPath = '/var/www/laravel/bootstrap/cache';
+
+        $mock = m::mock($service);
+        $app = m::mock('\Illuminate\Contracts\Foundation\Application');
         $events = m::mock('\Illuminate\Contracts\Events\Dispatcher');
+        $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
-        $app->shouldReceive('resolveProviderClass')->once()
-                ->with('Orchestra\Extension\TestCase\FooServiceProvider')->andReturn($mock)
+        $schema = [
+            'eager' => true,
+            'when' => [],
+            'deferred' => [],
+        ];
+
+        $app->shouldReceive('getCachedServicesPath')->once()->andReturn("{$manifestPath}/services.json")
+            ->shouldReceive('resolveProviderClass')->once()
+                ->with($service)->andReturn($mock)
             ->shouldReceive('register')->once()->with($mock)->andReturn($mock);
+        $files->shouldReceive('exists')->once()
+                ->with("{$manifestPath}/extension.json")->andReturn(false)
+            ->shouldReceive('put')->once()
+                ->with("{$manifestPath}/extension.json", json_encode([$service => $schema], JSON_PRETTY_PRINT))
+                ->andReturnNull();
 
-        $mock->shouldReceive('isDeferred')->once()->andReturn(false);
+        $mock->shouldReceive('isDeferred')->once()->andReturn(! $schema['eager']);
 
-        $stub = new ProviderRepository($app, $events);
-        $stub->provides([
-            'Orchestra\Extension\TestCase\FooServiceProvider',
-        ]);
+        $stub = new ProviderRepository($app, $events, $files);
+        $stub->loadManifest();
+        $stub->provides([$service]);
+
+        $this->assertTrue($stub->shouldRecompile());
+        $this->assertNull($stub->writeManifest());
     }
 
     /**
-     * Test Orchestra\Extension\ProviderRepository::services()
+     * Test Orchestra\Extension\ProviderRepository::provides()
      * method.
      *
      * @test
      */
     public function testServicesMethodWhenDeferred()
     {
-        $mock   = m::mock('\Orchestra\Extension\TestCase\FooServiceProvider');
-        $app    = m::mock('\Orchestra\Contracts\Foundation\DeferrableServiceContainer', '\Illuminate\Contracts\Foundation\Application');
-        $events = m::mock('\Illuminate\Contracts\Events\Dispatcher');
+        $service = 'Orchestra\Extension\TestCase\FooServiceProvider';
+        $manifestPath = '/var/www/laravel/bootstrap/cache';
 
-        $app->shouldReceive('resolveProviderClass')->once()
-                ->with('Orchestra\Extension\TestCase\FooServiceProvider')->andReturn($mock)
-            ->shouldReceive('getDeferredServices')->once()->andReturn(['events' => '\Illuminate\Events\EventsServiceProvider'])
+        $mock = m::mock($service);
+        $app = m::mock('\Orchestra\Contracts\Foundation\DeferrableServiceContainer', '\Illuminate\Contracts\Foundation\Application');
+        $events = m::mock('\Illuminate\Contracts\Events\Dispatcher');
+        $files = m::mock('\Illuminate\Filesystem\Filesystem');
+
+        $schema = [
+            'eager' => false,
+            'when' => [],
+            'deferred' => [
+                'foo' => $service,
+            ],
+        ];
+
+        $app->shouldReceive('getCachedServicesPath')->once()->andReturn("{$manifestPath}/services.json")
+            ->shouldReceive('resolveProviderClass')->once()
+                ->with($service)->andReturn($mock)
+            ->shouldReceive('getDeferredServices')->once()->andReturn([
+                'events' => '\Illuminate\Events\EventsServiceProvider'
+            ])
             ->shouldReceive('setDeferredServices')->once()->andReturn([
                 'events' => 'Illuminate\Events\EventsServiceProvider',
-                'foo'    => 'Orchestra\Extension\TestCase\FooServiceProvider',
+                'foo'    => $service,
             ]);
+        $files->shouldReceive('exists')->once()
+                ->with("{$manifestPath}/extension.json")->andReturn(false)
+            ->shouldReceive('put')->once()
+                ->with("{$manifestPath}/extension.json", json_encode([$service => $schema], JSON_PRETTY_PRINT))
+                ->andReturnNull();
 
-        $mock->shouldReceive('isDeferred')->once()->andReturn(true)
-            ->shouldReceive('provides')->once()->andReturn(['foo'])
-            ->shouldReceive('when')->once()->andReturn([]);
+        $mock->shouldReceive('isDeferred')->once()->andReturn(! $schema['eager'])
+            ->shouldReceive('provides')->once()->andReturn(array_keys($schema['deferred']))
+            ->shouldReceive('when')->once()->andReturn($schema['when']);
 
-        $stub = new ProviderRepository($app, $events);
-        $stub->provides([
-            'Orchestra\Extension\TestCase\FooServiceProvider',
-        ]);
+        $stub = new ProviderRepository($app, $events, $files);
+        $stub->loadManifest();
+        $stub->provides([$service]);
+
+        $this->assertTrue($stub->shouldRecompile());
+        $this->assertNull($stub->writeManifest());
+    }
+
+    /**
+     * Test Orchestra\Extension\ProviderRepository::provides()
+     * method.
+     *
+     * @test
+     */
+    public function testServicesMethodWhenManifestExists()
+    {
+        $service = 'Orchestra\Extension\TestCase\FooServiceProvider';
+        $manifestPath = '/var/www/laravel/bootstrap/cache';
+
+        $mock = m::mock($service);
+        $app = m::mock('\Illuminate\Contracts\Foundation\Application');
+        $events = m::mock('\Illuminate\Contracts\Events\Dispatcher');
+        $files = m::mock('\Illuminate\Filesystem\Filesystem');
+        $manifestPath = '/var/www/laravel/bootstrap/cache';
+
+        $schema = [
+            'eager' => true,
+            'when' => [],
+            'deferred' => [],
+        ];
+
+        $app->shouldReceive('getCachedServicesPath')->once()->andReturn("{$manifestPath}/services.json")
+            ->shouldReceive('register')->once()->with($service)->andReturnNull();
+        $files->shouldReceive('exists')->once()->with("{$manifestPath}/extension.json")->andReturn(true)
+            ->shouldReceive('get')->once()->with("{$manifestPath}/extension.json")
+                ->andReturn(json_encode([$service => $schema]));
+
+        $stub = new ProviderRepository($app, $events, $files);
+        $stub->loadManifest();
+        $stub->provides([$service]);
+
+        $this->assertFalse($stub->shouldRecompile());
+        $this->assertNull($stub->writeManifest());
     }
 }
 

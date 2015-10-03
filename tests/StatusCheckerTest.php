@@ -22,7 +22,7 @@ class StatusCheckerTest extends \PHPUnit_Framework_TestCase
     public function testCheckMethodWhenSafeModeIsOn()
     {
         $request = m::mock('\Illuminate\Http\Request');
-        $config  = m::mock('\Illuminate\Contracts\Config\Repository');
+        $config = m::mock('\Illuminate\Contracts\Config\Repository');
 
         $stub = new StatusChecker($config, $request);
 
@@ -45,7 +45,7 @@ class StatusCheckerTest extends \PHPUnit_Framework_TestCase
     public function testCheckMethodWhenSafeModeIsOff()
     {
         $request = m::mock('\Illuminate\Http\Request');
-        $config  = m::mock('\Illuminate\Contracts\Config\Repository');
+        $config = m::mock('\Illuminate\Contracts\Config\Repository');
 
         $stub = new StatusChecker($config, $request);
 

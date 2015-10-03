@@ -21,10 +21,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testMapMethod()
     {
-        $app     = new Container();
+        $app = new Container();
         $manager = m::mock('\Orchestra\Memory\MemoryManager', [$app]);
-        $memory  = m::mock('\Orchestra\Contracts\Memory\Provider');
-        $config  = m::mock('\Illuminate\Contracts\Config\Repository');
+        $memory = m::mock('\Orchestra\Contracts\Memory\Provider');
+        $config = m::mock('\Illuminate\Contracts\Config\Repository');
 
         $manager->shouldReceive('make')->once()->andReturn($memory);
         $memory->shouldReceive('get')->once()
@@ -44,7 +44,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $stub = new Repository($config, $manager);
 
         $stub->map('laravel/framework', [
-            'foo'    => 'laravel/framework::foo',
+            'foo' => 'laravel/framework::foo',
             'foobar' => 'laravel/framework::foobar',
         ]);
     }

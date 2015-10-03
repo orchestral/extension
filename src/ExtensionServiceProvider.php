@@ -13,9 +13,11 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerExtensionConfigManager();
+
         $this->registerExtensionFinder();
 
-        $this->registerExtensionConfigManager();
+        $this->registerExtensionProvider();
 
         $this->registerExtensionStatusChecker();
 
@@ -32,18 +34,14 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtension()
     {
         $this->app->singleton('orchestra.extension', function (Application $app) {
-            $events = $app->make('events');
+            $config   = $app->make('config');
+            $events   = $app->make('events');
+            $files    = $app->make('files');
+            $finder   = $app->make('orchestra.extension.finder');
+            $status   = $app->make('orchestra.extension.status');
+            $provider = $app->make('orchestra.extension.provider');
 
-            $dispatcher = new Dispatcher(
-                $app,
-                $app->make('config'),
-                $events,
-                $app->make('files'),
-                $app->make('orchestra.extension.finder'),
-                new ProviderRepository($app, $events)
-            );
-
-            $status = $app->make('orchestra.extension.status');
+            $dispatcher = new Dispatcher($app, $config, $events, $files, $finder, $provider);
 
             return new Factory($app, $dispatcher, $status);
         });
@@ -57,10 +55,7 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtensionConfigManager()
     {
         $this->app->singleton('orchestra.extension.config', function (Application $app) {
-            return new Repository(
-                $app->make('config'),
-                $app->make('orchestra.memory')
-            );
+            return new Repository($app->make('config'), $app->make('orchestra.memory'));
         });
     }
 
@@ -78,6 +73,22 @@ class ExtensionServiceProvider extends ServiceProvider
             ];
 
             return new Finder($app->make('files'), $config);
+        });
+    }
+
+    /**
+     * Register the service provider for Extension Provider.
+     *
+     * @return void
+     */
+    protected function registerExtensionProvider()
+    {
+        $this->app->singleton('orchestra.extension.provider', function (Application $app) {
+            $provider = new ProviderRepository($app, $app->make('events'), $app->make('files'));
+
+            $provider->loadManifest();
+
+            return $provider;
         });
     }
 

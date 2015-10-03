@@ -26,7 +26,7 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
         $manifestPath = '/var/www/laravel/bootstrap/cache';
 
         $mock = m::mock($service);
-        $app = m::mock('\Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('\Orchestra\Contracts\Foundation\Application');
         $events = m::mock('\Illuminate\Contracts\Events\Dispatcher');
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
@@ -68,7 +68,7 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
         $manifestPath = '/var/www/laravel/bootstrap/cache';
 
         $mock = m::mock($service);
-        $app = m::mock('\Orchestra\Contracts\Foundation\DeferrableServiceContainer', '\Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('\Orchestra\Contracts\Foundation\Application');
         $events = m::mock('\Illuminate\Contracts\Events\Dispatcher');
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
@@ -120,7 +120,7 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
         $manifestPath = '/var/www/laravel/bootstrap/cache';
 
         $mock = m::mock($service);
-        $app = m::mock('\Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('\Orchestra\Contracts\Foundation\Application');
         $events = m::mock('\Illuminate\Contracts\Events\Dispatcher');
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
         $manifestPath = '/var/www/laravel/bootstrap/cache';

@@ -2,7 +2,7 @@
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Contracts\Foundation\Application;
+use Orchestra\Contracts\Foundation\Application;
 use Orchestra\Contracts\Foundation\DeferrableServiceContainer;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcherContract;
 
@@ -11,7 +11,7 @@ class ProviderRepository
     /**
      * Application instance.
      *
-     * @var \Illuminate\Contracts\Foundation\Application
+     * @var \Orchestra\Contracts\Foundation\Application
      */
     protected $app;
 
@@ -53,7 +53,7 @@ class ProviderRepository
     /**
      * Construct a new finder.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Orchestra\Contracts\Foundation\Application  $app
      * @param  \Illuminate\Contracts\Events\Dispatcher  $events
      * @param  \Illuminate\Filesystem\Filesystem  $files
      */
@@ -99,7 +99,7 @@ class ProviderRepository
     {
         $instance = $this->app->resolveProviderClass($provider);
 
-        $type = $instance->isDeferred() && $this->app instanceof DeferrableServiceContainer ? 'Deferred' : 'Eager';
+        $type = $instance->isDeferred() ? 'Deferred' : 'Eager';
 
         return $this->{"register{$type}ServiceProvider"}($provider, $instance);
     }
@@ -237,10 +237,6 @@ class ProviderRepository
     {
         if ($options['eager']) {
             return ;
-        }
-
-        if (! $this->app instanceof DeferrableServiceContainer) {
-            return $this->app->register($provider);
         }
 
         $this->app->setDeferredServices(array_merge($this->app->getDeferredServices(), $options['deferred']));

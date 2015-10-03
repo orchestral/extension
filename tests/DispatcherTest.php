@@ -20,7 +20,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
      */
     protected function getProvider()
     {
-        $app = m::mock('\Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('\Orchestra\Contracts\Foundation\Application');
 
         $app->shouldReceive('getCachedExtensionServicesPath')->andReturn('/var/www/laravel/bootstrap/cache/extension.json');
 

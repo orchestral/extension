@@ -36,7 +36,7 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
             'deferred' => [],
         ];
 
-        $app->shouldReceive('getCachedServicesPath')->once()->andReturn("{$manifestPath}/services.json")
+        $app->shouldReceive('getCachedExtensionServicesPath')->once()->andReturn("{$manifestPath}/extension.json")
             ->shouldReceive('resolveProviderClass')->once()
                 ->with($service)->andReturn($mock)
             ->shouldReceive('register')->once()->with($mock)->andReturn($mock);
@@ -80,7 +80,7 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $app->shouldReceive('getCachedServicesPath')->once()->andReturn("{$manifestPath}/services.json")
+        $app->shouldReceive('getCachedExtensionServicesPath')->once()->andReturn("{$manifestPath}/extension.json")
             ->shouldReceive('resolveProviderClass')->once()
                 ->with($service)->andReturn($mock)
             ->shouldReceive('getDeferredServices')->once()->andReturn([
@@ -131,7 +131,7 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
             'deferred' => [],
         ];
 
-        $app->shouldReceive('getCachedServicesPath')->once()->andReturn("{$manifestPath}/services.json")
+        $app->shouldReceive('getCachedExtensionServicesPath')->once()->andReturn("{$manifestPath}/extension.json")
             ->shouldReceive('register')->once()->with($service)->andReturnNull();
         $files->shouldReceive('exists')->once()->with("{$manifestPath}/extension.json")->andReturn(true)
             ->shouldReceive('get')->once()->with("{$manifestPath}/extension.json")

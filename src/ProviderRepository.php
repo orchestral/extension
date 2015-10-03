@@ -63,7 +63,7 @@ class ProviderRepository
         $this->events = $events;
         $this->files  = $files;
 
-        $this->manifestPath = dirname($this->app->getCachedServicesPath()).'/extension.json';
+        $this->manifestPath = $this->app->getCachedExtensionServicesPath();
     }
 
     /**

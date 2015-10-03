@@ -22,7 +22,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $app = m::mock('\Illuminate\Contracts\Foundation\Application');
 
-        $app->shouldReceive('getCachedServicesPath')->andReturn('/var/www/laravel/bootstrap/cache/service.json');
+        $app->shouldReceive('getCachedExtensionServicesPath')->andReturn('/var/www/laravel/bootstrap/cache/extension.json');
 
         return m::mock('\Orchestra\Extension\ProviderRepository', [
             $app,

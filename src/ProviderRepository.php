@@ -238,7 +238,7 @@ class ProviderRepository
             return ;
         }
 
-        $this->app->setDeferredServices(array_merge($this->app->getDeferredServices(), $options['deferred']));
+        $this->app->addDeferredServices($options['deferred']);
     }
 
     /**

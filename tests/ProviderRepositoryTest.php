@@ -83,12 +83,8 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
         $app->shouldReceive('getCachedServicesPath')->once()->andReturn("{$manifestPath}/services.json")
             ->shouldReceive('resolveProviderClass')->once()
                 ->with($service)->andReturn($mock)
-            ->shouldReceive('getDeferredServices')->once()->andReturn([
-                'events' => '\Illuminate\Events\EventsServiceProvider'
-            ])
-            ->shouldReceive('setDeferredServices')->once()->andReturn([
-                'events' => 'Illuminate\Events\EventsServiceProvider',
-                'foo'    => $service,
+            ->shouldReceive('addDeferredServices')->once()->andReturn([
+                'foo' => $service,
             ]);
         $files->shouldReceive('exists')->once()
                 ->with("{$manifestPath}/extension.json")->andReturn(false)

@@ -112,7 +112,7 @@ trait DispatchableTrait
     public function after(Closure $callback = null)
     {
         if ($this->booted()) {
-            $this->app->call($callback);
+            return $this->app->call($callback);
         }
 
         $this->events->listen('orchestra.extension: booted', $callback);

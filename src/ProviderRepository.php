@@ -3,7 +3,6 @@
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
-use Orchestra\Contracts\Foundation\DeferrableServiceContainer;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcherContract;
 
 class ProviderRepository
@@ -99,7 +98,7 @@ class ProviderRepository
     {
         $instance = $this->app->resolveProviderClass($provider);
 
-        $type = $instance->isDeferred() && $this->app instanceof DeferrableServiceContainer ? 'Deferred' : 'Eager';
+        $type = $instance->isDeferred() ? 'Deferred' : 'Eager';
 
         return $this->{"register{$type}ServiceProvider"}($provider, $instance);
     }
@@ -237,10 +236,6 @@ class ProviderRepository
     {
         if ($options['eager']) {
             return ;
-        }
-
-        if (! $this->app instanceof DeferrableServiceContainer) {
-            return $this->app->register($provider);
         }
 
         $this->app->addDeferredServices($options['deferred']);

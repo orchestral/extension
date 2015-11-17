@@ -63,11 +63,12 @@ class Dispatcher implements DispatcherContract
     /**
      * Construct a new Application instance.
      *
-     * @param  \Illuminate\Contracts\Config\Repository  $config
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $dispatcher
-     * @param  \Illuminate\Filesystem\Filesystem  $files
-     * @param  \Orchestra\Contracts\Extension\Finder  $finder
-     * @param  \Orchestra\Extension\ProviderRepository  $provider
+     * @param  \Illuminate\Contracts\Foundation\Application $app
+     * @param  \Illuminate\Contracts\Config\Repository      $config
+     * @param  \Illuminate\Contracts\Events\Dispatcher      $dispatcher
+     * @param  \Illuminate\Filesystem\Filesystem            $files
+     * @param  \Orchestra\Contracts\Extension\Finder        $finder
+     * @param  \Orchestra\Extension\ProviderRepository      $provider
      */
     public function __construct(
         Application $app,

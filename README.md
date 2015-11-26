@@ -79,4 +79,4 @@ Before we can start using Extension Component, please run the following:
 ## Resources
 
 * [Documentation](http://orchestraplatform.com/docs/latest/components/extension)
-* [Change Log](http://orchestraplatform.com/docs/latest/components/extension/changes#v3-2)
+* [Change Log](http://orchestraplatform.com/docs/latest/components/extension/changes#v3-3)

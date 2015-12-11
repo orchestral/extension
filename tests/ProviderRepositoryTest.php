@@ -36,14 +36,14 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
             'deferred' => [],
         ];
 
-        $app->shouldReceive('getCachedExtensionServicesPath')->once()->andReturn("{$manifestPath}/extension.json")
+        $app->shouldReceive('getCachedExtensionServicesPath')->once()->andReturn("{$manifestPath}/extension.php")
             ->shouldReceive('resolveProviderClass')->once()
                 ->with($service)->andReturn($mock)
             ->shouldReceive('register')->once()->with($mock)->andReturn($mock);
         $files->shouldReceive('exists')->once()
-                ->with("{$manifestPath}/extension.json")->andReturn(false)
+                ->with("{$manifestPath}/extension.php")->andReturn(false)
             ->shouldReceive('put')->once()
-                ->with("{$manifestPath}/extension.json", json_encode([$service => $schema], JSON_PRETTY_PRINT))
+                ->with("{$manifestPath}/extension.php", '<?php return '.var_export([$service => $schema], true).';')
                 ->andReturnNull();
 
         $mock->shouldReceive('isDeferred')->once()->andReturn(! $schema['eager']);
@@ -80,16 +80,16 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $app->shouldReceive('getCachedExtensionServicesPath')->once()->andReturn("{$manifestPath}/extension.json")
+        $app->shouldReceive('getCachedExtensionServicesPath')->once()->andReturn("{$manifestPath}/extension.php")
             ->shouldReceive('resolveProviderClass')->once()
                 ->with($service)->andReturn($mock)
             ->shouldReceive('addDeferredServices')->once()->andReturn([
                 'foo' => $service,
             ]);
         $files->shouldReceive('exists')->once()
-                ->with("{$manifestPath}/extension.json")->andReturn(false)
+                ->with("{$manifestPath}/extension.php")->andReturn(false)
             ->shouldReceive('put')->once()
-                ->with("{$manifestPath}/extension.json", json_encode([$service => $schema], JSON_PRETTY_PRINT))
+                ->with("{$manifestPath}/extension.php", '<?php return '.var_export([$service => $schema], true).';')
                 ->andReturnNull();
 
         $mock->shouldReceive('isDeferred')->once()->andReturn(! $schema['eager'])
@@ -127,11 +127,11 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
             'deferred' => [],
         ];
 
-        $app->shouldReceive('getCachedExtensionServicesPath')->once()->andReturn("{$manifestPath}/extension.json")
+        $app->shouldReceive('getCachedExtensionServicesPath')->once()->andReturn("{$manifestPath}/extension.php")
             ->shouldReceive('register')->once()->with($service)->andReturnNull();
-        $files->shouldReceive('exists')->once()->with("{$manifestPath}/extension.json")->andReturn(true)
-            ->shouldReceive('get')->once()->with("{$manifestPath}/extension.json")
-                ->andReturn(json_encode([$service => $schema]));
+        $files->shouldReceive('exists')->once()->with("{$manifestPath}/extension.php")->andReturn(true)
+            ->shouldReceive('getRequire')->once()->with("{$manifestPath}/extension.php")
+                ->andReturn([$service => $schema]);
 
         $stub = new ProviderRepository($app, $events, $files);
         $stub->loadManifest();

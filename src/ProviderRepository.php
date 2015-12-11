@@ -128,14 +128,16 @@ class ProviderRepository
      */
     public function loadManifest()
     {
+        $this->manifest = [];
+
         // The service manifest is a file containing a JSON representation of every
         // service provided by the application and whether its provider is using
         // deferred loading or should be eagerly loaded on each request to us.
-        if (! $this->files->exists($this->manifestPath)) {
-            return $this->manifest = [];
+        if ($this->files->exists($this->manifestPath)) {
+            return $this->manifest = $this->files->getRequire($this->manifestPath);
         }
 
-        return $this->manifest = json_decode($this->files->get($this->manifestPath), true);
+        return $this->manifest;
     }
 
     /**
@@ -179,7 +181,7 @@ class ProviderRepository
      */
     protected function writeManifestFile(array $manifest = [])
     {
-        $this->files->put($this->manifestPath, json_encode($manifest, JSON_PRETTY_PRINT));
+        $this->files->put($this->manifestPath, '<?php return '.var_export($manifest, true).';');
     }
 
     /**

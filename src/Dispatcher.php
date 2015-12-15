@@ -101,9 +101,9 @@ class Dispatcher implements DispatcherContract
         // Get available service providers from orchestra.json and register
         // it to Laravel. In this case all service provider would be eager
         // loaded since the application would require it from any action.
-        $this->registerExtensionPlugin($options);
-
         $this->registerExtensionProviders($options);
+
+        $this->registerExtensionPlugin($options);
 
         // Register the extension so we can boot it later, this action is
         // to allow all service providers to be registered first before we

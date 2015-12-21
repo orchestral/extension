@@ -31,8 +31,8 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
         $schema = [
-            'eager' => true,
-            'when' => [],
+            'eager'    => true,
+            'when'     => [],
             'deferred' => [],
         ];
 
@@ -73,8 +73,8 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
         $schema = [
-            'eager' => false,
-            'when' => [],
+            'eager'    => false,
+            'when'     => [],
             'deferred' => [
                 'foo' => $service,
             ],
@@ -122,8 +122,8 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
         $manifestPath = '/var/www/laravel/bootstrap/cache';
 
         $schema = [
-            'eager' => true,
-            'when' => [],
+            'eager'    => true,
+            'when'     => [],
             'deferred' => [],
         ];
 

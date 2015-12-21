@@ -67,13 +67,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'path' => '/foo/path/laravel/framework/',
-                'config' => ['foo' => 'bar', 'handles' => 'laravel'],
+                'path'    => '/foo/path/laravel/framework/',
+                'config'  => ['foo' => 'bar', 'handles' => 'laravel'],
                 'provide' => ['Laravel\FrameworkServiceProvider'],
             ],
             [
-                'path' => '/foo/app/',
-                'config' => ['foo' => 'bar'],
+                'path'    => '/foo/app/',
+                'config'  => ['foo' => 'bar'],
                 'provide' => [],
             ],
         ];
@@ -239,7 +239,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
         $extensions = new Collection([
             'foo' => [
-                'name' => 'Foo',
+                'name'        => 'Foo',
                 'description' => 'Foobar',
             ],
         ]);

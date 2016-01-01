@@ -31,7 +31,6 @@ trait DispatchableTrait
         // safe mode (or debug mode). This is to ensure that developer have
         // a way to disable broken extension without tempering the database.
         if (! ($this->booted() || $this->status->is('safe'))) {
-
             // Avoid extension booting being called more than once.
             $this->booted = true;
 
@@ -111,7 +110,7 @@ trait DispatchableTrait
      */
     public function after(Closure $callback = null)
     {
-        if ($this->booted()) {
+        if ($this->booted() || $this->status->is('safe')) {
             return $this->app->call($callback);
         }
 

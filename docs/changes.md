@@ -5,6 +5,10 @@ title: Extension Change Log
 
 ## Version 3.2 {#v3-2}
 
+### v3.2.1 {#v3-2-1}
+
+* Execute `Orchestra\Extension\Factory::after()` callback immediately when request are under safe mode.
+
 ### v3.2.0 {#v3-2-0}
 
 * Update support to Laravel Framework v5.2.

@@ -46,7 +46,7 @@ abstract class Processor
                 throw new FilePermissionException("[{$name}] is not writable.");
             }
 
-            call_user_func($callback, $this->factory, $name);
+            $callback($this->factory, $name);
         } catch (FilePermissionException $e) {
             return call_user_func([$listener, "{$type}HasFailed"], $extension, ['error' => $e->getMessage()]);
         }

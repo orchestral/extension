@@ -22,6 +22,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     public function testMapMethod()
     {
         $app = new Container();
+        $app['encrypter'] = m::mock('\Illuminate\Contracts\Encryption\Encrypter');
         $manager = m::mock('\Orchestra\Memory\MemoryManager', [$app]);
         $memory = m::mock('\Orchestra\Contracts\Memory\Provider');
         $config = m::mock('\Illuminate\Contracts\Config\Repository');

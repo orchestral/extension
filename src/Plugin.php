@@ -71,6 +71,10 @@ abstract class Plugin
      */
     protected function bootstrapConfiguration(Application $app)
     {
+        if (empty($this->extension) || empty($this->config)) {
+            return ;
+        }
+
         $app->make('orchestra.extension.config')->map($this->extension, $this->config);
     }
 

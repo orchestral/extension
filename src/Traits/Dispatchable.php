@@ -4,7 +4,7 @@ use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
-trait DispatchableTrait
+trait Dispatchable
 {
     /**
      * Booted indicator.

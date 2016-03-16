@@ -48,9 +48,9 @@ abstract class Processor
 
             $callback($this->factory, $name);
         } catch (FilePermissionException $e) {
-            return call_user_func([$listener, "{$type}HasFailed"], $extension, ['error' => $e->getMessage()]);
+            return $listener->{"{$type}HasFailed"}($extension, ['error' => $e->getMessage()]);
         }
 
-        return call_user_func([$listener, "{$type}HasSucceed"], $extension);
+        return $listener->{"{$type}HasSucceed"}($extension);
     }
 }

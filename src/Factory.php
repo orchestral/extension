@@ -2,19 +2,19 @@
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Orchestra\Memory\Memorizable;
 use Illuminate\Support\Collection;
-use Orchestra\Memory\ContainerTrait;
+use Orchestra\Extension\Traits\Operation;
+use Orchestra\Extension\Traits\Dispatchable;
 use Illuminate\Contracts\Container\Container;
-use Orchestra\Extension\Traits\OperationTrait;
 use Orchestra\Extension\Bootstrap\LoadExtension;
-use Orchestra\Extension\Traits\DispatchableTrait;
 use Orchestra\Contracts\Extension\Factory as FactoryContract;
 use Orchestra\Contracts\Extension\Dispatcher as DispatcherContract;
 use Orchestra\Contracts\Extension\StatusChecker as StatusCheckerContract;
 
 class Factory implements FactoryContract
 {
-    use ContainerTrait, DispatchableTrait, OperationTrait;
+    use Dispatchable, Memorizable, Operation;
 
     /**
      * Application instance.

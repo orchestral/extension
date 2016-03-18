@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Arr;
 
-trait OperationTrait
+trait Operation
 {
     /**
      * Activate an extension.

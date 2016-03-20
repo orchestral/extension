@@ -1,4 +1,6 @@
-<?php namespace Orchestra\Extension;
+<?php
+
+namespace Orchestra\Extension;
 
 use Orchestra\Extension\Console\ResetCommand;
 use Orchestra\Extension\Console\DetectCommand;

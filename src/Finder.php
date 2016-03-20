@@ -1,4 +1,6 @@
-<?php namespace Orchestra\Extension;
+<?php
+
+namespace Orchestra\Extension;
 
 use RuntimeException;
 use Illuminate\Support\Arr;

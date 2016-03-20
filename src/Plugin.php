@@ -1,4 +1,6 @@
-<?php namespace Orchestra\Extension;
+<?php
+
+namespace Orchestra\Extension;
 
 use Closure;
 use Illuminate\Support\Fluent;

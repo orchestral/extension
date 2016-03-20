@@ -1,4 +1,6 @@
-<?php namespace Orchestra\Extension\Processor;
+<?php
+
+namespace Orchestra\Extension\Processor;
 
 use Illuminate\Support\Fluent;
 use Orchestra\Contracts\Extension\Command\Deactivator as Command;

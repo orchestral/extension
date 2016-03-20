@@ -1,4 +1,6 @@
-<?php namespace Orchestra\Extension\Config;
+<?php
+
+namespace Orchestra\Extension\Config;
 
 use Orchestra\Memory\MemoryManager;
 use Illuminate\Contracts\Config\Repository as Config;

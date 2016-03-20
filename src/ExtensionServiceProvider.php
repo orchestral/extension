@@ -1,4 +1,6 @@
-<?php namespace Orchestra\Extension;
+<?php
+
+namespace Orchestra\Extension;
 
 use Orchestra\Extension\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;

@@ -1,4 +1,6 @@
-<?php namespace Orchestra\Extension\Traits;
+<?php
+
+namespace Orchestra\Extension\Traits;
 
 use Illuminate\Support\Arr;
 

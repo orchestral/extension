@@ -1,4 +1,6 @@
-<?php namespace Orchestra\Extension\TestCase;
+<?php
+
+namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
 use Illuminate\Support\ServiceProvider;

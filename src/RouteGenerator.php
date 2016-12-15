@@ -48,13 +48,24 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @param  string  $handles
      * @param  \Illuminate\Http\Request  $request
+     * @param  string|null  $baseUrl
      */
-    public function __construct($handles, Request $request)
+    public function __construct($handles, Request $request, $baseUrl = null)
     {
         $this->request = $request;
 
-        $this->setBaseUrl($this->request->root());
+        $this->setBaseUrl($baseUrl ?: $this->request->root());
 
+        $this->build();
+    }
+
+    /**
+     * Build route.
+     *
+     * @return void
+     */
+    protected function build()
+    {
         // If the handles doesn't start as "//some.domain.com/foo" we should
         // assume that it doesn't belong to any subdomain, otherwise we
         // need to split the value to "some.domain.com" and "foo".

@@ -46,16 +46,14 @@ class RouteGenerator implements RouteGeneratorContract
     /**
      * Construct a new instance.
      *
-     * @param  string  $handles
      * @param  \Illuminate\Http\Request  $request
      * @param  string|null  $baseUrl
      */
-    public function __construct($handles, Request $request, $baseUrl = null)
+    public function __construct(Request $request, $baseUrl = null)
     {
         $this->request = $request;
 
-        $this->setBaseUrl($baseUrl ?: $this->request->root())
-            ->make($handles);
+        $this->setBaseUrl($baseUrl ?: $this->request->root());
     }
 
     /**

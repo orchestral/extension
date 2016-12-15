@@ -54,17 +54,18 @@ class RouteGenerator implements RouteGeneratorContract
     {
         $this->request = $request;
 
-        $this->setBaseUrl($baseUrl ?: $this->request->root());
-
-        $this->build();
+        $this->setBaseUrl($baseUrl ?: $this->request->root())
+            ->make($handles);
     }
 
     /**
      * Build route.
      *
-     * @return void
+     * @param  string  $handles
+     *
+     * @return $this
      */
-    protected function build()
+    public function make($handles)
     {
         // If the handles doesn't start as "//some.domain.com/foo" we should
         // assume that it doesn't belong to any subdomain, otherwise we
@@ -81,6 +82,8 @@ class RouteGenerator implements RouteGeneratorContract
         // It is possible that prefix would be null, in this case assume
         // it handle the main path under the domain.
         ! is_null($this->prefix) || $this->prefix = '/';
+
+        return $this;
     }
 
     /**
@@ -205,15 +208,9 @@ class RouteGenerator implements RouteGeneratorContract
      */
     public function setBaseUrl($root)
     {
-        // Build base URL and prefix.
-        $baseUrl = str_replace(['https://', 'http://'], '', $root);
-        $base    = explode('/', $baseUrl, 2);
-
-        if (count($base) > 1) {
-            $this->basePrefix = array_pop($base);
+        if (is_null($root)) {
+            $this->resolveBaseUrlFrom($root);
         }
-
-        $this->baseUrl = array_shift($base);
 
         return $this;
     }
@@ -242,5 +239,25 @@ class RouteGenerator implements RouteGeneratorContract
     public function __toString()
     {
         return $this->prefix();
+    }
+
+    /**
+     * Resolve base url from given path.
+     *
+     * @param  string  $root
+     *
+     * @return string
+     */
+    protected function resolveBaseUrlFrom($root)
+    {
+        // Build base URL and prefix.
+        $baseUrl = str_replace(['https://', 'http://'], '', $root);
+        $base    = explode('/', $baseUrl, 2);
+
+        if (count($base) > 1) {
+            $this->basePrefix = array_pop($base);
+        }
+
+        return $this->baseUrl = array_shift($base);
     }
 }

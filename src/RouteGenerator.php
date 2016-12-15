@@ -55,7 +55,7 @@ class RouteGenerator implements RouteGeneratorContract
         $this->request = $request;
 
         $this->setBaseUrl($baseUrl ?: $this->request->root())
-            ->make($handles);
+            ->handle($handles);
     }
 
     /**
@@ -65,7 +65,7 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @return $this
      */
-    public function make($handles)
+    public function handle($handles)
     {
         // If the handles doesn't start as "//some.domain.com/foo" we should
         // assume that it doesn't belong to any subdomain, otherwise we

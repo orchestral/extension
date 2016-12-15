@@ -52,8 +52,6 @@ class RouteGenerator implements RouteGeneratorContract
     public function __construct(Request $request, $baseUrl = null)
     {
         $this->request = $request;
-
-        $this->setBaseUrl($baseUrl ?: $this->request->root());
     }
 
     /**
@@ -63,8 +61,12 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @return $this
      */
-    public function make($handles)
+    public function handle($handles)
     {
+        if (! is_null($this->baseUrl)) {
+            $this->setBaseUrl($this->request->root());
+        }
+
         // If the handles doesn't start as "//some.domain.com/foo" we should
         // assume that it doesn't belong to any subdomain, otherwise we
         // need to split the value to "some.domain.com" and "foo".

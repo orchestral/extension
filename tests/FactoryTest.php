@@ -399,7 +399,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
         $app['orchestra.memory'] = $memory;
         $app['config'] = $config;
-        $app['request'] = $request;
+        $app['Illuminate\Http\Request'] = $request;
 
         list($options1, $options2) = $this->dataProvider();
 
@@ -413,7 +413,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('boot')->once()->andReturnNull();
         $status->shouldReceive('is')->once()->with('safe')->andReturn(false);
         $config->shouldReceive('get')->with('orchestra/extension::handles.laravel/framework', '/')->andReturn('laravel');
-        $request->shouldReceive('root')->once()->andReturn('http://localhost')
+        $request->shouldReceive('root')->andReturn('http://localhost')
                 ->shouldReceive('secure')->twice()->andReturn(false);
 
         $stub = new Factory($app, $dispatcher, $status);

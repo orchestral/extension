@@ -66,8 +66,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $request = m::mock('\Illuminate\Http\Request');
 
-        $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
-            ->shouldReceive('path')->once()->andReturn("acme/$path");
+        $request->shouldReceive('path')->once()->andReturn("acme/$path");
 
         $stub = (new RouteGenerator($request))->handle('acme');
 
@@ -84,8 +83,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $request = m::mock('\Illuminate\Http\Request');
 
-        $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
-            ->shouldReceive('path')->once()->andReturn($path);
+        $request->shouldReceive('path')->once()->andReturn($path);
 
         $stub = (new RouteGenerator($request))->handle('//foobar.com');
 
@@ -103,8 +101,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $request = m::mock('\Illuminate\Http\Request');
 
-        $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
-            ->shouldReceive('path')->once()->andReturn("acme/{$path}");
+        $request->shouldReceive('path')->once()->andReturn("acme/{$path}");
 
         $stub = (new RouteGenerator($request))->handle('//foobar.com/acme');
 

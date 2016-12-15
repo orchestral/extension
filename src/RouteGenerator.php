@@ -25,21 +25,21 @@ class RouteGenerator implements RouteGeneratorContract
     /**
      * Handles path.
      *
-     * @var string
+     * @var string|null
      */
     protected $prefix = null;
 
     /**
      * Base URL.
      *
-     * @var string
+     * @var string|null
      */
     protected $baseUrl = null;
 
     /**
      * Base URL prefix.
      *
-     * @var string
+     * @var string|null
      */
     protected $basePrefix = null;
 
@@ -47,9 +47,8 @@ class RouteGenerator implements RouteGeneratorContract
      * Construct a new instance.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string|null  $baseUrl
      */
-    public function __construct(Request $request, $baseUrl = null)
+    public function __construct(Request $request)
     {
         $this->request = $request;
     }
@@ -63,10 +62,6 @@ class RouteGenerator implements RouteGeneratorContract
      */
     public function handle($handles)
     {
-        if (! is_null($this->baseUrl)) {
-            $this->setBaseUrl($this->request->root());
-        }
-
         // If the handles doesn't start as "//some.domain.com/foo" we should
         // assume that it doesn't belong to any subdomain, otherwise we
         // need to split the value to "some.domain.com" and "foo".
@@ -96,11 +91,12 @@ class RouteGenerator implements RouteGeneratorContract
     public function domain($forceBase = false)
     {
         $pattern = $this->domain;
+        $baseUrl = $this->getBaseUrl();
 
         if (is_null($pattern) && $forceBase === true) {
-            $pattern = $this->baseUrl;
+            $pattern = $baseUrl;
         } elseif (Str::contains($pattern, '{{domain}}')) {
-            $pattern = str_replace('{{domain}}', $this->baseUrl, $pattern);
+            $pattern = str_replace('{{domain}}', $baseUrl, $pattern);
         }
 
         return $pattern;
@@ -200,6 +196,20 @@ class RouteGenerator implements RouteGeneratorContract
     }
 
     /**
+     * Get base url.
+     *
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        if (is_null($this->baseUrl)) {
+            $this->resolveBaseUrlFrom($this->request->root());
+        }
+
+        return $this->baseUrl;
+    }
+
+    /**
      * Set base URL.
      *
      * @param  string  $root
@@ -208,7 +218,7 @@ class RouteGenerator implements RouteGeneratorContract
      */
     public function setBaseUrl($root)
     {
-        if (! is_null($root)) {
+        if (! empty($root)) {
             $this->resolveBaseUrlFrom($root);
         }
 

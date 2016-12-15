@@ -206,7 +206,7 @@ class RouteGenerator implements RouteGeneratorContract
      */
     public function setBaseUrl($root)
     {
-        if (is_null($root)) {
+        if (! is_null($root)) {
             $this->resolveBaseUrlFrom($root);
         }
 
@@ -244,7 +244,7 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @param  string  $root
      *
-     * @return string
+     * @return void
      */
     protected function resolveBaseUrlFrom($root)
     {
@@ -256,6 +256,6 @@ class RouteGenerator implements RouteGeneratorContract
             $this->basePrefix = array_pop($base);
         }
 
-        return $this->baseUrl = array_shift($base);
+        $this->baseUrl = array_shift($base);
     }
 }

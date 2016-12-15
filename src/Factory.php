@@ -182,9 +182,9 @@ class Factory implements FactoryContract
             // config key, except for orchestra/foundation.
             $key = "orchestra/extension::handles.{$name}";
 
-            $this->routes[$name] = $this->app->make(RouteGenerator::class, [
-                $this->app->make('request'),
-            ])->make($this->app->make('config')->get($key, $default));
+            $prefix = $this->app->make('config')->get($key, $default);
+
+            $this->routes[$name] = $this->app->make(RouteGenerator::class)->handle($prefix);
         }
 
         return $this->routes[$name];

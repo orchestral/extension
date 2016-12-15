@@ -27,7 +27,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
         $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
             ->shouldReceive('secure')->once()->andReturn(false);
 
-        $stub = new RouteGenerator("foo", $request);
+        $stub = (new RouteGenerator($request))->handle('foo');
 
         $refl = new \ReflectionObject($stub);
         $domain = $refl->getProperty('domain');
@@ -69,7 +69,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
         $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
             ->shouldReceive('path')->once()->andReturn("acme/$path");
 
-        $stub = new RouteGenerator("acme", $request);
+        $stub = (new RouteGenerator($request))->handle('acme');
 
         $this->assertEquals($expected, $stub->is($pattern));
     }
@@ -87,7 +87,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
         $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
             ->shouldReceive('path')->once()->andReturn($path);
 
-        $stub = new RouteGenerator("//foobar.com", $request);
+        $stub = (new RouteGenerator($request))->handle('//foobar.com');
 
         $this->assertEquals($expected, $stub->is($pattern));
     }
@@ -106,7 +106,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
         $request->shouldReceive('root')->once()->andReturn("http://localhost/laravel")
             ->shouldReceive('path')->once()->andReturn("acme/{$path}");
 
-        $stub = new RouteGenerator("//foobar.com/acme", $request);
+        $stub = (new RouteGenerator($request))->handle('//foobar.com/acme');
 
         $this->assertEquals($expected, $stub->is($pattern));
     }
@@ -124,7 +124,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('path')->once()->andReturn('foo')
             ->shouldReceive('path')->once()->andReturn('foo/bar');
 
-        $stub = new RouteGenerator("foo", $request);
+        $stub = (new RouteGenerator($request))->handle('foo');
 
         $this->assertEquals('foo', $stub->path());
         $this->assertEquals('foo/bar', $stub->path());
@@ -145,7 +145,7 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('path')->once()->andReturn('/')
             ->shouldReceive('path')->once()->andReturn('bar');
 
-        $stub = new RouteGenerator("//foobar.com", $request);
+        $stub = (new RouteGenerator($request))->handle('//foobar.com');
 
         $this->assertEquals('/', $stub->path());
         $this->assertEquals('bar', $stub->path());
@@ -165,9 +165,9 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
         $request->shouldReceive('root')->andReturn(null)
             ->shouldReceive('secure')->andReturn(false);
 
-        $stub1 = new RouteGenerator("//blog.orchestraplatform.com", $request);
-        $stub2 = new RouteGenerator("//blog.orchestraplatform.com/hello", $request);
-        $stub3 = new RouteGenerator("//blog.orchestraplatform.com/hello/world", $request);
+        $stub1 = (new RouteGenerator($request))->handle('//blog.orchestraplatform.com');
+        $stub2 = (new RouteGenerator($request))->handle('//blog.orchestraplatform.com/hello');
+        $stub3 = (new RouteGenerator($request))->handle('//blog.orchestraplatform.com/hello/world');
 
         $this->assertEquals("blog.orchestraplatform.com", $stub1->domain());
         $this->assertEquals("/", $stub1->prefix());
@@ -207,9 +207,9 @@ class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
         $request->shouldReceive('root')->andReturn('http://localhost')
             ->shouldReceive('secure')->andReturn(false);
 
-        $stub1 = new RouteGenerator("//blog.{{domain}}", $request);
-        $stub2 = new RouteGenerator("//blog.{{domain}}/hello", $request);
-        $stub3 = new RouteGenerator("//blog.{{domain}}/hello/world", $request);
+        $stub1 = (new RouteGenerator($request))->handle('//blog.{{domain}}');
+        $stub2 = (new RouteGenerator($request))->handle('//blog.{{domain}}/hello');
+        $stub3 = (new RouteGenerator($request))->handle('//blog.{{domain}}/hello/world');
 
         $this->assertEquals("blog.localhost", $stub1->domain());
         $this->assertEquals("/", $stub1->prefix());

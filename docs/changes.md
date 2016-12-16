@@ -5,6 +5,10 @@ title: Extension Change Log
 
 ## Version 3.3 {#v3-3}
 
+### v3.3.2 {#v3-3-2}
+
+* Allow `Orchestra\Extension\RouteGenerator` to handle protocol-less url for base url.
+
 ### v3.3.1 {#v3-3-1}
 
 * Refactors `Orchestra\Extension\RouteGenerator`.

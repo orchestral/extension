@@ -261,7 +261,7 @@ class RouteGenerator implements RouteGeneratorContract
     protected function resolveBaseUrlFrom($root)
     {
         // Build base URL and prefix.
-        $baseUrl = str_replace(['https://', 'http://'], '', $root);
+        $baseUrl = ltrim(str_replace(['https://', 'http://'], '', $root), '/');
         $base    = explode('/', $baseUrl, 2);
 
         if (count($base) > 1) {

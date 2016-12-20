@@ -39,7 +39,7 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
         ];
 
         $app->shouldReceive('getCachedExtensionServicesPath')->once()->andReturn("{$manifestPath}/extension.php")
-            ->shouldReceive('resolveProviderClass')->once()
+            ->shouldReceive('resolveProvider')->once()
                 ->with($service)->andReturn($mock)
             ->shouldReceive('register')->once()->with($mock)->andReturn($mock);
         $files->shouldReceive('exists')->once()
@@ -83,7 +83,7 @@ class ProviderRepositoryTest extends \PHPUnit_Framework_TestCase
         ];
 
         $app->shouldReceive('getCachedExtensionServicesPath')->once()->andReturn("{$manifestPath}/extension.php")
-            ->shouldReceive('resolveProviderClass')->once()
+            ->shouldReceive('resolveProvider')->once()
                 ->with($service)->andReturn($mock)
             ->shouldReceive('addDeferredServices')->once()->andReturn([
                 'foo' => $service,

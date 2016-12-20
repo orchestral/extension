@@ -98,7 +98,7 @@ class ProviderRepository
      */
     protected function recompileProvider($provider)
     {
-        $instance = $this->app->resolveProviderClass($provider);
+        $instance = $this->app->resolveProvider($provider);
 
         $type = $instance->isDeferred() ? 'Deferred' : 'Eager';
 

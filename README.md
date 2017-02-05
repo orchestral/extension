@@ -18,7 +18,7 @@ Extension Component allows components or packages to be added dynamically to Orc
 * [Installation](#installation)
 * [Configuration](#configuration)
 * [Resources](#resources)
-* [Change Log](http://orchestraplatform.com/docs/latest/components/extension/changes#v3-4)
+* [Change Log](https://github.com/orchestral/extension/releases)
 
 ## Version Compatibility
 
@@ -78,6 +78,3 @@ Before we can start using Extension Component, please run the following:
 
 > The command utility is enabled via `Orchestra\Extension\CommandServiceProvider`.
 
-## Resources
-
-* [Documentation](http://orchestraplatform.com/docs/latest/components/extension)

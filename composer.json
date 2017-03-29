@@ -23,11 +23,12 @@
         "orchestra/support": "~3.4.0"
     },
     "require-dev": {
-        "mockery/mockery": "^0.9.4",
         "illuminate/console": "~5.4.0",
         "illuminate/container": "~5.4.0",
         "illuminate/filesystem": "~5.4.0",
-        "illuminate/http": "~5.4.0"
+        "illuminate/http": "~5.4.0",
+        "mockery/mockery": "^0.9.4",
+        "phpunit/phpunit": "~5.7"
     },
     "extra": {
         "branch-alias": {

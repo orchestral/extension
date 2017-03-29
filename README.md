@@ -8,9 +8,9 @@ Extension Component allows components or packages to be added dynamically to Orc
 [![Latest Stable Version](https://img.shields.io/github/release/orchestral/extension.svg?style=flat-square)](https://packagist.org/packages/orchestra/extension)
 [![Total Downloads](https://img.shields.io/packagist/dt/orchestra/extension.svg?style=flat-square)](https://packagist.org/packages/orchestra/extension)
 [![MIT License](https://img.shields.io/packagist/l/orchestra/extension.svg?style=flat-square)](https://packagist.org/packages/orchestra/extension)
-[![Build Status](https://img.shields.io/travis/orchestral/extension/master.svg?style=flat-square)](https://travis-ci.org/orchestral/extension)
-[![Coverage Status](https://img.shields.io/coveralls/orchestral/extension/master.svg?style=flat-square)](https://coveralls.io/r/orchestral/extension?branch=master)
-[![Scrutinizer Quality Score](https://img.shields.io/scrutinizer/g/orchestral/extension/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/orchestral/extension/)
+[![Build Status](https://img.shields.io/travis/orchestral/extension/3.5.svg?style=flat-square)](https://travis-ci.org/orchestral/extension)
+[![Coverage Status](https://img.shields.io/coveralls/orchestral/extension/3.5.svg?style=flat-square)](https://coveralls.io/r/orchestral/extension?branch=3.5)
+[![Scrutinizer Quality Score](https://img.shields.io/scrutinizer/g/orchestral/extension/3.5.svg?style=flat-square)](https://scrutinizer-ci.com/g/orchestral/extension/)
 
 ## Table of Content
 
@@ -31,7 +31,7 @@ Laravel    | Extension
  5.1.x     | 3.1.x
  5.2.x     | 3.2.x
  5.3.x     | 3.3.x
- 5.4.x     | 3.4.x@dev
+ 5.4.x     | 3.4.x
  5.5.x     | 3.5.x@dev
 
 ## Installation

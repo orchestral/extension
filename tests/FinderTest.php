@@ -3,10 +3,11 @@
 namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
-use Illuminate\Support\Collection;
 use Orchestra\Extension\Finder;
+use PHPUnit\Framework\TestCase;
+use Illuminate\Support\Collection;
 
-class FinderTest extends \PHPUnit_Framework_TestCase
+class FinderTest extends TestCase
 {
     /**
      * Teardown the test environment.

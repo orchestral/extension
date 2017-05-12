@@ -1,8 +1,6 @@
 Extension Component for Orchestra Platform
 ==============
 
-[![Join the chat at https://gitter.im/orchestral/platform](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/orchestral/platform?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 Extension Component allows components or packages to be added dynamically to Orchestra Platform without the hassle of modifying the configuration.
 
 [![Latest Stable Version](https://img.shields.io/github/release/orchestral/extension.svg?style=flat-square)](https://packagist.org/packages/orchestra/extension)
@@ -31,7 +29,7 @@ Laravel    | Extension
  5.1.x     | 3.1.x
  5.2.x     | 3.2.x
  5.3.x     | 3.3.x
- 5.4.x     | 3.4.x@dev
+ 5.4.x     | 3.4.x
 
 ## Installation
 

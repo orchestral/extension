@@ -3,9 +3,10 @@
 namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use Orchestra\Extension\StatusChecker;
 
-class StatusCheckerTest extends \PHPUnit_Framework_TestCase
+class StatusCheckerTest extends TestCase
 {
     /**
      * Teardown the test environment.

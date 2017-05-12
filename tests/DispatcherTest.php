@@ -3,9 +3,10 @@
 namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use Orchestra\Extension\Dispatcher;
 
-class DispatcherTest extends \PHPUnit_Framework_TestCase
+class DispatcherTest extends TestCase
 {
     /**
      * Teardown the test environment.

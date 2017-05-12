@@ -3,11 +3,12 @@
 namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
-use Illuminate\Container\Container;
-use Illuminate\Support\Collection;
+use PHPUnit\Framework\TestCase;
 use Orchestra\Extension\Factory;
+use Illuminate\Support\Collection;
+use Illuminate\Container\Container;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends TestCase
 {
     /**
      * Application instance.

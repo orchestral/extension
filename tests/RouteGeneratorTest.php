@@ -3,9 +3,10 @@
 namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use Orchestra\Extension\RouteGenerator;
 
-class RouteGeneratorTest extends \PHPUnit_Framework_TestCase
+class RouteGeneratorTest extends TestCase
 {
     /**
      * Teardown the test environment.

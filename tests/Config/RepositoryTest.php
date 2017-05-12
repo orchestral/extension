@@ -3,10 +3,11 @@
 namespace Orchestra\Extension\TestCase\Config;
 
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use Illuminate\Container\Container;
 use Orchestra\Extension\Config\Repository;
 
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends TestCase
 {
     /**
      * Teardown the test environment.

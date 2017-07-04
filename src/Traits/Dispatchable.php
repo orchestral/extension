@@ -3,7 +3,6 @@
 namespace Orchestra\Extension\Traits;
 
 use Closure;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 trait Dispatchable
@@ -91,11 +90,11 @@ trait Dispatchable
         foreach ($active as $name => $options) {
             if (isset($available[$name])) {
                 $config = array_merge(
-                    (array) Arr::get($available, "{$name}.config"),
-                    (array) Arr::get($options, 'config')
+                    (array) $available[$name]['config'] ?? [],
+                    (array) $options['config'] ?? []
                 );
 
-                Arr::set($options, 'config', $config);
+                $options['config'] = $config;
 
                 $this->extensions[$name] = $options;
                 $this->dispatcher->register($name, $options);

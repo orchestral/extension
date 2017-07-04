@@ -2,7 +2,6 @@
 
 namespace Orchestra\Extension;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Foundation\Application;
@@ -158,7 +157,7 @@ class Dispatcher implements DispatcherContract
      */
     protected function registerExtensionHandles($name, array $options)
     {
-        $handles = Arr::get($options, 'config.handles');
+        $handles = $options['config']['handles'] ?? null;
 
         if (! is_null($handles)) {
             $this->config->set("orchestra/extension::handles.{$name}", $handles);
@@ -174,7 +173,7 @@ class Dispatcher implements DispatcherContract
      */
     protected function registerExtensionProviders(array $options)
     {
-        $services = Arr::get($options, 'provides', []);
+        $services = $options['provides'] ?? [];
 
         ! empty($services) && $this->provider->provides($services);
     }
@@ -188,7 +187,7 @@ class Dispatcher implements DispatcherContract
      */
     protected function registerExtensionPlugin(array $options)
     {
-        $plugin = Arr::get($options, 'plugin');
+        $plugin = $options['plugin'] ?? null;
 
         ! is_null($plugin) && $this->app->make($plugin)->bootstrap($this->app);
     }
@@ -218,8 +217,8 @@ class Dispatcher implements DispatcherContract
     public function start($name, array $options)
     {
         $basePath   = rtrim($options['path'], '/');
-        $sourcePath = rtrim(Arr::get($options, 'source-path', $basePath), '/');
-        $autoload   = Arr::get($options, 'autoload', []);
+        $sourcePath = rtrim($options['source-path'] ?? $basePath, '/');
+        $autoload   = $options['autoload'] ?? [];
 
         $search      = ['source-path::', 'app::/'];
         $replacement = ["{$sourcePath}/", 'app::'];

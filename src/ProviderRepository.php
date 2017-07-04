@@ -259,7 +259,7 @@ class ProviderRepository
             return ;
         }
 
-        $this->app->register(isset($options['instance']) ? $options['instance'] : $provider);
+        $this->app->register($options['instance'] ?? $provider);
     }
 
     /**
@@ -274,7 +274,7 @@ class ProviderRepository
     {
         foreach ($options['when'] as $listen) {
             $this->events->listen($listen, function () use ($provider, $options) {
-                $this->app->register(isset($options['instance']) ? $options['instance'] : $provider);
+                $this->app->register($options['instance'] ?? $provider);
             });
         }
     }

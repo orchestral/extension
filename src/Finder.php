@@ -3,7 +3,6 @@
 namespace Orchestra\Extension;
 
 use RuntimeException;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Filesystem\Filesystem;
 use Orchestra\Contracts\Support\ManifestRuntimeException;
@@ -174,11 +173,11 @@ class Finder implements FinderContract
 
         if (is_array($lockContent)) {
             foreach (['description', 'version'] as $type) {
-                $jsonable[$type] = Arr::get($lockContent, $type, isset($jsonable[$type]) ? $jsonable[$type] : null);
+                $jsonable[$type] = $lockContent[$type] ?? $jsonable[$type] ?? null;
             }
         }
 
-        isset($jsonable['path']) && $path = $jsonable['path'];
+        $path = $jsonable['path'] ?? $path;
 
         $paths = [
             'path'        => rtrim($path, '/'),
@@ -208,10 +207,10 @@ class Finder implements FinderContract
 
         // Assign extension manifest option or provide the default value.
         foreach ($this->manifestOptions as $key => $default) {
-            $manifest["{$key}"] = Arr::get($jsonable, $key, $default);
+            $manifest["{$key}"] = $jsonable[$key] ?? $default;
         }
 
-        $manifest['provides'] = Arr::get($jsonable, 'provide', $manifest['provides']);
+        $manifest['provides'] = $jsonable['provide'] ?? $manifest['provides'];
 
         return $manifest;
     }

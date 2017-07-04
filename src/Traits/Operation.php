@@ -105,7 +105,7 @@ trait Operation
         // Append the activated extension to active extensions, and also
         // publish the extension (migrate the database and publish the
         // asset).
-        if (! is_null($handles = Arr::get($active, "{$name}.config.handles"))) {
+        if (! is_null($handles = $active[$name]['config']['handles'] ?? null)) {
             Arr::set($available, "{$name}.config.handles", $handles);
         }
 

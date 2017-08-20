@@ -137,7 +137,9 @@ class Finder implements FinderContract
             is_array($manifests) || $manifests = [];
 
             foreach ($manifests as $manifest) {
-                $name = (is_numeric($key) ? $this->guessExtensionNameFromManifest($manifest, $path) : $key);
+                $name = is_numeric($key)
+                            ? $this->guessExtensionNameFromManifest($manifest, $path)
+                            : $key;
 
                 if (! is_null($name)) {
                     $lockContent       = $packages->where('name', $name)->first();

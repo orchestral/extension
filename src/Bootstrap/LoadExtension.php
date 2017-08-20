@@ -15,9 +15,8 @@ class LoadExtension
      */
     public function bootstrap(Application $app)
     {
-        $extension = $app->make('orchestra.extension');
-
-        $extension->attach($app->make('orchestra.memory')->makeOrFallback());
-        $extension->boot();
+        $app->make('orchestra.extension')
+                ->attach($app->make('orchestra.memory')->makeOrFallback())
+                ->boot();
     }
 }

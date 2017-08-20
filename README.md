@@ -3,12 +3,11 @@ Extension Component for Orchestra Platform
 
 Extension Component allows components or packages to be added dynamically to Orchestra Platform without the hassle of modifying the configuration.
 
-[![Latest Stable Version](https://img.shields.io/github/release/orchestral/extension.svg?style=flat-square)](https://packagist.org/packages/orchestra/extension)
-[![Total Downloads](https://img.shields.io/packagist/dt/orchestra/extension.svg?style=flat-square)](https://packagist.org/packages/orchestra/extension)
-[![MIT License](https://img.shields.io/packagist/l/orchestra/extension.svg?style=flat-square)](https://packagist.org/packages/orchestra/extension)
-[![Build Status](https://img.shields.io/travis/orchestral/extension/master.svg?style=flat-square)](https://travis-ci.org/orchestral/extension)
-[![Coverage Status](https://img.shields.io/coveralls/orchestral/extension/master.svg?style=flat-square)](https://coveralls.io/r/orchestral/extension?branch=master)
-[![Scrutinizer Quality Score](https://img.shields.io/scrutinizer/g/orchestral/extension/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/orchestral/extension/)
+[![Build Status](https://travis-ci.org/orchestral/extension.svg?branch=master)](https://travis-ci.org/orchestral/extension)
+[![Latest Stable Version](https://poser.pugx.org/orchestra/extension/version)](https://packagist.org/packages/orchestra/extension)
+[![Total Downloads](https://poser.pugx.org/orchestra/extension/downloads)](https://packagist.org/packages/orchestra/extension)
+[![Latest Unstable Version](https://poser.pugx.org/orchestra/extension/v/unstable)](//packagist.org/packages/orchestra/extension)
+[![License](https://poser.pugx.org/orchestra/extension/license)](https://packagist.org/packages/orchestra/extension)
 
 ## Table of Content
 
@@ -16,7 +15,7 @@ Extension Component allows components or packages to be added dynamically to Orc
 * [Installation](#installation)
 * [Configuration](#configuration)
 * [Resources](#resources)
-* [Change Log](https://github.com/orchestral/extension/releases)
+* [Changelog](https://github.com/orchestral/extension/releases)
 
 ## Version Compatibility
 

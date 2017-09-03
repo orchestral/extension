@@ -3,7 +3,7 @@ Extension Component for Orchestra Platform
 
 Extension Component allows components or packages to be added dynamically to Orchestra Platform without the hassle of modifying the configuration.
 
-[![Build Status](https://travis-ci.org/orchestral/extension.svg?branch=master)](https://travis-ci.org/orchestral/extension)
+[![Build Status](https://travis-ci.org/orchestral/extension.svg?branch=3.5)](https://travis-ci.org/orchestral/extension)
 [![Latest Stable Version](https://poser.pugx.org/orchestra/extension/version)](https://packagist.org/packages/orchestra/extension)
 [![Total Downloads](https://poser.pugx.org/orchestra/extension/downloads)](https://packagist.org/packages/orchestra/extension)
 [![Latest Unstable Version](https://poser.pugx.org/orchestra/extension/v/unstable)](//packagist.org/packages/orchestra/extension)
@@ -29,7 +29,7 @@ Laravel    | Extension
  5.2.x     | 3.2.x
  5.3.x     | 3.3.x
  5.4.x     | 3.4.x
- 5.5.x     | 3.5.x@dev
+ 5.5.x     | 3.5.x
 
 ## Installation
 

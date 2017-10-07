@@ -79,12 +79,12 @@ class Dispatcher implements DispatcherContract
         FinderContract $finder,
         ProviderRepository $provider
     ) {
-        $this->app        = $app;
-        $this->config     = $config;
+        $this->app = $app;
+        $this->config = $config;
         $this->dispatcher = $dispatcher;
-        $this->files      = $files;
-        $this->finder     = $finder;
-        $this->provider   = $provider;
+        $this->files = $files;
+        $this->finder = $finder;
+        $this->provider = $provider;
     }
 
     /**
@@ -216,11 +216,11 @@ class Dispatcher implements DispatcherContract
      */
     public function start($name, array $options)
     {
-        $basePath   = rtrim($options['path'], '/');
+        $basePath = rtrim($options['path'], '/');
         $sourcePath = rtrim($options['source-path'] ?? $basePath, '/');
-        $autoload   = $options['autoload'] ?? [];
+        $autoload = $options['autoload'] ?? [];
 
-        $search      = ['source-path::', 'app::/'];
+        $search = ['source-path::', 'app::/'];
         $replacement = ["{$sourcePath}/", 'app::'];
 
         // By now, extension should already exist as an extension. We should

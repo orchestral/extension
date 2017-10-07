@@ -62,11 +62,11 @@ class Factory implements FactoryContract
      */
     public function __construct(Container $app, DispatcherContract $dispatcher, StatusCheckerContract $status)
     {
-        $this->app        = $app;
-        $this->events     = $this->app->make('events');
+        $this->app = $app;
+        $this->events = $this->app->make('events');
         $this->dispatcher = $dispatcher;
         $this->extensions = new Collection();
-        $this->status     = $status;
+        $this->status = $status;
     }
 
     /**
@@ -126,10 +126,10 @@ class Factory implements FactoryContract
      */
     public function permission($name)
     {
-        $finder   = $this->finder();
-        $memory   = $this->memory;
+        $finder = $this->finder();
+        $memory = $this->memory;
         $basePath = rtrim($memory->get("extensions.available.{$name}.path", $name), '/');
-        $path     = $finder->resolveExtensionPath("{$basePath}/public");
+        $path = $finder->resolveExtensionPath("{$basePath}/public");
 
         return $this->isWritableWithAsset($name, $path);
     }
@@ -200,13 +200,13 @@ class Factory implements FactoryContract
      */
     protected function isWritableWithAsset($name, $path)
     {
-        $files      = $this->app->make('files');
+        $files = $this->app->make('files');
         $publicPath = $this->app['path.public'];
         $targetPath = "{$publicPath}/packages/{$name}";
 
         if (Str::contains($name, '/') && ! $files->isDirectory($targetPath)) {
             list($vendor) = explode('/', $name);
-            $targetPath   = "{$publicPath}/packages/{$vendor}";
+            $targetPath = "{$publicPath}/packages/{$vendor}";
         }
 
         $isWritable = $files->isWritable($targetPath);

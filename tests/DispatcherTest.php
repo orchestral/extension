@@ -49,10 +49,10 @@ class DispatcherTest extends TestCase
         $finder = m::mock('\Orchestra\Extension\Finder');
 
         $options1 = [
-            'config'      => ['handles' => 'laravel'],
-            'path'        => '/foo/app/laravel/framework/',
+            'config' => ['handles' => 'laravel'],
+            'path' => '/foo/app/laravel/framework/',
             'source-path' => '/foo/app',
-            'autoload'    => [
+            'autoload' => [
                 'source-path::hello.php',
                 'start.php',
             ],
@@ -61,7 +61,7 @@ class DispatcherTest extends TestCase
 
         $options2 = [
             'config' => [],
-            'path'   => '/foo/app/',
+            'path' => '/foo/app/',
         ];
 
         $config->shouldReceive('set')->once()

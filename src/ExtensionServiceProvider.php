@@ -36,11 +36,11 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtension()
     {
         $this->app->singleton('orchestra.extension', function (Application $app) {
-            $config   = $app->make('config');
-            $events   = $app->make('events');
-            $files    = $app->make('files');
-            $finder   = $app->make('orchestra.extension.finder');
-            $status   = $app->make('orchestra.extension.status');
+            $config = $app->make('config');
+            $events = $app->make('events');
+            $files = $app->make('files');
+            $finder = $app->make('orchestra.extension.finder');
+            $status = $app->make('orchestra.extension.status');
             $provider = $app->make('orchestra.extension.provider');
 
             $dispatcher = new Dispatcher($app, $config, $events, $files, $finder, $provider);
@@ -70,7 +70,7 @@ class ExtensionServiceProvider extends ServiceProvider
     {
         $this->app->singleton('orchestra.extension.finder', function (Application $app) {
             $config = [
-                'path.app'  => $app->path(),
+                'path.app' => $app->path(),
                 'path.base' => $app->basePath(),
             ];
 

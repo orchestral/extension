@@ -48,7 +48,7 @@ class RepositoryTest extends TestCase
         $stub = new Repository($config, $manager);
 
         $stub->map('laravel/framework', [
-            'foo'    => 'laravel/framework::foo',
+            'foo' => 'laravel/framework::foo',
             'foobar' => 'laravel/framework::foobar',
         ]);
     }

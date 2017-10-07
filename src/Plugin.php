@@ -74,7 +74,7 @@ abstract class Plugin
     protected function bootstrapConfiguration(Application $app)
     {
         if (empty($this->extension) || empty($this->config)) {
-            return ;
+            return;
         }
 
         $app->make('orchestra.extension.config')->map($this->extension, $this->config);
@@ -118,7 +118,7 @@ abstract class Plugin
      */
     protected function bootstrapSidebarPlaceholders(Application $app)
     {
-        $widget      = $app->make('orchestra.widget');
+        $widget = $app->make('orchestra.widget');
         $placeholder = $widget->make('placeholder.orchestra.extensions');
 
         $this->attachListenerOn($app, 'form', function () use ($placeholder) {

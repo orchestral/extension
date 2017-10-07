@@ -94,9 +94,9 @@ trait Operation
      */
     public function refresh($name)
     {
-        $memory    = $this->memory;
+        $memory = $this->memory;
         $available = $memory->get('extensions.available', []);
-        $active    = $memory->get('extensions.active', []);
+        $active = $memory->get('extensions.active', []);
 
         if (! isset($available[$name])) {
             return;
@@ -125,7 +125,7 @@ trait Operation
      */
     public function reset($name)
     {
-        $memory  = $this->memory;
+        $memory = $this->memory;
         $default = $memory->get("extensions.available.{$name}", []);
 
         $memory->put("extensions.active.{$name}", $default);

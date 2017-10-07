@@ -82,7 +82,7 @@ trait Dispatchable
     protected function registerActiveExtensions()
     {
         $available = $this->memory->get('extensions.available', []);
-        $active    = $this->memory->get('extensions.active', []);
+        $active = $this->memory->get('extensions.active', []);
 
         // Loop all active extension and merge the configuration with
         // available config. Extension registration is handled by dispatcher

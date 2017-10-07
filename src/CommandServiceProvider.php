@@ -19,13 +19,13 @@ class CommandServiceProvider extends ServiceProvider
      * @var array
      */
     protected $commands = [
-        'Activate'   => 'orchestra.commands.extension.activate',
+        'Activate' => 'orchestra.commands.extension.activate',
         'Deactivate' => 'orchestra.commands.extension.deactivate',
-        'Detect'     => 'orchestra.commands.extension.detect',
-        'Migrate'    => 'orchestra.commands.extension.migrate',
-        'Publish'    => 'orchestra.commands.extension.publish',
-        'Refresh'    => 'orchestra.commands.extension.refresh',
-        'Reset'      => 'orchestra.commands.extension.reset',
+        'Detect' => 'orchestra.commands.extension.detect',
+        'Migrate' => 'orchestra.commands.extension.migrate',
+        'Publish' => 'orchestra.commands.extension.publish',
+        'Refresh' => 'orchestra.commands.extension.refresh',
+        'Reset' => 'orchestra.commands.extension.reset',
     ];
 
     /**

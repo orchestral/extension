@@ -39,7 +39,7 @@ class ResetCommand extends ExtensionCommand
 
         $reset = $this->laravel['orchestra.extension']->reset($name);
 
-        if (!! $reset) {
+        if ((bool) $reset) {
             $this->info("Extension [{$name}] has been reset.");
         } else {
             $this->error("Unable to reset extension [{$name}].");

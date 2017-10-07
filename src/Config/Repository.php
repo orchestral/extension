@@ -44,7 +44,7 @@ class Repository
     public function map($name, $aliases)
     {
         $memory = $this->memory->make();
-        $meta   = $memory->get("extension_{$name}", []);
+        $meta = $memory->get("extension_{$name}", []);
 
         foreach ($aliases as $current => $default) {
             isset($meta[$current]) && $this->config->set($default, $meta[$current]);

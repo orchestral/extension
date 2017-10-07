@@ -37,7 +37,7 @@ class StatusChecker implements StatusCheckerContract
      */
     public function __construct(Repository $config, Request $request)
     {
-        $this->config  = $config;
+        $this->config = $config;
         $this->request = $request;
     }
 
@@ -50,7 +50,7 @@ class StatusChecker implements StatusCheckerContract
      */
     public function is($mode)
     {
-        return ($this->mode() === $mode);
+        return $this->mode() === $mode;
     }
 
     /**
@@ -62,7 +62,7 @@ class StatusChecker implements StatusCheckerContract
      */
     public function isNot($mode)
     {
-        return ($this->mode() !== $mode);
+        return $this->mode() !== $mode;
     }
 
     /**
@@ -87,7 +87,7 @@ class StatusChecker implements StatusCheckerContract
     protected function verifyStatus()
     {
         $config = $this->config->get('orchestra/extension::mode', 'normal');
-        $input  = $this->request->input('_mode', $config);
+        $input = $this->request->input('_mode', $config);
 
         if ($input == 'safe') {
             $this->enableSafeMode();

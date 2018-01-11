@@ -18,7 +18,7 @@
     },
     "require": {
         "php": ">=7.0",
-        "orchestra/contracts": "~3.5.0",
+        "orchestra/contracts": "~3.5.1",
         "orchestra/memory": "~3.5.0",
         "orchestra/support": "~3.5.0"
     },
@@ -27,6 +27,7 @@
         "illuminate/container": "~5.5.0",
         "illuminate/filesystem": "~5.5.0",
         "illuminate/http": "~5.5.0",
+        "illuminate/routing": "~5.5.0",
         "mockery/mockery": "^0.9.4",
         "phpunit/phpunit": "~6.0"
     },

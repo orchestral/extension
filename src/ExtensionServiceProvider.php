@@ -107,6 +107,18 @@ class ExtensionServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register the service provider for Extension Provider.
+     *
+     * @return void
+     */
+    protected function registerExtensionUrlGenerator()
+    {
+        $this->app->bind('orchestra.extension.url', function (Application $app) {
+            return new UrlGenerator($app->make('request'));
+        });
+    }
+
+    /**
      * Bootstrap the application events.
      *
      * @return void

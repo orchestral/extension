@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Orchestra\Extension\Factory;
 use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
+use Orchestra\Extension\UrlGenerator;
 
 class FactoryTest extends TestCase
 {
@@ -401,6 +402,9 @@ class FactoryTest extends TestCase
         $app['orchestra.memory'] = $memory;
         $app['config'] = $config;
         $app['Illuminate\Http\Request'] = $request;
+        $app->bind('orchestra.extension.url', function ($app) use ($request) {
+            return new UrlGenerator($request);
+        });
 
         list($options1, $options2) = $this->dataProvider();
 
@@ -423,7 +427,7 @@ class FactoryTest extends TestCase
 
         $output = $stub->route('laravel/framework', '/');
 
-        $this->assertInstanceOf('\Orchestra\Extension\RouteGenerator', $output);
+        $this->assertInstanceOf('\Orchestra\Extension\UrlGenerator', $output);
         $this->assertEquals('laravel', $output);
         $this->assertEquals(null, $output->domain());
         $this->assertEquals('localhost', $output->domain(true));

@@ -60,8 +60,11 @@ class Factory implements FactoryContract
      * @param  \Orchestra\Contracts\Extension\Dispatcher  $dispatcher
      * @param  \Orchestra\Contracts\Extension\StatusChecker  $status
      */
-    public function __construct(Container $app, DispatcherContract $dispatcher, StatusCheckerContract $status)
-    {
+    public function __construct(
+        Container $app,
+        DispatcherContract $dispatcher,
+        StatusCheckerContract $status
+    ) {
         $this->app = $app;
         $this->events = $this->app->make('events');
         $this->dispatcher = $dispatcher;
@@ -169,7 +172,7 @@ class Factory implements FactoryContract
      * @param  string   $name
      * @param  string   $default
      *
-     * @return \Orchestra\Contracts\Extension\RouteGenerator
+     * @return \Orchestra\Contracts\Extension\UrlGenerator
      */
     public function route($name, $default = '/')
     {
@@ -184,7 +187,7 @@ class Factory implements FactoryContract
 
             $prefix = $this->app->make('config')->get($key, $default);
 
-            $this->routes[$name] = $this->app->make(RouteGenerator::class)->handle($prefix);
+            $this->routes[$name] = $this->app->make('orchestra.extension.url')->handle($prefix);
         }
 
         return $this->routes[$name];

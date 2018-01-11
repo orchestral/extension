@@ -4,9 +4,9 @@ namespace Orchestra\Extension\TestCase;
 
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
-use Orchestra\Extension\RouteGenerator;
+use Orchestra\Extension\UrlGenerator;
 
-class RouteGeneratorTest extends TestCase
+class UrlGeneratorTest extends TestCase
 {
     /**
      * Teardown the test environment.
@@ -17,7 +17,7 @@ class RouteGeneratorTest extends TestCase
     }
 
     /**
-     * Test Orchestra\Extension\RouteGenerator construct proper route.
+     * Test Orchestra\Extension\UrlGenerator construct proper route.
      *
      * @test
      */
@@ -28,7 +28,7 @@ class RouteGeneratorTest extends TestCase
         $request->shouldReceive('root')->once()->andReturn('http://localhost/laravel')
             ->shouldReceive('getScheme')->once()->andReturn('http');
 
-        $stub = (new RouteGenerator($request))->handle('foo');
+        $stub = (new UrlGenerator($request))->handle('foo');
 
         $refl = new \ReflectionObject($stub);
         $domain = $refl->getProperty('domain');
@@ -58,7 +58,7 @@ class RouteGeneratorTest extends TestCase
     }
 
     /**
-     * Test Orchestra\Extension\RouteGenerator::is() method without domain.
+     * Test Orchestra\Extension\UrlGenerator::is() method without domain.
      *
      * @test
      * @dataProvider isDataProvider
@@ -69,13 +69,13 @@ class RouteGeneratorTest extends TestCase
 
         $request->shouldReceive('path')->once()->andReturn("acme/$path");
 
-        $stub = (new RouteGenerator($request))->handle('acme');
+        $stub = (new UrlGenerator($request))->handle('acme');
 
         $this->assertEquals($expected, $stub->is($pattern));
     }
 
     /**
-     * Test Orchestra\Extension\RouteGenerator::is() method with domain.
+     * Test Orchestra\Extension\UrlGenerator::is() method with domain.
      *
      * @test
      * @dataProvider isDataProvider
@@ -86,13 +86,13 @@ class RouteGeneratorTest extends TestCase
 
         $request->shouldReceive('path')->once()->andReturn($path);
 
-        $stub = (new RouteGenerator($request))->handle('//foobar.com');
+        $stub = (new UrlGenerator($request))->handle('//foobar.com');
 
         $this->assertEquals($expected, $stub->is($pattern));
     }
 
     /**
-     * Test Orchestra\Extension\RouteGenerator::is() method with domain
+     * Test Orchestra\Extension\UrlGenerator::is() method with domain
      * and prefix.
      *
      * @test
@@ -104,13 +104,13 @@ class RouteGeneratorTest extends TestCase
 
         $request->shouldReceive('path')->once()->andReturn("acme/{$path}");
 
-        $stub = (new RouteGenerator($request))->handle('//foobar.com/acme');
+        $stub = (new UrlGenerator($request))->handle('//foobar.com/acme');
 
         $this->assertEquals($expected, $stub->is($pattern));
     }
 
     /**
-     * Test Orchestra\Extension\RouteGenerator::path method without domain.
+     * Test Orchestra\Extension\UrlGenerator::path method without domain.
      *
      * @test
      */
@@ -122,7 +122,7 @@ class RouteGeneratorTest extends TestCase
             ->shouldReceive('path')->once()->andReturn('foo')
             ->shouldReceive('path')->once()->andReturn('foo/bar');
 
-        $stub = (new RouteGenerator($request))->handle('foo');
+        $stub = (new UrlGenerator($request))->handle('foo');
 
         $this->assertEquals('foo', $stub->path());
         $this->assertEquals('foo/bar', $stub->path());
@@ -131,7 +131,7 @@ class RouteGeneratorTest extends TestCase
     }
 
     /**
-     * Test Orchestra\Extension\RouteGenerator::path() method with domain.
+     * Test Orchestra\Extension\UrlGenerator::path() method with domain.
      *
      * @test
      */
@@ -143,7 +143,7 @@ class RouteGeneratorTest extends TestCase
             ->shouldReceive('path')->once()->andReturn('/')
             ->shouldReceive('path')->once()->andReturn('bar');
 
-        $stub = (new RouteGenerator($request))->handle('//foobar.com');
+        $stub = (new UrlGenerator($request))->handle('//foobar.com');
 
         $this->assertEquals('/', $stub->path());
         $this->assertEquals('bar', $stub->path());
@@ -152,7 +152,7 @@ class RouteGeneratorTest extends TestCase
     }
 
     /**
-     * Test Orchestra\Extension\RouteGenerator with domain route.
+     * Test Orchestra\Extension\UrlGenerator with domain route.
      *
      * @test
      */
@@ -163,9 +163,9 @@ class RouteGeneratorTest extends TestCase
         $request->shouldReceive('root')->andReturn(null)
             ->shouldReceive('getScheme')->andReturn('http');
 
-        $stub1 = (new RouteGenerator($request))->handle('//blog.orchestraplatform.com');
-        $stub2 = (new RouteGenerator($request))->handle('//blog.orchestraplatform.com/hello');
-        $stub3 = (new RouteGenerator($request))->handle('//blog.orchestraplatform.com/hello/world');
+        $stub1 = (new UrlGenerator($request))->handle('//blog.orchestraplatform.com');
+        $stub2 = (new UrlGenerator($request))->handle('//blog.orchestraplatform.com/hello');
+        $stub3 = (new UrlGenerator($request))->handle('//blog.orchestraplatform.com/hello/world');
 
         $this->assertEquals('blog.orchestraplatform.com', $stub1->domain());
         $this->assertEquals('/', $stub1->prefix());
@@ -193,7 +193,7 @@ class RouteGeneratorTest extends TestCase
     }
 
     /**
-     * Test Orchestra\Extension\RouteGenerator with domain route when
+     * Test Orchestra\Extension\UrlGenerator with domain route when
      * domain name contain wildcard.
      *
      * @test
@@ -205,9 +205,9 @@ class RouteGeneratorTest extends TestCase
         $request->shouldReceive('root')->andReturn('http://localhost')
             ->shouldReceive('getScheme')->andReturn('http');
 
-        $stub1 = (new RouteGenerator($request))->handle('//blog.{{domain}}');
-        $stub2 = (new RouteGenerator($request))->handle('//blog.{{domain}}/hello');
-        $stub3 = (new RouteGenerator($request))->handle('//blog.{{domain}}/hello/world');
+        $stub1 = (new UrlGenerator($request))->handle('//blog.{{domain}}');
+        $stub2 = (new UrlGenerator($request))->handle('//blog.{{domain}}/hello');
+        $stub3 = (new UrlGenerator($request))->handle('//blog.{{domain}}/hello/world');
 
         $this->assertEquals('blog.localhost', $stub1->domain());
         $this->assertEquals('/', $stub1->prefix());

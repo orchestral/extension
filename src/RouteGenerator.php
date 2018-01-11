@@ -86,7 +86,7 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @return void
      */
-    public function forceSchema($schema)
+    public function forceScheme($schema)
     {
         $this->forceSchema = $schema.'://';
     }

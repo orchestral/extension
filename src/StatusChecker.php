@@ -37,7 +37,7 @@ class StatusChecker implements StatusCheckerContract
      */
     public function __construct(Repository $config, Request $request)
     {
-        $this->config  = $config;
+        $this->config = $config;
         $this->request = $request;
     }
 
@@ -48,9 +48,9 @@ class StatusChecker implements StatusCheckerContract
      *
      * @return bool
      */
-    public function is($mode)
+    public function is(string $mode): bool
     {
-        return ($this->mode() === $mode);
+        return $this->mode() === $mode;
     }
 
     /**
@@ -60,9 +60,9 @@ class StatusChecker implements StatusCheckerContract
      *
      * @return bool
      */
-    public function isNot($mode)
+    public function isNot(string $mode): bool
     {
-        return ($this->mode() !== $mode);
+        return $this->mode() !== $mode;
     }
 
     /**
@@ -70,7 +70,7 @@ class StatusChecker implements StatusCheckerContract
      *
      * @return string
      */
-    public function mode()
+    public function mode(): string
     {
         if (is_null($this->status)) {
             $this->verifyStatus();
@@ -84,10 +84,10 @@ class StatusChecker implements StatusCheckerContract
      *
      * @return void
      */
-    protected function verifyStatus()
+    protected function verifyStatus(): void
     {
         $config = $this->config->get('orchestra/extension::mode', 'normal');
-        $input  = $this->request->input('_mode', $config);
+        $input = $this->request->input('_mode', $config);
 
         if ($input == 'safe') {
             $this->enableSafeMode();
@@ -101,7 +101,7 @@ class StatusChecker implements StatusCheckerContract
      *
      * @return void
      */
-    protected function disableSafeMode()
+    protected function disableSafeMode(): void
     {
         $this->config->set('orchestra/extension::mode', $this->status = 'normal');
     }
@@ -111,7 +111,7 @@ class StatusChecker implements StatusCheckerContract
      *
      * @return void
      */
-    protected function enableSafeMode()
+    protected function enableSafeMode(): void
     {
         $this->config->set('orchestra/extension::mode', $this->status = 'safe');
     }

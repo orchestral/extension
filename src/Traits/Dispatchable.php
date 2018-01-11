@@ -26,7 +26,7 @@ trait Dispatchable
      *
      * @return $this
      */
-    public function boot()
+    public function boot(): self
     {
         // Extension should be activated only if we're not running under
         // safe mode (or debug mode). This is to ensure that developer have
@@ -51,9 +51,9 @@ trait Dispatchable
     /**
      * Boot active extensions.
      *
-     * @return $this
+     * @return bool
      */
-    public function booted()
+    public function booted(): bool
     {
         return $this->booted;
     }
@@ -63,7 +63,7 @@ trait Dispatchable
      *
      * @return $this
      */
-    public function finish()
+    public function finish(): self
     {
         foreach ($this->extensions as $name => $options) {
             $this->dispatcher->finish($name, $options);
@@ -79,10 +79,10 @@ trait Dispatchable
      *
      * @return void
      */
-    protected function registerActiveExtensions()
+    protected function registerActiveExtensions(): void
     {
         $available = $this->memory->get('extensions.available', []);
-        $active    = $this->memory->get('extensions.active', []);
+        $active = $this->memory->get('extensions.active', []);
 
         // Loop all active extension and merge the configuration with
         // available config. Extension registration is handled by dispatcher
@@ -109,10 +109,11 @@ trait Dispatchable
      *
      * @return void
      */
-    public function after(Closure $callback = null)
+    public function after(Closure $callback = null): void
     {
         if ($this->booted() || $this->status->is('safe')) {
-            return $this->app->call($callback);
+            $this->app->call($callback);
+            return ;
         }
 
         $this->events->listen('orchestra.extension: booted', $callback);

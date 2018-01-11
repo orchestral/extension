@@ -13,7 +13,7 @@ trait Operation
      *
      * @return bool
      */
-    public function activate($name)
+    public function activate(string $name): bool
     {
         return $this->activating($name);
     }
@@ -25,7 +25,7 @@ trait Operation
      *
      * @return bool
      */
-    protected function activating($name)
+    protected function activating(string $name): bool
     {
         if (is_null($active = $this->refresh($name))) {
             return false;
@@ -46,7 +46,7 @@ trait Operation
      *
      * @return bool
      */
-    public function activated($name)
+    public function activated(string $name): bool
     {
         return is_array($this->memory->get("extensions.active.{$name}"));
     }
@@ -58,7 +58,7 @@ trait Operation
      *
      * @return bool
      */
-    public function available($name)
+    public function available(string $name): bool
     {
         return is_array($this->memory->get("extensions.available.{$name}"));
     }
@@ -70,7 +70,7 @@ trait Operation
      *
      * @return bool
      */
-    public function deactivate($name)
+    public function deactivate(string $name): bool
     {
         $memory = $this->memory;
         $active = $memory->get('extensions.active', []);
@@ -92,14 +92,14 @@ trait Operation
      *
      * @return array|null
      */
-    public function refresh($name)
+    public function refresh(string $name): ?array
     {
-        $memory    = $this->memory;
+        $memory = $this->memory;
         $available = $memory->get('extensions.available', []);
-        $active    = $memory->get('extensions.active', []);
+        $active = $memory->get('extensions.active', []);
 
         if (! isset($available[$name])) {
-            return;
+            return null;
         }
 
         // Append the activated extension to active extensions, and also
@@ -123,9 +123,9 @@ trait Operation
      *
      * @return bool
      */
-    public function reset($name)
+    public function reset(string $name): bool
     {
-        $memory  = $this->memory;
+        $memory = $this->memory;
         $default = $memory->get("extensions.available.{$name}", []);
 
         $memory->put("extensions.active.{$name}", $default);
@@ -144,7 +144,7 @@ trait Operation
      *
      * @return bool
      */
-    public function started($name)
+    public function started(string $name): bool
     {
         return $this->extensions->has($name);
     }
@@ -156,5 +156,5 @@ trait Operation
      *
      * @return void
      */
-    abstract public function publish($name);
+    abstract public function publish(string $name): void;
 }

@@ -72,30 +72,30 @@ class FinderTest extends TestCase
 
         $expected = new Collection([
             'laravel/framework' => [
-                'path'        => 'vendor::laravel/framework',
+                'path' => 'vendor::laravel/framework',
                 'source-path' => 'vendor::laravel/framework',
-                'name'        => 'laravel/framework',
+                'name' => 'laravel/framework',
                 'description' => 'Laravel Framework',
-                'author'      => null,
-                'url'         => null,
-                'version'     => 'v5.1.10',
-                'config'      => [],
-                'autoload'    => [],
-                'provides'    => [],
-                'plugin'      => null,
+                'author' => null,
+                'url' => null,
+                'version' => 'v5.1.10',
+                'config' => [],
+                'autoload' => [],
+                'provides' => [],
+                'plugin' => null,
             ],
             'app' => [
-                'path'        => 'app::',
+                'path' => 'app::',
                 'source-path' => 'app::',
-                'name'        => 'Application',
+                'name' => 'Application',
                 'description' => null,
-                'author'      => null,
-                'url'         => null,
-                'version'     => '*',
-                'config'      => [],
-                'autoload'    => [],
-                'provides'    => [],
-                'plugin'      => null,
+                'author' => null,
+                'url' => null,
+                'version' => '*',
+                'config' => [],
+                'autoload' => [],
+                'provides' => [],
+                'plugin' => null,
             ],
         ]);
 
@@ -216,8 +216,8 @@ class FinderTest extends TestCase
         $this->assertTrue($stub->registerExtension('hello', '/var/www/laravel/modules/'));
 
         $expected = [
-            "/var/www/laravel/app",
-            "/var/www/laravel/vendor/*/*",
+            '/var/www/laravel/app',
+            '/var/www/laravel/vendor/*/*',
             'hello' => '/var/www/laravel/modules',
         ];
         $this->assertEquals($expected, $paths->getValue($stub));
@@ -237,48 +237,48 @@ class FinderTest extends TestCase
         return [
             [
                 $windowsPath,
-                ["laravel", "app"],
+                ['laravel', 'app'],
                 "c:\www\laravel\app/orchestra.json",
             ],
             [
                 $windowsPath,
-                ["orchestra", "control"],
+                ['orchestra', 'control'],
                 "c:\www\laravel\vendor/orchestra/control/orchestra.json",
             ],
             [
                 $windowsPath,
-                ["orchestra", "story"],
+                ['orchestra', 'story'],
                 "c:\www\laravel\vendor/orchestra/story/orchestra.json",
             ],
             [
                 $windowsPath,
-                ["laravel", "app"],
+                ['laravel', 'app'],
                 "c:\www\laravel\app\orchestra.json",
             ],
             [
                 $windowsPath,
-                ["orchestra", "control"],
+                ['orchestra', 'control'],
                 "c:\www\laravel\vendor\orchestra\control\orchestra.json",
             ],
             [
                 $windowsPath,
-                ["orchestra", "story"],
+                ['orchestra', 'story'],
                 "c:\www\laravel\vendor\orchestra\story\orchestra.json",
             ],
             [
                 $unixPath,
-                ["laravel", "app"],
-                "/var/www/laravel/app/orchestra.json",
+                ['laravel', 'app'],
+                '/var/www/laravel/app/orchestra.json',
             ],
             [
                 $unixPath,
-                ["orchestra", "control"],
-                "/var/www/laravel/vendor/orchestra/control/orchestra.json",
+                ['orchestra', 'control'],
+                '/var/www/laravel/vendor/orchestra/control/orchestra.json',
             ],
             [
                 $unixPath,
-                ["orchestra", "story"],
-                "/var/www/laravel/vendor/orchestra/story/orchestra.json",
+                ['orchestra', 'story'],
+                '/var/www/laravel/vendor/orchestra/story/orchestra.json',
             ],
         ];
     }
@@ -289,10 +289,10 @@ class FinderTest extends TestCase
     public function extensionPathProvider()
     {
         return [
-            ["foobar", "foobar"],
-            ["/var/www/laravel/app/foobar", "app::foobar"],
-            ["/var/www/laravel/vendor/foobar", "vendor::foobar"],
-            ["/var/www/laravel/foobar", "base::foobar"],
+            ['foobar', 'foobar'],
+            ['/var/www/laravel/app/foobar', 'app::foobar'],
+            ['/var/www/laravel/vendor/foobar', 'vendor::foobar'],
+            ['/var/www/laravel/foobar', 'base::foobar'],
         ];
     }
 }

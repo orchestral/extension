@@ -10,8 +10,10 @@ use Orchestra\Extension\Traits\Operation;
 use Orchestra\Extension\Traits\Dispatchable;
 use Illuminate\Contracts\Container\Container;
 use Orchestra\Extension\Bootstrap\LoadExtension;
+use Orchestra\Contracts\Extension\Finder as FinderContract;
 use Orchestra\Contracts\Extension\Factory as FactoryContract;
 use Orchestra\Contracts\Extension\Dispatcher as DispatcherContract;
+use Orchestra\Contracts\Extension\UrlGenerator as UrlGeneratorContract;
 use Orchestra\Contracts\Extension\StatusChecker as StatusCheckerContract;
 
 class Factory implements FactoryContract
@@ -60,21 +62,24 @@ class Factory implements FactoryContract
      * @param  \Orchestra\Contracts\Extension\Dispatcher  $dispatcher
      * @param  \Orchestra\Contracts\Extension\StatusChecker  $status
      */
-    public function __construct(Container $app, DispatcherContract $dispatcher, StatusCheckerContract $status)
-    {
-        $this->app        = $app;
-        $this->events     = $this->app->make('events');
+    public function __construct(
+        Container $app,
+        DispatcherContract $dispatcher,
+        StatusCheckerContract $status
+    ) {
+        $this->app = $app;
+        $this->events = $this->app->make('events');
         $this->dispatcher = $dispatcher;
         $this->extensions = new Collection();
-        $this->status     = $status;
+        $this->status = $status;
     }
 
     /**
      * Detect all extensions.
      *
-     * @return \Illuminate\Support\Collection|array
+     * @return \Illuminate\Support\Collection
      */
-    public function detect()
+    public function detect(): Collection
     {
         $this->events->fire('orchestra.extension: detecting');
 
@@ -94,7 +99,7 @@ class Factory implements FactoryContract
      *
      * @return \Orchestra\Contracts\Extension\Finder
      */
-    public function finder()
+    public function finder(): FinderContract
     {
         return $this->app->make('orchestra.extension.finder');
     }
@@ -108,7 +113,7 @@ class Factory implements FactoryContract
      *
      * @return mixed
      */
-    public function option($name, $option, $default = null)
+    public function option(string $name, string $option, $default = null)
     {
         if (! isset($this->extensions[$name])) {
             return value($default);
@@ -124,12 +129,12 @@ class Factory implements FactoryContract
      *
      * @return bool
      */
-    public function permission($name)
+    public function permission(string $name): bool
     {
-        $finder   = $this->finder();
-        $memory   = $this->memory;
+        $finder = $this->finder();
+        $memory = $this->memory;
         $basePath = rtrim($memory->get("extensions.available.{$name}.path", $name), '/');
-        $path     = $finder->resolveExtensionPath("{$basePath}/public");
+        $path = $finder->resolveExtensionPath("{$basePath}/public");
 
         return $this->isWritableWithAsset($name, $path);
     }
@@ -141,7 +146,7 @@ class Factory implements FactoryContract
      *
      * @return void
      */
-    public function publish($name)
+    public function publish(string $name): void
     {
         $this->app->make('orchestra.publisher.migrate')->extension($name);
         $this->app->make('orchestra.publisher.asset')->extension($name);
@@ -158,7 +163,7 @@ class Factory implements FactoryContract
      *
      * @return bool
      */
-    public function register($name, $path)
+    public function register(string $name, string $path): bool
     {
         return $this->finder()->registerExtension($name, $path);
     }
@@ -169,9 +174,9 @@ class Factory implements FactoryContract
      * @param  string   $name
      * @param  string   $default
      *
-     * @return \Orchestra\Contracts\Extension\RouteGenerator
+     * @return \Orchestra\Contracts\Extension\UrlGenerator
      */
-    public function route($name, $default = '/')
+    public function route(string $name, string $default = '/'): UrlGeneratorContract
     {
         // Boot the extension.
         ! $this->booted() && $this->app->make(LoadExtension::class)->bootstrap($this->app);
@@ -184,7 +189,7 @@ class Factory implements FactoryContract
 
             $prefix = $this->app->make('config')->get($key, $default);
 
-            $this->routes[$name] = $this->app->make(RouteGenerator::class)->handle($prefix);
+            $this->routes[$name] = $this->app->make('orchestra.extension.url')->handle($prefix);
         }
 
         return $this->routes[$name];
@@ -198,15 +203,15 @@ class Factory implements FactoryContract
      *
      * @return bool
      */
-    protected function isWritableWithAsset($name, $path)
+    protected function isWritableWithAsset(string $name, string $path): bool
     {
-        $files      = $this->app->make('files');
+        $files = $this->app->make('files');
         $publicPath = $this->app['path.public'];
         $targetPath = "{$publicPath}/packages/{$name}";
 
         if (Str::contains($name, '/') && ! $files->isDirectory($targetPath)) {
             list($vendor) = explode('/', $name);
-            $targetPath   = "{$publicPath}/packages/{$vendor}";
+            $targetPath = "{$publicPath}/packages/{$vendor}";
         }
 
         $isWritable = $files->isWritable($targetPath);

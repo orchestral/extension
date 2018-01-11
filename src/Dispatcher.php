@@ -79,12 +79,12 @@ class Dispatcher implements DispatcherContract
         FinderContract $finder,
         ProviderRepository $provider
     ) {
-        $this->app        = $app;
-        $this->config     = $config;
+        $this->app = $app;
+        $this->config = $config;
         $this->dispatcher = $dispatcher;
-        $this->files      = $files;
-        $this->finder     = $finder;
-        $this->provider   = $provider;
+        $this->files = $files;
+        $this->finder = $finder;
+        $this->provider = $provider;
     }
 
     /**
@@ -95,7 +95,7 @@ class Dispatcher implements DispatcherContract
      *
      * @return void
      */
-    public function register($name, array $options)
+    public function register(string $name, array $options): void
     {
         $this->registerExtensionHandles($name, $options);
 
@@ -123,7 +123,7 @@ class Dispatcher implements DispatcherContract
      *
      * @return void
      */
-    public function activating($name, array $options)
+    public function activating(string $name, array $options): void
     {
         $this->register($name, $options);
 
@@ -140,7 +140,7 @@ class Dispatcher implements DispatcherContract
      *
      * @return void
      */
-    public function deactivating($name, array $options)
+    public function deactivating(string $name, array $options): void
     {
         $this->fireEvent($name, $options, 'deactivating');
 
@@ -155,7 +155,7 @@ class Dispatcher implements DispatcherContract
      *
      * @return void
      */
-    protected function registerExtensionHandles($name, array $options)
+    protected function registerExtensionHandles(string $name, array $options): void
     {
         $handles = $options['config']['handles'] ?? null;
 
@@ -171,7 +171,7 @@ class Dispatcher implements DispatcherContract
      *
      * @return void
      */
-    protected function registerExtensionProviders(array $options)
+    protected function registerExtensionProviders(array $options): void
     {
         $services = $options['provides'] ?? [];
 
@@ -185,7 +185,7 @@ class Dispatcher implements DispatcherContract
      *
      * @return void
      */
-    protected function registerExtensionPlugin(array $options)
+    protected function registerExtensionPlugin(array $options): void
     {
         $plugin = $options['plugin'] ?? null;
 
@@ -197,7 +197,7 @@ class Dispatcher implements DispatcherContract
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         foreach ($this->extensions as $name => $options) {
             $this->fireEvent($name, $options, 'booted');
@@ -214,13 +214,13 @@ class Dispatcher implements DispatcherContract
      *
      * @return void
      */
-    public function start($name, array $options)
+    public function start(string $name, array $options): void
     {
-        $basePath   = rtrim($options['path'], '/');
+        $basePath = rtrim($options['path'], '/');
         $sourcePath = rtrim($options['source-path'] ?? $basePath, '/');
-        $autoload   = $options['autoload'] ?? [];
+        $autoload = $options['autoload'] ?? [];
 
-        $search      = ['source-path::', 'app::/'];
+        $search = ['source-path::', 'app::/'];
         $replacement = ["{$sourcePath}/", 'app::'];
 
         // By now, extension should already exist as an extension. We should
@@ -240,7 +240,7 @@ class Dispatcher implements DispatcherContract
      *
      * @return void
      */
-    public function finish($name, array $options)
+    public function finish(string $name, array $options): void
     {
         $this->fireEvent($name, $options, 'done');
     }
@@ -254,7 +254,7 @@ class Dispatcher implements DispatcherContract
      *
      * @return void
      */
-    protected function fireEvent($name, $options, $type = 'started')
+    protected function fireEvent(string $name, array $options, string $type = 'started'): void
     {
         $this->dispatcher->fire("extension.{$type}", [$name, $options]);
         $this->dispatcher->fire("extension.{$type}: {$name}", [$options]);
@@ -267,7 +267,7 @@ class Dispatcher implements DispatcherContract
      *
      * @return array
      */
-    protected function getAutoloadFiles(array $autoload)
+    protected function getAutoloadFiles(array $autoload): array
     {
         $resolver = function ($path) {
             if (Str::contains($path, '::')) {
@@ -292,7 +292,7 @@ class Dispatcher implements DispatcherContract
      *
      * @return void
      */
-    protected function loadAutoloaderFile($filePath)
+    protected function loadAutoloaderFile(string $filePath): void
     {
         $filePath = $this->finder->resolveExtensionPath($filePath);
 

@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Orchestra\Extension\Factory;
 use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
+use Orchestra\Extension\UrlGenerator;
 
 class FactoryTest extends TestCase
 {
@@ -70,13 +71,13 @@ class FactoryTest extends TestCase
     {
         return [
             [
-                'path'    => '/foo/path/laravel/framework/',
-                'config'  => ['foo' => 'bar', 'handles' => 'laravel'],
+                'path' => '/foo/path/laravel/framework/',
+                'config' => ['foo' => 'bar', 'handles' => 'laravel'],
                 'provide' => ['Laravel\FrameworkServiceProvider'],
             ],
             [
-                'path'    => '/foo/app/',
-                'config'  => ['foo' => 'bar'],
+                'path' => '/foo/app/',
+                'config' => ['foo' => 'bar'],
                 'provide' => [],
             ],
         ];
@@ -242,7 +243,7 @@ class FactoryTest extends TestCase
 
         $extensions = new Collection([
             'foo' => [
-                'name'        => 'Foo',
+                'name' => 'Foo',
                 'description' => 'Foobar',
             ],
         ]);
@@ -401,6 +402,9 @@ class FactoryTest extends TestCase
         $app['orchestra.memory'] = $memory;
         $app['config'] = $config;
         $app['Illuminate\Http\Request'] = $request;
+        $app->bind('orchestra.extension.url', function ($app) use ($request) {
+            return new UrlGenerator($request);
+        });
 
         list($options1, $options2) = $this->dataProvider();
 
@@ -415,7 +419,7 @@ class FactoryTest extends TestCase
         $status->shouldReceive('is')->once()->with('safe')->andReturn(false);
         $config->shouldReceive('get')->with('orchestra/extension::handles.laravel/framework', '/')->andReturn('laravel');
         $request->shouldReceive('root')->andReturn('http://localhost')
-                ->shouldReceive('secure')->twice()->andReturn(false);
+                ->shouldReceive('getScheme')->twice()->andReturn('http');
 
         $stub = new Factory($app, $dispatcher, $status);
         $stub->attach($memory);
@@ -423,7 +427,7 @@ class FactoryTest extends TestCase
 
         $output = $stub->route('laravel/framework', '/');
 
-        $this->assertInstanceOf('\Orchestra\Extension\RouteGenerator', $output);
+        $this->assertInstanceOf('\Orchestra\Extension\UrlGenerator', $output);
         $this->assertEquals('laravel', $output);
         $this->assertEquals(null, $output->domain());
         $this->assertEquals('localhost', $output->domain(true));

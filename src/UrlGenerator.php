@@ -4,9 +4,9 @@ namespace Orchestra\Extension;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Orchestra\Contracts\Extension\RouteGenerator as RouteGeneratorContract;
+use Orchestra\Contracts\Extension\UrlGenerator as UrlGeneratorContract;
 
-class RouteGenerator implements RouteGeneratorContract
+class UrlGenerator implements UrlGeneratorContract
 {
     /**
      * Request instance.
@@ -18,39 +18,76 @@ class RouteGenerator implements RouteGeneratorContract
     /**
      * Domain name.
      *
-     * @var string
+     * @var string|null
      */
-    protected $domain = null;
+    protected $domain;
 
     /**
      * Handles path.
      *
      * @var string|null
      */
-    protected $prefix = null;
+    protected $prefix;
 
     /**
      * Base URL.
      *
      * @var string|null
      */
-    protected $baseUrl = null;
+    protected $baseUrl;
 
     /**
      * Base URL prefix.
      *
      * @var string|null
      */
-    protected $basePrefix = null;
+    protected $basePrefix;
+
+
+
+    /**
+     * The URL schema to be forced on all generated URLs.
+     *
+     * @var string|null
+     */
+    protected $forceSchema;
 
     /**
      * Construct a new instance.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request  $request
      */
     public function __construct(Request $request)
     {
         $this->request = $request;
+    }
+
+    /**
+     * Get the scheme for a raw URL.
+     *
+     * @param  bool|null  $secure
+     *
+     * @return string
+     */
+    protected function getScheme(?bool $secure): string
+    {
+        if (is_null($secure)) {
+            return $this->forceSchema ?: $this->request->getScheme().'://';
+        }
+
+        return $secure ? 'https://' : 'http://';
+    }
+
+    /**
+     * Force the schema for URLs.
+     *
+     * @param  string  $schema
+     *
+     * @return void
+     */
+    public function forceScheme(string $schema): void
+    {
+        $this->forceSchema = $schema.'://';
     }
 
     /**
@@ -60,7 +97,7 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @return $this
      */
-    public function handle($handles)
+    public function handle(string $handles): self
     {
         // If the handles doesn't start as "//some.domain.com/foo" we should
         // assume that it doesn't belong to any subdomain, otherwise we
@@ -68,8 +105,8 @@ class RouteGenerator implements RouteGeneratorContract
         if (is_null($handles) || ! Str::startsWith($handles, ['//', 'http://', 'https://'])) {
             $this->prefix = $handles;
         } else {
-            $handles      = substr(str_replace(['http://', 'https://'], '//', $handles), 2);
-            $fragments    = explode('/', $handles, 2);
+            $handles = substr(str_replace(['http://', 'https://'], '//', $handles), 2);
+            $fragments = explode('/', $handles, 2);
             $this->domain = array_shift($fragments);
             $this->prefix = array_shift($fragments);
         }
@@ -88,7 +125,7 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @return string|null
      */
-    public function domain($forceBase = false)
+    public function domain(bool $forceBase = false): ?string
     {
         $pattern = $this->domain;
         $baseUrl = $this->getBaseUrl();
@@ -109,7 +146,7 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @return array
      */
-    public function group($forceBase = false)
+    public function group(bool $forceBase = false): array
     {
         $group = [
             'prefix' => $this->prefix($forceBase),
@@ -129,9 +166,9 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @return bool
      */
-    public function is($pattern)
+    public function is(string $pattern): bool
     {
-        $path   = $this->path();
+        $path = $this->path();
         $prefix = $this->prefix();
 
         foreach (func_get_args() as $pattern) {
@@ -153,7 +190,7 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @return string
      */
-    public function path()
+    public function path(): string
     {
         $pattern = trim($this->request->path(), '/');
 
@@ -167,7 +204,7 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @return string
      */
-    public function prefix($forceBase = false)
+    public function prefix(bool $forceBase = false): string
     {
         $pattern = trim($this->prefix, '/');
 
@@ -186,13 +223,13 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @return string
      */
-    public function root()
+    public function root(): string
     {
-        $http   = ($this->request->secure() ? 'https' : 'http');
+        $scheme = $this->getScheme(null);
         $domain = trim($this->domain(true), '/');
         $prefix = $this->prefix(true);
 
-        return trim("{$http}://{$domain}/{$prefix}", '/');
+        return trim("{$scheme}{$domain}/{$prefix}", '/');
     }
 
     /**
@@ -200,7 +237,7 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @return string
      */
-    public function getBaseUrl()
+    public function getBaseUrl(): string
     {
         if (is_null($this->baseUrl)) {
             $this->resolveBaseUrlFrom($this->request->root());
@@ -216,7 +253,7 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @return $this
      */
-    public function setBaseUrl($root)
+    public function setBaseUrl(string $root): self
     {
         if (! empty($root)) {
             $this->resolveBaseUrlFrom($root);
@@ -232,10 +269,10 @@ class RouteGenerator implements RouteGeneratorContract
      *
      * @return string
      */
-    public function to($to)
+    public function to(string $to): string
     {
-        $root    = $this->root();
-        $to      = trim($to, '/');
+        $root = $this->root();
+        $to = trim($to, '/');
         $pattern = trim("{$root}/{$to}", '/');
 
         return $pattern !== '/' ? $pattern : '';
@@ -254,15 +291,15 @@ class RouteGenerator implements RouteGeneratorContract
     /**
      * Resolve base url from given path.
      *
-     * @param  string  $root
+     * @param  string|null  $root
      *
      * @return void
      */
-    protected function resolveBaseUrlFrom($root)
+    protected function resolveBaseUrlFrom(?string $root): void
     {
         // Build base URL and prefix.
         $baseUrl = ltrim(str_replace(['https://', 'http://'], '', $root), '/');
-        $base    = explode('/', $baseUrl, 2);
+        $base = explode('/', $baseUrl, 2);
 
         if (count($base) > 1) {
             $this->basePrefix = array_pop($base);

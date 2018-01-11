@@ -36,16 +36,16 @@ class Finder implements FinderContract
      *
      * @var array
      */
-    protected $manifestOptions =  [
-        'name'        => null,
+    protected $manifestOptions = [
+        'name' => null,
         'description' => null,
-        'author'      => null,
-        'url'         => null,
-        'version'     => '*',
-        'config'      => [],
-        'autoload'    => [],
-        'provides'    => [],
-        'plugin'      => null,
+        'author' => null,
+        'url' => null,
+        'version' => '*',
+        'config' => [],
+        'autoload' => [],
+        'provides' => [],
+        'plugin' => null,
     ];
 
     /**
@@ -84,10 +84,10 @@ class Finder implements FinderContract
      */
     public function __construct(Filesystem $files, array $config)
     {
-        $this->files  = $files;
+        $this->files = $files;
         $this->config = $config;
 
-        $app  = rtrim($config['path.app'], '/');
+        $app = rtrim($config['path.app'], '/');
         $base = rtrim($config['path.base'], '/');
 
         // In most cases we would only need to concern with the following
@@ -105,7 +105,7 @@ class Finder implements FinderContract
      *
      * @return $this
      */
-    public function addPath($path)
+    public function addPath(string $path): self
     {
         $path = rtrim($path, '/');
 
@@ -124,7 +124,7 @@ class Finder implements FinderContract
     public function detect()
     {
         $extensions = [];
-        $packages   = $this->getComposerLockData();
+        $packages = $this->getComposerLockData();
 
         // Loop each path to check if there orchestra.json available within
         // the paths. We would only treat packages that include orchestra.json
@@ -142,7 +142,7 @@ class Finder implements FinderContract
                             : $key;
 
                 if (! is_null($name)) {
-                    $lockContent       = $packages->where('name', $name)->first();
+                    $lockContent = $packages->where('name', $name)->first();
                     $extensions[$name] = $this->getManifestContents($manifest, $lockContent);
                 }
             }
@@ -157,13 +157,13 @@ class Finder implements FinderContract
      * @param  string  $manifest
      * @param  array|null  $lockContent
      *
-     * @return array
-     *
      * @throws \Orchestra\Contracts\Support\ManifestRuntimeException
+     *
+     * @return array
      */
-    protected function getManifestContents($manifest, $lockContent)
+    protected function getManifestContents(string $manifest, ?array $lockContent): array
     {
-        $path     = $sourcePath = $this->guessExtensionPath($manifest);
+        $path = $sourcePath = $this->guessExtensionPath($manifest);
         $jsonable = json_decode($this->files->get($manifest), true);
 
         // If json_decode fail, due to invalid json format. We going to
@@ -182,7 +182,7 @@ class Finder implements FinderContract
         $path = $jsonable['path'] ?? $path;
 
         $paths = [
-            'path'        => rtrim($path, '/'),
+            'path' => rtrim($path, '/'),
             'source-path' => rtrim($sourcePath, '/'),
         ];
 
@@ -203,7 +203,7 @@ class Finder implements FinderContract
      *
      * @return array
      */
-    protected function generateManifestConfig(array $jsonable)
+    protected function generateManifestConfig(array $jsonable): array
     {
         $manifest = [];
 
@@ -222,7 +222,7 @@ class Finder implements FinderContract
      *
      * @return \Illuminate\Support\Collection
      */
-    protected function getComposerLockData()
+    protected function getComposerLockData(): Collection
     {
         return new Collection(
             json_decode($this->files->get($this->config['path.base'].'/composer.lock'), true)['packages']
@@ -235,11 +235,11 @@ class Finder implements FinderContract
      * @param  string  $manifest
      * @param  string  $path
      *
-     * @return string
-     *
      * @throws \RuntimeException
+     *
+     * @return string|null
      */
-    public function guessExtensionNameFromManifest($manifest, $path)
+    public function guessExtensionNameFromManifest(string $manifest, string $path): ?string
     {
         if (rtrim($this->config['path.app'], '/') === rtrim($path, '/')) {
             return 'app';
@@ -248,7 +248,7 @@ class Finder implements FinderContract
         list($vendor, $package) = $namespace = $this->resolveExtensionNamespace($manifest);
 
         if (is_null($vendor) && is_null($package)) {
-            return;
+            return null;
         }
 
         // Each package should have vendor/package name pattern.
@@ -264,10 +264,10 @@ class Finder implements FinderContract
      *
      * @return string
      */
-    public function guessExtensionPath($path)
+    public function guessExtensionPath(string $path): string
     {
         $path = str_replace('orchestra.json', '', $path);
-        $app  = rtrim($this->config['path.app'], '/');
+        $app = rtrim($this->config['path.app'], '/');
         $base = rtrim($this->config['path.base'], '/');
 
         return str_replace(
@@ -285,7 +285,7 @@ class Finder implements FinderContract
      *
      * @return bool
      */
-    public function registerExtension($name, $path)
+    public function registerExtension(string $name, string $path): bool
     {
         $this->paths[$name] = rtrim($path, '/');
 
@@ -299,10 +299,10 @@ class Finder implements FinderContract
      *
      * @return array
      */
-    public function resolveExtensionNamespace($manifest)
+    public function resolveExtensionNamespace(string $manifest): array
     {
-        $vendor   = null;
-        $package  = null;
+        $vendor = null;
+        $package = null;
         $manifest = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $manifest);
         $fragment = explode(DIRECTORY_SEPARATOR, $manifest);
 
@@ -310,7 +310,7 @@ class Finder implements FinderContract
         // the two segment before it.
         if (array_pop($fragment) == 'orchestra.json') {
             $package = array_pop($fragment);
-            $vendor  = array_pop($fragment);
+            $vendor = array_pop($fragment);
         }
 
         return [$vendor, $package];
@@ -323,9 +323,9 @@ class Finder implements FinderContract
      *
      * @return string
      */
-    public function resolveExtensionPath($path)
+    public function resolveExtensionPath(string $path): string
     {
-        $app  = rtrim($this->config['path.app'], '/');
+        $app = rtrim($this->config['path.app'], '/');
         $base = rtrim($this->config['path.base'], '/');
 
         return str_replace(
@@ -340,11 +340,11 @@ class Finder implements FinderContract
      *
      * @param  string  $name
      *
-     * @return string
-     *
      * @throws \RuntimeException
+     *
+     * @return string
      */
-    public function validateExtensionName($name)
+    public function validateExtensionName(string $name): string
     {
         if (in_array($name, $this->reserved)) {
             throw new RuntimeException("Unable to register reserved name [{$name}] as extension.");

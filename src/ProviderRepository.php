@@ -60,9 +60,9 @@ class ProviderRepository
      */
     public function __construct(Application $app, EventDispatcherContract $events, Filesystem $files)
     {
-        $this->app    = $app;
+        $this->app = $app;
         $this->events = $events;
-        $this->files  = $files;
+        $this->files = $files;
 
         $this->manifestPath = $this->app->getCachedExtensionServicesPath();
     }
@@ -204,8 +204,8 @@ class ProviderRepository
 
         return [
             'instance' => $instance,
-            'eager'    => false,
-            'when'     => $instance->when(),
+            'eager' => false,
+            'when' => $instance->when(),
             'deferred' => $deferred,
         ];
     }
@@ -222,8 +222,8 @@ class ProviderRepository
     {
         return [
             'instance' => $instance,
-            'eager'    => true,
-            'when'     => [],
+            'eager' => true,
+            'when' => [],
             'deferred' => [],
         ];
     }
@@ -239,7 +239,7 @@ class ProviderRepository
     protected function loadDeferredServiceProvider($provider, array $options)
     {
         if ($options['eager']) {
-            return ;
+            return;
         }
 
         $this->app->addDeferredServices($options['deferred']);
@@ -256,7 +256,7 @@ class ProviderRepository
     protected function loadEagerServiceProvider($provider, array $options)
     {
         if (! $options['eager']) {
-            return ;
+            return;
         }
 
         $this->app->register($options['instance'] ?? $provider);

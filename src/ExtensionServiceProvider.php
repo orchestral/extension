@@ -23,6 +23,8 @@ class ExtensionServiceProvider extends ServiceProvider
 
         $this->registerExtensionStatusChecker();
 
+        $this->registerExtensionUrlGenerator();
+
         $this->registerExtension();
 
         $this->registerExtensionEvents();

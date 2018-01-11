@@ -26,7 +26,7 @@ class RouteGeneratorTest extends TestCase
         $request = m::mock('\Illuminate\Http\Request');
 
         $request->shouldReceive('root')->once()->andReturn('http://localhost/laravel')
-            ->shouldReceive('secure')->once()->andReturn(false);
+            ->shouldReceive('getScheme')->once()->andReturn('http');
 
         $stub = (new RouteGenerator($request))->handle('foo');
 
@@ -161,7 +161,7 @@ class RouteGeneratorTest extends TestCase
         $request = m::mock('\Illuminate\Http\Request');
 
         $request->shouldReceive('root')->andReturn(null)
-            ->shouldReceive('secure')->andReturn(false);
+            ->shouldReceive('getScheme')->andReturn('http');
 
         $stub1 = (new RouteGenerator($request))->handle('//blog.orchestraplatform.com');
         $stub2 = (new RouteGenerator($request))->handle('//blog.orchestraplatform.com/hello');
@@ -203,7 +203,7 @@ class RouteGeneratorTest extends TestCase
         $request = m::mock('\Illuminate\Http\Request');
 
         $request->shouldReceive('root')->andReturn('http://localhost')
-            ->shouldReceive('secure')->andReturn(false);
+            ->shouldReceive('getScheme')->andReturn('http');
 
         $stub1 = (new RouteGenerator($request))->handle('//blog.{{domain}}');
         $stub2 = (new RouteGenerator($request))->handle('//blog.{{domain}}/hello');

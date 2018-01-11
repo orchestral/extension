@@ -415,7 +415,7 @@ class FactoryTest extends TestCase
         $status->shouldReceive('is')->once()->with('safe')->andReturn(false);
         $config->shouldReceive('get')->with('orchestra/extension::handles.laravel/framework', '/')->andReturn('laravel');
         $request->shouldReceive('root')->andReturn('http://localhost')
-                ->shouldReceive('secure')->twice()->andReturn(false);
+                ->shouldReceive('getScheme')->twice()->andReturn('http');
 
         $stub = new Factory($app, $dispatcher, $status);
         $stub->attach($memory);

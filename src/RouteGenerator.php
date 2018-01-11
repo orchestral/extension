@@ -226,7 +226,7 @@ class RouteGenerator implements RouteGeneratorContract
      */
     public function root()
     {
-        $scheme = $this->getScheme();
+        $scheme = $this->getScheme(null);
         $domain = trim($this->domain(true), '/');
         $prefix = $this->prefix(true);
 

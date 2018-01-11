@@ -18,39 +18,77 @@ class RouteGenerator implements RouteGeneratorContract
     /**
      * Domain name.
      *
-     * @var string
+     * @var string|null
      */
-    protected $domain = null;
+    protected $domain;
 
     /**
      * Handles path.
      *
      * @var string|null
      */
-    protected $prefix = null;
+    protected $prefix;
 
     /**
      * Base URL.
      *
      * @var string|null
      */
-    protected $baseUrl = null;
+    protected $baseUrl;
 
     /**
      * Base URL prefix.
      *
      * @var string|null
      */
-    protected $basePrefix = null;
+    protected $basePrefix;
+
+
+
+    /**
+     * The URL schema to be forced on all generated URLs.
+     *
+     * @var string|null
+     */
+    protected $forceSchema;
 
     /**
      * Construct a new instance.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request  $request
+     * @param \Illuminate\Contracts\Routing\UrlGenerator  $url
      */
     public function __construct(Request $request)
     {
         $this->request = $request;
+    }
+
+    /**
+     * Get the scheme for a raw URL.
+     *
+     * @param  bool|null  $secure
+     *
+     * @return string
+     */
+    protected function getScheme($secure)
+    {
+        if (is_null($secure)) {
+            return $this->forceSchema ?: $this->request->getScheme().'://';
+        }
+
+        return $secure ? 'https://' : 'http://';
+    }
+
+    /**
+     * Force the schema for URLs.
+     *
+     * @param  string  $schema
+     *
+     * @return void
+     */
+    public function forceSchema($schema)
+    {
+        $this->forceSchema = $schema.'://';
     }
 
     /**
@@ -188,11 +226,11 @@ class RouteGenerator implements RouteGeneratorContract
      */
     public function root()
     {
-        $http = ($this->request->secure() ? 'https' : 'http');
+        $scheme = $this->getScheme();
         $domain = trim($this->domain(true), '/');
         $prefix = $this->prefix(true);
 
-        return trim("{$http}://{$domain}/{$prefix}", '/');
+        return trim("{$scheme}{$domain}/{$prefix}", '/');
     }
 
     /**

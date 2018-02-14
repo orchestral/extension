@@ -113,7 +113,8 @@ trait Dispatchable
     {
         if ($this->booted() || $this->status->is('safe')) {
             $this->app->call($callback);
-            return ;
+
+            return;
         }
 
         $this->events->listen('orchestra.extension: booted', $callback);

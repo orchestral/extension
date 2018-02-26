@@ -90,6 +90,7 @@ class Finder implements FinderContract
         $app = rtrim($config['path.app'], '/');
         $base = rtrim($config['path.base'], '/');
 
+
         // In most cases we would only need to concern with the following
         // path; application folder, vendor folders and workbench folders.
         $this->paths = [
@@ -224,9 +225,13 @@ class Finder implements FinderContract
      */
     protected function getComposerLockData(): Collection
     {
-        return new Collection(
-            json_decode($this->files->get($this->config['path.base'].'/composer.lock'), true)['packages']
-        );
+        $json = [];
+
+        if ($this->files->exists($this->config['path.composer'])) {
+            $json = json_decode($this->files->get($this->config['path.composer']), true);
+        }
+
+        return new Collection($json['packages'] ?? []);
     }
 
     /**

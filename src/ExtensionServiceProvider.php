@@ -74,7 +74,7 @@ class ExtensionServiceProvider extends ServiceProvider
             $config = [
                 'path.app' => $app->path(),
                 'path.base' => $app->basePath(),
-                'path.composer' => $app->basePath('/composer.lock')
+                'path.composer' => $app->basePath('/composer.lock'),
             ];
 
             return new Finder($app->make('files'), $config);

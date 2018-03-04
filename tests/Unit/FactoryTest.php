@@ -1,6 +1,6 @@
 <?php
 
-namespace Orchestra\Extension\TestCase;
+namespace Orchestra\Extension\TestCase\Unit;
 
 use Mockery as m;
 use PHPUnit\Framework\TestCase;

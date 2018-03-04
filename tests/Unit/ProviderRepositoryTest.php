@@ -1,6 +1,6 @@
 <?php
 
-namespace Orchestra\Extension\TestCase;
+namespace Orchestra\Extension\TestCase\Unit;
 
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
@@ -25,7 +25,7 @@ class ProviderRepositoryTest extends TestCase
      */
     public function testServicesMethodWhenEager()
     {
-        $service = 'Orchestra\Extension\TestCase\FooServiceProvider';
+        $service = FooServiceProvider::class;
         $manifestPath = '/var/www/laravel/bootstrap/cache';
 
         $mock = m::mock($service);
@@ -67,7 +67,7 @@ class ProviderRepositoryTest extends TestCase
      */
     public function testServicesMethodWhenDeferred()
     {
-        $service = 'Orchestra\Extension\TestCase\FooServiceProvider';
+        $service = FooServiceProvider::class;
         $manifestPath = '/var/www/laravel/bootstrap/cache';
 
         $mock = m::mock($service);
@@ -115,7 +115,7 @@ class ProviderRepositoryTest extends TestCase
      */
     public function testServicesMethodWhenManifestExists()
     {
-        $service = 'Orchestra\Extension\TestCase\FooServiceProvider';
+        $service = FooServiceProvider::class;
         $manifestPath = '/var/www/laravel/bootstrap/cache';
 
         $mock = m::mock($service);

@@ -70,6 +70,7 @@ trait Dispatchable
         }
 
         $this->extensions = new Collection();
+        $this->booted = false;
 
         return $this;
     }

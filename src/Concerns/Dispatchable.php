@@ -1,6 +1,6 @@
 <?php
 
-namespace Orchestra\Extension\Traits;
+namespace Orchestra\Extension\Concerns;
 
 use Closure;
 use Illuminate\Support\Collection;

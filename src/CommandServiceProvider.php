@@ -2,13 +2,6 @@
 
 namespace Orchestra\Extension;
 
-use Orchestra\Extension\Console\ResetCommand;
-use Orchestra\Extension\Console\DetectCommand;
-use Orchestra\Extension\Console\MigrateCommand;
-use Orchestra\Extension\Console\PublishCommand;
-use Orchestra\Extension\Console\RefreshCommand;
-use Orchestra\Extension\Console\ActivateCommand;
-use Orchestra\Extension\Console\DeactivateCommand;
 use Orchestra\Support\Providers\CommandServiceProvider as ServiceProvider;
 
 class CommandServiceProvider extends ServiceProvider
@@ -36,7 +29,7 @@ class CommandServiceProvider extends ServiceProvider
     protected function registerActivateCommand(): void
     {
         $this->app->singleton('orchestra.commands.extension.activate', function () {
-            return new ActivateCommand();
+            return new Console\ActivateCommand();
         });
     }
 
@@ -48,7 +41,7 @@ class CommandServiceProvider extends ServiceProvider
     protected function registerDeactivateCommand(): void
     {
         $this->app->singleton('orchestra.commands.extension.deactivate', function () {
-            return new DeactivateCommand();
+            return new Console\DeactivateCommand();
         });
     }
 
@@ -60,7 +53,7 @@ class CommandServiceProvider extends ServiceProvider
     protected function registerDetectCommand(): void
     {
         $this->app->singleton('orchestra.commands.extension.detect', function () {
-            return new DetectCommand();
+            return new Console\DetectCommand();
         });
     }
 
@@ -72,7 +65,7 @@ class CommandServiceProvider extends ServiceProvider
     protected function registerMigrateCommand(): void
     {
         $this->app->singleton('orchestra.commands.extension.migrate', function () {
-            return new MigrateCommand();
+            return new Console\MigrateCommand();
         });
     }
 
@@ -84,7 +77,7 @@ class CommandServiceProvider extends ServiceProvider
     protected function registerPublishCommand(): void
     {
         $this->app->singleton('orchestra.commands.extension.publish', function () {
-            return new PublishCommand();
+            return new Console\PublishCommand();
         });
     }
 
@@ -96,7 +89,7 @@ class CommandServiceProvider extends ServiceProvider
     protected function registerRefreshCommand(): void
     {
         $this->app->singleton('orchestra.commands.extension.refresh', function () {
-            return new RefreshCommand();
+            return new Console\RefreshCommand();
         });
     }
 
@@ -108,7 +101,7 @@ class CommandServiceProvider extends ServiceProvider
     protected function registerResetCommand(): void
     {
         $this->app->singleton('orchestra.commands.extension.reset', function () {
-            return new ResetCommand();
+            return new Console\ResetCommand();
         });
     }
 }

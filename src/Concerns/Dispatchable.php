@@ -26,7 +26,7 @@ trait Dispatchable
      *
      * @return $this
      */
-    public function boot(): self
+    public function boot()
     {
         // Extension should be activated only if we're not running under
         // safe mode (or debug mode). This is to ensure that developer have
@@ -63,7 +63,7 @@ trait Dispatchable
      *
      * @return $this
      */
-    public function finish(): self
+    public function finish()
     {
         foreach ($this->extensions as $name => $options) {
             $this->dispatcher->finish($name, $options);

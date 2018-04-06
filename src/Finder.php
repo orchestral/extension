@@ -106,7 +106,7 @@ class Finder implements FinderContract
      *
      * @return $this
      */
-    public function addPath(string $path): self
+    public function addPath(string $path)
     {
         $path = rtrim($path, '/');
 

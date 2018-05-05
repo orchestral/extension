@@ -6,8 +6,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Orchestra\Memory\Memorizable;
 use Illuminate\Support\Collection;
-use Orchestra\Extension\Traits\Operation;
-use Orchestra\Extension\Traits\Dispatchable;
 use Illuminate\Contracts\Container\Container;
 use Orchestra\Extension\Bootstrap\LoadExtension;
 use Orchestra\Contracts\Extension\Finder as FinderContract;
@@ -18,7 +16,9 @@ use Orchestra\Contracts\Extension\StatusChecker as StatusCheckerContract;
 
 class Factory implements FactoryContract
 {
-    use Dispatchable, Memorizable, Operation;
+    use Concerns\Dispatchable,
+        Concerns\Operation,
+        Memorizable;
 
     /**
      * Application instance.

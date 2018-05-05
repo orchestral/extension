@@ -2,20 +2,12 @@
 
 namespace Orchestra\Extension\Traits;
 
-use Orchestra\Extension\RouteGenerator;
-use Illuminate\Contracts\Foundation\Application;
+use Orchestra\Extension\Concerns\DomainAware as Concern;
 
+/**
+ * @deprecated v3.6.0
+ */
 trait DomainAware
 {
-    /**
-     * Register domain awareness from configuration.
-     *
-     * @return void
-     */
-    public function registerDomainAwareness()
-    {
-        $this->app->resolving(RouteGenerator::class, function (RouteGenerator $generator, Application $app) {
-            $generator->setBaseUrl($app->make('config')->get('app.url'));
-        });
-    }
+    use Concern;
 }

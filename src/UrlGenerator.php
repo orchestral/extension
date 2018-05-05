@@ -97,7 +97,7 @@ class UrlGenerator implements UrlGeneratorContract
      *
      * @return $this
      */
-    public function handle(string $handles): self
+    public function handle(string $handles)
     {
         // If the handles doesn't start as "//some.domain.com/foo" we should
         // assume that it doesn't belong to any subdomain, otherwise we
@@ -253,7 +253,7 @@ class UrlGenerator implements UrlGeneratorContract
      *
      * @return $this
      */
-    public function setBaseUrl(string $root): self
+    public function setBaseUrl(string $root)
     {
         if (! empty($root)) {
             $this->resolveBaseUrlFrom($root);

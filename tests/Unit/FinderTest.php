@@ -1,6 +1,6 @@
 <?php
 
-namespace Orchestra\Extension\TestCase;
+namespace Orchestra\Extension\TestCase\Unit;
 
 use Mockery as m;
 use Orchestra\Extension\Finder;
@@ -26,6 +26,7 @@ class FinderTest extends TestCase
     {
         $config['path.app'] = '/var/www/laravel/app';
         $config['path.base'] = '/var/www/laravel';
+        $config['path.composer'] = '/var/www/laravel/composer.lock';
 
         $stub = new Finder(m::mock('\Illuminate\Filesystem\Filesystem'), $config);
 
@@ -55,6 +56,7 @@ class FinderTest extends TestCase
     {
         $config['path.app'] = '/var/www/laravel/app';
         $config['path.base'] = '/var/www/laravel';
+        $config['path.composer'] = '/var/www/laravel/composer.lock';
 
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
@@ -65,6 +67,7 @@ class FinderTest extends TestCase
                 ->andReturn(['/var/www/laravel/vendor/laravel/framework/orchestra.json', '/var/www/laravel/orchestra.js'])
             ->shouldReceive('get')->once()->with('/var/www/laravel/vendor/laravel/framework/orchestra.json')
                 ->andReturn('{"name": "laravel/framework", "description": "Laravel Framework", "path": "vendor::laravel/framework"}')
+            ->shouldReceive('exists')->once()->with('/var/www/laravel/composer.lock')->andReturn(true)
             ->shouldReceive('get')->once()->with('/var/www/laravel/composer.lock')
                 ->andReturn('{"packages":[{"name": "laravel/framework", "description": "Laravel Framework", "version": "v5.1.10"}]}');
 
@@ -112,6 +115,7 @@ class FinderTest extends TestCase
     {
         $config['path.app'] = '/var/www/laravel/app';
         $config['path.base'] = '/var/www/laravel';
+        $config['path.composer'] = '/var/www/laravel/composer.lock';
 
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
@@ -120,6 +124,7 @@ class FinderTest extends TestCase
             ->shouldReceive('get')->once()->with('/var/www/laravel/app/orchestra.json')->andReturn('{"name":"Application"}')
             ->shouldReceive('glob')->once()->with('/var/www/laravel/vendor/*/*/orchestra.json')
                 ->andReturn(['/var/www/laravel/vendor/orchestra/foundation/orchestra.json'])
+            ->shouldReceive('exists')->once()->with('/var/www/laravel/composer.lock')->andReturn(true)
             ->shouldReceive('get')->once()->with('/var/www/laravel/composer.lock')
                 ->andReturn('{"packages":[{"name": "laravel/framework", "description": "Laravel Framework", "version": "v5.1.10"}]}');
 
@@ -137,10 +142,12 @@ class FinderTest extends TestCase
     {
         $config['path.app'] = '/var/www/laravel/app';
         $config['path.base'] = '/var/www/laravel';
+        $config['path.composer'] = '/var/www/laravel/composer.lock';
 
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
 
-        $files->shouldReceive('get')->once()->with('/var/www/laravel/composer.lock')
+        $files->shouldReceive('exists')->once()->with('/var/www/laravel/composer.lock')->andReturn(true)
+            ->shouldReceive('get')->once()->with('/var/www/laravel/composer.lock')
                 ->andReturn('{"packages":[{"name": "laravel/framework", "description": "Laravel Framework", "version": "v5.1.10"}]}')
                 ->shouldReceive('glob')->once()->with('/var/www/laravel/app/orchestra.json')->andReturn([])
             ->shouldReceive('glob')->once()->with('/var/www/laravel/vendor/*/*/orchestra.json')

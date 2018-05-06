@@ -8,6 +8,7 @@ Extension Component allows components or packages to be added dynamically to Orc
 [![Total Downloads](https://poser.pugx.org/orchestra/extension/downloads)](https://packagist.org/packages/orchestra/extension)
 [![Latest Unstable Version](https://poser.pugx.org/orchestra/extension/v/unstable)](//packagist.org/packages/orchestra/extension)
 [![License](https://poser.pugx.org/orchestra/extension/license)](https://packagist.org/packages/orchestra/extension)
+[![Coverage Status](https://coveralls.io/repos/github/orchestral/extension/badge.svg?branch=master)](https://coveralls.io/github/orchestral/extension?branch=master)
 
 ## Table of Content
 
@@ -30,7 +31,7 @@ Laravel    | Extension
  5.3.x     | 3.3.x
  5.4.x     | 3.4.x
  5.5.x     | 3.5.x
- 5.6.x     | 3.6.x@dev
+ 5.6.x     | 3.6.x
  5.7.x     | 3.7.x@dev
 
 ## Installation

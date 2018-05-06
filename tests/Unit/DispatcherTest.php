@@ -66,13 +66,13 @@ class DispatcherTest extends TestCase
 
         $config->shouldReceive('set')->once()
                 ->with('orchestra/extension::handles.laravel/framework', 'laravel')->andReturnNull();
-        $event->shouldReceive('fire')->once()
+        $event->shouldReceive('dispatch')->once()
                 ->with('extension.started: laravel/framework', [$options1])->andReturnNull()
-            ->shouldReceive('fire')->once()
+            ->shouldReceive('dispatch')->once()
                 ->with('extension.started', ['laravel/framework', $options1])->andReturnNull()
-            ->shouldReceive('fire')->once()
+            ->shouldReceive('dispatch')->once()
                 ->with('extension.booted: laravel/framework', [$options1])->andReturnNull()
-            ->shouldReceive('fire')->once()
+            ->shouldReceive('dispatch')->once()
                 ->with('extension.booted', ['laravel/framework', $options1])->andReturnNull();
         $files->shouldReceive('isFile')->once()->with('/foo/app/hello.php')->andReturn(true)
             ->shouldReceive('isFile')->once()->with('/foo/app/start.php')->andReturn(true)
@@ -85,13 +85,13 @@ class DispatcherTest extends TestCase
                     ->with(['Laravel\FrameworkServiceProvider'])->andReturn(true)
                 ->shouldReceive('writeManifest')->once()->andReturnNull();
 
-        $event->shouldReceive('fire')->once()
+        $event->shouldReceive('dispatch')->once()
                 ->with('extension.started: app', [$options2])->andReturnNull()
-            ->shouldReceive('fire')->once()
+            ->shouldReceive('dispatch')->once()
                 ->with('extension.started', ['app', $options2])->andReturnNull()
-            ->shouldReceive('fire')->once()
+            ->shouldReceive('dispatch')->once()
                 ->with('extension.booted: app', [$options2])->andReturnNull()
-            ->shouldReceive('fire')->once()
+            ->shouldReceive('dispatch')->once()
                 ->with('extension.booted', ['app', $options2])->andReturnNull();
         $files->shouldReceive('isFile')->once()
                 ->with('/foo/app/src/orchestra.php')->andReturn(false)
@@ -124,10 +124,10 @@ class DispatcherTest extends TestCase
         $files = m::mock('\Illuminate\Filesystem\Filesystem');
         $finder = m::mock('\Orchestra\Extension\Finder');
 
-        $event->shouldReceive('fire')->once()
+        $event->shouldReceive('dispatch')->once()
                 ->with('extension.done: laravel/framework', [['foo']])
                 ->andReturnNull()
-            ->shouldReceive('fire')->once()
+            ->shouldReceive('dispatch')->once()
                 ->with('extension.done', ['laravel/framework', ['foo']])
                 ->andReturnNull();
 

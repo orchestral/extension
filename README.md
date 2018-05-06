@@ -8,6 +8,7 @@ Extension Component allows components or packages to be added dynamically to Orc
 [![Total Downloads](https://poser.pugx.org/orchestra/extension/downloads)](https://packagist.org/packages/orchestra/extension)
 [![Latest Unstable Version](https://poser.pugx.org/orchestra/extension/v/unstable)](//packagist.org/packages/orchestra/extension)
 [![License](https://poser.pugx.org/orchestra/extension/license)](https://packagist.org/packages/orchestra/extension)
+[![Coverage Status](https://coveralls.io/repos/github/orchestral/extension/badge.svg?branch=3.6)](https://coveralls.io/github/orchestral/extension?branch=3.6)
 
 ## Table of Content
 

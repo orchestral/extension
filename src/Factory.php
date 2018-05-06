@@ -81,7 +81,7 @@ class Factory implements FactoryContract
      */
     public function detect(): Collection
     {
-        $this->events->fire('orchestra.extension: detecting');
+        $this->events->dispatch('orchestra.extension: detecting');
 
         $extensions = $this->finder()->detect();
 
@@ -151,8 +151,8 @@ class Factory implements FactoryContract
         $this->app->make('orchestra.publisher.migrate')->extension($name);
         $this->app->make('orchestra.publisher.asset')->extension($name);
 
-        $this->events->fire('orchestra.publishing', [$name]);
-        $this->events->fire("orchestra.publishing: {$name}");
+        $this->events->dispatch('orchestra.publishing', [$name]);
+        $this->events->dispatch("orchestra.publishing: {$name}");
     }
 
     /**

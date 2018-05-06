@@ -256,8 +256,8 @@ class Dispatcher implements DispatcherContract
      */
     protected function fireEvent(string $name, array $options, string $type = 'started'): void
     {
-        $this->dispatcher->fire("extension.{$type}", [$name, $options]);
-        $this->dispatcher->fire("extension.{$type}: {$name}", [$options]);
+        $this->dispatcher->dispatch("extension.{$type}", [$name, $options]);
+        $this->dispatcher->dispatch("extension.{$type}: {$name}", [$options]);
     }
 
     /**

@@ -45,7 +45,7 @@ class FactoryTest extends TestCase
     public function setUp()
     {
         $this->app = new Container();
-        $this->events = m::mock('\Orchestra\Contracts\Events\Dispatcher');
+        $this->events = m::mock('\Illuminate\Contracts\Events\Dispatcher');
         $this->dispatcher = m::mock('\Orchestra\Extension\Dispatcher');
         $this->status = m::mock('\Orchestra\Extension\StatusChecker');
 
@@ -130,9 +130,9 @@ class FactoryTest extends TestCase
                 ->with('extensions.active', ['laravel/framework' => []])->andReturn(true);
         $migrator->shouldReceive('extension')->once()->with('laravel/framework')->andReturn(true);
         $asset->shouldReceive('extension')->once()->with('laravel/framework')->andReturn(true);
-        $events->shouldReceive('fire')->once()
+        $events->shouldReceive('dispatch')->once()
                 ->with('orchestra.publishing', ['laravel/framework'])->andReturn(true)
-            ->shouldReceive('fire')->once()
+            ->shouldReceive('dispatch')->once()
                 ->with('orchestra.publishing: laravel/framework')->andReturn(true);
 
         $stub = new Factory($app, $dispatcher, $this->status);
@@ -205,7 +205,7 @@ class FactoryTest extends TestCase
 
         $extension = ['laravel/framework' => $options1, 'app' => $options2];
 
-        $events->shouldReceive('fire')->once()->with('orchestra.extension: booted')->andReturnNull();
+        $events->shouldReceive('dispatch')->once()->with('orchestra.extension: booted')->andReturnNull();
         $memory->shouldReceive('get')->once()->with('extensions.available', [])->andReturn($extension)
             ->shouldReceive('get')->once()->with('extensions.active', [])->andReturn($extension);
         $dispatcher->shouldReceive('register')->once()->with('laravel/framework', $options1)->andReturnNull()
@@ -248,7 +248,7 @@ class FactoryTest extends TestCase
             ],
         ]);
 
-        $events->shouldReceive('fire')->once()->with('orchestra.extension: detecting')->andReturnNull();
+        $events->shouldReceive('dispatch')->once()->with('orchestra.extension: detecting')->andReturnNull();
         $finder->shouldReceive('detect')->once()->andReturn($extensions);
         $memory->shouldReceive('put')->once()->with('extensions.available', ['foo' => ['name' => 'Foo']])->andReturnNull();
 
@@ -410,7 +410,7 @@ class FactoryTest extends TestCase
 
         $extension = ['laravel/framework' => $options1, 'app' => $options2];
 
-        $events->shouldReceive('fire')->once()->with('orchestra.extension: booted')->andReturnNull();
+        $events->shouldReceive('dispatch')->once()->with('orchestra.extension: booted')->andReturnNull();
         $memory->shouldReceive('get')->once()->with('extensions.available', [])->andReturn($extension)
             ->shouldReceive('get')->once()->with('extensions.active', [])->andReturn($extension);
         $dispatcher->shouldReceive('register')->once()->with('laravel/framework', $options1)->andReturnNull()

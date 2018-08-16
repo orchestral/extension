@@ -4,7 +4,7 @@ namespace Orchestra\Extension\Console;
 
 use Illuminate\Support\Fluent;
 use Illuminate\Console\ConfirmableTrait;
-use Orchestra\Extension\Processor\Deactivator as Processor;
+use Orchestra\Extension\Processors\Deactivator as Processor;
 use Orchestra\Contracts\Extension\Listener\Deactivator as Listener;
 
 class DeactivateCommand extends ExtensionCommand implements Listener
@@ -40,7 +40,7 @@ class DeactivateCommand extends ExtensionCommand implements Listener
             return;
         }
 
-        return $deactivator->deactivate($this, new Fluent(['name' => $this->argument('name')]));
+        return $deactivator($this, new Fluent(['name' => $this->argument('name')]));
     }
 
     /**

@@ -4,7 +4,7 @@ namespace Orchestra\Extension\Console;
 
 use Illuminate\Support\Fluent;
 use Illuminate\Console\ConfirmableTrait;
-use Orchestra\Extension\Processor\Activator as Processor;
+use Orchestra\Extension\Processors\Activator as Processor;
 use Orchestra\Contracts\Extension\Listener\Activator as Listener;
 
 class ActivateCommand extends ExtensionCommand implements Listener
@@ -30,7 +30,7 @@ class ActivateCommand extends ExtensionCommand implements Listener
     /**
      * Execute the console command.
      *
-     * @param  \Orchestra\Extension\Processor\Activator  $activator
+     * @param  \Orchestra\Extension\Processors\Activator  $activator
      *
      * @return void
      */
@@ -40,7 +40,7 @@ class ActivateCommand extends ExtensionCommand implements Listener
             return;
         }
 
-        return $activator->activate($this, new Fluent(['name' => $this->argument('name')]));
+        return $activator($this, new Fluent(['name' => $this->argument('name')]));
     }
 
     /**

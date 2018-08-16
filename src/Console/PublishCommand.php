@@ -4,7 +4,7 @@ namespace Orchestra\Extension\Console;
 
 use Illuminate\Support\Fluent;
 use Illuminate\Console\ConfirmableTrait;
-use Orchestra\Extension\Processor\Migrator as Processor;
+use Orchestra\Extension\Processors\Migrator as Processor;
 use Orchestra\Contracts\Extension\Listener\Migrator as Listener;
 
 class PublishCommand extends ExtensionCommand implements Listener
@@ -40,7 +40,7 @@ class PublishCommand extends ExtensionCommand implements Listener
             return;
         }
 
-        return $migrator->migrate($this, new Fluent(['name' => $this->argument('name')]));
+        return $migrator($this, new Fluent(['name' => $this->argument('name')]));
     }
 
     /**

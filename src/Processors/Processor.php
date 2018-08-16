@@ -1,6 +1,6 @@
 <?php
 
-namespace Orchestra\Extension\Processor;
+namespace Orchestra\Extension\Processors;
 
 use Closure;
 use Illuminate\Support\Fluent;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Orchestra\Extension\Processor;
+namespace Orchestra\Extension\Processors;
 
 use Illuminate\Support\Fluent;
 use Orchestra\Contracts\Extension\Factory;
@@ -36,5 +36,18 @@ class Activator extends Processor implements Command
         return function (Factory $factory, $name) {
             $factory->activate($name);
         };
+    }
+
+    /**
+     * Execute processor using invoke.
+     *
+     * @param  \Orchestra\Contracts\Extension\Listener\Activator  $listener
+     * @param  \Illuminate\Support\Fluent  $extension
+     *
+     * @return mixed
+     */
+    public function __invoke(Listener $listener, Fluent $extension)
+    {
+        return $this->activate($listener, $extension);
     }
 }

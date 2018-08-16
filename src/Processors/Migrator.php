@@ -1,6 +1,6 @@
 <?php
 
-namespace Orchestra\Extension\Processor;
+namespace Orchestra\Extension\Processors;
 
 use Illuminate\Support\Fluent;
 use Orchestra\Contracts\Extension\Factory;
@@ -23,7 +23,7 @@ class Migrator extends Processor implements Command
             return $listener->abortWhenRequirementMismatched();
         }
 
-        return $this->execute($listener, 'migration', $extension, $this->getMigrationClosure());
+        return $this->execute($listener, 'migration', $extension, $this->getMigrationResolver());
     }
 
     /**
@@ -31,10 +31,23 @@ class Migrator extends Processor implements Command
      *
      * @return callable
      */
-    protected function getMigrationClosure()
+    protected function getMigrationResolver()
     {
         return function (Factory $factory, $name) {
             $factory->publish($name);
         };
+    }
+
+    /**
+     * Execute processor using invoke.
+     *
+     * @param  \Orchestra\Contracts\Extension\Listener\Deactivator  $listener
+     * @param  \Illuminate\Support\Fluent  $extension
+     *
+     * @return mixed
+     */
+    public function __invoke(Listener $listener, Fluent $extension)
+    {
+        return $this->migrate($listener, $extension);
     }
 }

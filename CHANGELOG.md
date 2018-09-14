@@ -2,6 +2,18 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `orchestra/extension`.
 
+## 3.7.0
+
+Released: 2018-09-14
+
+### Changes
+
+* Update support for Laravel Framework v5.7.
+
+### Removed
+
+* Remove deprecated `Orchestra\Extension\Traits\DomainAware`, use `Orchestra\Extension\Concerns\DomainAware` instead.
+
 ## 3.6.0
 
 Released: 2018-05-06

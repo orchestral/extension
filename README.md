@@ -22,9 +22,7 @@ Extension Component allows components or packages to be added dynamically to Orc
 
 Laravel    | Extension
 :----------|:----------
- 4.0.x     | 2.0.x
- 4.1.x     | 2.1.x
- 4.2.x     | 2.2.x
+ 4.x.x     | 2.x.x
  5.0.x     | 3.0.x
  5.1.x     | 3.1.x
  5.2.x     | 3.2.x
@@ -32,7 +30,7 @@ Laravel    | Extension
  5.4.x     | 3.4.x
  5.5.x     | 3.5.x
  5.6.x     | 3.6.x
- 5.7.x     | 3.7.x@dev
+ 5.7.x     | 3.7.x
 
 ## Installation
 
@@ -41,7 +39,7 @@ To install through composer, simply put the following in your `composer.json` fi
 ```json
 {
     "require": {
-        "orchestra/extension": "~3.0"
+        "orchestra/extension": "^3.0"
     }
 }
 ```
@@ -52,7 +50,7 @@ And then run `composer install` from the terminal.
 
 Above installation can also be simplify by using the following command:
 
-    composer require "orchestra/extension=~3.0"
+    composer require "orchestra/extension=^3.0"
 
 ## Configuration
 

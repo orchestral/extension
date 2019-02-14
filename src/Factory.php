@@ -116,7 +116,7 @@ class Factory implements FactoryContract
     public function option(string $name, string $option, $default = null)
     {
         if (! isset($this->extensions[$name])) {
-            return value($default);
+            return \value($default);
         }
 
         return Arr::get($this->extensions[$name], $option, $default);
@@ -133,7 +133,7 @@ class Factory implements FactoryContract
     {
         $finder = $this->finder();
         $memory = $this->memory;
-        $basePath = rtrim($memory->get("extensions.available.{$name}.path", $name), '/');
+        $basePath = \rtrim($memory->get("extensions.available.{$name}.path", $name), '/');
         $path = $finder->resolveExtensionPath("{$basePath}/public");
 
         return $this->isWritableWithAsset($name, $path);
@@ -210,7 +210,7 @@ class Factory implements FactoryContract
         $targetPath = "{$publicPath}/packages/{$name}";
 
         if (Str::contains($name, '/') && ! $files->isDirectory($targetPath)) {
-            list($vendor) = explode('/', $name);
+            list($vendor) = \explode('/', $name);
             $targetPath = "{$publicPath}/packages/{$vendor}";
         }
 

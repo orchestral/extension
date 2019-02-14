@@ -103,7 +103,7 @@ abstract class Plugin
      */
     protected function bootstrapMenuHandler(Application $app)
     {
-        if (! is_null($this->menu)) {
+        if (! \is_null($this->menu)) {
             $app->make('events')
                 ->listen('orchestra.ready: admin', $this->menu);
         }
@@ -123,7 +123,7 @@ abstract class Plugin
 
         $this->attachListenerOn($app, 'form', function () use ($placeholder) {
             foreach ($this->sidebar as $name => $view) {
-                $placeholder->add($name)->value(view($view));
+                $placeholder->add($name)->value(\view($view));
             }
         });
     }

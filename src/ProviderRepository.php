@@ -149,7 +149,7 @@ class ProviderRepository
      */
     public function shouldRecompile()
     {
-        return array_keys($this->manifest) != array_keys($this->compiled);
+        return \array_keys($this->manifest) != \array_keys($this->compiled);
     }
 
     /**
@@ -183,7 +183,7 @@ class ProviderRepository
      */
     protected function writeManifestFile(array $manifest = [])
     {
-        $this->files->put($this->manifestPath, '<?php return '.var_export($manifest, true).';');
+        $this->files->put($this->manifestPath, '<?php return '.\var_export($manifest, true).';');
     }
 
     /**

@@ -43,8 +43,6 @@ class UrlGenerator implements UrlGeneratorContract
      */
     protected $basePrefix;
 
-
-
     /**
      * The URL schema to be forced on all generated URLs.
      *
@@ -71,7 +69,7 @@ class UrlGenerator implements UrlGeneratorContract
      */
     protected function getScheme(?bool $secure): string
     {
-        if (is_null($secure)) {
+        if (\is_null($secure)) {
             return $this->forceSchema ?: $this->request->getScheme().'://';
         }
 
@@ -102,18 +100,18 @@ class UrlGenerator implements UrlGeneratorContract
         // If the handles doesn't start as "//some.domain.com/foo" we should
         // assume that it doesn't belong to any subdomain, otherwise we
         // need to split the value to "some.domain.com" and "foo".
-        if (is_null($handles) || ! Str::startsWith($handles, ['//', 'http://', 'https://'])) {
+        if (\is_null($handles) || ! Str::startsWith($handles, ['//', 'http://', 'https://'])) {
             $this->prefix = $handles;
         } else {
-            $handles = substr(str_replace(['http://', 'https://'], '//', $handles), 2);
-            $fragments = explode('/', $handles, 2);
-            $this->domain = array_shift($fragments);
-            $this->prefix = array_shift($fragments);
+            $handles = \substr(\str_replace(['http://', 'https://'], '//', $handles), 2);
+            $fragments = \explode('/', $handles, 2);
+            $this->domain = \array_shift($fragments);
+            $this->prefix = \array_shift($fragments);
         }
 
         // It is possible that prefix would be null, in this case assume
         // it handle the main path under the domain.
-        ! is_null($this->prefix) || $this->prefix = '/';
+        ! \is_null($this->prefix) || $this->prefix = '/';
 
         return $this;
     }
@@ -130,10 +128,10 @@ class UrlGenerator implements UrlGeneratorContract
         $pattern = $this->domain;
         $baseUrl = $this->getBaseUrl();
 
-        if (is_null($pattern) && $forceBase === true) {
+        if (\is_null($pattern) && $forceBase === true) {
             $pattern = $baseUrl;
         } elseif (Str::contains($pattern, '{{domain}}')) {
-            $pattern = str_replace('{{domain}}', $baseUrl, $pattern);
+            $pattern = \str_replace('{{domain}}', $baseUrl, $pattern);
         }
 
         return $pattern;
@@ -152,7 +150,7 @@ class UrlGenerator implements UrlGeneratorContract
             'prefix' => $this->prefix($forceBase),
         ];
 
-        if (! is_null($domain = $this->domain($forceBase))) {
+        if (! \is_null($domain = $this->domain($forceBase))) {
             $group['domain'] = $domain;
         }
 
@@ -171,9 +169,9 @@ class UrlGenerator implements UrlGeneratorContract
         $path = $this->path();
         $prefix = $this->prefix();
 
-        foreach (func_get_args() as $pattern) {
+        foreach (\func_get_args() as $pattern) {
             $pattern = ($pattern === '*' ? "{$prefix}*" : "{$prefix}/{$pattern}");
-            $pattern = trim($pattern, '/');
+            $pattern = \trim($pattern, '/');
 
             empty($pattern) && $pattern = '/';
 
@@ -192,7 +190,7 @@ class UrlGenerator implements UrlGeneratorContract
      */
     public function path(): string
     {
-        $pattern = trim($this->request->path(), '/');
+        $pattern = \trim($this->request->path(), '/');
 
         return $pattern === '' ? '/' : $pattern;
     }
@@ -206,11 +204,11 @@ class UrlGenerator implements UrlGeneratorContract
      */
     public function prefix(bool $forceBase = false): string
     {
-        $pattern = trim($this->prefix, '/');
+        $pattern = \trim($this->prefix, '/');
 
-        if (is_null($this->domain) && $forceBase === true) {
-            $pattern = trim($this->basePrefix, '/')."/{$pattern}";
-            $pattern = trim($pattern, '/');
+        if (\is_null($this->domain) && $forceBase === true) {
+            $pattern = \trim($this->basePrefix, '/')."/{$pattern}";
+            $pattern = \trim($pattern, '/');
         }
 
         empty($pattern) && $pattern = '/';
@@ -226,10 +224,10 @@ class UrlGenerator implements UrlGeneratorContract
     public function root(): string
     {
         $scheme = $this->getScheme(null);
-        $domain = trim($this->domain(true), '/');
+        $domain = \trim($this->domain(true), '/');
         $prefix = $this->prefix(true);
 
-        return trim("{$scheme}{$domain}/{$prefix}", '/');
+        return \trim("{$scheme}{$domain}/{$prefix}", '/');
     }
 
     /**
@@ -239,7 +237,7 @@ class UrlGenerator implements UrlGeneratorContract
      */
     public function getBaseUrl(): string
     {
-        if (is_null($this->baseUrl)) {
+        if (\is_null($this->baseUrl)) {
             $this->resolveBaseUrlFrom($this->request->root());
         }
 
@@ -272,8 +270,8 @@ class UrlGenerator implements UrlGeneratorContract
     public function to(string $to): string
     {
         $root = $this->root();
-        $to = trim($to, '/');
-        $pattern = trim("{$root}/{$to}", '/');
+        $to = \trim($to, '/');
+        $pattern = \trim("{$root}/{$to}", '/');
 
         return $pattern !== '/' ? $pattern : '';
     }
@@ -298,13 +296,13 @@ class UrlGenerator implements UrlGeneratorContract
     protected function resolveBaseUrlFrom(?string $root): void
     {
         // Build base URL and prefix.
-        $baseUrl = ltrim(str_replace(['https://', 'http://'], '', $root), '/');
-        $base = explode('/', $baseUrl, 2);
+        $baseUrl = \ltrim(\str_replace(['https://', 'http://'], '', $root), '/');
+        $base = \explode('/', $baseUrl, 2);
 
-        if (count($base) > 1) {
-            $this->basePrefix = array_pop($base);
+        if (\count($base) > 1) {
+            $this->basePrefix = \array_pop($base);
         }
 
-        $this->baseUrl = array_shift($base);
+        $this->baseUrl = \array_shift($base);
     }
 }

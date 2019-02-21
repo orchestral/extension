@@ -42,7 +42,7 @@ class FactoryTest extends TestCase
     /**
      * Setup the test environment.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->app = new Container();
         $this->events = m::mock('\Illuminate\Contracts\Events\Dispatcher');
@@ -55,7 +55,7 @@ class FactoryTest extends TestCase
     /**
      * Teardown the test environment.
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->app);
         unset($this->events);

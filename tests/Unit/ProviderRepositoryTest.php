@@ -12,7 +12,7 @@ class ProviderRepositoryTest extends TestCase
     /**
      * Teardown the test environment.
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }

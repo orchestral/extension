@@ -12,7 +12,7 @@ class FinderTest extends TestCase
     /**
      * Teardown the test environment.
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }
@@ -109,10 +109,12 @@ class FinderTest extends TestCase
      * Test Orchestra\Extension\Finder::detect() method giveb reserved name
      * throws exception.
      *
-     * @expectedException \RuntimeException
+     * @test
      */
     public function testDetectMethodGivenReservedNameThrowsException()
     {
+        $this->expectException('RuntimeException');
+
         $config['path.app'] = '/var/www/laravel/app';
         $config['path.base'] = '/var/www/laravel';
         $config['path.composer'] = '/var/www/laravel/composer.lock';
@@ -136,10 +138,12 @@ class FinderTest extends TestCase
      * Test Orchestra\Extension\Finder::detect() method throws
      * exception when unable to parse json manifest file.
      *
-     * @expectedException \Orchestra\Contracts\Support\ManifestRuntimeException
+     * @test
      */
     public function testDetectMethodThrowsException()
     {
+        $this->expectException('Orchestra\Contracts\Support\ManifestRuntimeException');
+
         $config['path.app'] = '/var/www/laravel/app';
         $config['path.base'] = '/var/www/laravel';
         $config['path.composer'] = '/var/www/laravel/composer.lock';
@@ -227,6 +231,7 @@ class FinderTest extends TestCase
             '/var/www/laravel/vendor/*/*',
             'hello' => '/var/www/laravel/modules',
         ];
+
         $this->assertEquals($expected, $paths->getValue($stub));
     }
 

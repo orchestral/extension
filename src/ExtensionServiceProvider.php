@@ -127,7 +127,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $path = realpath(__DIR__.'/../');
+        $path = \realpath(__DIR__.'/../');
 
         $this->addConfigComponent('orchestra/extension', 'orchestra/extension', "{$path}/resources/config");
     }

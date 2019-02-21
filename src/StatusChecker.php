@@ -72,7 +72,7 @@ class StatusChecker implements StatusCheckerContract
      */
     public function mode(): string
     {
-        if (is_null($this->status)) {
+        if (\is_null($this->status)) {
             $this->verifyStatus();
         }
 

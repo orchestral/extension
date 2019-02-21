@@ -90,7 +90,7 @@ trait Dispatchable
         // process due to complexity of extension boot process.
         foreach ($active as $name => $options) {
             if (isset($available[$name])) {
-                $config = array_merge(
+                $config = \array_merge(
                     (array) $available[$name]['config'] ?? [],
                     (array) $options['config'] ?? []
                 );

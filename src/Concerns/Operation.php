@@ -27,7 +27,7 @@ trait Operation
      */
     protected function activating(string $name): bool
     {
-        if (is_null($active = $this->refresh($name))) {
+        if (\is_null($active = $this->refresh($name))) {
             return false;
         }
 
@@ -48,7 +48,7 @@ trait Operation
      */
     public function activated(string $name): bool
     {
-        return is_array($this->memory->get("extensions.active.{$name}"));
+        return \is_array($this->memory->get("extensions.active.{$name}"));
     }
 
     /**
@@ -60,7 +60,7 @@ trait Operation
      */
     public function available(string $name): bool
     {
-        return is_array($this->memory->get("extensions.available.{$name}"));
+        return \is_array($this->memory->get("extensions.available.{$name}"));
     }
 
     /**
@@ -105,7 +105,7 @@ trait Operation
         // Append the activated extension to active extensions, and also
         // publish the extension (migrate the database and publish the
         // asset).
-        if (! is_null($handles = $active[$name]['config']['handles'] ?? null)) {
+        if (! \is_null($handles = $active[$name]['config']['handles'] ?? null)) {
             Arr::set($available, "{$name}.config.handles", $handles);
         }
 

@@ -159,7 +159,7 @@ class Dispatcher implements DispatcherContract
     {
         $handles = $options['config']['handles'] ?? null;
 
-        if (! is_null($handles)) {
+        if (! \is_null($handles)) {
             $this->config->set("orchestra/extension::handles.{$name}", $handles);
         }
     }
@@ -189,7 +189,7 @@ class Dispatcher implements DispatcherContract
     {
         $plugin = $options['plugin'] ?? null;
 
-        ! is_null($plugin) && $this->app->make($plugin)->bootstrap($this->app);
+        ! \is_null($plugin) && $this->app->make($plugin)->bootstrap($this->app);
     }
 
     /**
@@ -216,8 +216,8 @@ class Dispatcher implements DispatcherContract
      */
     public function start(string $name, array $options): void
     {
-        $basePath = rtrim($options['path'], '/');
-        $sourcePath = rtrim($options['source-path'] ?? $basePath, '/');
+        $basePath = \rtrim($options['path'], '/');
+        $sourcePath = \rtrim($options['source-path'] ?? $basePath, '/');
         $autoload = $options['autoload'] ?? [];
 
         $search = ['source-path::', 'app::/'];
@@ -274,14 +274,13 @@ class Dispatcher implements DispatcherContract
                 return $path;
             }
 
-            return 'source-path::'.ltrim($path, '/');
+            return 'source-path::'.\ltrim($path, '/');
         };
 
-        $paths = array_map($resolver, $autoload);
+        $paths = \array_map($resolver, $autoload);
 
-        return array_merge(
-            $paths,
-            ['source-path::src/orchestra.php', 'source-path::orchestra.php']
+        return \array_merge(
+            $paths, ['source-path::src/orchestra.php', 'source-path::orchestra.php']
         );
     }
 

@@ -4,8 +4,9 @@ namespace Orchestra\Extension;
 
 use Illuminate\Contracts\Foundation\Application;
 use Orchestra\Support\Providers\ServiceProvider;
+use Illuminate\Contracts\Support\RegistrableProvider;
 
-class ExtensionServiceProvider extends ServiceProvider
+class ExtensionServiceProvider extends ServiceProvider implements RegistrableProvider
 {
     /**
      * Register the service provider.
@@ -44,9 +45,9 @@ class ExtensionServiceProvider extends ServiceProvider
             $status = $app->make('orchestra.extension.status');
             $provider = $app->make('orchestra.extension.provider');
 
-            $dispatcher = new Dispatcher($app, $config, $events, $files, $finder, $provider);
-
-            return new Factory($app, $dispatcher, $status);
+            return new Factory(
+                $app, new Dispatcher($app, $config, $events, $files, $finder, $provider), $status
+            );
         });
     }
 
@@ -121,18 +122,6 @@ class ExtensionServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap the application events.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        $path = \realpath(__DIR__.'/../');
-
-        $this->addConfigComponent('orchestra/extension', 'orchestra/extension', "{$path}/resources/config");
-    }
-
-    /**
      * Register extension events.
      *
      * @return void
@@ -142,5 +131,17 @@ class ExtensionServiceProvider extends ServiceProvider
         $this->app->terminating(function () {
             $this->app->make('orchestra.extension')->finish();
         });
+    }
+
+    /**
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $path = \realpath(__DIR__.'/../');
+
+        $this->addConfigComponent('orchestra/extension', 'orchestra/extension', "{$path}/resources/config");
     }
 }

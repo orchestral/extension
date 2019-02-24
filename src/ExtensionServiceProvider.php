@@ -4,9 +4,8 @@ namespace Orchestra\Extension;
 
 use Illuminate\Contracts\Foundation\Application;
 use Orchestra\Support\Providers\ServiceProvider;
-use Illuminate\Contracts\Support\RegistrableProvider;
 
-class ExtensionServiceProvider extends ServiceProvider implements RegistrableProvider
+class ExtensionServiceProvider extends ServiceProvider
 {
     /**
      * Register the service provider.

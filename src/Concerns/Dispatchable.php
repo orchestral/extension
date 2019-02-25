@@ -65,9 +65,9 @@ trait Dispatchable
      */
     public function finish()
     {
-        foreach ($this->extensions as $name => $options) {
+        $this->extensions->each(function ($options, $name) {
             $this->dispatcher->finish($name, $options);
-        }
+        });
 
         $this->extensions = new Collection();
         $this->booted = false;
@@ -97,7 +97,7 @@ trait Dispatchable
 
                 $options['config'] = $config;
 
-                $this->extensions[$name] = $options;
+                $this->extensions->put($name, $options);
                 $this->dispatcher->register($name, $options);
             }
         }

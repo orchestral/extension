@@ -3,6 +3,7 @@
 namespace Orchestra\Extension;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Config\Repository as Config;
@@ -218,16 +219,16 @@ class Dispatcher implements DispatcherContract
     {
         $basePath = \rtrim($options['path'], '/');
         $sourcePath = \rtrim($options['source-path'] ?? $basePath, '/');
-        $autoload = $options['autoload'] ?? [];
 
         $search = ['source-path::', 'app::/'];
         $replacement = ["{$sourcePath}/", 'app::'];
 
         // By now, extension should already exist as an extension. We should
         // be able start orchestra.php start file on each package.
-        foreach ($this->getAutoloadFiles($autoload) as $filePath) {
-            $this->loadAutoloaderFile(str_replace($search, $replacement, $filePath));
-        }
+        $this->getAutoloadFiles(Collection::make($options['autoload'] ?? []))
+            ->each(function ($path) use ($search, $replacement) {
+                $this->loadAutoloaderFile(\str_replace($search, $replacement, $path));
+            });
 
         $this->fireEvent($name, $options, 'started');
     }
@@ -265,23 +266,15 @@ class Dispatcher implements DispatcherContract
      *
      * @param  array  $autoload
      *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
-    protected function getAutoloadFiles(array $autoload): array
+    protected function getAutoloadFiles(Collection $autoload): Collection
     {
-        $resolver = function ($path) {
-            if (Str::contains($path, '::')) {
-                return $path;
-            }
-
-            return 'source-path::'.\ltrim($path, '/');
-        };
-
-        $paths = \array_map($resolver, $autoload);
-
-        return \array_merge(
-            $paths, ['source-path::src/orchestra.php', 'source-path::orchestra.php']
-        );
+        return $autoload->map(function ($path) {
+            return Str::contains($path, '::')
+                        ? $path
+                        : 'source-path::'.\ltrim($path, '/');
+        })->merge(['source-path::src/orchestra.php', 'source-path::orchestra.php']);
     }
 
     /**

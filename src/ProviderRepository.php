@@ -2,6 +2,8 @@
 
 namespace Orchestra\Extension;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
 use Orchestra\Contracts\Foundation\Application;
@@ -76,17 +78,15 @@ class ProviderRepository
      */
     public function provides(array $provides)
     {
-        $services = [];
+        $this->compiled = Collection::make($provides)->mapWithKeys(function ($provider) {
+            $options = $this->manifest[$provider] ?? $this->recompileProvider($provider);
 
-        foreach ($provides as $provider) {
-            if (! isset($this->manifest[$provider])) {
-                $services[$provider] = $this->recompileProvider($provider);
-            } else {
-                $services[$provider] = $this->manifest[$provider];
-            }
-        }
+            $this->loadDeferredServiceProvider($provider, $options);
+            $this->loadEagerServiceProvider($provider, $options);
+            $this->loadQueuedServiceProvider($provider, $options);
 
-        $this->dispatch($services);
+            return [$provider => Arr::except($options, ['instance'])];
+        })->all();
     }
 
     /**
@@ -103,24 +103,6 @@ class ProviderRepository
         $type = $instance->isDeferred() ? 'Deferred' : 'Eager';
 
         return $this->{"register{$type}ServiceProvider"}($provider, $instance);
-    }
-
-    /**
-     * Register all deferred service providers.
-     *
-     * @return void
-     */
-    protected function dispatch(array $services)
-    {
-        foreach ($services as $provider => $options) {
-            $this->loadDeferredServiceProvider($provider, $options);
-            $this->loadEagerServiceProvider($provider, $options);
-            $this->loadQueuedServiceProvider($provider, $options);
-
-            unset($options['instance']);
-
-            $this->compiled[$provider] = $options;
-        }
     }
 
     /**
@@ -196,17 +178,11 @@ class ProviderRepository
      */
     protected function registerDeferredServiceProvider($provider, ServiceProvider $instance)
     {
-        $deferred = [];
-
-        foreach ($instance->provides() as $provide) {
-            $deferred[$provide] = $provider;
-        }
-
         return [
             'instance' => $instance,
             'eager' => false,
             'when' => $instance->when(),
-            'deferred' => $deferred,
+            'deferred' => \array_fill_keys($instance->provides(), $provider),
         ];
     }
 

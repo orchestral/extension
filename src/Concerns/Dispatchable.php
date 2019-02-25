@@ -88,19 +88,20 @@ trait Dispatchable
         // Loop all active extension and merge the configuration with
         // available config. Extension registration is handled by dispatcher
         // process due to complexity of extension boot process.
-        foreach ($active as $name => $options) {
-            if (isset($available[$name])) {
-                $config = \array_merge(
-                    (array) $available[$name]['config'] ?? [],
-                    (array) $options['config'] ?? []
-                );
 
-                $options['config'] = $config;
+        Collection::make($active)->filter(function ($options, $name) use ($available) {
+            return isset($available[$name]);
+        })->map(function ($options, $name) use ($available) {
+            $options['config'] = \array_merge(
+                (array) $available[$name]['config'] ?? [],
+                (array) $options['config'] ?? []
+            );
 
-                $this->extensions->put($name, $options);
-                $this->dispatcher->register($name, $options);
-            }
-        }
+            return $options;
+        })->each(function ($options, $name) {
+            $this->extensions->put($name, $options);
+            $this->dispatcher->register($name, $options);
+        });
     }
 
     /**

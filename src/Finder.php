@@ -142,7 +142,7 @@ class Finder implements FinderContract
                             : $key;
 
                 if (! \is_null($name)) {
-                    $lockContent = $packages->where('name', $name)->first();
+                    $lockContent = $packages->firstWhere('name', $name);
                     $extensions[$name] = $this->getManifestContents($manifest, $lockContent);
                 }
             }
@@ -199,22 +199,16 @@ class Finder implements FinderContract
      * to migrate, load service provider as well as preload some
      * configuration.
      *
-     * @param  array  $jsonable
+     * @param  array  $config
      *
      * @return array
      */
-    protected function generateManifestConfig(array $jsonable): array
+    protected function generateManifestConfig(array $config): array
     {
-        $manifest = [];
-
         // Assign extension manifest option or provide the default value.
-        foreach ($this->manifestOptions as $key => $default) {
-            $manifest["{$key}"] = $jsonable[$key] ?? $default;
-        }
-
-        $manifest['provides'] = $jsonable['provide'] ?? $manifest['provides'];
-
-        return $manifest;
+        return Collection::make($this->manifestOptions)->mapWithKeys(function ($default, $key) use ($config) {
+            return [$key => ($config[$key] ?? $default)];
+        })->all();
     }
 
     /**
@@ -230,7 +224,7 @@ class Finder implements FinderContract
             $json = \json_decode($this->files->get($this->config['path.composer']), true);
         }
 
-        return new Collection($json['packages'] ?? []);
+        return Collection::make($json['packages'] ?? []);
     }
 
     /**

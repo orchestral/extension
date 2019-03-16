@@ -83,15 +83,11 @@ class Factory implements FactoryContract
     {
         $this->events->dispatch('orchestra.extension: detecting');
 
-        $extensions = $this->finder()->detect();
-
-        $collection = $extensions->map(function ($item) {
-            return Arr::except($item, ['description', 'author', 'url', 'version']);
+        return \tap($this->finder()->detect(), function ($extensions) {
+            $this->memory->put('extensions.available', $extensions->map(function ($item) {
+                return Arr::except($item, ['description', 'author', 'url', 'version']);
+            })->all());
         });
-
-        $this->memory->put('extensions.available', $collection->all());
-
-        return $extensions;
     }
 
     /**
@@ -115,11 +111,11 @@ class Factory implements FactoryContract
      */
     public function option(string $name, string $option, $default = null)
     {
-        if (! isset($this->extensions[$name])) {
+        if (! $this->extensions->has($name)) {
             return \value($default);
         }
 
-        return Arr::get($this->extensions[$name], $option, $default);
+        return Arr::get($this->extensions->get($name), $option, $default);
     }
 
     /**

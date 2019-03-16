@@ -23,19 +23,9 @@ class Activator extends Processor implements Command
             return $listener->abortWhenRequirementMismatched();
         }
 
-        return $this->execute($listener, 'activation', $extension, $this->getActivationClosure());
-    }
-
-    /**
-     * Get activation closure.
-     *
-     * @return callable
-     */
-    protected function getActivationClosure()
-    {
-        return function (Factory $factory, $name) {
+        return $this->execute($listener, 'activation', $extension, function (Factory $factory, $name) {
             $factory->activate($name);
-        };
+        });
     }
 
     /**

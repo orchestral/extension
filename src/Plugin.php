@@ -103,10 +103,11 @@ abstract class Plugin
      */
     protected function bootstrapMenuHandler(Application $app)
     {
-        if (! \is_null($this->menu)) {
-            $app->make('events')
-                ->listen('orchestra.ready: admin', $this->menu);
+        if (\is_null($this->menu)) {
+            return;
         }
+
+        $app->make('events')->listen('orchestra.ready: admin', $this->menu);
     }
 
     /**

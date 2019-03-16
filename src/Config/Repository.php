@@ -41,7 +41,7 @@ class Repository
      *
      * @return bool
      */
-    public function map($name, $aliases)
+    public function map(string $name, array $aliases): bool
     {
         $memory = $this->memory->make();
         $meta = $memory->get("extension_{$name}", []);

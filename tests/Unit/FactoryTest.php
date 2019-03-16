@@ -293,7 +293,7 @@ class FactoryTest extends TestCase
         $refl = new \ReflectionObject($stub);
         $extensions = $refl->getProperty('extensions');
         $extensions->setAccessible(true);
-        $extensions->setValue($stub, ['laravel/framework' => $options1, 'app' => $options2]);
+        $extensions->setValue($stub, collect(['laravel/framework' => $options1, 'app' => $options2]));
 
         $stub->finish();
     }

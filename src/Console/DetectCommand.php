@@ -25,28 +25,25 @@ class DetectCommand extends Command
      */
     public function handle()
     {
-        $service = $this->laravel['orchestra.extension'];
-        $extensions = $service->detect();
+        $provider = $this->laravel->make('orchestra.extension');
+        $extensions = $provider->detect();
 
         if ($this->option('quiet')) {
             return;
         }
 
-        if (empty($extensions)) {
+        if ($extensions->isEmpty()) {
             return $this->line('<comment>No extension detected!</comment>');
         }
 
         $header = ['Extension', 'Version', 'Activate'];
-        $content = [];
 
-        foreach ($extensions as $name => $options) {
-            $content[] = [
+        $this->table($header, $extensions->map(function ($options, $name) use ($provider) {
+            return [
                 $name,
-                $options['version'],
-                $service->started($name) ? '    ✓' : '',
+                $option['version'],
+                $provider->started($name) ? '    ✓' : '',
             ];
-        }
-
-        $this->table($header, $content);
+        })->all());
     }
 }

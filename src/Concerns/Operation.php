@@ -31,7 +31,7 @@ trait Operation
             return false;
         }
 
-        $this->extensions[$name] = $active[$name];
+        $this->extensions->put($name, $active[$name]);
         $this->publish($name);
 
         $this->dispatcher->activating($name, $active[$name]);

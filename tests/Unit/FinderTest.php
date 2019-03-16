@@ -1,6 +1,6 @@
 <?php
 
-namespace Orchestra\Extension\TestCase\Unit;
+namespace Orchestra\Extension\Tests\Unit;
 
 use Mockery as m;
 use Orchestra\Extension\Finder;

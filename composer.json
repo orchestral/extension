@@ -16,6 +16,11 @@
             "Orchestra\\Extension\\" : "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Orchestra\\Extension\\Tests\\" : "tests/"
+        }
+    },
     "require": {
         "php": ">=7.2",
         "orchestra/contracts": "~3.9.0",

@@ -89,9 +89,9 @@ trait Dispatchable
         // available config. Extension registration is handled by dispatcher
         // process due to complexity of extension boot process.
 
-        Collection::make($active)->filter(function ($options, $name) use ($available) {
+        Collection::make($active)->filter(static function ($options, $name) use ($available) {
             return isset($available[$name]);
-        })->map(function ($options, $name) use ($available) {
+        })->map(static function ($options, $name) use ($available) {
             $options['config'] = \array_merge(
                 (array) $available[$name]['config'] ?? [],
                 (array) $options['config'] ?? []

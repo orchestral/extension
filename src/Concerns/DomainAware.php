@@ -14,7 +14,7 @@ trait DomainAware
      */
     public function registerDomainAwareness()
     {
-        $this->app->resolving(RouteGenerator::class, function (RouteGenerator $generator, Application $app) {
+        $this->app->resolving(RouteGenerator::class, static function (RouteGenerator $generator, Application $app) {
             $generator->setBaseUrl($app->make('config')->get('app.url'));
         });
     }

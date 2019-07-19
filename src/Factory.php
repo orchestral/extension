@@ -84,7 +84,7 @@ class Factory implements FactoryContract
         $this->events->dispatch('orchestra.extension: detecting');
 
         return \tap($this->finder()->detect(), function ($extensions) {
-            $this->memory->put('extensions.available', $extensions->map(function ($item) {
+            $this->memory->put('extensions.available', $extensions->map(static function ($item) {
                 return Arr::except($item, ['description', 'author', 'url', 'version']);
             })->all());
         });

@@ -36,7 +36,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtension(): void
     {
-        $this->app->singleton('orchestra.extension', function (Application $app) {
+        $this->app->singleton('orchestra.extension', static function (Application $app) {
             $config = $app->make('config');
             $events = $app->make('events');
             $files = $app->make('files');
@@ -57,7 +57,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionConfigManager(): void
     {
-        $this->app->singleton('orchestra.extension.config', function (Application $app) {
+        $this->app->singleton('orchestra.extension.config', static function (Application $app) {
             return new Config\Repository($app->make('config'), $app->make('orchestra.memory'));
         });
     }
@@ -69,7 +69,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionFinder(): void
     {
-        $this->app->singleton('orchestra.extension.finder', function (Application $app) {
+        $this->app->singleton('orchestra.extension.finder', static function (Application $app) {
             $config = [
                 'path.app' => $app->path(),
                 'path.base' => $app->basePath(),
@@ -87,7 +87,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionProvider(): void
     {
-        $this->app->singleton('orchestra.extension.provider', function (Application $app) {
+        $this->app->singleton('orchestra.extension.provider', static function (Application $app) {
             $provider = new ProviderRepository($app, $app->make('events'), $app->make('files'));
 
             $provider->loadManifest();
@@ -103,7 +103,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionStatusChecker(): void
     {
-        $this->app->singleton('orchestra.extension.status', function (Application $app) {
+        $this->app->singleton('orchestra.extension.status', static function (Application $app) {
             return new StatusChecker($app->make('config'), $app->make('request'));
         });
     }
@@ -115,7 +115,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionUrlGenerator(): void
     {
-        $this->app->bind('orchestra.extension.url', function (Application $app) {
+        $this->app->bind('orchestra.extension.url', static function (Application $app) {
             return new UrlGenerator($app->make('request'));
         });
     }

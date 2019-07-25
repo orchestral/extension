@@ -28,7 +28,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     protected function registerActivateCommand(): void
     {
-        $this->app->singleton('orchestra.commands.extension.activate', function () {
+        $this->app->singleton('orchestra.commands.extension.activate', static function () {
             return new Console\ActivateCommand();
         });
     }
@@ -40,7 +40,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     protected function registerDeactivateCommand(): void
     {
-        $this->app->singleton('orchestra.commands.extension.deactivate', function () {
+        $this->app->singleton('orchestra.commands.extension.deactivate', static function () {
             return new Console\DeactivateCommand();
         });
     }
@@ -52,7 +52,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     protected function registerDetectCommand(): void
     {
-        $this->app->singleton('orchestra.commands.extension.detect', function () {
+        $this->app->singleton('orchestra.commands.extension.detect', static function () {
             return new Console\DetectCommand();
         });
     }
@@ -64,7 +64,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     protected function registerMigrateCommand(): void
     {
-        $this->app->singleton('orchestra.commands.extension.migrate', function () {
+        $this->app->singleton('orchestra.commands.extension.migrate', static function () {
             return new Console\MigrateCommand();
         });
     }
@@ -76,7 +76,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     protected function registerPublishCommand(): void
     {
-        $this->app->singleton('orchestra.commands.extension.publish', function () {
+        $this->app->singleton('orchestra.commands.extension.publish', static function () {
             return new Console\PublishCommand();
         });
     }
@@ -88,7 +88,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     protected function registerRefreshCommand(): void
     {
-        $this->app->singleton('orchestra.commands.extension.refresh', function () {
+        $this->app->singleton('orchestra.commands.extension.refresh', static function () {
             return new Console\RefreshCommand();
         });
     }
@@ -100,7 +100,7 @@ class CommandServiceProvider extends ServiceProvider
      */
     protected function registerResetCommand(): void
     {
-        $this->app->singleton('orchestra.commands.extension.reset', function () {
+        $this->app->singleton('orchestra.commands.extension.reset', static function () {
             return new Console\ResetCommand();
         });
     }

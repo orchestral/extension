@@ -270,7 +270,7 @@ class Dispatcher implements DispatcherContract
      */
     protected function getAutoloadFiles(Collection $autoload): Collection
     {
-        return $autoload->map(function ($path) {
+        return $autoload->map(static function ($path) {
             return Str::contains($path, '::') ? $path : 'source-path::'.\ltrim($path, '/');
         })->merge(['source-path::src/orchestra.php', 'source-path::orchestra.php']);
     }

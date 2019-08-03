@@ -206,7 +206,7 @@ class Finder implements FinderContract
     protected function generateManifestConfig(array $config): array
     {
         // Assign extension manifest option or provide the default value.
-        return Collection::make($this->manifestOptions)->mapWithKeys(function ($default, $key) use ($config) {
+        return Collection::make($this->manifestOptions)->mapWithKeys(static function ($default, $key) use ($config) {
             return [$key => ($config[$key] ?? $default)];
         })->all();
     }

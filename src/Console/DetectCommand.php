@@ -38,7 +38,7 @@ class DetectCommand extends Command
 
         $header = ['Extension', 'Version', 'Activate'];
 
-        $this->table($header, $extensions->map(function ($options, $name) use ($provider) {
+        $this->table($header, $extensions->map(static function ($options, $name) use ($provider) {
             return [
                 $name,
                 $option['version'],

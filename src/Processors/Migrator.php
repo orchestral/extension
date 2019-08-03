@@ -23,7 +23,7 @@ class Migrator extends Processor implements Command
             return $listener->abortWhenRequirementMismatched();
         }
 
-        return $this->execute($listener, 'migration', $extension, function (Factory $factory, $name) {
+        return $this->execute($listener, 'migration', $extension, static function (Factory $factory, $name) {
             $factory->publish($name);
         });
     }

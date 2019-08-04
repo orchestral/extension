@@ -248,9 +248,11 @@ class ProviderRepository
      */
     protected function loadQueuedServiceProvider($provider, array $options)
     {
+        $app = $this->app;
+
         foreach ($options['when'] as $listen) {
-            $this->events->listen($listen, function () use ($provider, $options) {
-                $this->app->register($options['instance'] ?? $provider);
+            $this->events->listen($listen, static function () use ($app, $provider, $options) {
+                $app->register($options['instance'] ?? $provider);
             });
         }
     }

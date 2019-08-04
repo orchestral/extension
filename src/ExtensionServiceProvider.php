@@ -37,16 +37,14 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtension(): void
     {
         $this->app->singleton('orchestra.extension', static function (Application $app) {
-            $config = $app->make('config');
-            $events = $app->make('events');
-            $files = $app->make('files');
             $finder = $app->make('orchestra.extension.finder');
-            $status = $app->make('orchestra.extension.status');
             $provider = $app->make('orchestra.extension.provider');
 
-            return new Factory(
-                $app, new Dispatcher($app, $config, $events, $files, $finder, $provider), $status
+            $dispatcher = new Dispatcher(
+                $app, $app->make('config'), $app->make('events'), $app->make('files'), $finder, $provider
             );
+
+            return new Factory($app, $dispatcher, $app->make('orchestra.extension.status'));
         });
     }
 
@@ -70,13 +68,11 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtensionFinder(): void
     {
         $this->app->singleton('orchestra.extension.finder', static function (Application $app) {
-            $config = [
+            return new Finder($app->make('files'), [
                 'path.app' => $app->path(),
                 'path.base' => $app->basePath(),
                 'path.composer' => $app->basePath('/composer.lock'),
-            ];
-
-            return new Finder($app->make('files'), $config);
+            ]);
         });
     }
 
@@ -88,11 +84,9 @@ class ExtensionServiceProvider extends ServiceProvider
     protected function registerExtensionProvider(): void
     {
         $this->app->singleton('orchestra.extension.provider', static function (Application $app) {
-            $provider = new ProviderRepository($app, $app->make('events'), $app->make('files'));
-
-            $provider->loadManifest();
-
-            return $provider;
+            return \tap(new ProviderRepository($app, $app->make('events'), $app->make('files')), static function ($provider) {
+                $provider->loadManifest();
+            });
         });
     }
 

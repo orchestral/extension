@@ -190,7 +190,9 @@ class Dispatcher implements DispatcherContract
     {
         $plugin = $options['plugin'] ?? null;
 
-        ! \is_null($plugin) && $this->app->make($plugin)->bootstrap($this->app);
+        if (! \is_null($plugin)) {
+            $this->app->make($plugin)->bootstrap($this->app);
+        }
     }
 
     /**

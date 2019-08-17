@@ -2,6 +2,7 @@
 
 namespace Orchestra\Extension;
 
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
 use Orchestra\Support\Providers\ServiceProvider;
 
@@ -55,7 +56,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionConfigManager(): void
     {
-        $this->app->singleton('orchestra.extension.config', static function (Application $app) {
+        $this->app->singleton('orchestra.extension.config', static function (Container $app) {
             return new Config\Repository($app->make('config'), $app->make('orchestra.memory'));
         });
     }
@@ -67,7 +68,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionFinder(): void
     {
-        $this->app->singleton('orchestra.extension.finder', static function (Application $app) {
+        $this->app->singleton('orchestra.extension.finder', static function (Container $app) {
             return new Finder($app->make('files'), [
                 'path.app' => $app->path(),
                 'path.base' => $app->basePath(),
@@ -83,7 +84,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionProvider(): void
     {
-        $this->app->singleton('orchestra.extension.provider', static function (Application $app) {
+        $this->app->singleton('orchestra.extension.provider', static function (Container $app) {
             return \tap(new ProviderRepository($app, $app->make('events'), $app->make('files')), static function ($provider) {
                 $provider->loadManifest();
             });
@@ -97,7 +98,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionStatusChecker(): void
     {
-        $this->app->singleton('orchestra.extension.status', static function (Application $app) {
+        $this->app->singleton('orchestra.extension.status', static function (Container $app) {
             return new StatusChecker($app->make('config'), $app->make('request'));
         });
     }
@@ -109,7 +110,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionUrlGenerator(): void
     {
-        $this->app->bind('orchestra.extension.url', static function (Application $app) {
+        $this->app->bind('orchestra.extension.url', static function (Container $app) {
             return new UrlGenerator($app->make('request'));
         });
     }

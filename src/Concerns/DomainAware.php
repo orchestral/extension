@@ -3,7 +3,7 @@
 namespace Orchestra\Extension\Concerns;
 
 use Orchestra\Extension\RouteGenerator;
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Container\Container;
 
 trait DomainAware
 {
@@ -14,7 +14,7 @@ trait DomainAware
      */
     public function registerDomainAwareness()
     {
-        $this->app->resolving(RouteGenerator::class, static function (RouteGenerator $generator, Application $app) {
+        $this->app->resolving(RouteGenerator::class, static function (RouteGenerator $generator, Container $app) {
             $generator->setBaseUrl($app->make('config')->get('app.url'));
         });
     }

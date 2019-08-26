@@ -25,10 +25,11 @@ class RepositoryTest extends TestCase
     public function testMapMethod()
     {
         $app = new Container();
-        $app['encrypter'] = m::mock('\Illuminate\Contracts\Encryption\Encrypter');
-        $manager = m::mock('\Orchestra\Memory\MemoryManager', [$app]);
-        $memory = m::mock('\Orchestra\Contracts\Memory\Provider');
-        $config = m::mock('\Illuminate\Contracts\Config\Repository');
+        $app['config'] = m::mock('Illuminate\Contracts\Config\Repository');
+        $app['encrypter'] = m::mock('Illuminate\Contracts\Encryption\Encrypter');
+        $manager = m::mock('Orchestra\Memory\MemoryManager', [$app]);
+        $memory = m::mock('Orchestra\Contracts\Memory\Provider');
+        $config = m::mock('Illuminate\Contracts\Config\Repository');
 
         $manager->shouldReceive('make')->once()->andReturn($memory);
         $memory->shouldReceive('get')->once()

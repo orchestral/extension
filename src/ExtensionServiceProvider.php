@@ -68,7 +68,7 @@ class ExtensionServiceProvider extends ServiceProvider
      */
     protected function registerExtensionFinder(): void
     {
-        $this->app->singleton('orchestra.extension.finder', static function (Container $app) {
+        $this->app->singleton('orchestra.extension.finder', static function (Application $app) {
             return new Finder($app->make('files'), [
                 'path.app' => $app->path(),
                 'path.base' => $app->basePath(),

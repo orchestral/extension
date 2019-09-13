@@ -3,8 +3,8 @@
 namespace Orchestra\Extension\Processors;
 
 use Illuminate\Support\Fluent;
-use Orchestra\Contracts\Extension\Factory;
 use Orchestra\Contracts\Extension\Command\Activator as Command;
+use Orchestra\Contracts\Extension\Factory;
 use Orchestra\Contracts\Extension\Listener\Activator as Listener;
 
 class Activator extends Processor implements Command

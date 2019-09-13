@@ -2,14 +2,14 @@
 
 namespace Orchestra\Extension;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Config\Repository as Config;
-use Orchestra\Contracts\Extension\Finder as FinderContract;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Orchestra\Contracts\Extension\Dispatcher as DispatcherContract;
+use Orchestra\Contracts\Extension\Finder as FinderContract;
 
 class Dispatcher implements DispatcherContract
 {

@@ -2,10 +2,10 @@
 
 namespace Orchestra\Extension\Console;
 
-use Illuminate\Support\Fluent;
 use Illuminate\Console\ConfirmableTrait;
-use Orchestra\Extension\Processors\Migrator as Processor;
+use Illuminate\Support\Fluent;
 use Orchestra\Contracts\Extension\Listener\Migrator as Listener;
+use Orchestra\Extension\Processors\Migrator as Processor;
 
 class PublishCommand extends ExtensionCommand implements Listener
 {

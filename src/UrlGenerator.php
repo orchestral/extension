@@ -2,8 +2,8 @@
 
 namespace Orchestra\Extension;
 
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Orchestra\Contracts\Extension\UrlGenerator as UrlGeneratorContract;
 
 class UrlGenerator implements UrlGeneratorContract

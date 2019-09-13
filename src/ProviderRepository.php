@@ -2,12 +2,12 @@
 
 namespace Orchestra\Extension;
 
+use Illuminate\Contracts\Events\Dispatcher as EventDispatcherContract;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
 use Orchestra\Contracts\Foundation\Application;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcherContract;
 
 class ProviderRepository
 {

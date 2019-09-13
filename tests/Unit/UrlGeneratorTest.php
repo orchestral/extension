@@ -3,8 +3,8 @@
 namespace Orchestra\Extension\Tests\Unit;
 
 use Mockery as m;
-use PHPUnit\Framework\TestCase;
 use Orchestra\Extension\UrlGenerator;
+use PHPUnit\Framework\TestCase;
 
 class UrlGeneratorTest extends TestCase
 {

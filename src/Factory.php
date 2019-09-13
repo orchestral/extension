@@ -2,17 +2,17 @@
 
 namespace Orchestra\Extension;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Orchestra\Memory\Memorizable;
-use Illuminate\Support\Collection;
 use Illuminate\Contracts\Container\Container;
-use Orchestra\Extension\Bootstrap\LoadExtension;
-use Orchestra\Contracts\Extension\Finder as FinderContract;
-use Orchestra\Contracts\Extension\Factory as FactoryContract;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Orchestra\Contracts\Extension\Dispatcher as DispatcherContract;
-use Orchestra\Contracts\Extension\UrlGenerator as UrlGeneratorContract;
+use Orchestra\Contracts\Extension\Factory as FactoryContract;
+use Orchestra\Contracts\Extension\Finder as FinderContract;
 use Orchestra\Contracts\Extension\StatusChecker as StatusCheckerContract;
+use Orchestra\Contracts\Extension\UrlGenerator as UrlGeneratorContract;
+use Orchestra\Extension\Bootstrap\LoadExtension;
+use Orchestra\Memory\Memorizable;
 
 class Factory implements FactoryContract
 {

@@ -2,8 +2,8 @@
 
 namespace Orchestra\Extension\Concerns;
 
-use Orchestra\Extension\RouteGenerator;
 use Illuminate\Contracts\Container\Container;
+use Orchestra\Extension\RouteGenerator;
 
 trait DomainAware
 {

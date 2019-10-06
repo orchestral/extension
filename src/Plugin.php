@@ -3,8 +3,8 @@
 namespace Orchestra\Extension;
 
 use Closure;
-use Illuminate\Support\Fluent;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Fluent;
 use Orchestra\Contracts\Html\Form\Builder as FormBuilder;
 
 abstract class Plugin

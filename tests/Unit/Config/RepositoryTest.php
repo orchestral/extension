@@ -2,10 +2,10 @@
 
 namespace Orchestra\Extension\Tests\Unit\Config;
 
-use Mockery as m;
-use PHPUnit\Framework\TestCase;
 use Illuminate\Container\Container;
+use Mockery as m;
 use Orchestra\Extension\Config\Repository;
+use PHPUnit\Framework\TestCase;
 
 class RepositoryTest extends TestCase
 {

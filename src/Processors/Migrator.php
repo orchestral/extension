@@ -3,8 +3,8 @@
 namespace Orchestra\Extension\Processors;
 
 use Illuminate\Support\Fluent;
-use Orchestra\Contracts\Extension\Factory;
 use Orchestra\Contracts\Extension\Command\Migrator as Command;
+use Orchestra\Contracts\Extension\Factory;
 use Orchestra\Contracts\Extension\Listener\Migrator as Listener;
 
 class Migrator extends Processor implements Command

@@ -2,12 +2,12 @@
 
 namespace Orchestra\Extension\Tests\Unit;
 
-use Mockery as m;
-use PHPUnit\Framework\TestCase;
-use Orchestra\Extension\Factory;
-use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
+use Illuminate\Support\Collection;
+use Mockery as m;
+use Orchestra\Extension\Factory;
 use Orchestra\Extension\UrlGenerator;
+use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
 {

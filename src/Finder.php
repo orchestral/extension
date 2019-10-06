@@ -2,11 +2,11 @@
 
 namespace Orchestra\Extension;
 
-use RuntimeException;
-use Illuminate\Support\Collection;
 use Illuminate\Filesystem\Filesystem;
-use Orchestra\Contracts\Support\ManifestRuntimeException;
+use Illuminate\Support\Collection;
 use Orchestra\Contracts\Extension\Finder as FinderContract;
+use Orchestra\Contracts\Support\ManifestRuntimeException;
+use RuntimeException;
 
 class Finder implements FinderContract
 {

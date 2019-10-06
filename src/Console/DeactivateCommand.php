@@ -2,10 +2,10 @@
 
 namespace Orchestra\Extension\Console;
 
-use Illuminate\Support\Fluent;
 use Illuminate\Console\ConfirmableTrait;
-use Orchestra\Extension\Processors\Deactivator as Processor;
+use Illuminate\Support\Fluent;
 use Orchestra\Contracts\Extension\Listener\Deactivator as Listener;
+use Orchestra\Extension\Processors\Deactivator as Processor;
 
 class DeactivateCommand extends ExtensionCommand implements Listener
 {

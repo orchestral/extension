@@ -3,8 +3,8 @@
 namespace Orchestra\Extension\Tests\Unit;
 
 use Mockery as m;
-use PHPUnit\Framework\TestCase;
 use Orchestra\Extension\Dispatcher;
+use PHPUnit\Framework\TestCase;
 
 class DispatcherTest extends TestCase
 {

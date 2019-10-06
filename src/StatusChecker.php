@@ -2,8 +2,8 @@
 
 namespace Orchestra\Extension;
 
-use Illuminate\Http\Request;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Http\Request;
 use Orchestra\Contracts\Extension\StatusChecker as StatusCheckerContract;
 
 class StatusChecker implements StatusCheckerContract

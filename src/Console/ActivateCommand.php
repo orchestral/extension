@@ -2,10 +2,10 @@
 
 namespace Orchestra\Extension\Console;
 
-use Illuminate\Support\Fluent;
 use Illuminate\Console\ConfirmableTrait;
-use Orchestra\Extension\Processors\Activator as Processor;
+use Illuminate\Support\Fluent;
 use Orchestra\Contracts\Extension\Listener\Activator as Listener;
+use Orchestra\Extension\Processors\Activator as Processor;
 
 class ActivateCommand extends ExtensionCommand implements Listener
 {

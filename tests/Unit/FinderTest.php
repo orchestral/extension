@@ -2,10 +2,10 @@
 
 namespace Orchestra\Extension\Tests\Unit;
 
+use Illuminate\Support\Collection;
 use Mockery as m;
 use Orchestra\Extension\Finder;
 use PHPUnit\Framework\TestCase;
-use Illuminate\Support\Collection;
 
 class FinderTest extends TestCase
 {

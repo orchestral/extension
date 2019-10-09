@@ -2,6 +2,14 @@
 
 This changelog references the relevant changes (bug and security fixes) done to `orchestra/extension`.
 
+## 3.8.2
+
+Released: 2019-10-09
+
+### Fixes
+
+* Fixes `php artisan extension:detect` command.
+
 ## 3.8.1
 
 Released: 2019-08-04

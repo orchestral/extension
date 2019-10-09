@@ -41,7 +41,7 @@ class DetectCommand extends Command
         $this->table($header, $extensions->map(static function ($options, $name) use ($provider) {
             return [
                 $name,
-                $option['version'],
+                $options['version'],
                 $provider->started($name) ? '    ✓' : '',
             ];
         })->all());

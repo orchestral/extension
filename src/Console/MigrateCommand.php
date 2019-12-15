@@ -28,5 +28,7 @@ class MigrateCommand extends Command
         $path = 'vendor/orchestra/memory/database/migrations';
 
         $this->call('migrate', ['--path' => $path]);
+
+        return 0;
     }
 }

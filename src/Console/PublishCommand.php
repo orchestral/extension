@@ -37,7 +37,7 @@ class PublishCommand extends ExtensionCommand implements Listener
     public function handle(Processor $migrator)
     {
         if (! $this->confirmToProceed()) {
-            return;
+            return 126;
         }
 
         return $migrator($this, new Fluent(['name' => $this->argument('name')]));
@@ -49,11 +49,13 @@ class PublishCommand extends ExtensionCommand implements Listener
      * @param  \Illuminate\Support\Fluent  $extension
      * @param  array  $errors
      *
-     * @return mixed
+     * @return int
      */
     public function migrationHasFailed(Fluent $extension, array $errors)
     {
         $this->error("Extension [{$extension->get('name')}] update has failed.");
+
+        return 1;
     }
 
     /**
@@ -61,10 +63,12 @@ class PublishCommand extends ExtensionCommand implements Listener
      *
      * @param  \Illuminate\Support\Fluent  $extension
      *
-     * @return mixed
+     * @return int
      */
     public function migrationHasSucceed(Fluent $extension)
     {
         $this->info("Extension [{$extension->get('name')}] updated.");
+
+        return 0;
     }
 }

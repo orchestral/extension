@@ -30,7 +30,7 @@ class ResetCommand extends ExtensionCommand
     public function handle()
     {
         if (! $this->confirmToProceed()) {
-            return;
+            return 126;
         }
 
         $name = $this->argument('name');
@@ -41,8 +41,12 @@ class ResetCommand extends ExtensionCommand
 
         if ((bool) $reset) {
             $this->info("Extension [{$name}] has been reset.");
-        } else {
-            $this->error("Unable to reset extension [{$name}].");
+
+            return 0;
         }
+
+        $this->error("Unable to reset extension [{$name}].");
+
+        return 1;
     }
 }

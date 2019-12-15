@@ -29,11 +29,13 @@ class DetectCommand extends Command
         $extensions = $provider->detect();
 
         if ($this->option('quiet')) {
-            return;
+            return 0;
         }
 
         if ($extensions->isEmpty()) {
-            return $this->line('<comment>No extension detected!</comment>');
+            $this->line('<comment>No extension detected!</comment>');
+
+            return 0;
         }
 
         $header = ['Extension', 'Version', 'Activate'];
@@ -45,5 +47,7 @@ class DetectCommand extends Command
                 $provider->started($name) ? '    ✓' : '',
             ];
         })->all());
+
+        return 0;
     }
 }

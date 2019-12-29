@@ -32,12 +32,12 @@ class ActivateCommand extends ExtensionCommand implements Listener
      *
      * @param  \Orchestra\Extension\Processors\Activator  $activator
      *
-     * @return void
+     * @return int
      */
     public function handle(Processor $activator)
     {
         if (! $this->confirmToProceed()) {
-            return;
+            return 126;
         }
 
         return $activator($this, new Fluent(['name' => $this->argument('name')]));
@@ -49,11 +49,13 @@ class ActivateCommand extends ExtensionCommand implements Listener
      * @param  \Illuminate\Support\Fluent  $extension
      * @param  array  $errors
      *
-     * @return mixed
+     * @return int
      */
-    public function activationHasFailed(Fluent $extension, array $errors)
+    public function activationHasFailed(Fluent $extension, array $errors): int
     {
         $this->error("Unable to activate extension [{$extension->get('name')}].");
+
+        return 1;
     }
 
     /**
@@ -61,12 +63,14 @@ class ActivateCommand extends ExtensionCommand implements Listener
      *
      * @param  \Illuminate\Support\Fluent  $extension
      *
-     * @return mixed
+     * @return int
      */
     public function activationHasSucceed(Fluent $extension)
     {
         $this->refreshRouteCache();
 
         $this->info("Extension [{$extension->get('name')}] activated.");
+
+        return 0;
     }
 }

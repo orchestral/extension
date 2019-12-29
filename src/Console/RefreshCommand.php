@@ -30,7 +30,7 @@ class RefreshCommand extends ExtensionCommand
     public function handle()
     {
         if (! $this->confirmToProceed()) {
-            return;
+            return 126;
         }
 
         $name = $this->argument('name');
@@ -39,8 +39,12 @@ class RefreshCommand extends ExtensionCommand
 
         if ((bool) $refresh) {
             $this->info("Extension [{$name}] refreshed.");
-        } else {
-            $this->error("Unable to refresh extension [{$name}].");
+
+            return 0;
         }
+
+        $this->error("Unable to refresh extension [{$name}].");
+
+        return 1;
     }
 }

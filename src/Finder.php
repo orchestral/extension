@@ -116,7 +116,7 @@ class Finder implements FinderContract
      *
      * @return \Illuminate\Support\Collection
      */
-    public function detect()
+    public function detect(): Collection
     {
         $extensions = [];
         $packages = $this->getComposerLockData();

@@ -32,8 +32,6 @@ class ExtensionServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider for Extension.
-     *
-     * @return void
      */
     protected function registerExtension(): void
     {
@@ -51,8 +49,6 @@ class ExtensionServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider for Extension Config Manager.
-     *
-     * @return void
      */
     protected function registerExtensionConfigManager(): void
     {
@@ -63,8 +59,6 @@ class ExtensionServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider for Extension Finder.
-     *
-     * @return void
      */
     protected function registerExtensionFinder(): void
     {
@@ -79,8 +73,6 @@ class ExtensionServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider for Extension Provider.
-     *
-     * @return void
      */
     protected function registerExtensionProvider(): void
     {
@@ -93,8 +85,6 @@ class ExtensionServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider for Extension Safe Mode Checker.
-     *
-     * @return void
      */
     protected function registerExtensionStatusChecker(): void
     {
@@ -105,8 +95,6 @@ class ExtensionServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider for Extension Provider.
-     *
-     * @return void
      */
     protected function registerExtensionUrlGenerator(): void
     {
@@ -117,8 +105,6 @@ class ExtensionServiceProvider extends ServiceProvider
 
     /**
      * Register extension events.
-     *
-     * @return void
      */
     protected function registerExtensionEvents(): void
     {

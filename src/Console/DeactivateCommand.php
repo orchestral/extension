@@ -30,8 +30,6 @@ class DeactivateCommand extends ExtensionCommand implements Listener
     /**
      * Execute the console command.
      *
-     * @param  \Orchestra\Extension\Processor\Deactivator  $deactivator
-     *
      * @return int
      */
     public function handle(Processor $deactivator)
@@ -45,8 +43,6 @@ class DeactivateCommand extends ExtensionCommand implements Listener
 
     /**
      * Response when extension deactivation has succeed.
-     *
-     * @param  \Illuminate\Support\Fluent  $extension
      *
      * @return int
      */

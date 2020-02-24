@@ -47,8 +47,6 @@ abstract class Plugin
     /**
      * Bootstrap plugin.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
-     *
      * @return void
      */
     public function bootstrap(Application $app)
@@ -67,8 +65,6 @@ abstract class Plugin
     /**
      * Bootstrap configuration.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
-     *
      * @return void
      */
     protected function bootstrapConfiguration(Application $app)
@@ -83,8 +79,6 @@ abstract class Plugin
     /**
      * Bootstrap the form.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
-     *
      * @return void
      */
     protected function bootstrapForm(Application $app)
@@ -96,8 +90,6 @@ abstract class Plugin
 
     /**
      * Bootstrap menu handler.
-     *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
      *
      * @return void
      */
@@ -112,8 +104,6 @@ abstract class Plugin
 
     /**
      * Bootstrap sidebar placeholder.
-     *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
      *
      * @return void
      */
@@ -132,8 +122,6 @@ abstract class Plugin
     /**
      * Bootstrap validation rules.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
-     *
      * @return void
      */
     protected function bootstrapValidationRules(Application $app)
@@ -148,9 +136,7 @@ abstract class Plugin
     /**
      * Attach event listener.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @param  string  $event
-     * @param  \Closure  $callback
      *
      * @return void
      */
@@ -161,9 +147,6 @@ abstract class Plugin
 
     /**
      * Setup the form.
-     *
-     * @param  \Illuminate\Support\Fluent  $model
-     * @param  \Orchestra\Contracts\Html\Form\Builder  $form
      *
      * @return void
      */

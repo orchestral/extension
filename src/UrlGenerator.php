@@ -52,8 +52,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Construct a new instance.
-     *
-     * @param \Illuminate\Http\Request  $request
      */
     public function __construct(Request $request)
     {
@@ -62,10 +60,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Get the scheme for a raw URL.
-     *
-     * @param  bool|null  $secure
-     *
-     * @return string
      */
     protected function getScheme(?bool $secure): string
     {
@@ -78,10 +72,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Force the schema for URLs.
-     *
-     * @param  string  $schema
-     *
-     * @return void
      */
     public function forceScheme(string $schema): void
     {
@@ -90,8 +80,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Build route.
-     *
-     * @param  string  $handles
      *
      * @return $this
      */
@@ -118,10 +106,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Get route domain.
-     *
-     * @param  bool  $forceBase
-     *
-     * @return string|null
      */
     public function domain(bool $forceBase = false): ?string
     {
@@ -139,10 +123,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Get route group.
-     *
-     * @param  bool  $forceBase
-     *
-     * @return array
      */
     public function group(bool $forceBase = false): array
     {
@@ -159,10 +139,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Determine if the current request URI matches a pattern.
-     *
-     * @param  string  $pattern
-     *
-     * @return bool
      */
     public function is(string $pattern): bool
     {
@@ -185,8 +161,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Get the current path info for the request.
-     *
-     * @return string
      */
     public function path(): string
     {
@@ -197,10 +171,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Get route prefix.
-     *
-     * @param  bool  $forceBase
-     *
-     * @return string
      */
     public function prefix(bool $forceBase = false): string
     {
@@ -218,8 +188,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Get route root.
-     *
-     * @return string
      */
     public function root(): string
     {
@@ -232,8 +200,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Get base url.
-     *
-     * @return string
      */
     public function getBaseUrl(): string
     {
@@ -246,8 +212,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Set base URL.
-     *
-     * @param  string  $root
      *
      * @return $this
      */
@@ -262,10 +226,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Get route to.
-     *
-     * @param  string  $to
-     *
-     * @return string
      */
     public function to(string $to): string
     {
@@ -288,10 +248,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Resolve base url from given path.
-     *
-     * @param  string|null  $root
-     *
-     * @return void
      */
     protected function resolveBaseUrlFrom(?string $root): void
     {

@@ -31,9 +31,6 @@ class StatusChecker implements StatusCheckerContract
 
     /**
      * Construct a new Application instance.
-     *
-     * @param  \Illuminate\Contracts\Config\Repository  $config
-     * @param  \Illuminate\Http\Request  $request
      */
     public function __construct(Repository $config, Request $request)
     {
@@ -43,10 +40,6 @@ class StatusChecker implements StatusCheckerContract
 
     /**
      * Check current mode is equal given $mode.
-     *
-     * @param  string  $mode
-     *
-     * @return bool
      */
     public function is(string $mode): bool
     {
@@ -55,10 +48,6 @@ class StatusChecker implements StatusCheckerContract
 
     /**
      * Check current mode is not equal given $mode.
-     *
-     * @param  string  $mode
-     *
-     * @return bool
      */
     public function isNot(string $mode): bool
     {
@@ -67,8 +56,6 @@ class StatusChecker implements StatusCheckerContract
 
     /**
      * Get current mode.
-     *
-     * @return string
      */
     public function mode(): string
     {
@@ -81,8 +68,6 @@ class StatusChecker implements StatusCheckerContract
 
     /**
      * Verify safe mode status.
-     *
-     * @return void
      */
     protected function verifyStatus(): void
     {
@@ -98,8 +83,6 @@ class StatusChecker implements StatusCheckerContract
 
     /**
      * Disable safe mode.
-     *
-     * @return void
      */
     protected function disableSafeMode(): void
     {
@@ -108,8 +91,6 @@ class StatusChecker implements StatusCheckerContract
 
     /**
      * Enable safe mode.
-     *
-     * @return void
      */
     protected function enableSafeMode(): void
     {

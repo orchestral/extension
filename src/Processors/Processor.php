@@ -18,8 +18,6 @@ abstract class Processor
 
     /**
      * Construct a new processor instance.
-     *
-     * @param \Orchestra\Contracts\Extension\Factory  $factory
      */
     public function __construct(Factory $factory)
     {
@@ -31,8 +29,6 @@ abstract class Processor
      *
      * @param  object  $listener
      * @param  string  $type
-     * @param  \Illuminate\Support\Fluent  $extension
-     * @param  \Closure  $callback
      *
      * @return mixed
      */

@@ -50,8 +50,6 @@ trait Dispatchable
 
     /**
      * Boot active extensions.
-     *
-     * @return bool
      */
     public function booted(): bool
     {
@@ -77,8 +75,6 @@ trait Dispatchable
 
     /**
      * Register all active extension to dispatcher.
-     *
-     * @return void
      */
     protected function registerActiveExtensions(): void
     {
@@ -106,10 +102,6 @@ trait Dispatchable
 
     /**
      * Create an event listener or execute it directly.
-     *
-     * @param  \Closure|null  $callback
-     *
-     * @return void
      */
     public function after(Closure $callback = null): void
     {

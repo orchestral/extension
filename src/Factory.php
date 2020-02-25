@@ -57,10 +57,6 @@ class Factory implements FactoryContract
 
     /**
      * Construct a new Application instance.
-     *
-     * @param  \Illuminate\Contracts\Container\Container  $app
-     * @param  \Orchestra\Contracts\Extension\Dispatcher  $dispatcher
-     * @param  \Orchestra\Contracts\Extension\StatusChecker  $status
      */
     public function __construct(
         Container $app,
@@ -76,8 +72,6 @@ class Factory implements FactoryContract
 
     /**
      * Detect all extensions.
-     *
-     * @return \Illuminate\Support\Collection
      */
     public function detect(): Collection
     {
@@ -92,8 +86,6 @@ class Factory implements FactoryContract
 
     /**
      * Get extension finder.
-     *
-     * @return \Orchestra\Contracts\Extension\Finder
      */
     public function finder(): FinderContract
     {
@@ -103,8 +95,6 @@ class Factory implements FactoryContract
     /**
      * Get an option for a given extension.
      *
-     * @param  string  $name
-     * @param  string  $option
      * @param  mixed   $default
      *
      * @return mixed
@@ -120,10 +110,6 @@ class Factory implements FactoryContract
 
     /**
      * Check whether an extension has a writable public asset.
-     *
-     * @param  string  $name
-     *
-     * @return bool
      */
     public function permission(string $name): bool
     {
@@ -139,8 +125,6 @@ class Factory implements FactoryContract
      * Publish an extension.
      *
      * @param  string
-     *
-     * @return void
      */
     public function publish(string $name): void
     {
@@ -153,11 +137,6 @@ class Factory implements FactoryContract
 
     /**
      * Register an extension.
-     *
-     * @param  string  $name
-     * @param  string  $path
-     *
-     * @return bool
      */
     public function register(string $name, string $path): bool
     {
@@ -166,11 +145,6 @@ class Factory implements FactoryContract
 
     /**
      * Get extension route handle.
-     *
-     * @param  string   $name
-     * @param  string   $default
-     *
-     * @return \Orchestra\Contracts\Extension\UrlGenerator
      */
     public function route(string $name, string $default = '/'): UrlGeneratorContract
     {
@@ -193,11 +167,6 @@ class Factory implements FactoryContract
 
     /**
      * Check whether an extension has a writable public asset.
-     *
-     * @param  string  $name
-     * @param  string  $path
-     *
-     * @return bool
      */
     protected function isWritableWithAsset(string $name, string $path): bool
     {

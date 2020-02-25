@@ -23,9 +23,6 @@ class Repository
 
     /**
      * Construct a new Config Repository instance.
-     *
-     * @param  \Illuminate\Contracts\Config\Repository  $config
-     * @param  \Orchestra\Memory\MemoryManager  $memory
      */
     public function __construct(Config $config, MemoryManager $memory)
     {
@@ -35,11 +32,6 @@ class Repository
 
     /**
      * Map configuration to allow orchestra to store it in database.
-     *
-     * @param  string  $name
-     * @param  array   $aliases
-     *
-     * @return bool
      */
     public function map(string $name, array $aliases): bool
     {

@@ -78,9 +78,6 @@ class Finder implements FinderContract
 
     /**
      * Construct a new finder.
-     *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
-     * @param  array  $config
      */
     public function __construct(Filesystem $files, array $config)
     {
@@ -101,8 +98,6 @@ class Finder implements FinderContract
     /**
      * Add a new path to finder.
      *
-     * @param  string  $path
-     *
      * @return $this
      */
     public function addPath(string $path)
@@ -121,7 +116,7 @@ class Finder implements FinderContract
      *
      * @return \Illuminate\Support\Collection
      */
-    public function detect()
+    public function detect(): Collection
     {
         $extensions = [];
         $packages = $this->getComposerLockData();
@@ -154,12 +149,7 @@ class Finder implements FinderContract
     /**
      * Get manifest contents.
      *
-     * @param  string  $manifest
-     * @param  array|null  $lockContent
-     *
      * @throws \Orchestra\Contracts\Support\ManifestRuntimeException
-     *
-     * @return array
      */
     protected function getManifestContents(string $manifest, ?array $lockContent): array
     {
@@ -198,10 +188,6 @@ class Finder implements FinderContract
      * would allow other part of the application to use this configuration
      * to migrate, load service provider as well as preload some
      * configuration.
-     *
-     * @param  array  $config
-     *
-     * @return array
      */
     protected function generateManifestConfig(array $config): array
     {
@@ -213,8 +199,6 @@ class Finder implements FinderContract
 
     /**
      * Get composer.lock data.
-     *
-     * @return \Illuminate\Support\Collection
      */
     protected function getComposerLockData(): Collection
     {
@@ -230,12 +214,7 @@ class Finder implements FinderContract
     /**
      * Guess extension name from manifest.
      *
-     * @param  string  $manifest
-     * @param  string  $path
-     *
      * @throws \RuntimeException
-     *
-     * @return string|null
      */
     public function guessExtensionNameFromManifest(string $manifest, string $path): ?string
     {
@@ -257,10 +236,6 @@ class Finder implements FinderContract
 
     /**
      * Guess extension path from manifest file.
-     *
-     * @param  string  $path
-     *
-     * @return string
      */
     public function guessExtensionPath(string $path): string
     {
@@ -277,11 +252,6 @@ class Finder implements FinderContract
 
     /**
      * Register the extension.
-     *
-     * @param  string  $name
-     * @param  string  $path
-     *
-     * @return bool
      */
     public function registerExtension(string $name, string $path): bool
     {
@@ -292,10 +262,6 @@ class Finder implements FinderContract
 
     /**
      * Resolve extension namespace name from manifest.
-     *
-     * @param  string  $manifest
-     *
-     * @return array
      */
     public function resolveExtensionNamespace(string $manifest): array
     {
@@ -316,10 +282,6 @@ class Finder implements FinderContract
 
     /**
      * Resolve extension path.
-     *
-     * @param  string  $path
-     *
-     * @return string
      */
     public function resolveExtensionPath(string $path): string
     {
@@ -334,11 +296,7 @@ class Finder implements FinderContract
     /**
      * Validate extension name.
      *
-     * @param  string  $name
-     *
      * @throws \RuntimeException
-     *
-     * @return string
      */
     public function validateExtensionName(string $name): string
     {

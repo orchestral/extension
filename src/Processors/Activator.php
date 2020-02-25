@@ -12,9 +12,6 @@ class Activator extends Processor implements Command
     /**
      * Activate an extension.
      *
-     * @param  \Orchestra\Contracts\Extension\Listener\Activator  $listener
-     * @param  \Illuminate\Support\Fluent  $extension
-     *
      * @return mixed
      */
     public function activate(Listener $listener, Fluent $extension)
@@ -30,9 +27,6 @@ class Activator extends Processor implements Command
 
     /**
      * Execute processor using invoke.
-     *
-     * @param  \Orchestra\Contracts\Extension\Listener\Activator  $listener
-     * @param  \Illuminate\Support\Fluent  $extension
      *
      * @return mixed
      */

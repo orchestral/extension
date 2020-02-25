@@ -55,10 +55,6 @@ class ProviderRepository
 
     /**
      * Construct a new finder.
-     *
-     * @param  \Orchestra\Contracts\Foundation\Application  $app
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
-     * @param  \Illuminate\Filesystem\Filesystem  $files
      */
     public function __construct(Application $app, EventDispatcherContract $events, Filesystem $files)
     {
@@ -71,8 +67,6 @@ class ProviderRepository
 
     /**
      * Load available service providers.
-     *
-     * @param  array  $provides
      *
      * @return void
      */
@@ -159,8 +153,6 @@ class ProviderRepository
     /**
      * Write the manifest file.
      *
-     * @param  array  $manifest
-     *
      * @return void
      */
     protected function writeManifestFile(array $manifest = [])
@@ -172,7 +164,6 @@ class ProviderRepository
      * Register deferred service provider.
      *
      * @param  string  $provider
-     * @param  \Illuminate\Support\ServiceProvider  $instance
      *
      * @return void
      */
@@ -190,7 +181,6 @@ class ProviderRepository
      * Register eager service provider.
      *
      * @param  string  $provider
-     * @param  \Illuminate\Support\ServiceProvider  $instance
      *
      * @return void
      */
@@ -208,7 +198,6 @@ class ProviderRepository
      * Load deferred service provider.
      *
      * @param  string  $provider
-     * @param  array  $options
      *
      * @return void
      */
@@ -225,7 +214,6 @@ class ProviderRepository
      * Load eager service provider.
      *
      * @param  string  $provider
-     * @param  array  $options
      *
      * @return void
      */
@@ -242,7 +230,6 @@ class ProviderRepository
      * Load queued service provider.
      *
      * @param  string  $provider
-     * @param  array  $options
      *
      * @return void
      */

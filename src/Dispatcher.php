@@ -64,13 +64,6 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Construct a new Application instance.
-     *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
-     * @param  \Illuminate\Contracts\Config\Repository  $config
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $dispatcher
-     * @param  \Illuminate\Filesystem\Filesystem  $files
-     * @param  \Orchestra\Contracts\Extension\Finder  $finder
-     * @param  \Orchestra\Extension\ProviderRepository  $provider
      */
     public function __construct(
         Application $app,
@@ -90,11 +83,6 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Register the extension.
-     *
-     * @param  string  $name
-     * @param  array   $options
-     *
-     * @return void
      */
     public function register(string $name, array $options): void
     {
@@ -118,11 +106,6 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Activating the extension.
-     *
-     * @param  string  $name
-     * @param  array   $options
-     *
-     * @return void
      */
     public function activating(string $name, array $options): void
     {
@@ -135,11 +118,6 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Deactivating the extension.
-     *
-     * @param  string  $name
-     * @param  array   $options
-     *
-     * @return void
      */
     public function deactivating(string $name, array $options): void
     {
@@ -150,11 +128,6 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Set the handles to orchestra/extension package config (if available).
-     *
-     * @param  string  $name
-     * @param  array   $options
-     *
-     * @return void
      */
     protected function registerExtensionHandles(string $name, array $options): void
     {
@@ -167,10 +140,6 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Register extension service providers.
-     *
-     * @param  array  $options
-     *
-     * @return void
      */
     protected function registerExtensionProviders(array $options): void
     {
@@ -181,10 +150,6 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Register extension plugin.
-     *
-     * @param  array  $options
-     *
-     * @return void
      */
     protected function registerExtensionPlugin(array $options): void
     {
@@ -197,8 +162,6 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Boot all extensions.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -211,11 +174,6 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Start the extension.
-     *
-     * @param  string  $name
-     * @param  array   $options
-     *
-     * @return void
      */
     public function start(string $name, array $options): void
     {
@@ -237,11 +195,6 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Shutdown an extension.
-     *
-     * @param  string  $name
-     * @param  array   $options
-     *
-     * @return void
      */
     public function finish(string $name, array $options): void
     {
@@ -250,12 +203,6 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Fire events.
-     *
-     * @param  string  $name
-     * @param  array   $options
-     * @param  string  $type
-     *
-     * @return void
      */
     protected function fireEvent(string $name, array $options, string $type = 'started'): void
     {
@@ -267,8 +214,6 @@ class Dispatcher implements DispatcherContract
      * Get list of available paths for the extension.
      *
      * @param  array  $autoload
-     *
-     * @return \Illuminate\Support\Collection
      */
     protected function getAutoloadFiles(Collection $autoload): Collection
     {
@@ -279,10 +224,6 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Load autoloader file.
-     *
-     * @param  string  $filePath
-     *
-     * @return void
      */
     protected function loadAutoloaderFile(string $filePath): void
     {

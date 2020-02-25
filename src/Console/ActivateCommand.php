@@ -30,8 +30,6 @@ class ActivateCommand extends ExtensionCommand implements Listener
     /**
      * Execute the console command.
      *
-     * @param  \Orchestra\Extension\Processors\Activator  $activator
-     *
      * @return int
      */
     public function handle(Processor $activator)
@@ -45,11 +43,6 @@ class ActivateCommand extends ExtensionCommand implements Listener
 
     /**
      * Response when extension activation has failed.
-     *
-     * @param  \Illuminate\Support\Fluent  $extension
-     * @param  array  $errors
-     *
-     * @return int
      */
     public function activationHasFailed(Fluent $extension, array $errors): int
     {
@@ -60,8 +53,6 @@ class ActivateCommand extends ExtensionCommand implements Listener
 
     /**
      * Response when extension activation has succeed.
-     *
-     * @param  \Illuminate\Support\Fluent  $extension
      *
      * @return int
      */

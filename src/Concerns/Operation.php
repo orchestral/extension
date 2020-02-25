@@ -8,10 +8,6 @@ trait Operation
 {
     /**
      * Activate an extension.
-     *
-     * @param  string  $name
-     *
-     * @return bool
      */
     public function activate(string $name): bool
     {
@@ -20,10 +16,6 @@ trait Operation
 
     /**
      * Activating an extension.
-     *
-     * @param  string  $name
-     *
-     * @return bool
      */
     protected function activating(string $name): bool
     {
@@ -41,10 +33,6 @@ trait Operation
 
     /**
      * Check whether an extension is active.
-     *
-     * @param  string  $name
-     *
-     * @return bool
      */
     public function activated(string $name): bool
     {
@@ -53,10 +41,6 @@ trait Operation
 
     /**
      * Check whether an extension is available.
-     *
-     * @param  string  $name
-     *
-     * @return bool
      */
     public function available(string $name): bool
     {
@@ -65,10 +49,6 @@ trait Operation
 
     /**
      * Deactivate an extension.
-     *
-     * @param  string  $name
-     *
-     * @return bool
      */
     public function deactivate(string $name): bool
     {
@@ -87,10 +67,6 @@ trait Operation
 
     /**
      * Refresh extension configuration.
-     *
-     * @param  string  $name
-     *
-     * @return array|null
      */
     public function refresh(string $name): ?array
     {
@@ -118,10 +94,6 @@ trait Operation
 
     /**
      * Reset extension.
-     *
-     * @param  string  $name
-     *
-     * @return bool
      */
     public function reset(string $name): bool
     {
@@ -139,10 +111,6 @@ trait Operation
 
     /**
      * Check if extension is started.
-     *
-     * @param  string  $name
-     *
-     * @return bool
      */
     public function started(string $name): bool
     {
@@ -153,8 +121,6 @@ trait Operation
      * Publish an extension.
      *
      * @param  string
-     *
-     * @return void
      */
     abstract public function publish(string $name): void;
 }

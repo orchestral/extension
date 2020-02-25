@@ -12,9 +12,6 @@ class Migrator extends Processor implements Command
     /**
      * Update/migrate an extension.
      *
-     * @param  \Orchestra\Contracts\Extension\Listener\Migrator  $listener
-     * @param  \Illuminate\Support\Fluent  $extension
-     *
      * @return mixed
      */
     public function migrate(Listener $listener, Fluent $extension)
@@ -30,9 +27,6 @@ class Migrator extends Processor implements Command
 
     /**
      * Execute processor using invoke.
-     *
-     * @param  \Orchestra\Contracts\Extension\Listener\Deactivator  $listener
-     * @param  \Illuminate\Support\Fluent  $extension
      *
      * @return mixed
      */

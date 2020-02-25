@@ -9,8 +9,6 @@ class LoadExtension
     /**
      * Bootstrap the given application.
      *
-     * @param  \Illuminate\Contracts\Container\Container  $app
-     *
      * @return void
      */
     public function bootstrap(Container $app)

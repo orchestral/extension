@@ -30,8 +30,6 @@ class PublishCommand extends ExtensionCommand implements Listener
     /**
      * Execute the console command.
      *
-     * @param  \Orchestra\Extension\Processor\Migrator  $migrator
-     *
      * @return void
      */
     public function handle(Processor $migrator)
@@ -46,9 +44,6 @@ class PublishCommand extends ExtensionCommand implements Listener
     /**
      * Response when extension migration has failed.
      *
-     * @param  \Illuminate\Support\Fluent  $extension
-     * @param  array  $errors
-     *
      * @return int
      */
     public function migrationHasFailed(Fluent $extension, array $errors)
@@ -60,8 +55,6 @@ class PublishCommand extends ExtensionCommand implements Listener
 
     /**
      * Response when extension migration has succeed.
-     *
-     * @param  \Illuminate\Support\Fluent  $extension
      *
      * @return int
      */

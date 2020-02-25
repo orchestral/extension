@@ -23,8 +23,6 @@ class CommandServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     protected function registerActivateCommand(): void
     {
@@ -35,8 +33,6 @@ class CommandServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     protected function registerDeactivateCommand(): void
     {
@@ -47,8 +43,6 @@ class CommandServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     protected function registerDetectCommand(): void
     {
@@ -59,8 +53,6 @@ class CommandServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     protected function registerMigrateCommand(): void
     {
@@ -71,8 +63,6 @@ class CommandServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     protected function registerPublishCommand(): void
     {
@@ -83,8 +73,6 @@ class CommandServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     protected function registerRefreshCommand(): void
     {
@@ -95,8 +83,6 @@ class CommandServiceProvider extends ServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     protected function registerResetCommand(): void
     {

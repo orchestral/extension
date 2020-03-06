@@ -3,12 +3,12 @@ Extension Component for Orchestra Platform
 
 Extension Component allows components or packages to be added dynamically to Orchestra Platform without the hassle of modifying the configuration.
 
-[![Build Status](https://travis-ci.org/orchestral/extension.svg?branch=5.x)](https://travis-ci.org/orchestral/extension)
+[![Build Status](https://travis-ci.org/orchestral/extension.svg?branch=master)](https://travis-ci.org/orchestral/extension)
 [![Latest Stable Version](https://poser.pugx.org/orchestra/extension/version)](https://packagist.org/packages/orchestra/extension)
 [![Total Downloads](https://poser.pugx.org/orchestra/extension/downloads)](https://packagist.org/packages/orchestra/extension)
 [![Latest Unstable Version](https://poser.pugx.org/orchestra/extension/v/unstable)](//packagist.org/packages/orchestra/extension)
 [![License](https://poser.pugx.org/orchestra/extension/license)](https://packagist.org/packages/orchestra/extension)
-[![Coverage Status](https://coveralls.io/repos/github/orchestral/extension/badge.svg?branch=5.x)](https://coveralls.io/github/orchestral/extension?branch=5.x)
+[![Coverage Status](https://coveralls.io/repos/github/orchestral/extension/badge.svg?branch=master)](https://coveralls.io/github/orchestral/extension?branch=master)
 
 ## Table of Content
 

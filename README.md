@@ -3,12 +3,12 @@ Extension Component for Orchestra Platform
 
 Extension Component allows components or packages to be added dynamically to Orchestra Platform without the hassle of modifying the configuration.
 
-[![tests](https://github.com/orchestral/extension/workflows/tests/badge.svg?branch=6.x)](https://github.com/orchestral/extension/actions?query=workflow%3Atests+branch%3A6.x)
+[![tests](https://github.com/orchestral/extension/workflows/tests/badge.svg?branch=master)](https://github.com/orchestral/extension/actions?query=workflow%3Atests+branch%3Amaster)
 [![Latest Stable Version](https://poser.pugx.org/orchestra/extension/version)](https://packagist.org/packages/orchestra/extension)
 [![Total Downloads](https://poser.pugx.org/orchestra/extension/downloads)](https://packagist.org/packages/orchestra/extension)
 [![Latest Unstable Version](https://poser.pugx.org/orchestra/extension/v/unstable)](//packagist.org/packages/orchestra/extension)
 [![License](https://poser.pugx.org/orchestra/extension/license)](https://packagist.org/packages/orchestra/extension)
-[![Coverage Status](https://coveralls.io/repos/github/orchestral/extension/badge.svg?branch=6.x)](https://coveralls.io/github/orchestral/extension?branch=6.x)
+[![Coverage Status](https://coveralls.io/repos/github/orchestral/extension/badge.svg?branch=master)](https://coveralls.io/github/orchestral/extension?branch=master)
 
 ## Table of Content
 

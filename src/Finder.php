@@ -113,8 +113,6 @@ class Finder implements FinderContract
 
     /**
      * Detect available extensions.
-     *
-     * @return \Illuminate\Support\Collection
      */
     public function detect(): Collection
     {
